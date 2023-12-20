@@ -1,35 +1,41 @@
 import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet } from "react-native";
 import React from "react";
 import AppTextInput from "../components/AppTextInput";
-import { AntDesign } from "@expo/vector-icons";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import { useNavigation } from "@react-navigation/native";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../components/Constants/Screen";
+import { useState } from "react";
+import { postData } from "../config/ServerServices";
 
 const Register = () => {
   const navigation = useNavigation();
+  const [emailAddress, setEmailAddress] = useState('')
+  const [password, setPassword] = useState('')
+  const [phone, setPhone] = useState('')
+  const [invitationCode, setInvitationCode] = useState('')
+
+  const handleSignUp = async () => {
+    var body = { email: emailAddress, phone: phone, password: password, inviteCode: invitationCode }
+    var result = await postData('api/auth/register', body)
+    console.log(result);
+
+  }
+  const isResetButtonEnabled =
+    emailAddress !== '' &&
+    password !== '' &&
+    phone !== '' &&
+    invitationCode !== '';
+
+
   return (
     <SafeAreaView>
-      <View
-        style={{
-          padding: 20,
-        }}
-      >
+      <View style={{ padding: 20, }} >
         {/* #29fd53 */}
-
         <View style={{ alignItems: "center" }}>
-          <Text
-            style={{
-              fontSize: 30,
-              color: 'purple',
-              // fontFamily:Font('poppins-bold'),
-              fontWeight: 'bold',
-              marginVertical: 30,
-
-            }}
-          >
+          <Text style={{ fontSize: 30, color: 'purple', fontWeight: 'bold', marginVertical: 10 }}>
             Create Account
           </Text>
-          <View style={{ width: SCREEN_WIDTH * 0.8, alignSelf: 'center', borderBottomWidth: 0.3, marginBottom: 20, borderBottomColor: 'gray' }}></View>
+          <View style={{ width: SCREEN_WIDTH * 0.8, alignSelf: 'center', borderBottomWidth: 0.3, marginBottom: 10, borderBottomColor: 'gray' }}></View>
           <View style={{
             width: SCREEN_WIDTH * 0.8,
           }}>
@@ -41,26 +47,31 @@ const Register = () => {
                 fontWeight: '700',
                 textAlign: "center",
                 lineHeight: 30,
+                color: 'black'
               }}
             >
               Create an account so you can explore all the exisiting games
             </Text>
           </View>
         </View>
-
         <View
           style={{
             marginVertical: 30,
           }}
         >
-          <AppTextInput placeholder="Email" />
-          <AppTextInput placeholder='Password' />
-          <AppTextInput placeholder="Confirm Password" />
+          <AppTextInput placeholder="Email"
+            value={emailAddress} onChangeText={(text) => setEmailAddress(text)} />
+          <AppTextInput placeholder="Phone" secureTextEntry value={phone} onChangeText={(text) => setPhone(text)} />
+          <AppTextInput placeholder='Password' secureTextEntry value={password} onChangeText={(text) => setPassword(text)} />
+          <AppTextInput placeholder="Invite Code" value={invitationCode} onChangeText={(text) => setInvitationCode(text)} />
+
         </View>
         <View>
         </View>
         <TouchableOpacity
-          style={Styles.signIn}
+          onPress={handleSignUp}
+          style={[styles.signIn, isResetButtonEnabled ? styles.enabledButton : styles.disabledButton]}
+          disabled={!isResetButtonEnabled}
         >
           <Text style={{ color: 'white', textAlign: "center", fontSize: 20, }}>
             Sign Up
@@ -146,20 +157,19 @@ const Register = () => {
 export default Register
 
 
-const Styles = StyleSheet.create({
+const styles = StyleSheet.create({
   signIn: {
     paddingHorizontal: 20,
     paddingVertical: 10,
     backgroundColor: 'purple',
     marginVertical: 30,
     borderRadius: 10,
-    shadowColor: 'red',
-    shadowOffset: {
-      width: 0,
-      height: 10,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 10,
     elevation: 5
-  }
+  },
+  enabledButton: {
+    backgroundColor: 'purple',
+  },
+  disabledButton: {
+    backgroundColor: 'lightgray',
+  },
 })

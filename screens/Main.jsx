@@ -5,7 +5,7 @@ import MainSlider from '../components/sliders/MainSlider';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
 import { Colors } from '../components/Constants/Colors';
 
-const Main = () => {
+export default function Main() {
   const navigation = useNavigation();
   // Sample data for recent winners and top 10 lists
   const recentWinnersData = [
@@ -63,7 +63,7 @@ const Main = () => {
   // Renders a grid of game icons
   const renderGameIcon = ({ item }) => (
     <TouchableOpacity style={styles.gameIconContainer}
-      onPress={() => navigation.navigate('Gamescreen')}>
+      onPress={() => navigation.navigate("Gamescreen")}>
 
       <Image source={item.icon} style={styles.gameIcon} />
       <Text style={styles.gameIconText}>{item.name}</Text>
@@ -94,6 +94,9 @@ const Main = () => {
         <Text style={styles.informationText}>Information Screen</Text>
         <Text style={styles.informationText2}>Attention for all the members make sure that you filled all the bank details correctly</Text>
       </View>
+      <TouchableOpacity style={{ height: 30, width: 70, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center' }} onPress={() => alert('hi')}><Text>Hi</Text>
+
+      </TouchableOpacity>
 
       {/* Game Icons */}
       <View style={styles.iconSection}>
@@ -210,13 +213,13 @@ const styles = StyleSheet.create({
     resizeMode: 'contain'
   },
   gameIconText: {
-    // color: 'white',
+    color: 'black',
     fontSize: 14,
     fontWeight: 'bold'
   },
   informationSection: {
     backgroundColor: Colors.lightGray,
-    padding: 20,
+    padding: 10,
     margin: 10,
     borderRadius: 10,
   },
@@ -229,8 +232,9 @@ const styles = StyleSheet.create({
   informationText2: {
     fontWeight: '500',
     fontSize: 14,
-    marginBottom: 10,
-    lineHeight: 25
+    marginBottom: 1,
+    lineHeight: 20,
+    color: 'black'
 
   },
   section: {
@@ -297,4 +301,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Main;
+;

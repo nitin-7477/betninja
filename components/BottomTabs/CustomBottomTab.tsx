@@ -51,7 +51,7 @@ export const CustomButtomTab: FC<BottomTabBarProps> = ({
     const currentPath = interpolatePath(
       progress.value,
       Array.from({ length: curvedPaths.length }, (_, index) => index + 1),
-      curvedPaths
+      curvedPaths,
     );
     runOnJS(handleMoveCircle)(currentPath);
     return {

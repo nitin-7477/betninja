@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, Button, ScrollView, StyleSheet, TouchableOpacity, FlatList, Modal, TextInput, KeyboardAvoidingView } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
+import { View, Text, Image, Button, ScrollView, StyleSheet, TouchableOpacity, Modal, TextInput, KeyboardAvoidingView } from 'react-native';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import HistoryScreen from '../components/GameScreen/HistoryScreen';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
 import MyHistoryScreen from '../components/GameScreen/MyHistoryScreen';
-
 
 
 const myHistoryData = [
@@ -21,27 +20,32 @@ const HomeScreen = ({ navigation }) => {
 
   const [gameHistory, setGameHistory] = useState(true)
   const [myHistory, setMyHistory] = useState(false)
-  const [secondsRemaining30, setSecondsRemaining30] = useState(30);
-  const [secondsRemaining60, setSecondsRemaining60] = useState(60);
-  const [secondsRemaining, setSecondsRemaining] = useState(30);
-  const [modalCountdown, setModalCountdown] = useState(5);
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [serialNumber, setSerialNumber] = useState(1);
-  const [selectedDuration, setSelectedDuration] = useState(30);
   const [btnModalVisibleGreen, setBtnModalVisibleGreen] = useState(false);
   const [btnModalVisibleRed, setBtnModalVisibleRed] = useState(false);
   const [btnModalVisibleViolet, setBtnModalVisibleViolet] = useState(false);
-
   const [inputValue, setInputValue] = useState('1'); // Set default value to '1'
   const [totalAmount, setTotalAmount] = useState('');
 
-  // ***************************For the timer***************************
+
+  const [secondsRemaining30, setSecondsRemaining30] = useState(30);
+  const [secondsRemaining60, setSecondsRemaining60] = useState(60);
+  const [secondsRemaining300, setSecondsRemaining300] = useState(300); // 5 minutes
+  const [secondsRemaining600, setSecondsRemaining600] = useState(600); // 10 minutes
+  const [modalCountdown, setModalCountdown] = useState(5);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [serialNumber, setSerialNumber] = useState(1);
+  const [selectedDuration, setSelectedDuration] = useState(null);
+
   useEffect(() => {
     const interval = setInterval(() => {
       if (selectedDuration === 30) {
         setSecondsRemaining30((prevSeconds) => (prevSeconds > 0 ? prevSeconds - 1 : 0));
       } else if (selectedDuration === 60) {
         setSecondsRemaining60((prevSeconds) => (prevSeconds > 0 ? prevSeconds - 1 : 0));
+      } else if (selectedDuration === 300) {
+        setSecondsRemaining300((prevSeconds) => (prevSeconds > 0 ? prevSeconds - 1 : 0));
+      } else if (selectedDuration === 600) {
+        setSecondsRemaining600((prevSeconds) => (prevSeconds > 0 ? prevSeconds - 1 : 0));
       }
     }, 1000);
 
@@ -49,15 +53,88 @@ const HomeScreen = ({ navigation }) => {
   }, [selectedDuration, isModalVisible]);
 
   useEffect(() => {
-    if (selectedDuration === 30 && secondsRemaining30 === 0 && isModalVisible) {
-      handleTimerCompletion(30, setSecondsRemaining30);
-    } else if (selectedDuration === 60 && secondsRemaining60 === 0 && isModalVisible) {
-      handleTimerCompletion(60, setSecondsRemaining60);
-    } else if ((selectedDuration === 30 && secondsRemaining30 === 5) || (selectedDuration === 60 && secondsRemaining60 === 5)) {
+    if (
+      (selectedDuration === 30 && secondsRemaining30 === 0) ||
+      (selectedDuration === 60 && secondsRemaining60 === 0) ||
+      (selectedDuration === 300 && secondsRemaining300 === 0) ||
+      (selectedDuration === 600 && secondsRemaining600 === 0)
+    ) {
+      handleTimerCompletion(selectedDuration);
+    } else if (
+      (selectedDuration === 30 && secondsRemaining30 === 5) ||
+      (selectedDuration === 60 && secondsRemaining60 === 5) ||
+      (selectedDuration === 300 && secondsRemaining300 === 5) ||
+      (selectedDuration === 600 && secondsRemaining600 === 5)
+    ) {
       setModalVisible(true);
       setModalCountdown(5);
     }
-  }, [secondsRemaining30, secondsRemaining60, isModalVisible]);
+  }, [secondsRemaining30, secondsRemaining60, secondsRemaining300, secondsRemaining600, isModalVisible]);
+
+  useEffect(() => {
+    let countdownInterval;
+
+    if (isModalVisible) {
+      countdownInterval = setInterval(() => {
+        setModalCountdown((prevCountdown) => (prevCountdown > 0 ? prevCountdown - 1 : 0));
+      }, 1000);
+    }
+
+    if (modalCountdown === 0) {
+      clearInterval(countdownInterval);
+      setModalVisible(false);
+      resetTimer(selectedDuration);
+      setSerialNumber((prevSerialNumber) => (prevSerialNumber < 30 ? prevSerialNumber + 1 : prevSerialNumber));
+      // Start the timer again
+      setTimeout(() => {
+        startTimer(selectedDuration);
+      }, 1000);
+    }
+
+    return () => clearInterval(countdownInterval);
+  }, [isModalVisible, modalCountdown, selectedDuration]);
+
+  const startTimer = (duration) => {
+    if (!isModalVisible) {
+      setSelectedDuration(duration);
+    }
+  };
+
+  const resetTimer = (duration) => {
+    if (duration === 30) {
+      setSecondsRemaining30(duration);
+    } else if (duration === 60) {
+      setSecondsRemaining60(duration);
+    } else if (duration === 300) {
+      setSecondsRemaining300(duration);
+    } else if (duration === 600) {
+      setSecondsRemaining600(duration);
+    }
+  };
+
+  const handleTimerCompletion = (duration) => {
+    setModalVisible(false);
+    resetTimer(duration);
+    setSerialNumber((prevSerialNumber) => (prevSerialNumber < 30 ? prevSerialNumber + 1 : prevSerialNumber));
+    // Start the timer again
+    setTimeout(() => {
+      startTimer(duration);
+    }, 1000);
+  };
+
+  const formatTime = (timeInSeconds) => {
+    const minutes = Math.floor(timeInSeconds / 60);
+    const seconds = timeInSeconds % 60;
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
+
+  // ***************************For the timer***************************
+
 
 
   useEffect(() => {
@@ -81,61 +158,8 @@ const HomeScreen = ({ navigation }) => {
 
 
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setSecondsRemaining((prevSeconds) => (prevSeconds > 0 ? prevSeconds - 1 : 0));
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [selectedDuration, isModalVisible]);
-
-  useEffect(() => {
-    if (secondsRemaining === 0 && isModalVisible) {
-      setModalVisible(false);
-      setSecondsRemaining(selectedDuration);
-      setSerialNumber((prevSerialNumber) => (prevSerialNumber < 30 ? prevSerialNumber + 1 : prevSerialNumber));
-    } else if (secondsRemaining === 5 && secondsRemaining > 0) {
-      setModalVisible(true);
-      setModalCountdown(5);
-    }
-  }, [secondsRemaining, isModalVisible]);
-
-  useEffect(() => {
-    let countdownInterval;
-
-    if (isModalVisible) {
-      countdownInterval = setInterval(() => {
-        setModalCountdown((prevCountdown) => (prevCountdown > 0 ? prevCountdown - 1 : 0));
-      }, 1000);
-    }
-
-    // Close modal automatically when countdown reaches 0
-    if (modalCountdown === 0) {
-      clearInterval(countdownInterval);
-      setModalVisible(false);
-      setSecondsRemaining(selectedDuration); // Reset the main timer
-      setSerialNumber((prevSerialNumber) => (prevSerialNumber < 30 ? prevSerialNumber + 1 : prevSerialNumber));
-    }
-
-    return () => clearInterval(countdownInterval);
-  }, [isModalVisible, modalCountdown, selectedDuration]);
-
-  const startTimer = (duration) => {
-    if (duration !== selectedDuration) {
-      setSelectedDuration(duration);
-      setSecondsRemaining(duration);
-    }
-  };
-  const formatTime = (timeInSeconds) => {
-    const minutes = Math.floor(timeInSeconds / 60);
-    const seconds = timeInSeconds % 60;
-    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-  };
 
 
-  const closeModal = () => {
-    setModalVisible(false);
-  };
 
   const handleGameHistory = () => {
     setGameHistory(true)
@@ -537,7 +561,7 @@ const HomeScreen = ({ navigation }) => {
             onPress={() => startTimer(30)}
           >
             <Image source={require('../assets/clock.png')} style={{ height: 40, width: 40 }} />
-            <Text style={{ fontWeight: 'bold', }}>30 Sec</Text>
+            <Text style={{ fontWeight: 'bold', color: 'black' }}>30 Sec</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.gameButton}>
@@ -547,17 +571,7 @@ const HomeScreen = ({ navigation }) => {
           // onPress={() => navigation.navigate('WithdrawScreen')}
           >
             <Image source={require('../assets/clock.png')} style={{ height: 40, width: 40 }} />
-            <Text style={{ fontWeight: 'bold', }}>1 Min</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.gameButton}>
-          <TouchableOpacity
-            onPress={() => startTimer(180)}
-            style={styles.clockBtn}
-          // onPress={() => navigation.navigate('WithdrawScreen')}
-          >
-            <Image source={require('../assets/clock.png')} style={{ height: 40, width: 40 }} />
-            <Text style={{ fontWeight: 'bold', }}>3 Min</Text>
+            <Text style={{ fontWeight: 'bold', color: 'black' }}>1 Min</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.gameButton}>
@@ -567,11 +581,20 @@ const HomeScreen = ({ navigation }) => {
           // onPress={() => navigation.navigate('WithdrawScreen')}
           >
             <Image source={require('../assets/clock.png')} style={{ height: 40, width: 40 }} />
-            <Text style={{ fontWeight: 'bold', }}>5 Min</Text>
+            <Text style={{ fontWeight: 'bold', color: 'black' }}>5 Min</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.gameButton}>
+          <TouchableOpacity
+            onPress={() => startTimer(600)}
+            style={styles.clockBtn}
+          // onPress={() => navigation.navigate('WithdrawScreen')}
+          >
+            <Image source={require('../assets/clock.png')} style={{ height: 40, width: 40 }} />
+            <Text style={{ fontWeight: 'bold', color: 'black' }}>5 Min</Text>
           </TouchableOpacity>
         </View>
       </View>
-
       {isModalVisible ? (
         <Modal
           visible={true}
@@ -580,17 +603,28 @@ const HomeScreen = ({ navigation }) => {
           onRequestClose={closeModal}
         >
           <View style={styles.modalContainer}>
-            <Text style={styles.modalText}>{formatTime(modalCountdown)} seconds left!</Text>
+            <Text style={styles.modalText}>{formatTime(modalCountdown)}</Text>
+            <TouchableOpacity onPress={closeModal}>
+              <Text style={styles.closeModalText}>Close</Text>
+            </TouchableOpacity>
           </View>
         </Modal>
       ) : (
         <View style={{ height: SCREEN_HEIGHT * 0.2, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', justifyContent: 'center', alignItems: 'center', backgroundColor: 'purple', marginVertical: 10, borderRadius: 10 }}>
           <Text style={{ color: 'white', fontSize: 16, marginVertical: 5 }}>Time remaining</Text>
-          <Text style={{ color: 'white', fontSize: 32, marginVertical: 5 }}>{formatTime(secondsRemaining)}</Text>
-          <Text style={{ color: 'white', fontSize: 16, marginVertical: 5 }}>Serial Number: {serialNumber}</Text>
+          {selectedDuration === 30 ? (
+            <Text style={{ color: 'white', fontSize: 32, marginVertical: 5 }}>{formatTime(secondsRemaining30)}</Text>
+          ) : selectedDuration === 60 ? (
+            <Text style={{ color: 'white', fontSize: 32, marginVertical: 5 }}>{formatTime(secondsRemaining60)}</Text>
+          ) : selectedDuration === 300 ? (
+            <Text style={{ color: 'white', fontSize: 32, marginVertical: 5 }}>{formatTime(secondsRemaining300)}</Text>
+          ) : selectedDuration === 600 ? (
+            <Text style={{ color: 'white', fontSize: 32, marginVertical: 5 }}>{formatTime(secondsRemaining600)}</Text>
+          ) : null}
+          <Text >Serial Number: {serialNumber}</Text>
         </View>
       )}
-      <Text style={{ fontWeight: '900', fontSize: 18, marginVertical: 10 }}>Prediction Options:</Text>
+      <Text style={{ fontWeight: '900', fontSize: 18, marginVertical: 10, color: 'black' }}>Prediction Options:</Text>
       <View style={styles.buttonRow}>
         <TouchableOpacity
           onPress={() => alert('Big')}

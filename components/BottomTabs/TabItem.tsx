@@ -7,11 +7,11 @@ import Animated, {
     withTiming
 } from 'react-native-reanimated'
 
-import { Feather } from "@expo/vector-icons";
+import Feather from 'react-native-vector-icons/Feather';
 import { SCREEN_WIDTH } from "../Constants/Screen";
 import usePath from "../hooks/usePath";
 import { getPathXCenterByIndex } from "../utils/path";
-import { styled } from "tailwindcss-react-native";
+// import { styled } from "tailwindcss-react-native";
 
 export type TabProps = {
     label : string;

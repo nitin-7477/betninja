@@ -1,6 +1,5 @@
-import { View, Text, ScrollView } from 'react-native'
-import { StatusBar } from 'expo-status-bar'
-import { Ionicons, EvilIcons, AntDesign } from '@expo/vector-icons'
+import { View, Text, ScrollView, StatusBar } from 'react-native'
+import { Ionicons, EvilIcons, AntDesign } from 'react-native-vector-icons'
 import React from 'react'
 
 

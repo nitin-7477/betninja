@@ -1,7 +1,9 @@
 import { FlatList, StyleSheet, Text, View, TouchableOpacity, ScrollView, Image } from 'react-native'
 import React from 'react'
 import { Colors } from '../Constants/Colors';
-import { Ionicons, Entypo, AntDesign, EvilIcons, Feather, MaterialIcons } from "@expo/vector-icons";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import Feather from "react-native-vector-icons/Feather";
+
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen';
 
 const Setting = () => {

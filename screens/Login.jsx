@@ -1,12 +1,25 @@
-import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, TextInput, Image } from "react-native";
+import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, TextInput, Image, Alert } from "react-native";
 import React from "react";
+import { useState } from "react";
 import AppTextInput from "../components/AppTextInput";
-import { AntDesign } from "@expo/vector-icons";
+import AntDesign from "react-native-vector-icons/AntDesign"
 import { useNavigation } from "@react-navigation/native";
 import Font from "../components/Constants/Font";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../components/Constants/Screen";
+import { ServerURL, postData } from "../config/ServerServices";
 
 const Login = () => {
+  const [emailAddress, setEmailAddress] = useState('')
+  const [password, setPassword] = useState('')
+
+  const checkLogin = async () => {
+    var body = { email: emailAddress, password: password }
+    var result = await postData('api/auth/login', body)
+    console.log(result);
+
+  }
+
+
   const navigation = useNavigation();
   return (
     <SafeAreaView>
@@ -38,7 +51,8 @@ const Login = () => {
               fontWeight: '700',
               textAlign: "center",
               letterSpacing: 0.5,
-              lineHeight: 30
+              lineHeight: 30,
+              color: "black"
             }}
           >
             Welcome back you've been missed!
@@ -49,14 +63,12 @@ const Login = () => {
             marginVertical: 30,
           }}
         >
-          <AppTextInput placeholder="Email" />
-          {/* <View style={{ width: SCREEN_WIDTH * 0.88, height: SCREEN_HEIGHT * 0.07, backgroundColor: 'skyblue', paddingHorizontal: 20, paddingVertical: 10, borderRadius: 10 }}>
-            <TextInput placeholder="Email" />
-          </View> */}
-          <AppTextInput placeholder='Password' />
+          <AppTextInput value={emailAddress} onChangeText={(text) => setEmailAddress(text)} placeholder="Email" />
+
+          <AppTextInput value={password} onChangeText={(text) => setPassword(text)} placeholder='Password' />
         </View>
         <TouchableOpacity
-          onPress={() => navigation.navigate("ForgotPassword")}
+          // onPress={() => navigation.navigate("ForgotPassword")}
 
           style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
           <Image source={require('../assets/lock.png')} style={{ height: 30, width: 30 }} />
@@ -71,6 +83,7 @@ const Login = () => {
           </Text>
         </TouchableOpacity >
         <TouchableOpacity
+          onPress={checkLogin}
           style={Styles.signIn}
         >
           <Text

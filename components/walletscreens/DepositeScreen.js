@@ -2,7 +2,7 @@ import { SafeAreaView, StyleSheet, Text, View, ScrollView, Image, TouchableOpaci
 import React from 'react'
 import { useState } from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
-import { Ionicons, EvilIcons, AntDesign, Entypo } from '@expo/vector-icons'
+import Entypo from 'react-native-vector-icons/Entypo'
 import RNUpiPayment from 'react-native-upi-payment'
 
 
@@ -14,12 +14,12 @@ const DepositeScreen = () => {
   };
 
   const PaymentGateWay = () => {
+
     RNUpiPayment.initializePayment(
       {
-
         vpa: '7477235745@paytm', // or can be john@ybl or mobileNo@upi
-        payeeName: 'John Doe',
-        amount: '1',
+        payeeName: 'Nitin Gautam',
+        amount: '100',
         transactionRef: 'aasf-332-aoei-fn',
       },
       successCallback,
@@ -27,7 +27,7 @@ const DepositeScreen = () => {
     );
   }
 
-  
+
   function successCallback(data) {
     console.log(data)
   }

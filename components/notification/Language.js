@@ -2,7 +2,6 @@ import { FlatList, StyleSheet, Text, View, TouchableOpacity, Image, ScrollView }
 import React from 'react'
 import { Colors } from '../Constants/Colors'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
-import { Ionicons, Entypo, AntDesign } from "@expo/vector-icons";
 import { useState } from 'react';
 
 const Language = () => {

@@ -15,15 +15,18 @@ const AppTextInput: React.FC<TextInputProps> = ({ ...otherProps }) => {
       onFocus={() => setFocused(true)}
       onBlur={() => setFocused(false)}
       placeholderTextColor={'dark'}
+
       style={[
         {
           // fontFamily:"poppins-regular",
-          fontSize: 14,
+          fontSize: 16,
+          color: 'black',
           paddingHorizontal: 20,
           paddingVertical: 12,
           backgroundColor: Colors.lightblue,
           borderRadius: 10,
           marginVertical: 10,
+          fontWeight: '500'
         },
         focused && {
           borderWidth: 1,

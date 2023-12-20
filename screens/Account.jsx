@@ -1,6 +1,8 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
-import { Ionicons, AntDesign } from "@expo/vector-icons";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import Ionicons from "react-native-vector-icons/Ionicons";
+
 import { useNavigation } from "@react-navigation/native";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
 import { Colors } from "../components/Constants/Colors";
@@ -115,7 +117,7 @@ const Account = () => {
         </View>
       </View>
 
-    
+
       <View style={styles.serviceItems}>
         <Text style={styles.serviceTitle}>Service Center</Text>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10 }}>

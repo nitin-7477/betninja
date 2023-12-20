@@ -37,8 +37,8 @@ const MyHistoryScreen = () => {
             <Image source={item.image} style={{ height: 30, width: 30 }} />
           </View>
           <View>
-            <Text>{item.id}</Text>
-            <Text>
+            <Text style={{ color: 'black' }}>{item.id}</Text>
+            <Text style={{ color: 'black' }}>
               {item.date}
               {item.time}
             </Text>
@@ -63,7 +63,7 @@ const MyHistoryScreen = () => {
       </Pressable>
       {expandedIndex === index ? (
         <View>
-          <Text>{item.period}</Text>
+          <Text style={{ color: 'black' }}>{item.period}</Text>
           {/* Add more details as needed */}
         </View>
       ) : null}
@@ -73,7 +73,7 @@ const MyHistoryScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.details}>
-        <Text>Details</Text>
+        <Text style={{ color: 'black' }}>Details</Text>
       </View>
       <FlatList data={myHistoryData} renderItem={renderItem} keyExtractor={(item) => item.id} />
     </View>

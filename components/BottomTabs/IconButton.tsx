@@ -1,19 +1,19 @@
 import { View, Text, Pressable, StyleProp, ViewStyle, StyleSheet, PressableProps } from 'react-native'
-import React, {FC} from 'react'
-import { Feather } from '@expo/vector-icons'
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import React, { FC } from 'react'
+import Feather from 'react-native-vector-icons/Feather';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export type IconLibrary = {
-    [key: string] : () => React.ComponentType<any>;
+    [key: string]: () => React.ComponentType<any>;
 }
 
-const ICON_LIBRARIES : IconLibrary = {
-    Feather : () => Feather,
+const ICON_LIBRARIES: IconLibrary = {
+    Feather: () => Feather,
     MaterialCommunityIcons: () => MaterialCommunityIcons,
-} 
+}
 
 export type IconButtonProps = PressableProps & {
-    icon : string;
+    icon: string;
     iconFamily?: 'Feather' | 'MaterialCommunityIcons';
     variant?: 'text' | 'contained' | 'outline';
     size?: 'small' | 'medium' | 'big';
@@ -24,39 +24,39 @@ export type IconButtonProps = PressableProps & {
 
 }
 
-const IconButton : FC<IconButtonProps> = ({
+const IconButton: FC<IconButtonProps> = ({
     icon,
-    iconFamily = "Father",
+    iconFamily = 'Feather',
     variant = 'contained',
     size = 'medium',
     iconColor = 'white',
     roundness = 'medium',
-    style ={},
+    style = {},
     onPress,
     ...rest
-}: IconButtonProps) =>{
+}: IconButtonProps) => {
     const Icon = ICON_LIBRARIES[iconFamily]();
-    const iconSize = size ==='big' ? 24 : size === 'medium' ? 16 :12;
-    const buttonSize = size === 'big' ? 48 : size === 'medium' ? 36:12;
+    const iconSize = size === 'big' ? 24 : size === 'medium' ? 16 : 12;
+    const buttonSize = size === 'big' ? 48 : size === 'medium' ? 36 : 12;
 
     const buttonStyles = [
         styles.button,
         styles[`${variant}Button`],
         styles[`${roundness}Roundness`],
-        {width: buttonSize, height : buttonSize},
+        { width: buttonSize, height: buttonSize },
         style
     ] as StyleProp<ViewStyle>;
 
     return (
         <Pressable
-        {...rest}
-        onPress={onPress}
-        style={({pressed}) => [
-            buttonStyles,
-            pressed && styles.buttonPressed,
-            pressed && styles.shadow
-        ]}>
-            <Icon name={icon} size={iconSize} color={iconColor}/>
+            {...rest}
+            onPress={onPress}
+            style={({ pressed }) => [
+                buttonStyles,
+                pressed && styles.buttonPressed,
+                pressed && styles.shadow
+            ]}>
+            <Icon name={icon} size={iconSize} color={iconColor} />
         </Pressable>
     )
 }
@@ -64,43 +64,43 @@ const IconButton : FC<IconButtonProps> = ({
 export default IconButton
 
 const styles = StyleSheet.create({
-    button :{
+    button: {
         borderRadius: 40,
         alignItems: 'center',
-        justifyContent:'center',
+        justifyContent: 'center',
     },
-    buttonPressed:{
-        opacity:0.9
+    buttonPressed: {
+        opacity: 0.9
     },
-    containedButton :{
+    containedButton: {
         backgroundColor: '#2196F3'
     },
-    textButton:{
-        backgroundColor : 'transparent'
+    textButton: {
+        backgroundColor: 'transparent'
     },
-    outlineButton:{
+    outlineButton: {
         backgroundColor: 'transparent',
-        borderWidth: 1 ,
+        borderWidth: 1,
         borderColor: '#2196F3'
     },
-   fullRoundness:{
-    borderRadius: 100
-   },
-   mediumRoundness:{
-    borderRadius: 20
-   },
-   smallRoundness:{
-    borderRadius: 10
-   },
-   shadow:{
-    shadowColor: '#000',
-    shadowOffset:{
-        width:0,
-        height:1
+    fullRoundness: {
+        borderRadius: 100
     },
-    shadowOpacity: 0.18,
-    shadowRadius:1.0,
-    elevation: 1,
-   }
+    mediumRoundness: {
+        borderRadius: 20
+    },
+    smallRoundness: {
+        borderRadius: 10
+    },
+    shadow: {
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 1
+        },
+        shadowOpacity: 0.18,
+        shadowRadius: 1.0,
+        elevation: 1,
+    }
 
 })

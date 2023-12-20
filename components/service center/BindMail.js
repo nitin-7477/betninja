@@ -3,7 +3,7 @@ import React from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
 import { Colors } from '../Constants/Colors'
 import AppTextInput from '../AppTextInput'
-import { Ionicons, Entypo, AntDesign, EvilIcons, Feather, MaterialIcons } from "@expo/vector-icons";
+import Feather from "react-native-vector-icons/Feather";
 
 
 const BindMail = () => {

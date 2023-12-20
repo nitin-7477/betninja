@@ -2,7 +2,7 @@ import { SafeAreaView, StyleSheet, Text, View, ScrollView, Image, TouchableOpaci
 import React from 'react'
 import { useState } from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
-import { Ionicons, EvilIcons, AntDesign, Entypo } from '@expo/vector-icons'
+// import { Ionicons, EvilIcons, AntDesign, Entypo } from '@expo/vector-icons'
 
 const WithdrawHistoryScreen = () => {
   const [amount, setAmount] = useState('');

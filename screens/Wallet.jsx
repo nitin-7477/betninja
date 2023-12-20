@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TextInput, TouchableOpacity, FlatList, Image } from 'react-native';
-import { FontAwesome5 } from '@expo/vector-icons';
+// import { FontAwesome5 } from '@expo/vector-icons';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
-import { Ionicons, EvilIcons, AntDesign, Entypo } from '@expo/vector-icons'
+// import { Ionicons, EvilIcons, AntDesign, Entypo } from '@expo/vector-icons'
 
 // ₹
 

@@ -22,22 +22,22 @@ const HistoryScreen = () => {
   return (
     <>
       <View style={{ display: 'flex', flexDirection: 'row', width: SCREEN_WIDTH * 0.9, marginTop: 20, height: 45, backgroundColor: '#d9ad82', paddingVertical: 10, borderTopEndRadius: 10, paddingHorizontal: 5, borderTopStartRadius: 10 }}>
-        <View style={{ width: SCREEN_WIDTH * 0.25, }}><Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>Peroid</Text></View>
+        <View style={{ width: SCREEN_WIDTH * 0.25, }}><Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold', }}>Peroid</Text></View>
         <View style={{ width: SCREEN_WIDTH * 0.17, alignItems: 'center' }}><Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>Number</Text></View>
         <View style={{ width: SCREEN_WIDTH * 0.3, alignItems: 'center' }}><Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>Big Small</Text></View>
         <View ><Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>Color</Text></View>
-
       </View>
+
       <FlatList data={localData} renderItem={({ item }) => {
         return <View style={{ display: 'flex', flexDirection: 'row', width: SCREEN_WIDTH * 0.9, marginTop: 2, height: 43, paddingVertical: 10, borderBottomWidth: 0.5, borderBottomColor: 'grey', paddingHorizontal: 5, }}>
-          <View style={{ width: SCREEN_WIDTH * 0.25, }}><Text style={{ fontSize: 16 }}>{item.period}</Text></View>
-          <View style={{ width: SCREEN_WIDTH * 0.17, alignItems: 'center' }}><Text style={{ fontSize: 16 }}>{item.number}</Text></View>
-          <View style={{ width: SCREEN_WIDTH * 0.3, alignItems: 'center' }}><Text style={{ fontSize: 16 }}>{item.bigsmall}</Text></View>
-          <View><Text style={{ width: SCREEN_WIDTH * 0.2, fontSize: 16, alignItems: 'center' }}>{item.color}</Text></View>
+          <View style={{ width: SCREEN_WIDTH * 0.25, }}><Text style={{ fontSize: 16, color: 'black' }}>{item.period}</Text></View>
+          <View style={{ width: SCREEN_WIDTH * 0.17, alignItems: 'center' }}><Text style={{ fontSize: 16, color: 'black' }}>{item.number}</Text></View>
+          <View style={{ width: SCREEN_WIDTH * 0.3, alignItems: 'center' }}><Text style={{ fontSize: 16, color: 'black' }}>{item.bigsmall}</Text></View>
+          <View><Text style={{ width: SCREEN_WIDTH * 0.2, fontSize: 16, alignItems: 'center', color: 'black' }}>{item.color}</Text></View>
 
         </View>
       }} />
-     
+
     </>
   );
 };

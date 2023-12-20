@@ -201,3 +201,16 @@ const styles = StyleSheet.create({
 });
 
 export default TimerWithModal;
+
+
+
+
+
+
+
+
+{/* <View style={{ height: SCREEN_HEIGHT * 0.2, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', justifyContent: 'center', alignItems: 'center', backgroundColor: 'purple', marginVertical: 10, borderRadius: 10 }}>
+<Text style={{ color: 'white', fontSize: 16, marginVertical: 5 }}>Time remaining</Text>
+<Text style={{ color: 'white', fontSize: 32, marginVertical: 5 }}>{formatTime(secondsRemaining)}</Text>
+<Text style={{ color: 'white', fontSize: 16, marginVertical: 5 }}>Serial Number: {serialNumber}</Text>
+</View> */}

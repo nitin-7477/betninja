@@ -2,7 +2,7 @@ import { FlatList, StyleSheet, Text, View, TouchableOpacity } from 'react-native
 import React from 'react'
 import { Colors } from '../Constants/Colors'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
-import { Ionicons, Entypo, AntDesign } from "@expo/vector-icons";
+import { Ionicons, Entypo, AntDesign } from "react-native-vector-icons";
 
 const notificationData = [
   {

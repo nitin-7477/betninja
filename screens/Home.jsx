@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Modal from "react-native-modal";
 import Promotion from "./Promotion";
 import Activity from "./Activity";
 import Wallet from "./Wallet";
 import Account from "./Account";
 import Main from "./Main";
-import { View, Text, Button, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, Button, Image, TouchableOpacity, StyleSheet ,Modal} from "react-native";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../components/Constants/Screen";
 import { Colors } from "../components/Constants/Colors";
 
@@ -51,9 +50,11 @@ const Home = () => {
           component={Account}
         />
       </Tab.Navigator>
-      <Modal isVisible={isNotificationVisible}>
+
+
+      {/* <Modal isVisible={isNotificationVisible}>
         <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-          {/* <Text>{notificationMessage}</Text> */}
+          <Text>{notificationMessage}</Text>
           <View style={{ height: SCREEN_HEIGHT * 0.8, width: SCREEN_WIDTH * 0.8, alignSelf: 'center', backgroundColor: 'green', justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
             <View style={{ width: 230, height: 40, backgroundColor: Colors.purple, marginVertical: 10, justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
               <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'white' }}>Highlights</Text>
@@ -75,7 +76,8 @@ const Home = () => {
             </TouchableOpacity>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
+
     </View>
   );
 };
