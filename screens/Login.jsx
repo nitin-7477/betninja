@@ -9,6 +9,7 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../components/Constants/Screen";
 import { ServerURL, postData } from "../config/ServerServices";
 
 const Login = () => {
+  const navigation = useNavigation();
   const [emailAddress, setEmailAddress] = useState('')
   const [password, setPassword] = useState('')
 
@@ -20,7 +21,8 @@ const Login = () => {
   }
 
 
-  const navigation = useNavigation();
+
+
   return (
     <SafeAreaView>
       <View
@@ -68,7 +70,7 @@ const Login = () => {
           <AppTextInput value={password} onChangeText={(text) => setPassword(text)} placeholder='Password' />
         </View>
         <TouchableOpacity
-          // onPress={() => navigation.navigate("ForgotPassword")}
+          onPress={() => navigation.navigate("ForgotPassword")}
 
           style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
           <Image source={require('../assets/lock.png')} style={{ height: 30, width: 30 }} />
@@ -98,14 +100,14 @@ const Login = () => {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate("Register")}
+          onPress={() => navigation.navigate('Register')}
           style={{
             padding: 10,
           }}
         >
           <Text
             style={{
-              // fontFamily: Font('poppins-semiBold'),
+
               color: 'black',
               textAlign: "center",
               fontSize: 14,
@@ -122,7 +124,7 @@ const Login = () => {
         >
           <Text
             style={{
-              // fontFamily: Font('poppins-semiBold'),
+
               color: 'blue',
               textAlign: "center",
               fontSize: 14,

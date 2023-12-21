@@ -94,9 +94,6 @@ export default function Main() {
         <Text style={styles.informationText}>Information Screen</Text>
         <Text style={styles.informationText2}>Attention for all the members make sure that you filled all the bank details correctly</Text>
       </View>
-      <TouchableOpacity style={{ height: 30, width: 70, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center' }} onPress={() => alert('hi')}><Text>Hi</Text>
-
-      </TouchableOpacity>
 
       {/* Game Icons */}
       <View style={styles.iconSection}>

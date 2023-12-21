@@ -25,7 +25,7 @@ const Account = () => {
       </View>
 
       <View style={styles.balance}>
-        <Text>Total Balance: ₹1,000.00</Text>
+        <Text style={{ color: 'black' }}>Total Balance: ₹1,000.00</Text>
       </View>
 
       <View style={{ flexDirection: 'row', width: SCREEN_WIDTH * 0.9, justifyContent: 'space-between', alignContent: 'center', marginBottom: 10 }}>
@@ -36,18 +36,7 @@ const Account = () => {
           <Image source={require('../assets/wallet/deposit.png')} style={{ height: 50, width: 50 }} />
           <Text style={{ color: 'white', fontSize: 10 }}>Wallet</Text>
         </TouchableOpacity>
-        {/* <View style={styles.iconItem}>
-          <Ionicons name="add-circle" size={30} color="green" />
-          <Text>Deposit</Text>
-        </View>
-        <View style={styles.iconItem}>
-          <Ionicons name="remove-circle" size={30} color="red" />
-          <Text>Withdraw</Text>
-        </View>
-        <View style={styles.iconItem}>
-          <Ionicons name="star" size={30} color="orange" />
-          <Text>Level</Text>
-        </View> */}
+
 
         <TouchableOpacity
           onPress={() => navigation.navigate("DepositeScreen")}
@@ -78,7 +67,7 @@ const Account = () => {
             style={styles.sectionItem}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Ionicons name="notifications" size={24} color="black" />
-              <Text style={{ marginLeft: 10, fontSize: 16 }}>Notifications</Text>
+              <Text style={{ marginLeft: 10, fontSize: 16, color: 'black' }}>Notifications</Text>
             </View>
             <AntDesign name="right" size={20} color="grey" />
 
@@ -87,7 +76,7 @@ const Account = () => {
             style={styles.sectionItem}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Ionicons name="gift" size={24} color="black" />
-              <Text style={{ marginLeft: 10, fontSize: 16 }}>Gifts</Text>
+              <Text style={{ marginLeft: 10, fontSize: 16, color: 'black' }}>Gifts</Text>
             </View>
             <AntDesign name="right" size={20} color="grey" />
 
@@ -97,7 +86,7 @@ const Account = () => {
             onPress={() => navigation.navigate("GameStats")} style={styles.sectionItem}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Ionicons name="stats-chart" size={24} color="black" />
-              <Text style={{ marginLeft: 10, fontSize: 16 }}>Game Chart</Text>
+              <Text style={{ marginLeft: 10, fontSize: 16, color: 'black' }}>Game Chart</Text>
             </View>
             <AntDesign name="right" size={20} color="grey" />
 
@@ -107,7 +96,7 @@ const Account = () => {
             style={styles.sectionItem}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Ionicons name="language" size={24} color="black" />
-              <Text style={{ marginLeft: 10, fontSize: 16 }}>Languages</Text>
+              <Text style={{ marginLeft: 10, fontSize: 16, color: 'black' }}>Languages</Text>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Text style={{ marginRight: 10 }}>English</Text>
@@ -125,31 +114,31 @@ const Account = () => {
             onPress={() => navigation.navigate("Setting")}
             style={styles.serviceIcons}>
             <Ionicons name="settings" size={24} color="black" />
-            <Text>Settings</Text>
+            <Text style={{ color: 'black' }}>Settings</Text>
           </TouchableOpacity>
           <View style={styles.serviceIcons}>
             <Ionicons name="chatbubble" size={24} color="black" />
-            <Text>Feedback</Text>
+            <Text style={{ color: 'black' }}>Feedback</Text>
           </View>
           <View style={styles.serviceIcons}>
             <Ionicons name="person-sharp" size={24} color="black" />
-            <Text>Customer Service</Text>
+            <Text style={{ color: 'black' }}>Customer Service</Text>
           </View>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10 }}>
           <View style={styles.serviceIcons}>
             <Ionicons name="notifications" size={24} color="black" />
-            <Text>Notification</Text>
+            <Text style={{ color: 'black' }}>Notification</Text>
           </View>
           <View style={styles.serviceIcons}>
 
             <Ionicons name="book" size={24} color="black" />
-            <Text>Beginner's Guide</Text>
+            <Text style={{ color: 'black' }}>Beginner's Guide</Text>
           </View>
           <View style={styles.serviceIcons}>
 
             <Ionicons name="information-circle" size={24} color="black" />
-            <Text>About Us</Text>
+            <Text style={{ color: 'black' }}>About Us</Text>
           </View>
         </View>
       </View>
@@ -165,7 +154,7 @@ const styles = {
   container: {
     flex: 1,
     padding: 20,
-    marginTop: 30
+
   },
   header: {
     flexDirection: "row",
@@ -182,16 +171,19 @@ const styles = {
   },
   userName: {
     fontSize: 18,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: 'black'
   },
   userId: {
     fontSize: 14,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: 'black'
   },
   level: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: 'purple'
+    color: 'purple',
+
   },
   balance: {
     marginVertical: 20,
@@ -215,11 +207,13 @@ const styles = {
   },
   sectionTitle: {
     fontSize: 22,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: 'black'
   },
   serviceTitle: {
     fontSize: 20,
-    fontWeight: 500
+    fontWeight: 500,
+    color: 'black'
   },
   sectionItems: {
     height: SCREEN_HEIGHT * 0.3, width: SCREEN_WIDTH * 0.9, backgroundColor: Colors.lightGray, padding: 10, borderRadius: 7

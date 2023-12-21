@@ -2,15 +2,21 @@ import { FlatList, StyleSheet, Text, View, TouchableOpacity, Image, ScrollView }
 import React from 'react'
 import { Colors } from '../Constants/Colors'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 
 
 const GameStats = () => {
   return (
     <ScrollView style={styles.container}>
       {/* header */}
-      <View style={styles.header}>
-        <Text style={{ fontSize: 16, fontWeight: '600' }}>Game Statistics</Text>
-      </View>
+
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}><TouchableOpacity
+        onPress={() => navigation.navigate('Wallet')}
+        style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
+        <Ionicons name='return-up-back' color={'white'} size={30} />
+      </TouchableOpacity>
+        <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.purple, marginLeft: 30 }}>Game Charts</Text></View>
       <View style={{ flexDirection: 'row' }}>
         <TouchableOpacity style={styles.otpBtn}    >
           <Text style={{ color: 'white', textAlign: 'center', fontSize: 12, }} >

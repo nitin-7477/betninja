@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import React , {FC, useEffect} from 'react';
+import React, { FC, useEffect } from 'react';
 import Animated, {
     useAnimatedProps,
     useAnimatedStyle,
@@ -14,48 +14,48 @@ import { getPathXCenterByIndex } from "../utils/path";
 // import { styled } from "tailwindcss-react-native";
 
 export type TabProps = {
-    label : string;
+    label: string;
     icon: string;
-    index:number,
-    activeIndex:number;
-    onTabPress: ()=> void;
+    index: number,
+    activeIndex: number;
+    onTabPress: () => void;
 }
 
 const iCON_SIZE = 25;
-const LABEL_WIDTH = SCREEN_WIDTH /4;
+const LABEL_WIDTH = SCREEN_WIDTH / 4;
 const AnimatedIcon = Animated.createAnimatedComponent(Feather);
 
 
-const TabItem : FC<TabProps> = ({
+const TabItem: FC<TabProps> = ({
     label,
     icon,
     index,
     activeIndex,
     onTabPress
-}) =>{
-    const {curvedPaths} = usePath();
+}) => {
+    const { curvedPaths } = usePath();
     const animatedActiveIndex = useSharedValue(activeIndex);
     const iconPosition = getPathXCenterByIndex(curvedPaths, index);
     const labelPosition = getPathXCenterByIndex(curvedPaths, index);
 
-    const tabStyle = useAnimatedStyle(()=>{
-        const translateY = animatedActiveIndex.value - 1 === index ? -35 :20;
+    const tabStyle = useAnimatedStyle(() => {
+        const translateY = animatedActiveIndex.value - 1 === index ? -35 : 20;
         const iconPositionX = iconPosition - index * iCON_SIZE;
         return {
-            width:iCON_SIZE,
-            height:iCON_SIZE,
-            transform:[
-                {translateY: withTiming(translateY)},
-                {translateX: iconPositionX - iCON_SIZE / 2},
+            width: iCON_SIZE,
+            height: iCON_SIZE,
+            transform: [
+                { translateY: withTiming(translateY) },
+                { translateX: iconPositionX - iCON_SIZE / 2 },
             ]
         }
     })
-    const labelContainerStyle = useAnimatedStyle(()=>{
-        const translateY = animatedActiveIndex.value -1 === index ? 36 : 100;
+    const labelContainerStyle = useAnimatedStyle(() => {
+        const translateY = animatedActiveIndex.value - 1 === index ? 36 : 100;
         return {
-            transform:[
-                {translateY:withTiming(translateY)},
-                {translateX: labelPosition - LABEL_WIDTH / 2},
+            transform: [
+                { translateY: withTiming(translateY) },
+                { translateX: labelPosition - LABEL_WIDTH / 2 },
             ]
         }
     })
@@ -65,36 +65,36 @@ const TabItem : FC<TabProps> = ({
     )
 
     // first time render
-    useEffect(()=>{
+    useEffect(() => {
         animatedActiveIndex.value = activeIndex;
-        if(activeIndex === index + 1){
+        if (activeIndex === index + 1) {
             iconColor.value = withTiming('white');
-        }else{
+        } else {
             iconColor.value = withTiming('rgba(128,128,128,0.8)');
         }
-    },[activeIndex]);
+    }, [activeIndex]);
 
-    const animatedIconProps = useAnimatedProps(()=>({
+    const animatedIconProps = useAnimatedProps(() => ({
         color: iconColor.value
     }));
-    return(
+    return (
         <>
-        <Animated.View style={[tabStyle]}>
-            <Pressable
-            testID={`tab${label}`}
-            //increase touchable area
-            hitSlop={{top:30, bottom:30,left:50,right:50}}
-            onPress={onTabPress}>
-                <AnimatedIcon
-                name={icon}
-                size={25}
-                animatedProps={animatedIconProps}
-                />
-            </Pressable>
-        </Animated.View>
-        <Animated.View style={[labelContainerStyle, styles.labelContainer]}>
-            <Text style={styles.label}>{label}</Text>
-        </Animated.View>
+            <Animated.View style={[tabStyle]}>
+                <Pressable
+                    testID={`tab${label}`}
+                    //increase touchable area
+                    hitSlop={{ top: 30, bottom: 30, left: 50, right: 50 }}
+                    onPress={onTabPress}>
+                    <AnimatedIcon
+                        name={icon}
+                        size={25}
+                        animatedProps={animatedIconProps}
+                    />
+                </Pressable>
+            </Animated.View>
+            <Animated.View style={[labelContainerStyle, styles.labelContainer]}>
+                <Text style={styles.label}>{label}</Text>
+            </Animated.View>
         </>
     )
 }
@@ -102,13 +102,13 @@ const TabItem : FC<TabProps> = ({
 export default TabItem;
 
 const styles = StyleSheet.create({
-    labelContainer:{
+    labelContainer: {
         position: 'absolute',
         alignItems: 'center',
-        width:LABEL_WIDTH,
+        width: LABEL_WIDTH,
     },
-    label:{
-        color:'rgba(128, 128, 128, 0.8',
-        fontSize:17
+    label: {
+        color: 'rgba(128, 128, 128, 0.8',
+        fontSize: 17
     }
 })

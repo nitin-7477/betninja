@@ -7,7 +7,7 @@ const TimerButton = ({ onPress, text }) => (
   </TouchableOpacity>
 );
 
-const TimerWithModal = () => {
+const TimerWithModal3Min = () => {
   const [secondsRemaining180, setSecondsRemaining180] = useState(180); // 3 minutes
   const [modalCountdown, setModalCountdown] = useState(5);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -137,4 +137,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TimerWithModal;
+export default TimerWithModal3Min;

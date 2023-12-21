@@ -11,7 +11,7 @@ const BindMail = () => {
     <View style={styles.container}>
       {/* header */}
       <View style={styles.header}>
-        <Text style={{ fontSize: 16, fontWeight: '600' }}>Bind MailBox</Text>
+        <Text style={{ fontSize: 16, fontWeight: '600', color: 'black' }}>Bind MailBox</Text>
       </View>
       <View style={{ flexDirection: 'row' }}>
         <Feather name='lock' size={20} color={Colors.fontGray} />
@@ -23,10 +23,7 @@ const BindMail = () => {
         <Text style={{ marginLeft: 10, fontSize: 16, color: Colors.fontGray, fontWeight: '500', marginRight: 10 }}>Referrel Code</Text>
       </View>
       <AppTextInput placeholder='Please Enter Referrel Code' />
-      <View style={{ flexDirection: 'row' }}>
-        <Feather name='lock' size={20} color={Colors.fontGray} />
-        <Text style={{ marginLeft: 10, fontSize: 16, color: Colors.fontGray, fontWeight: '500', marginRight: 10 }}>Verification Code</Text>
-      </View>
+     
       <AppTextInput placeholder="Please Enter Verification code" />
       <TouchableOpacity style={styles.otpBtn} >
         <Text style={{ color: 'white', textAlign: "center", fontSize: 16, }} >

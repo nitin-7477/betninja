@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, Button, ScrollView, StyleSheet, TouchableOpacity, Modal, TextInput, KeyboardAvoidingView } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import HistoryScreen from '../components/GameScreen/HistoryScreen';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
 import MyHistoryScreen from '../components/GameScreen/MyHistoryScreen';
+import TimerWithModal30Sec from '../components/timers/TimerOf30Sec';
+import TimerWithModal60Sec from '../components/timers/TimerOf60Sec';
 
 
 const myHistoryData = [
@@ -35,6 +38,13 @@ const HomeScreen = ({ navigation }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [serialNumber, setSerialNumber] = useState(1);
   const [selectedDuration, setSelectedDuration] = useState(null);
+
+  const [selectedButton, setSelectedButton] = useState(null);
+
+  const handleButtonClick = (buttonNumber) => {
+    setSelectedButton(buttonNumber);
+  };
+
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -529,6 +539,12 @@ const HomeScreen = ({ navigation }) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Home')}
+          style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
+          <Ionicons name='return-up-back' color={'white'} size={30} />
+        </TouchableOpacity>
+
         <Image source={require('../image/1.jpg')} style={styles.logo} />
       </View>
 
@@ -558,7 +574,7 @@ const HomeScreen = ({ navigation }) => {
         <View style={styles.gameButton}>
           <TouchableOpacity
             style={styles.clockBtn}
-            onPress={() => startTimer(30)}
+            onPress={() => handleButtonClick(1)}
           >
             <Image source={require('../assets/clock.png')} style={{ height: 40, width: 40 }} />
             <Text style={{ fontWeight: 'bold', color: 'black' }}>30 Sec</Text>
@@ -566,7 +582,7 @@ const HomeScreen = ({ navigation }) => {
         </View>
         <View style={styles.gameButton}>
           <TouchableOpacity
-            onPress={() => startTimer(60)}
+            onPress={() => handleButtonClick(2)}
             style={styles.clockBtn}
           // onPress={() => navigation.navigate('WithdrawScreen')}
           >
@@ -591,7 +607,7 @@ const HomeScreen = ({ navigation }) => {
           // onPress={() => navigation.navigate('WithdrawScreen')}
           >
             <Image source={require('../assets/clock.png')} style={{ height: 40, width: 40 }} />
-            <Text style={{ fontWeight: 'bold', color: 'black' }}>5 Min</Text>
+            <Text style={{ fontWeight: 'bold', color: 'black' }}>10 Min</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -624,6 +640,8 @@ const HomeScreen = ({ navigation }) => {
           <Text >Serial Number: {serialNumber}</Text>
         </View>
       )}
+      {selectedButton === 1 && <TimerWithModal30Sec />}
+      {selectedButton === 2 && <TimerWithModal60Sec />}
       <Text style={{ fontWeight: '900', fontSize: 18, marginVertical: 10, color: 'black' }}>Prediction Options:</Text>
       <View style={styles.buttonRow}>
         <TouchableOpacity
@@ -769,10 +787,13 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: 'center',
+    flexDirection: 'row',
+    width: SCREEN_WIDTH * 0.9
   },
   logo: {
     width: 150,
     height: 50,
+    marginLeft: 60
   },
   refreshIcon: {
     marginLeft: 20,

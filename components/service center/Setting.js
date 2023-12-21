@@ -3,15 +3,19 @@ import React from 'react'
 import { Colors } from '../Constants/Colors';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Feather from "react-native-vector-icons/Feather";
+import { useNavigation } from "@react-navigation/native";
+
 
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen';
 
 const Setting = () => {
+  const navigation = useNavigation();
+
   return (
     <ScrollView style={styles.container}>
       {/* header */}
       <View style={styles.header}>
-        <Text style={{ fontSize: 16, fontWeight: '600' }}>Setting</Text>
+        <Text style={{ fontSize: 16, fontWeight: '600', color: 'black' }}>Setting</Text>
       </View>
       <View style={styles.section}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15 }}>
@@ -42,10 +46,12 @@ const Setting = () => {
             <Feather name='copy' size={20} color={Colors.fontGray} />
           </View>
         </View>
-
       </View>
 
-      <TouchableOpacity style={styles.history}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Login')}
+        style={styles.history}>
+
         <View style={{ flexDirection: 'row' }}>
           <Feather name='lock' size={20} color={Colors.fontGray} />
           <Text style={{ marginLeft: 10, fontSize: 16, color: Colors.fontGray, fontWeight: '500', marginRight: 10 }}>Login password</Text>
@@ -57,7 +63,10 @@ const Setting = () => {
 
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.history}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('BindMail')}
+
+        style={styles.history}>
         <View style={{ flexDirection: 'row' }}>
           <Feather name='mail' size={20} color={Colors.fontGray} />
           <Text style={{ marginLeft: 10, fontSize: 16, color: Colors.fontGray, fontWeight: '500', marginRight: 10 }}>Bind MailBox</Text>
@@ -81,7 +90,9 @@ const Setting = () => {
 
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.history}>
+      <TouchableOpacity
+        onPress={() => alert('Updated Version')}
+        style={styles.history}>
         <View style={{ flexDirection: 'row' }}>
           <MaterialIcons name='system-update' size={25} color={Colors.fontGray} />
           <Text style={{ marginLeft: 10, fontSize: 16, color: Colors.fontGray, fontWeight: '500', marginRight: 10 }}>Updated Version</Text>
@@ -90,9 +101,7 @@ const Setting = () => {
           <Text style={{ fontSize: 16, color: Colors.fontGray, fontWeight: '500', marginRight: 10 }}>1.2.3</Text>
           <Feather name='chevron-right' size={20} color={Colors.fontGray} />
         </View>
-
       </TouchableOpacity>
-
 
     </ScrollView>
   )

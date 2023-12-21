@@ -4,9 +4,15 @@ import { useState } from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
 import Entypo from 'react-native-vector-icons/Entypo'
 import RNUpiPayment from 'react-native-upi-payment'
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Colors } from '../Constants/Colors'
+import { useNavigation } from "@react-navigation/native";
+
 
 
 const DepositeScreen = () => {
+  const navigation = useNavigation();
+
   const [amount, setAmount] = useState('');
 
   const handleDepositWithdraw = (tab) => {
@@ -19,7 +25,7 @@ const DepositeScreen = () => {
       {
         vpa: '7477235745@paytm', // or can be john@ybl or mobileNo@upi
         payeeName: 'Nitin Gautam',
-        amount: '100',
+        amount: '1',
         transactionRef: 'aasf-332-aoei-fn',
       },
       successCallback,
@@ -39,7 +45,12 @@ const DepositeScreen = () => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.depositSection}>
-        <Text style={styles.sectionTitle}>Deposit</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}><TouchableOpacity
+          onPress={() => navigation.navigate('Wallet')}
+          style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
+          <Ionicons name='return-up-back' color={'white'} size={30} />
+        </TouchableOpacity>
+          <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.purple, marginLeft: 30 }}>Deposit Screen</Text></View>
         {/* *********************balance card******************* */}
         <View style={{ height: SCREEN_HEIGHT * 0.15, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: '#d9ad82', marginVertical: 10, borderRadius: 10, padding: 10 }}>
 
@@ -87,7 +98,7 @@ const DepositeScreen = () => {
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
             <Image source={require('../../assets/wallet/payment1.png')} style={{ height: 20, width: 20 }} />
 
-            <Text style={{ marginLeft: 10, fontSize: 16, fontWeight: 'bold' }} >Select Channel</Text>
+            <Text style={{ marginLeft: 10, fontSize: 16, fontWeight: 'bold', color: 'black' }} >Select Channel</Text>
           </View>
           <View style={{ height: SCREEN_HEIGHT * 0.1, width: SCREEN_WIDTH * 0.8, alignSelf: 'center', backgroundColor: '#d9ad82', borderRadius: 10, padding: 10 }}>
 
@@ -103,7 +114,7 @@ const DepositeScreen = () => {
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
             <Image source={require('../../assets/wallet/payment1.png')} style={{ height: 20, width: 20 }} />
 
-            <Text style={{ marginLeft: 10, fontSize: 16, fontWeight: 'bold' }} >Deposite Amount</Text>
+            <Text style={{ marginLeft: 10, fontSize: 16, fontWeight: 'bold', color: 'black' }} >Deposite Amount</Text>
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
             <TouchableOpacity style={styles.redBtn} onPress={() => setAmount(500)}>
@@ -157,25 +168,25 @@ const DepositeScreen = () => {
         <View style={{ height: SCREEN_HEIGHT * 0.35, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: '#eeeeee', marginBottom: 10, borderRadius: 10, padding: 10, }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
             <Image source={require('../../assets/wallet/payment1.png')} style={{ height: 20, width: 20 }} />
-            <Text style={{ marginLeft: 10, fontSize: 16, fontWeight: 'bold' }} >Recharge Instruction</Text>
+            <Text style={{ marginLeft: 10, fontSize: 16, fontWeight: 'bold', color: 'black' }} >Recharge Instruction</Text>
           </View>
 
           <View style={{ height: SCREEN_HEIGHT * 0.28, width: SCREEN_WIDTH * 0.85, borderWidth: 0.4, borderColor: 'grey', borderRadius: 10, padding: 10 }}>
             <View style={{ flexDirection: 'row', marginVertical: 2 }}>
               <Entypo name='star' size={20} style={{ marginRight: 10, color: '#d9ad82' }} />
-              <Text style={{ width: SCREEN_WIDTH * 0.77, }}>If the transfer time is up, please fill out the deposite form again</Text>
+              <Text style={{ width: SCREEN_WIDTH * 0.77, color: 'black' }}>If the transfer time is up, please fill out the deposite form again</Text>
             </View>
             <View style={{ flexDirection: 'row', marginVertical: 2 }}>
               <Entypo name='star' size={20} style={{ marginRight: 10, color: '#d9ad82' }} />
-              <Text style={{ width: SCREEN_WIDTH * 0.75, }}>The Transfer amount must match the order you created, ohterwise the money can not be credited successfully</Text>
+              <Text style={{ width: SCREEN_WIDTH * 0.75, color: 'black' }}>The Transfer amount must match the order you created, ohterwise the money can not be credited successfully</Text>
             </View>
             <View style={{ flexDirection: 'row', marginVertical: 2 }}>
               <Entypo name='star' size={20} style={{ marginRight: 10, color: '#d9ad82' }} />
-              <Text style={{ width: SCREEN_WIDTH * 0.7, }}>If you transfer the wrong amount, our company will not be responsible for this lost account</Text>
+              <Text style={{ width: SCREEN_WIDTH * 0.7, color: 'black' }}>If you transfer the wrong amount, our company will not be responsible for this lost account</Text>
             </View>
             <View style={{ flexDirection: 'row', marginVertical: 2 }}>
               <Entypo name='star' size={20} style={{ marginRight: 10, color: '#d9ad82' }} />
-              <Text style={{ width: SCREEN_WIDTH * 0.75, }}>NOTE: Do not cancel the deposite order after the money has been tranferred</Text>
+              <Text style={{ width: SCREEN_WIDTH * 0.75, color: 'black' }}>NOTE: Do not cancel the deposite order after the money has been tranferred</Text>
             </View>
           </View>
         </View>
@@ -194,7 +205,7 @@ const styles = {
     flex: 1,
     padding: 20,
     backgroundColor: '#f5f5f5',
-    marginTop: 30
+
   },
   redBtn: {
     backgroundColor: '#D3D3D3',
@@ -239,7 +250,7 @@ const styles = {
     marginBottom: 30,
   },
   sectionTitle: {
-
+    color: "black",
     fontSize: 18,
     marginVertical: 10,
     fontWeight: 'bold'
@@ -257,6 +268,7 @@ const styles = {
   amountInput: {
     paddingVertical: 10,
     paddingHorizontal: 16,
+    color: 'black'
   },
   depositButton: {
     backgroundColor: '#d9ad82',

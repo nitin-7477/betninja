@@ -13,8 +13,25 @@ const Register = () => {
   const [password, setPassword] = useState('')
   const [phone, setPhone] = useState('')
   const [invitationCode, setInvitationCode] = useState('')
+  const [isRegistered, setIsRegistered] = useState(false);
+
+  useEffect(() => {
+    // Check if the user is already registered
+    // Replace this logic with actual backend check
+    if (emailAddress === 'inayatnitin@gmail.com') {
+      setIsRegistered(true);
+    } else {
+      setIsRegistered(false);
+    }
+  }, [emailAddress]);
 
   const handleSignUp = async () => {
+
+    if (isRegistered) {
+      console.log('User is already registered');
+      navigation.navigate('Login');
+      return;
+    }
     var body = { email: emailAddress, phone: phone, password: password, inviteCode: invitationCode }
     var result = await postData('api/auth/register', body)
     console.log(result);
@@ -65,6 +82,7 @@ const Register = () => {
           <AppTextInput placeholder='Password' secureTextEntry value={password} onChangeText={(text) => setPassword(text)} />
           <AppTextInput placeholder="Invite Code" value={invitationCode} onChangeText={(text) => setInvitationCode(text)} />
 
+          {!isResetButtonEnabled ? <Text style={{ color: 'red' }}> * Please fill all Details</Text> : <></>}
         </View>
         <View>
         </View>
@@ -77,7 +95,7 @@ const Register = () => {
             Sign Up
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("Home")} style={{ padding: 10, }} >
+        <TouchableOpacity onPress={() => navigation.navigate('Login')} style={{ padding: 10, }} >
           <Text style={{ color: 'black', textAlign: "center", fontSize: 14, }}>
             Already have an account?
           </Text>

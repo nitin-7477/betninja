@@ -20,10 +20,9 @@ const AppTextInput: React.FC<TextInputProps> = ({ ...otherProps }) => {
         {
           // fontFamily:"poppins-regular",
           fontSize: 16,
-          color: 'black',
           paddingHorizontal: 20,
           paddingVertical: 12,
-          backgroundColor: Colors.lightblue,
+          backgroundColor: '#1434A4',
           borderRadius: 10,
           marginVertical: 10,
           fontWeight: '500'

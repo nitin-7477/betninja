@@ -33,7 +33,7 @@ export const CustomButtomTab: FC<BottomTabBarProps> = ({
   const selectIcon = (routeName: string) => {
     switch (routeName) {
       case "Main":
-        return "Home";
+        return "Main";
       case "Promotion":
         return "Promotion";
       case "Activity":

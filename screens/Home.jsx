@@ -5,9 +5,10 @@ import Activity from "./Activity";
 import Wallet from "./Wallet";
 import Account from "./Account";
 import Main from "./Main";
-import { View, Text, Button, Image, TouchableOpacity, StyleSheet ,Modal} from "react-native";
+import { View, Text, Button, Image, TouchableOpacity, StyleSheet, Modal } from "react-native";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../components/Constants/Screen";
 import { Colors } from "../components/Constants/Colors";
+import CustomButtomTab from "../components/BottomTabs/CustomBottomTab";
 
 const Tab = createBottomTabNavigator();
 
@@ -23,7 +24,7 @@ const Home = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <Tab.Navigator initialRouteName="Home">
+      <Tab.Navigator tabBar={props => <CustomButtomTab {...props} />} initialRouteName="Home">
         <Tab.Screen
           options={{ tabBarLabel: "Promotion", headerShown: false }}
           name="Promotion"

@@ -7,30 +7,30 @@ const TimerButton = ({ onPress, text }) => (
   </TouchableOpacity>
 );
 
-const TimerWithModal = () => {
-  const [secondsRemaining180, setSecondsRemaining180] = useState(180); // 3 minutes
+const TimerWithModal5Min = () => {
+  const [secondsRemaining300, setSecondsRemaining300] = useState(300); // 5 minutes
   const [modalCountdown, setModalCountdown] = useState(5);
   const [isModalVisible, setModalVisible] = useState(false);
   const [serialNumber, setSerialNumber] = useState(1);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setSecondsRemaining180((prevSeconds) => (prevSeconds > 0 ? prevSeconds - 1 : 0));
+      setSecondsRemaining300((prevSeconds) => (prevSeconds > 0 ? prevSeconds - 1 : 0));
     }, 1000);
 
     return () => clearInterval(interval);
   }, [isModalVisible]);
 
   useEffect(() => {
-    if (secondsRemaining180 === 0 && isModalVisible) {
+    if (secondsRemaining300 === 0 && isModalVisible) {
       setModalVisible(false);
-      setSecondsRemaining180(180); // Reset the timer
+      setSecondsRemaining300(300); // Reset the timer
       setSerialNumber((prevSerialNumber) => (prevSerialNumber < 30 ? prevSerialNumber + 1 : prevSerialNumber));
-    } else if (secondsRemaining180 === 5 && secondsRemaining180 > 0) {
+    } else if (secondsRemaining300 === 5 && secondsRemaining300 > 0) {
       setModalVisible(true);
       setModalCountdown(5);
     }
-  }, [secondsRemaining180, isModalVisible]);
+  }, [secondsRemaining300, isModalVisible]);
 
   useEffect(() => {
     let countdownInterval;
@@ -44,7 +44,7 @@ const TimerWithModal = () => {
     if (modalCountdown === 0) {
       clearInterval(countdownInterval);
       setModalVisible(false);
-      setSecondsRemaining180(180); // Reset the timer
+      setSecondsRemaining300(300); // Reset the timer
       setSerialNumber((prevSerialNumber) => (prevSerialNumber < 30 ? prevSerialNumber + 1 : prevSerialNumber));
     }
 
@@ -52,7 +52,7 @@ const TimerWithModal = () => {
   }, [isModalVisible, modalCountdown]);
 
   const startTimer = (duration) => {
-    setSecondsRemaining180(duration);
+    setSecondsRemaining300(duration);
     setModalVisible(false);
   };
 
@@ -68,7 +68,7 @@ const TimerWithModal = () => {
 
   return (
     <View style={styles.container}>
-      <TimerButton onPress={() => startTimer(180)} text="3 min" />
+      <TimerButton onPress={() => startTimer(300)} text="5 min" />
 
       {isModalVisible ? (
         <Modal
@@ -86,7 +86,7 @@ const TimerWithModal = () => {
         </Modal>
       ) : (
         <View>
-          <Text style={styles.timerText}>{formatTime(secondsRemaining180)}</Text>
+          <Text style={styles.timerText}>{formatTime(secondsRemaining300)}</Text>
           <Text style={styles.serialNumberText}>Serial Number: {serialNumber}</Text>
         </View>
       )}
@@ -108,17 +108,15 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 18,
-    color: 'black',
+    color: 'white',
   },
   timerText: {
     fontSize: 20,
     marginBottom: 10,
-    color: 'black'
   },
   serialNumberText: {
     fontSize: 16,
     marginBottom: 10,
-    color: 'black'
   },
   modalContainer: {
     flex: 1,
@@ -128,13 +126,13 @@ const styles = StyleSheet.create({
   },
   modalText: {
     fontSize: 18,
-    color: 'black',
+    color: '#fff',
     marginBottom: 20,
   },
   closeModalText: {
     fontSize: 16,
-    color: 'black',
+    color: '#fff',
   },
 });
 
-export default TimerWithModal;
+export default TimerWithModal5Min;

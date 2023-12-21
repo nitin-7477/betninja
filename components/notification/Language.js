@@ -3,6 +3,7 @@ import React from 'react'
 import { Colors } from '../Constants/Colors'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
 import { useState } from 'react';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Language = () => {
 
@@ -16,9 +17,13 @@ const Language = () => {
   return (
     <ScrollView style={styles.container}>
       {/* header */}
-      <View style={styles.header}>
-        <Text style={{ fontSize: 16, fontWeight: '600' }}>Language</Text>
-      </View>
+
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}><TouchableOpacity
+        onPress={() => navigation.navigate('Wallet')}
+        style={{ height: 30, width: 30, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
+        <Ionicons name='return-up-back' color={'white'} size={25} />
+      </TouchableOpacity>
+        <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.purple, marginLeft: 30 }}>Language</Text></View>
       <View style={styles.top10}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Image source={require('../../assets/indianFlag.png')} style={{ height: 20, width: 20, borderRadius: 5 }} />

@@ -2,22 +2,24 @@ import { SafeAreaView, StyleSheet, Text, View, ScrollView, Image, TouchableOpaci
 import React from 'react'
 import { useState } from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
-// import { Ionicons, EvilIcons, AntDesign, Entypo } from '@expo/vector-icons'
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Colors } from '../Constants/Colors'
+import { useNavigation } from "@react-navigation/native";
 
 const WithdrawHistoryScreen = () => {
-  const [amount, setAmount] = useState('');
+  const navigation = useNavigation();
 
-  const handleDepositWithdraw = (tab) => {
-    setActiveTab(tab);
-  };
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.depositSection}>
 
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
-          <Image source={require('../../assets/wallet/payment1.png')} style={{ height: 20, width: 20 }} />
-          <Text style={{ marginLeft: 10, fontSize: 16, fontWeight: 'bold' }} >Withdraw History</Text>
-        </View>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}><TouchableOpacity
+          onPress={() => navigation.navigate('Wallet')}
+          style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
+          <Ionicons name='return-up-back' color={'white'} size={30} />
+        </TouchableOpacity>
+          <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.purple, marginLeft: 30 }}>Withdraw History Screen</Text></View>
         {/* *********************************Withdraw History****************************** */}
 
         <View style={{ height: SCREEN_HEIGHT * 0.28, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: '#e1edf0', marginBottom: 10, borderRadius: 10, padding: 10, }}>
@@ -38,49 +40,16 @@ const WithdrawHistoryScreen = () => {
 
           <View style={{ height: SCREEN_HEIGHT * 0.28, width: SCREEN_WIDTH * 0.85, borderTopWidth: 0.4, borderColor: 'grey', borderRadius: 10, padding: 10 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-              <Text style={{ fontSize: 16 }}>Balance</Text><Text style={{ color: 'orange', fontSize: 18 }}>₹ 10000.00</Text>
+              <Text style={{ fontSize: 16, color: "black" }}>Balance</Text><Text style={{ color: 'orange', fontSize: 18 }}>₹ 10000.00</Text>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-              <Text style={{ fontSize: 16 }}>Type</Text><Text>TB- Bank</Text>
+              <Text style={{ fontSize: 16, color: "black" }}>Type</Text><Text style={{ color: "black" }}>TB- Bank</Text>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-              <Text style={{ fontSize: 16 }}>Time</Text><Text>2023-12-15 16:23:00</Text>
+              <Text style={{ fontSize: 16, color: "black" }}>Time</Text><Text style={{ color: "black" }}>2023-12-15 16:23:00</Text>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-              <Text style={{ fontSize: 16 }}>Order No</Text><Text>P2023102110360707708791</Text>
-            </View>
-
-          </View>
-        </View>
-        {/* *********************************Deposit History****************************** */}
-        <View style={{ height: SCREEN_HEIGHT * 0.28, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: '#e1edf0', marginBottom: 10, borderRadius: 10, padding: 10, }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10, justifyContent: 'space-between' }}>
-            <TouchableOpacity style={{
-              backgroundColor: '#FF6633',
-              alignItems: 'center',
-              width: SCREEN_WIDTH * 0.25,
-              paddingVertical: 5,
-              borderRadius: 7
-
-            }}>
-              <Text style={{ fontWeight: 'bold', color: 'white', }}>₹ 10K</Text>
-            </TouchableOpacity>
-            <Text style={{ marginLeft: 10, fontSize: 16, color: 'green' }} >Withdraw</Text>
-          </View>
-          {/* *********************************Deposit History Card ****************************** */}
-
-          <View style={{ height: SCREEN_HEIGHT * 0.28, width: SCREEN_WIDTH * 0.85, borderTopWidth: 0.4, borderColor: 'grey', borderRadius: 10, padding: 10 }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-              <Text style={{ fontSize: 16 }}>Balance</Text><Text style={{ color: 'orange', fontSize: 18 }}>₹ 10000.00</Text>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-              <Text style={{ fontSize: 16 }}>Type</Text><Text>TB- Bank</Text>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-              <Text style={{ fontSize: 16 }}>Time</Text><Text>2023-12-15 16:23:00</Text>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-              <Text style={{ fontSize: 16 }}>Order No</Text><Text>P2023102110360707708791</Text>
+              <Text style={{ fontSize: 16, color: "black" }}>Order No</Text><Text style={{ color: "black" }}>P2023102110360707708791</Text>
             </View>
 
           </View>
@@ -104,16 +73,49 @@ const WithdrawHistoryScreen = () => {
 
           <View style={{ height: SCREEN_HEIGHT * 0.28, width: SCREEN_WIDTH * 0.85, borderTopWidth: 0.4, borderColor: 'grey', borderRadius: 10, padding: 10 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-              <Text style={{ fontSize: 16 }}>Balance</Text><Text style={{ color: 'orange', fontSize: 18 }}>₹ 10000.00</Text>
+              <Text style={{ fontSize: 16, color: "black" }}>Balance</Text><Text style={{ color: 'orange', fontSize: 18 }}>₹ 10000.00</Text>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-              <Text style={{ fontSize: 16 }}>Type</Text><Text>TB- Bank</Text>
+              <Text style={{ fontSize: 16, color: "black" }}>Type</Text><Text style={{ color: "black" }}>TB- Bank</Text>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-              <Text style={{ fontSize: 16 }}>Time</Text><Text>2023-12-15 16:23:00</Text>
+              <Text style={{ fontSize: 16, color: "black" }}>Time</Text><Text style={{ color: "black" }}>2023-12-15 16:23:00</Text>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-              <Text style={{ fontSize: 16 }}>Order No</Text><Text>P2023102110360707708791</Text>
+              <Text style={{ fontSize: 16, color: "black" }}>Order No</Text><Text style={{ color: "black" }}>P2023102110360707708791</Text>
+            </View>
+
+          </View>
+        </View>
+        {/* *********************************Deposit History****************************** */}
+        <View style={{ height: SCREEN_HEIGHT * 0.28, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: '#e1edf0', marginBottom: 10, borderRadius: 10, padding: 10, }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10, justifyContent: 'space-between' }}>
+            <TouchableOpacity style={{
+              backgroundColor: '#FF6633',
+              alignItems: 'center',
+              width: SCREEN_WIDTH * 0.25,
+              paddingVertical: 5,
+              borderRadius: 7
+
+            }}>
+              <Text style={{ fontWeight: 'bold', color: 'white', }}>₹ 10K</Text>
+            </TouchableOpacity>
+            <Text style={{ marginLeft: 10, fontSize: 16, color: 'green' }} >Withdraw</Text>
+          </View>
+          {/* *********************************Deposit History Card ****************************** */}
+
+          <View style={{ height: SCREEN_HEIGHT * 0.28, width: SCREEN_WIDTH * 0.85, borderTopWidth: 0.4, borderColor: 'grey', borderRadius: 10, padding: 10 }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
+              <Text style={{ fontSize: 16, color: "black" }}>Balance</Text><Text style={{ color: 'orange', fontSize: 18 }}>₹ 10000.00</Text>
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
+              <Text style={{ fontSize: 16, color: "black" }}>Type</Text><Text style={{ color: "black" }}>TB- Bank</Text>
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
+              <Text style={{ fontSize: 16, color: "black" }}>Time</Text><Text style={{ color: "black" }}>2023-12-15 16:23:00</Text>
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
+              <Text style={{ fontSize: 16, color: "black" }}>Order No</Text><Text style={{ color: "black" }}>P2023102110360707708791</Text>
             </View>
 
           </View>
@@ -134,7 +136,7 @@ const styles = {
     flex: 1,
     padding: 20,
     backgroundColor: '#f5f5f5',
-    marginTop: 30
+
   },
   redBtn: {
     backgroundColor: '#D3D3D3',

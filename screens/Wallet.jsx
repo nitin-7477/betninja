@@ -1,25 +1,13 @@
-import React, { useState } from 'react';
-import { View, Text, ScrollView, TextInput, TouchableOpacity, FlatList, Image } from 'react-native';
-// import { FontAwesome5 } from '@expo/vector-icons';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
-// import { Ionicons, EvilIcons, AntDesign, Entypo } from '@expo/vector-icons'
+import React from 'react';
+import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { SCREEN_WIDTH } from '../components/Constants/Screen';
+import { useNavigation } from "@react-navigation/native";
 
 // ₹
 
 const Wallet = () => {
-  const [activeTab, setActiveTab] = useState('deposit');
+  const navigation = useNavigation();
 
-  const [history, setHistory] = useState([]);
-  const isDeposit = activeTab === 'deposit';
-  const isWithDraw = activeTab === 'withdraw';
-  const isDepositHistory = activeTab === 'deposit_history';
-  const isWithDrawHistory = activeTab === 'withdraw_history';
-
-
-
-  const handleDepositWithdraw = (tab) => {
-    setActiveTab(tab);
-  };
   // alert(amount)
 
   return (
@@ -30,30 +18,30 @@ const Wallet = () => {
 
         <View style={{ flexDirection: 'row', width: SCREEN_WIDTH * 0.9, justifyContent: 'space-between', alignContent: 'center', marginBottom: 10 }}>
           <TouchableOpacity
-            onPress={() => handleDepositWithdraw('deposit')}
+            onPress={() => navigation.navigate('DepositeScreen')}
             style={{ height: 80, width: 80, backgroundColor: '#d9ad82', borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
             <Image source={require('../assets/wallet/deposit.png')} style={{ height: 50, width: 50 }} />
             <Text style={{ color: 'white', fontSize: 10 }}>Deposite</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => handleDepositWithdraw('withdraw')}
+            onPress={() => navigation.navigate('WithdrawScreen')}
             style={{ height: 80, width: 80, backgroundColor: '#D3D3D3', borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
             <Image source={require('../assets/wallet/withdraw.png')} style={{ height: 40, width: 40 }} />
-            <Text style={{ fontSize: 12, marginVertical: 3 }} >Withdraw</Text>
+            <Text style={{ fontSize: 12, marginVertical: 3, color: 'black' }} >Withdraw</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => handleDepositWithdraw('withdraw_history')}
+            onPress={() => navigation.navigate('WithdrawHistoryScreen')}
             style={{ height: 80, width: 80, backgroundColor: '#D3D3D3', borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
             <Image source={require('../assets/wallet/withdrawHistory.png')} style={{ height: 40, width: 40 }} />
-            <Text style={{ fontSize: 12, marginVertical: 3, textAlign: 'center' }} >Withdraw History</Text>
+            <Text style={{ fontSize: 12, marginVertical: 3, textAlign: 'center', color: 'black' }} >Withdraw History</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => handleDepositWithdraw('deposit_history')}
+            onPress={() => navigation.navigate('DepositHistoryScreen')}
             style={{ height: 80, width: 80, backgroundColor: '#D3D3D3', borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
             <Image source={require('../assets/wallet/depositeHistory.png')} style={{ height: 40, width: 40 }} />
-            <Text style={{ fontSize: 12, marginVertical: 3, textAlign: 'center' }}>Deposite History</Text>
+            <Text style={{ fontSize: 12, marginVertical: 3, textAlign: 'center', color: 'black' }}>Deposite History</Text>
           </TouchableOpacity>
         </View>
 
@@ -69,9 +57,7 @@ const Wallet = () => {
 const styles = {
   container: {
     flex: 1,
-    padding: 20,
     backgroundColor: '#f5f5f5',
-    marginTop: 30
   },
   redBtn: {
     backgroundColor: '#D3D3D3',
@@ -92,6 +78,7 @@ const styles = {
   headerText: {
     fontSize: 24,
     marginBottom: 10,
+    color: 'black'
   },
   balanceText: {
     fontSize: 20,

@@ -3,8 +3,12 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, SafeAreaView } from 'r
 import AppTextInput from '../components/AppTextInput';
 import { Colors } from '../components/Constants/Colors';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useNavigation } from "@react-navigation/native";
 
 const ForgotPasswordComponent = () => {
+
+  const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
@@ -59,7 +63,12 @@ const ForgotPasswordComponent = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={{ height: SCREEN_HEIGHT * 0.115, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: Colors.lightGray, padding: 10, borderRadius: 10, elevation: 2 }}>
-        <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.purple }}>Forgot password</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}><TouchableOpacity
+          onPress={() => navigation.navigate('Login')}
+          style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
+          <Ionicons name='return-up-back' color={'white'} size={30} />
+        </TouchableOpacity>
+          <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.purple, marginLeft: 30 }}>Forgot password</Text></View>
         <Text style={{ color: 'black' }}>Enter Your Email and verificationCode to set a new Password</Text>
       </View>
       <View style={{ marginVertical: 15 }}>
