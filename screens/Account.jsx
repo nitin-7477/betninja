@@ -6,9 +6,21 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
 import { Colors } from "../components/Constants/Colors";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Account = () => {
   const navigation = useNavigation();
+
+  const handleLogOut = async () => {
+    try {
+
+      await AsyncStorage.removeItem('userToken');
+      navigation.navigate('Login');
+      console.log('User logged out');
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -17,10 +29,12 @@ const Account = () => {
           source={require("../image/1.jpg")}
           style={styles.profileImage}
         />
+
         <View style={styles.userInfo}>
           <Text style={styles.userName}>User's Name</Text>
           <Text style={styles.userId}>User ID: 123456</Text>
         </View>
+
         <Text style={styles.level}>Level: 5</Text>
       </View>
 
@@ -143,9 +157,12 @@ const Account = () => {
         </View>
       </View>
 
-      <TouchableOpacity style={styles.logoutButton}>
+      <TouchableOpacity
+        onPress={() => handleLogOut()}
+        style={styles.logoutButton}>
         <Text style={{ color: 'white' }}>Logout</Text>
       </TouchableOpacity>
+
     </ScrollView>
   );
 };
@@ -243,7 +260,8 @@ const styles = {
     justifyContent: "center",
     padding: 10,
     borderRadius: 5,
-    marginVertical: 30
+    marginVertical: 30,
+    marginBottom: 50
   },
 };
 

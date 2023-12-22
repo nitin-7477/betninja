@@ -5,7 +5,7 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Entypo from "react-native-vector-icons/Entypo";
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import { useNavigation } from "@react-navigation/native";
 
 const notificationData = [
   {
@@ -19,12 +19,13 @@ const notificationData = [
 
 
 const Notifications = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       {/* header */}
 
       <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}><TouchableOpacity
-        onPress={() => navigation.navigate('Wallet')}
+        onPress={() => navigation.navigate('Account')}
         style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
         <Ionicons name='return-up-back' color={'white'} size={30} />
       </TouchableOpacity>

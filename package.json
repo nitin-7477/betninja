@@ -11,6 +11,7 @@
     "build": "rm -rf dist/ && webpack --mode=production --config webpack.config.js",
     "web": "webpack serve --mode=development --config webpack.config.js"
   },
+
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.21.0",
     "@react-navigation/bottom-tabs": "^6.5.9",
@@ -33,6 +34,7 @@
     "react-native-vector-icons": "^10.0.3",
     "react-native-web": "^0.19.9"
   },
+  
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@babel/preset-env": "^7.20.0",

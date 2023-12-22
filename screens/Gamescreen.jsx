@@ -26,8 +26,7 @@ const HomeScreen = ({ navigation }) => {
   const [btnModalVisibleGreen, setBtnModalVisibleGreen] = useState(false);
   const [btnModalVisibleRed, setBtnModalVisibleRed] = useState(false);
   const [btnModalVisibleViolet, setBtnModalVisibleViolet] = useState(false);
-  const [inputValue, setInputValue] = useState('1'); // Set default value to '1'
-  const [totalAmount, setTotalAmount] = useState('');
+
 
 
   const [secondsRemaining30, setSecondsRemaining30] = useState(30);
@@ -147,24 +146,24 @@ const HomeScreen = ({ navigation }) => {
 
 
 
-  useEffect(() => {
-    // Set the total amount when the component mounts
-    const result = parseInt(inputValue || 0, 10);
-    setTotalAmount(result.toString());
-  }, [inputValue]);
+  // useEffect(() => {
+  //   // Set the total amount when the component mounts
+  //   const result = parseInt(inputValue || 0, 10);
+  //   setTotalAmount(result.toString());
+  // }, [inputValue]);
 
-  const handleMultiplierClick = (value) => {
-    setInputValue(value.toString());
+  // const handleMultiplierClick = (value) => {
+  //   setInputValue(value.toString());
 
-    // Calculate and set the total amount
-    const result = parseInt(inputValue || 0, 10) * value;
-    setTotalAmount(result.toString());
-  };
+  //   // Calculate and set the total amount
+  //   const result = parseInt(inputValue || 0, 10) * value;
+  //   setTotalAmount(result.toString());
+  // };
 
-  const buttonMultiplier = (value) => {
-    const result = parseInt(inputValue || 0, 10) * value;
-    setTotalAmount(result.toString());
-  };
+  // const buttonMultiplier = (value) => {
+  //   const result = parseInt(inputValue || 0, 10) * value;
+  //   setTotalAmount(result.toString());
+  // };
 
 
 
@@ -417,7 +416,32 @@ const HomeScreen = ({ navigation }) => {
 
     )
   }
+
+  
   const NewModalViolet = () => {
+    const [inputValue, setInputValue] = useState('1'); // Set default value to '1'
+    const [totalAmount, setTotalAmount] = useState('');
+
+    useEffect(() => {
+      // Set the total amount when the component mounts
+      const result = parseInt(inputValue || 0, 10);
+      setTotalAmount(result.toString());
+    }, [inputValue]);
+
+    const handleMultiplierClick = (value) => {
+      setInputValue(value.toString());
+
+      // Calculate and set the total amount
+      const result = parseInt(inputValue || 0, 10) * value;
+      setTotalAmount(result.toString());
+    };
+
+    const buttonMultiplier = (value) => {
+      const result = parseInt(inputValue || 0, 10) * value;
+      setTotalAmount(result.toString());
+    };
+
+
     return (
       <KeyboardAvoidingView style={{ justifyContent: 'flex-end', alignItems: 'center', flex: 1 }}>
         <View style={styles.diaLogViolet}>
@@ -425,48 +449,12 @@ const HomeScreen = ({ navigation }) => {
           <View style={{ height: '10%', width: '97%', padding: 5, display: 'flex', justifyContent: 'center', backgroundColor: 'purple', flexDirection: 'row', borderRadius: 10, marginVertical: 5 }}>
             <Text style={{ color: 'white' }}>Purple</Text>
           </View>
-
-          <View style={{ height: '15%', width: '97%', padding: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text>Balance</Text>
-            <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity
-                style={{ height: 25, width: 30, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => buttonMultiplier(1)}
-              >
-                <Text style={{ color: 'white' }}>1</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{ height: 25, width: 30, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => buttonMultiplier(10)}
-              >
-                <Text style={{ color: 'white' }}>10</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{ height: 25, width: 30, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => buttonMultiplier(100)}
-              >
-                <Text style={{ color: 'white' }}>100</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{ height: 25, width: 35, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => buttonMultiplier(1000)}
-              >
-                <Text style={{ color: 'white' }}>1000</Text>
-              </TouchableOpacity>
-            </View >
-
-          </View>
-
-
-          <View style={{ height: '15%', width: '97%', padding: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text>Quantity</Text>
+          <View style={{ height: '25%', width: '97%', padding: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Text style={{ color: 'purple', fontWeight: 'bold' }}>Quantity</Text>
             <View style={{ flexDirection: 'row' }}>
 
               <TextInput
-                style={styles.input}
+                style={{ backgroundColor: 'purple' }}
                 placeholder="Enter a number"
                 keyboardType="numeric"
                 value={inputValue}
@@ -476,8 +464,10 @@ const HomeScreen = ({ navigation }) => {
 
             </View></View>
 
+
+
           <View style={{ height: '15%', width: '97%', padding: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10 }}>
-            <Text>Times</Text>
+            <Text style={{ color: 'purple', fontWeight: 'bold' }}>Times</Text>
             <View style={{ flexDirection: 'row' }}>
               <TouchableOpacity
                 style={{ height: 25, width: 30, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
@@ -521,12 +511,50 @@ const HomeScreen = ({ navigation }) => {
             </View >
 
           </View>
+          <View style={{ height: '15%', width: '97%', padding: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text style={{ color: 'purple', fontWeight: 'bold' }}>Balance</Text>
+            <View style={{ flexDirection: 'row' }}>
+              <TouchableOpacity
+                style={{ height: 25, width: 50, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
+                onPress={() => buttonMultiplier(1)}
+              >
+                <Text style={{ color: 'white' }}>₹1</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={{ height: 25, width: 50, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
+                onPress={() => buttonMultiplier(10)}
+              >
+                <Text style={{ color: 'white' }}>₹10</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={{ height: 25, width: 50, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
+                onPress={() => buttonMultiplier(100)}
+              >
+                <Text style={{ color: 'white' }}>₹100</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={{ height: 25, width: 50, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
+                onPress={() => buttonMultiplier(1000)}
+              >
+                <Text style={{ color: 'white' }}>₹1000</Text>
+              </TouchableOpacity>
+            </View >
+
+          </View>
+
+
+
+
+
           <View style={{ flexDirection: 'row', flex: 1, alignItems: 'flex-end', justifyContent: 'space-between', width: '90%' }}>
             <TouchableOpacity style={{ height: 30, width: 100, justifyContent: 'center', alignItems: 'center', backgroundColor: "purple" }} onPress={() => setBtnModalVisibleViolet(false)}>
               <Text style={{ color: 'white' }}>Cancel</Text>
             </TouchableOpacity>
-            <View style={{ width: '50%' }}>
-              <Text>Total Amount :{totalAmount}</Text>
+            <View style={{ width: '50%', marginBottom: 5 }}>
+              <Text style={{ color: 'purple', fontWeight: 'bold' }}>Total Amount :{totalAmount}</Text>
 
             </View>
           </View>

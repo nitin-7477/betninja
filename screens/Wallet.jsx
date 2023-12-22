@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { SCREEN_WIDTH } from '../components/Constants/Screen';
 import { useNavigation } from "@react-navigation/native";
+import DepositeScreen from '../components/walletscreens/DepositeScreen';
 
 // ₹
 
@@ -44,6 +45,7 @@ const Wallet = () => {
             <Text style={{ fontSize: 12, marginVertical: 3, textAlign: 'center', color: 'black' }}>Deposite History</Text>
           </TouchableOpacity>
         </View>
+        <DepositeScreen />
 
 
       </View>

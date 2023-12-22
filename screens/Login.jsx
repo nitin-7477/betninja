@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, TextInput, Image, Alert } from "react-native";
+import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, TextInput, Image, Alert} from "react-native";
 import React from "react";
 import { useState } from "react";
 import AppTextInput from "../components/AppTextInput";
@@ -7,6 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import Font from "../components/Constants/Font";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../components/Constants/Screen";
 import { ServerURL, postData } from "../config/ServerServices";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Login = () => {
   const navigation = useNavigation();
@@ -14,11 +15,34 @@ const Login = () => {
   const [password, setPassword] = useState('')
 
   const checkLogin = async () => {
-    var body = { email: emailAddress, password: password }
-    var result = await postData('api/auth/login', body)
-    console.log(result);
+    try {
+      var body = { email: emailAddress, password: password };
+      var result = await postData('api/auth/login', body);
 
-  }
+      if (result.token) {
+        console.log('Login successful:', result.user);
+        await AsyncStorage.setItem('userToken', result.token);
+        navigation.navigate('Home', { user: result.user });
+        console.log(userToken)
+
+      } else {
+
+        console.log('Login failed:');
+        Alert.alert('Login Failed');
+      }
+    } catch (error) {
+
+      console.error('Error during login:', error);
+    }
+  };
+  // const printToken = async () => {
+  //   try {  
+  //     const userToken = await AsyncStorage.getItem('userToken');
+  //     console.log('User Token:', userToken);
+  //   } catch (error) {
+  //     console.error('Error retrieving token:', error);
+  //   }
+  // };
 
 
 
@@ -99,6 +123,11 @@ const Login = () => {
             Sign in
           </Text>
         </TouchableOpacity>
+
+
+
+
+
         <TouchableOpacity
           onPress={() => navigation.navigate('Register')}
           style={{

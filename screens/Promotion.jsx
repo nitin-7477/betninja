@@ -5,6 +5,7 @@ import { Colors } from '../components/Constants/Colors';
 import { useNavigation } from "@react-navigation/native";
 
 import React from 'react'
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
 
 
 const Promotion = () => {
@@ -22,16 +23,16 @@ const Promotion = () => {
           <Ionicons name='return-up-back' color={'white'} size={30} />
         </TouchableOpacity>
           <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.purple, marginLeft: 30 }}>Promotion</Text></View>
-        <View style={{ height: 300, width: 355, backgroundColor: '#d9ad82', }}>
-          <View >
 
+        <View style={{ height: SCREEN_HEIGHT * 0.38, width: SCREEN_WIDTH, backgroundColor: '#d9ad82', }}>
+          <View >
             <Text style={{ textAlign: 'center', color: 'white', fontWeight: '500', fontSize: 22, marginVertical: 10, }}>0</Text>
             <Text style={{ textAlign: 'center', color: 'white', fontWeight: '500', fontSize: 16, marginVertical: 10 }}>Yesterday's Total Commission</Text>
             <Text style={{ textAlign: 'center', color: 'white', fontWeight: '500', fontSize: 14, marginVertical: 5 }}>Upgrade the level to increase the Commission income</Text>
           </View>
 
 
-          <View style={{ backgroundColor: '#D3D3D3', height: 270, width: 320, alignSelf: 'center', marginTop: 20, borderRadius: 10 }}>
+          <View style={{ backgroundColor: '#D3D3D3', height: 270, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', marginTop: 20, borderRadius: 10 }}>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: '50%', padding: 5, height: 35, backgroundColor: 'white', justifyContent: 'center', borderTopLeftRadius: 10, flexDirection: 'row', alignItems: 'center' }}>
                 <Ionicons name='person' size={20} color={'#770737'} />
@@ -166,7 +167,6 @@ const styles = {
   container: {
     flex: 1,
     // padding: 20,
-
   },
   heading: {
     heading: 50,

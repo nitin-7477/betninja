@@ -4,44 +4,55 @@ import AppTextInput from "../components/AppTextInput";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useNavigation } from "@react-navigation/native";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../components/Constants/Screen";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { postData } from "../config/ServerServices";
 
 const Register = () => {
   const navigation = useNavigation();
   const [emailAddress, setEmailAddress] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [phone, setPhone] = useState('')
   const [invitationCode, setInvitationCode] = useState('')
   const [isRegistered, setIsRegistered] = useState(false);
 
-  useEffect(() => {
-    // Check if the user is already registered
-    // Replace this logic with actual backend check
-    if (emailAddress === 'inayatnitin@gmail.com') {
-      setIsRegistered(true);
-    } else {
-      setIsRegistered(false);
-    }
-  }, [emailAddress]);
 
   const handleSignUp = async () => {
 
-    if (isRegistered) {
-      console.log('User is already registered');
-      navigation.navigate('Login');
+    if (password !== confirmPassword) {
+      Alert.alert(
+        'PASSWORD DOES NOT MATCH',
+        [
+          {
+            text: 'OK', onPress: () => console.log('Passwords do not match')
+          }
+        ]
+      );
       return;
     }
+
     var body = { email: emailAddress, phone: phone, password: password, inviteCode: invitationCode }
     var result = await postData('api/auth/register', body)
     console.log(result);
+    if (result) {
+      Alert.alert(
+        'Registration Successful',
+        'Your account has been successfully registered!',
+        [
+          { text: 'OK', onPress: () => navigation.navigate('Login') }
+        ]
+      );
+    } else {
+      console.log('Registration failed:', result.error);
+    }
+
 
   }
   const isResetButtonEnabled =
     emailAddress !== '' &&
     password !== '' &&
-    phone !== '' &&
-    invitationCode !== '';
+    confirmPassword !== '' &&
+    phone !== '';
 
 
   return (
@@ -49,10 +60,10 @@ const Register = () => {
       <View style={{ padding: 20, }} >
         {/* #29fd53 */}
         <View style={{ alignItems: "center" }}>
-          <Text style={{ fontSize: 30, color: 'purple', fontWeight: 'bold', marginVertical: 10 }}>
+          <Text style={{ fontSize: 30, color: 'purple', fontWeight: 'bold', marginVertical: 3 }}>
             Create Account
           </Text>
-          <View style={{ width: SCREEN_WIDTH * 0.8, alignSelf: 'center', borderBottomWidth: 0.3, marginBottom: 10, borderBottomColor: 'gray' }}></View>
+          <View style={{ width: SCREEN_WIDTH * 0.8, alignSelf: 'center', borderBottomWidth: 0.3, marginBottom: 3, borderBottomColor: 'gray' }}></View>
           <View style={{
             width: SCREEN_WIDTH * 0.8,
           }}>
@@ -80,6 +91,7 @@ const Register = () => {
             value={emailAddress} onChangeText={(text) => setEmailAddress(text)} />
           <AppTextInput placeholder="Phone" secureTextEntry value={phone} onChangeText={(text) => setPhone(text)} />
           <AppTextInput placeholder='Password' secureTextEntry value={password} onChangeText={(text) => setPassword(text)} />
+          <AppTextInput placeholder='Password' secureTextEntry value={confirmPassword} onChangeText={(text) => setConfirmPassword(text)} />
           <AppTextInput placeholder="Invite Code" value={invitationCode} onChangeText={(text) => setInvitationCode(text)} />
 
           {!isResetButtonEnabled ? <Text style={{ color: 'red' }}> * Please fill all Details</Text> : <></>}
@@ -180,7 +192,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     backgroundColor: 'purple',
-    marginVertical: 30,
     borderRadius: 10,
     elevation: 5
   },

@@ -4,6 +4,7 @@ import { Colors } from '../Constants/Colors';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Feather from "react-native-vector-icons/Feather";
 import { useNavigation } from "@react-navigation/native";
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen';
@@ -14,9 +15,12 @@ const Setting = () => {
   return (
     <ScrollView style={styles.container}>
       {/* header */}
-      <View style={styles.header}>
-        <Text style={{ fontSize: 16, fontWeight: '600', color: 'black' }}>Setting</Text>
-      </View>
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}><TouchableOpacity
+        onPress={() => navigation.navigate('Account')}
+        style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
+        <Ionicons name='return-up-back' color={'white'} size={30} />
+      </TouchableOpacity>
+        <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.purple, marginLeft: 30 }}>Setting</Text></View>
       <View style={styles.section}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15 }}>
           <View style={{ height: 60, width: 60, backgroundColor: 'orange', justifyContent: 'center', alignItems: 'center', borderRadius: 50, borderColor: Colors.fontGray, borderWidth: 1 }}>

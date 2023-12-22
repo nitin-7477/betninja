@@ -11,27 +11,27 @@ export default function Main() {
   const recentWinnersData = [
     {
       name: 'Player 1', amount: '$500', game: 'Slot Machine',
-      image: require('../assets/casino-player.png')
+      image: require('../assets/player.png')
     },
     {
       name: 'Player 2', amount: '$1000', game: 'Roulette',
-      image: require('../assets/casino-player.png')
+      image: require('../assets/player.png')
     },
     {
       name: 'Player 3', amount: '$3000', game: 'Slot Machine',
-      image: require('../assets/casino-player.png')
+      image: require('../assets/player.png')
     },
     {
       name: 'Player 4', amount: '$500', game: 'Slot Machine',
-      image: require('../assets/casino-player.png')
+      image: require('../assets/player.png')
     },
     {
       name: 'Player 5', amount: '$1000', game: 'Roulette',
-      image: require('../assets/casino-player.png')
+      image: require('../assets/player.png')
     },
     {
       name: 'Player 6', amount: '$3000', game: 'Slot Machine',
-      image: require('../assets/casino-player.png')
+      image: require('../assets/player.png')
     },
     // Add more recent winners data
   ];
@@ -50,13 +50,11 @@ export default function Main() {
   // Sample data for game icons
   const gameIconsData = [
 
-    { name: 'Game 1', icon: require('../assets/casino-game.png') },
-    { name: 'Game 2', icon: require('../assets/casino-game.png') },
-    { name: 'Game 3', icon: require('../assets/casino-game.png') },
-    { name: 'Game 4', icon: require('../assets/casino-game.png') },
-    { name: 'Game 5', icon: require('../assets/casino-game.png') },
-    { name: 'Game 6', icon: require('../assets/casino-game.png') },
-    { name: 'Game 7', icon: require('../assets/casino-game.png') },
+    { name: 'Rapid Fire', icon: require('../assets/casino-game.png') },
+    { name: '1 Min Win', icon: require('../assets/casino-game.png') },
+    { name: '3 Min Win', icon: require('../assets/casino-game.png') },
+    { name: '5 Min Win', icon: require('../assets/casino-game.png') },
+
     // Add more game icons with their images
   ];
 
@@ -91,8 +89,13 @@ export default function Main() {
 
       {/* Information Section */}
       <View style={styles.informationSection}>
-        <Text style={styles.informationText}>Information Screen</Text>
-        <Text style={styles.informationText2}>Attention for all the members make sure that you filled all the bank details correctly</Text>
+        <View style={{ width: SCREEN_WIDTH * 0.75, }}>
+          <Text style={styles.informationText2}>Attention for all the members make sure that you filled all the bank details correctly</Text></View>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Notification')}
+          style={{ height: 25, width: 45, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
+          <Text style={{ color: 'white' }}>Details</Text>
+        </TouchableOpacity>
       </View>
 
       {/* Game Icons */}
@@ -115,9 +118,9 @@ export default function Main() {
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
             <View style={styles.recentWinner}>
-              <Image source={item.image} style={{ height: 60, width: 50 }} />
+              <Image source={item.image} style={{ height: 60, width: 60 }} />
+              <Text style={{ color: Colors.black, fontWeight: '500', marginVertical: 3 }}>{item.name}</Text>
               <View style={{ borderBottomWidth: 0.3, width: '100%', marginVertical: 10, borderColor: Colors.fontGray }}></View>
-              <Text style={{}}>{item.name}</Text>
               <Text style={{ color: 'red' }}>{item.amount}</Text>
               <Text style={{ color: Colors.fontGray, fontWeight: '500' }}>{item.game}</Text>
             </View>
@@ -126,7 +129,7 @@ export default function Main() {
       </View>
 
       {/* Top 10 Lists */}
-      <View style={styles.section}>
+      <View style={styles.section2}>
         <Text style={{ color: 'black', textAlign: 'center', marginVertical: 10, fontWeight: 'bold', fontSize: 18 }}>Top 10 Lists</Text>
         <FlatList
           data={top10ListsData}
@@ -138,7 +141,7 @@ export default function Main() {
                 <Image source={item.image} style={{ height: 30, width: 30 }} />
                 <View>
                   <Text style={{ fontWeight: 'bold', color: 'green' }}>{item.rank}</Text>
-                  <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
+                  <Text style={{ fontWeight: 'bold', color: 'black' }}>{item.name}</Text>
                 </View>
               </View>
               <Text style={{ color: 'orange', fontWeight: '800', fontSize: 18 }}>{item.earnings}</Text>
@@ -160,7 +163,7 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+    height: SCREEN_HEIGHT * 0.89,
     resizeMode: 'cover',
     position: 'absolute', // Position the background image
   },
@@ -216,29 +219,40 @@ const styles = StyleSheet.create({
   },
   informationSection: {
     backgroundColor: Colors.lightGray,
-    padding: 10,
+    padding: 5,
     margin: 10,
     borderRadius: 10,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    width: SCREEN_WIDTH * 0.92,
+    alignSelf: 'center',
+    alignItems: 'center'
   },
-  informationText: {
-    fontWeight: 'bold',
-    fontSize: 18,
-    marginBottom: 10,
-    color: Colors.purple
-  },
+
   informationText2: {
     fontWeight: '500',
     fontSize: 14,
     marginBottom: 1,
     lineHeight: 20,
     color: 'black'
+  },
+
+  section: {
+    backgroundColor: 'white',
+    padding: 10,
+    // margin: 10,
+    borderRadius: 10,
+    marginTop: 30,
 
   },
-  section: {
-    backgroundColor: 'rgba(0,0,0,0.01)',
+  section2: {
+    backgroundColor: 'white',
     padding: 10,
     margin: 10,
     borderRadius: 10,
+    marginTop: 30,
+    marginBottom: 0
+
   },
   sectionTitle: {
     color: 'white',
@@ -268,9 +282,9 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 10,
     width: SCREEN_WIDTH * 0.88,
-    borderRadius: 15,
+    borderRadius: 10,
     height: SCREEN_HEIGHT * 0.07,
-    marginVertical: 5,
+    marginVertical: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     elevation: 2
@@ -279,10 +293,10 @@ const styles = StyleSheet.create({
   recentWinner: {
     alignItems: 'center',
     marginHorizontal: 5,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.lightGray,
     paddingVertical: 5,
     paddingHorizontal: 10,
-    width: SCREEN_WIDTH * 0.27,
+    width: SCREEN_WIDTH * 0.35,
     borderRadius: 15,
     height: SCREEN_HEIGHT * 0.2
   },

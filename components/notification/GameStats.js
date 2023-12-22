@@ -3,16 +3,17 @@ import React from 'react'
 import { Colors } from '../Constants/Colors'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import { useNavigation } from "@react-navigation/native";
 
 
 const GameStats = () => {
+  const navigation = useNavigation();
   return (
     <ScrollView style={styles.container}>
       {/* header */}
 
       <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}><TouchableOpacity
-        onPress={() => navigation.navigate('Wallet')}
+        onPress={() => navigation.navigate('Account')}
         style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
         <Ionicons name='return-up-back' color={'white'} size={30} />
       </TouchableOpacity>
