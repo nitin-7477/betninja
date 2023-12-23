@@ -1,57 +1,77 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
-import { SCREEN_WIDTH } from '../components/Constants/Screen';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
 import { useNavigation } from "@react-navigation/native";
 import DepositeScreen from '../components/walletscreens/DepositeScreen';
-
-// ₹
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Colors } from "../components/Constants/Colors";
 
 const Wallet = () => {
   const navigation = useNavigation();
+  const [userBalance, setUserBalance] = useState(null);
+  const [selectedButton, setSelectedButton] = useState('Deposite'); // Initialize with the first button
 
-  // alert(amount)
+  useEffect(() => {
+    const retrieveUserData = async () => {
+      try {
+        const storedUserData = await AsyncStorage.getItem('userData');
+        const parsedUserData = JSON.parse(storedUserData);
+        setUserBalance(parsedUserData);
+      }
+
+      catch (error) {
+        console.error('Error retrieving user data:', error);
+      }
+    };
+    retrieveUserData();
+  }, []);
+
+  const handleButtonPress = (buttonName) => {
+    setSelectedButton(buttonName);
+  };
+
+  const renderButton = (buttonName, iconSource) => {
+    const isSelected = selectedButton === buttonName;
+    const buttonStyle = {
+      height: 80,
+      width: 80,
+      backgroundColor: isSelected ? '#d9ad82' : '#D3D3D3',
+      borderRadius: 10,
+      justifyContent: 'center',
+      alignItems: 'center',
+    };
+
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          handleButtonPress(buttonName);
+          navigation.navigate(`${buttonName}Screen`);
+        }}
+        style={buttonStyle}
+      >
+        <Image source={iconSource} style={{ height: 50, width: 50 }} />
+        <Text style={{ color: isSelected ? 'white' : 'black', fontSize: 10 }}>{buttonName}</Text>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>My Wallet</Text>
-        <Text style={styles.balanceText}>₹1,000.00</Text>
-
+        <Text style={styles.balanceText}>
+          {userBalance ? `Balance: ${userBalance.user.wallet}` : 'Loading...'}
+        </Text>
         <View style={{ flexDirection: 'row', width: SCREEN_WIDTH * 0.9, justifyContent: 'space-between', alignContent: 'center', marginBottom: 10 }}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('DepositeScreen')}
-            style={{ height: 80, width: 80, backgroundColor: '#d9ad82', borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
-            <Image source={require('../assets/wallet/deposit.png')} style={{ height: 50, width: 50 }} />
-            <Text style={{ color: 'white', fontSize: 10 }}>Deposite</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => navigation.navigate('WithdrawScreen')}
-            style={{ height: 80, width: 80, backgroundColor: '#D3D3D3', borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
-            <Image source={require('../assets/wallet/withdraw.png')} style={{ height: 40, width: 40 }} />
-            <Text style={{ fontSize: 12, marginVertical: 3, color: 'black' }} >Withdraw</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => navigation.navigate('WithdrawHistoryScreen')}
-            style={{ height: 80, width: 80, backgroundColor: '#D3D3D3', borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
-            <Image source={require('../assets/wallet/withdrawHistory.png')} style={{ height: 40, width: 40 }} />
-            <Text style={{ fontSize: 12, marginVertical: 3, textAlign: 'center', color: 'black' }} >Withdraw History</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('DepositHistoryScreen')}
-            style={{ height: 80, width: 80, backgroundColor: '#D3D3D3', borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
-            <Image source={require('../assets/wallet/depositeHistory.png')} style={{ height: 40, width: 40 }} />
-            <Text style={{ fontSize: 12, marginVertical: 3, textAlign: 'center', color: 'black' }}>Deposite History</Text>
-          </TouchableOpacity>
+          {renderButton('Deposite', require('../assets/wallet/deposit.png'))}
+          {renderButton('Withdraw', require('../assets/wallet/withdraw.png'))}
+          {renderButton('WithdrawHistory', require('../assets/wallet/withdrawHistory.png'))}
+          {renderButton('DepositHistory', require('../assets/wallet/depositeHistory.png'))}
         </View>
-        <DepositeScreen />
-
-
+        <View style={{ height: SCREEN_HEIGHT * 0.5, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: Colors.lightGray, marginVertical: 30, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
+          <Image source={require('../assets/dollar.png')} style={{ height: 200, width: 200 }} />
+        </View>
       </View>
-
-
-      {/* Add similar sections for other tabs: withdraw_history and deposit_history */}
     </ScrollView>
   );
 };
@@ -60,18 +80,6 @@ const styles = {
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
-  },
-  redBtn: {
-    backgroundColor: '#D3D3D3',
-    alignItems: 'center',
-    width: SCREEN_WIDTH * 0.25,
-    paddingVertical: 10,
-    borderWidth: 0.7,
-    borderRadius: 3,
-    borderColor: 'grey'
-
-
-
   },
   header: {
     alignItems: 'center',
@@ -86,70 +94,6 @@ const styles = {
     fontSize: 20,
     color: 'green',
     marginBottom: 20,
-  },
-  icons: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
-    marginVertical: 20,
-  },
-  icon: {
-    alignItems: 'center',
-  },
-  tabButtons: {
-    flexDirection: 'row',
-    marginBottom: 20,
-  },
-  tabButtonsContainer: {
-    paddingHorizontal: 20,
-  },
-  depositSection: {
-    marginBottom: 30,
-  },
-  sectionTitle: {
-
-    fontSize: 18,
-    marginVertical: 10,
-    fontWeight: 'bold'
-
-  },
-  amountInputContainer: {
-    borderWidth: 1,
-    borderRadius: 25,
-    marginBottom: 10,
-    width: SCREEN_WIDTH * 0.8,
-    alignSelf: 'center',
-    backgroundColor: 'white',
-    flexDirection: 'row', alignItems: 'center', marginTop: 10
-  },
-  amountInput: {
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-  },
-  depositButton: {
-    backgroundColor: '#d9ad82',
-    paddingVertical: 12,
-    borderRadius: 25,
-    alignItems: 'center',
-  },
-  withDrawButton: {
-    backgroundColor: '#d9ad82',
-    paddingVertical: 12,
-    borderRadius: 25,
-    alignItems: 'center',
-    marginVertical: 10
-  },
-  depositButtonText: {
-    fontSize: 16,
-    color: 'white',
-  },
-  rechargeInstructionsTitle: {
-    fontSize: 16,
-    marginBottom: 10,
-  },
-  rechargeInstructionItem: {
-    fontSize: 16,
-    marginBottom: 5,
   },
 };
 

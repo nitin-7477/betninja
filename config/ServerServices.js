@@ -1,5 +1,6 @@
 import axios from "axios"
-const ServerURL = "https://2ca3-2401-4900-1c19-3fe4-4830-f817-540c-d0bd.ngrok-free.app"
+
+const ServerURL = `${process.env.SERVERURL}`
 
 
 const getData = async (url) => {

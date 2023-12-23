@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, TextInput, Image, Alert} from "react-native";
+import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, TextInput, Image, Alert } from "react-native";
 import React from "react";
 import { useState } from "react";
 import AppTextInput from "../components/AppTextInput";
@@ -16,14 +16,21 @@ const Login = () => {
 
   const checkLogin = async () => {
     try {
+
       var body = { email: emailAddress, password: password };
       var result = await postData('api/auth/login', body);
 
       if (result.token) {
         console.log('Login successful:', result.user);
-        await AsyncStorage.setItem('userToken', result.token);
-        navigation.navigate('Home', { user: result.user });
-        console.log(userToken)
+        Alert.alert("Login Successfully", "Welcome", [
+          {
+            text: 'OK', onPress: () => { console.log('Closed') }
+          }
+        ],
+        )
+        await AsyncStorage.setItem('userData', JSON.stringify(result));
+        navigation.navigate('Home', { user: result });
+
 
       } else {
 

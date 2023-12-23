@@ -1,11 +1,13 @@
-import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, Alert } from "react-native";
 import React from "react";
 import AppTextInput from "../components/AppTextInput";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useNavigation } from "@react-navigation/native";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../components/Constants/Screen";
 import { useState, useEffect } from "react";
-import { postData } from "../config/ServerServices";
+import { postData, ServerURL } from "../config/ServerServices";
+import Modal from "react-native-modal";
+import { Colors } from "../components/Constants/Colors";
 
 const Register = () => {
   const navigation = useNavigation();
@@ -15,36 +17,39 @@ const Register = () => {
   const [phone, setPhone] = useState('')
   const [invitationCode, setInvitationCode] = useState('')
   const [isRegistered, setIsRegistered] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [isModalVisible2, setModalVisible2] = useState(false);
+
+
+  const toggleModal1 = () => {
+    setModalVisible(!isModalVisible);
+  };
+  const toggleModal2 = () => {
+    setModalVisible2(!isModalVisible2);
+  };
 
 
   const handleSignUp = async () => {
 
     if (password !== confirmPassword) {
-      Alert.alert(
-        'PASSWORD DOES NOT MATCH',
-        [
-          {
-            text: 'OK', onPress: () => console.log('Passwords do not match')
-          }
-        ]
-      );
+      toggleModal1(); // Show the modal
       return;
     }
 
     var body = { email: emailAddress, phone: phone, password: password, inviteCode: invitationCode }
     var result = await postData('api/auth/register', body)
-    console.log(result);
+    console.log("xxxxxxxxxxxxxxxxxxxx", result);
     if (result) {
-      Alert.alert(
-        'Registration Successful',
-        'Your account has been successfully registered!',
-        [
-          { text: 'OK', onPress: () => navigation.navigate('Login') }
-        ]
-      );
-    } else {
-      console.log('Registration failed:', result.error);
+      toggleModal2()
+      // Alert.alert("Registered Successfully", "Process to Login", [
+      //   {
+      //     text: 'OK', onPress: () => { console.log('Closed') }
+      //   }
+      // ],
+      // )
+      navigation.navigate('Login')
     }
+
 
 
   }
@@ -80,6 +85,7 @@ const Register = () => {
             >
               Create an account so you can explore all the exisiting games
             </Text>
+            {/* <Text style={{ color: 'red' }}>{ServerURL}</Text> */}
           </View>
         </View>
         <View
@@ -89,7 +95,7 @@ const Register = () => {
         >
           <AppTextInput placeholder="Email"
             value={emailAddress} onChangeText={(text) => setEmailAddress(text)} />
-          <AppTextInput placeholder="Phone" secureTextEntry value={phone} onChangeText={(text) => setPhone(text)} />
+          <AppTextInput placeholder="Phone" value={phone} onChangeText={(text) => setPhone(text)} />
           <AppTextInput placeholder='Password' secureTextEntry value={password} onChangeText={(text) => setPassword(text)} />
           <AppTextInput placeholder='Password' secureTextEntry value={confirmPassword} onChangeText={(text) => setConfirmPassword(text)} />
           <AppTextInput placeholder="Invite Code" value={invitationCode} onChangeText={(text) => setInvitationCode(text)} />
@@ -107,6 +113,41 @@ const Register = () => {
             Sign Up
           </Text>
         </TouchableOpacity>
+
+
+
+        {/* Modal */}
+        <Modal isVisible={isModalVisible} onBackdropPress={toggleModal1}>
+          <View style={styles.modalContainer}>
+            <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10, color: 'black' }}>
+              Passwords Do Not Match
+            </Text>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={toggleModal1}
+            >
+              <Text style={{ color: "white" }}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
+        {/* Modal2 to navigate to login page */}
+        <Modal isVisible={isModalVisible2} onBackdropPress={toggleModal2}>
+          <View style={styles.modalContainer}>
+            <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10, color: 'black' }}>
+              Registered Succesfully
+            </Text>
+            <Text style={{ color: 'black', fontSize: 12, fontWeight: '500' }}>Process to login</Text>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={toggleModal2}
+            >
+              <Text style={{ color: "white" }}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
+
+
+
         <TouchableOpacity onPress={() => navigation.navigate('Login')} style={{ padding: 10, }} >
           <Text style={{ color: 'black', textAlign: "center", fontSize: 14, }}>
             Already have an account?
@@ -200,5 +241,19 @@ const styles = StyleSheet.create({
   },
   disabledButton: {
     backgroundColor: 'lightgray',
+  },
+  modalContainer: {
+    backgroundColor: "white",
+    padding: 50,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  closeButton: {
+    backgroundColor: "purple",
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+    width: "50%",
+    alignItems: "center",
   },
 })

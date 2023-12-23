@@ -26,6 +26,7 @@ import TimerWithModal30Sec from "./components/timers/TimerOf30Sec";
 import TimerWithModal60Sec from "./components/timers/TimerOf60Sec";
 import TimerWithModal3Min from "./components/timers/Timerof3Min";
 import TimerWithModal5Min from "./components/timers/Timerof5min";
+import FeedbackForm from "./components/FeedBack";
 
 const Stack = createNativeStackNavigator();
 
@@ -50,19 +51,17 @@ export default function App() {
       <Stack.Navigator>
 
         {/* {isFirstLaunch && (
-            <Stack.Screen options={{ headerShown: false }} name="OnboardingScreen" component={OnboardingScreen} />
-          )} */}
-
-{/* 
-        <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
-        <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
-        <Stack.Screen options={{ headerShown: false }} name="Gamescreen" component={Gamescreen} />
-        <Stack.Screen options={{ headerShown: false }} name="ForgotPassword" component={ForgotPasswordComponent} /> */}
-
+          <Stack.Screen options={{ headerShown: false }} name="OnboardingScreen" component={OnboardingScreen} />
+        )} */}
         <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
-        <Stack.Screen options={{ headerShown: false }} name="Notification" component={Notifications} />
-
+        <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
+        <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
+        <Stack.Screen options={{ headerShown: false }} name="Gamescreen" component={Gamescreen} />
         <Stack.Screen name="Wallet" options={{ headerShown: false }} component={Wallet} />
+        <Stack.Screen options={{ headerShown: false }} name="ForgotPassword" component={ForgotPasswordComponent} />
+
+        <Stack.Screen options={{ headerShown: false }} name="Notification" component={Notifications} />
+        <Stack.Screen name="FeedbackForm" options={{ headerShown: false }} component={FeedbackForm} />
         <Stack.Screen name="Account" options={{ headerShown: false }} component={Account} />
         <Stack.Screen name="Setting" options={{ headerShown: false }} component={Setting} />
         <Stack.Screen name="Gifts" options={{ headerShown: false }} component={Gifts} />

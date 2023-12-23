@@ -14,7 +14,8 @@ const AppTextInput: React.FC<TextInputProps> = ({ ...otherProps }) => {
     <TextInput
       onFocus={() => setFocused(true)}
       onBlur={() => setFocused(false)}
-      placeholderTextColor={'dark'}
+      placeholderTextColor={'white'}
+
 
       style={[
         {
@@ -25,7 +26,8 @@ const AppTextInput: React.FC<TextInputProps> = ({ ...otherProps }) => {
           backgroundColor: '#1434A4',
           borderRadius: 10,
           marginVertical: 10,
-          fontWeight: '500'
+          fontWeight: '500',
+          color: 'white'
         },
         focused && {
           borderWidth: 1,

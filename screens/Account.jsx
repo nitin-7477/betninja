@@ -2,7 +2,6 @@ import React from "react";
 import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
-
 import { useNavigation } from "@react-navigation/native";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
 import { Colors } from "../components/Constants/Colors";
@@ -130,10 +129,12 @@ const Account = () => {
             <Ionicons name="settings" size={24} color="black" />
             <Text style={{ color: 'black' }}>Settings</Text>
           </TouchableOpacity>
-          <View style={styles.serviceIcons}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('FeedbackForm')}
+            style={styles.serviceIcons}>
             <Ionicons name="chatbubble" size={24} color="black" />
             <Text style={{ color: 'black' }}>Feedback</Text>
-          </View>
+          </TouchableOpacity>
           <View style={styles.serviceIcons}>
             <Ionicons name="person-sharp" size={24} color="black" />
             <Text style={{ color: 'black' }}>Customer Service</Text>
@@ -179,9 +180,10 @@ const styles = {
     justifyContent: 'space-between'
   },
   profileImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 90,
+    height: 60,
+    borderRadius: 50,
+    resizeMode: 'contain'
   },
   userInfo: {
     marginLeft: 10,
