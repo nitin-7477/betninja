@@ -8,10 +8,10 @@ import { useNavigation } from "@react-navigation/native";
 const Language = () => {
   const navigation = useNavigation();
 
-  const [isChecked, setChecked] = useState(false);
+  const [isChecked, setChecked] = useState(true);
 
   const handleToggle = () => {
-    setChecked(!isChecked);
+    setChecked(true);
   };
 
 
@@ -25,18 +25,7 @@ const Language = () => {
         <Ionicons name='return-up-back' color={'white'} size={25} />
       </TouchableOpacity>
         <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.purple, marginLeft: 30 }}>Language</Text></View>
-      <View style={styles.top10}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Image source={require('../../assets/indianFlag.png')} style={{ height: 20, width: 20, borderRadius: 5 }} />
-          <Text style={{ color: Colors.fontGray, fontWeight: '800', fontSize: 18, marginLeft: 10 }}>Hindi</Text>
-        </View>
-        <TouchableOpacity onPress={handleToggle} activeOpacity={0.8}>
-          <View style={[styles.checkbox, isChecked && styles.checked]}>
-            {isChecked && <Text style={{ color: 'white' }}>✓</Text>}
-          </View>
-        </TouchableOpacity>
 
-      </View>
       <View style={styles.top10}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Image source={require('../../assets/britishFlag.png')} style={{ height: 20, width: 20, borderRadius: 5 }} />

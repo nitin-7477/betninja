@@ -1,23 +1,24 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Image, Text, TouchableOpacity, Alert } from 'react-native';
-import { Colors } from './Constants/Colors';
-import { SCREEN_WIDTH } from './Constants/Screen';
+import { Colors } from '../Constants/Colors';
+import { SCREEN_WIDTH } from '../Constants/Screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
+import { postData } from '../../config/ServerServices';
 const FeedbackForm = () => {
+  
   const navigation = useNavigation();
-
   const [feedback, setFeedback] = useState('');
 
-  const handleSubmit = () => {
-    console.log('Feedback submitted:', feedback);
+  const handleSubmit = async () => {
+
+    var body = { userId: 2, rating: 5, comment: feedback }
+    var result = await postData('api/feedback', body);
+
+    console.log('Bodyxxxxxxxxxx', body);
+    console.log(result);
     setFeedback('');
-    // Alert.alert("OOPS", "ALert kyu aa gya bhai", [
-    //   {
-    //     text: 'Band Kro', onPress: () => { console.log('Band Ho gya') }
-    //   }
-    // ],
-    // )
+
   };
 
   return (
@@ -38,7 +39,7 @@ const FeedbackForm = () => {
         value={feedback}
         onChangeText={(text) => setFeedback(text)}
       />
-      <Image source={require('../assets/feedback.png')} style={{ height: 200, width: 300, marginVertical: 40 }} />
+      <Image source={require('../../assets/feedback.png')} style={{ height: 200, width: 300, marginVertical: 40 }} />
 
 
       <TouchableOpacity onPress={handleSubmit} style={{ height: 40, width: SCREEN_WIDTH * 0.9, backgroundColor: 'red', marginVertical: 20, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>

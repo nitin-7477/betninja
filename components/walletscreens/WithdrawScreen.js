@@ -6,14 +6,20 @@ import Entypo from 'react-native-vector-icons/Entypo'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../Constants/Colors'
 import { useNavigation } from "@react-navigation/native";
+import { postData } from '../../config/ServerServices'
 
 const WithdrawScreen = () => {
   const navigation = useNavigation();
 
   const [amount, setAmount] = useState('');
 
-  const handleDepositWithdraw = (tab) => {
+  const handleDepositWithdraw = async (tab) => {
+
+    var body = { userId: '6585b4a3367ad4750f0b5b59', amount: 100 }
+    var result = await postData('/api/withdraw', body)
+    console.log(result);
     setActiveTab(tab);
+
   };
   return (
     <ScrollView style={styles.container}>

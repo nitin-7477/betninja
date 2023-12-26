@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, Button, ScrollView, StyleSheet, TouchableOpacity, Modal, TextInput, KeyboardAvoidingView } from 'react-native';
+import { View, Text, Image, Button, ScrollView, StyleSheet, TouchableOpacity, Modal, } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import HistoryScreen from '../components/GameScreen/HistoryScreen';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
 import MyHistoryScreen from '../components/GameScreen/MyHistoryScreen';
-import TimerWithModal30Sec from '../components/timers/TimerOf30Sec';
-import TimerWithModal60Sec from '../components/timers/TimerOf60Sec';
+import CountdownComponent from '../components/timers/TimerOf30Sec';
+import NewModalViolet from '../components/GamingModal';
 
 
 const myHistoryData = [
@@ -26,115 +26,12 @@ const HomeScreen = ({ navigation }) => {
   const [btnModalVisibleGreen, setBtnModalVisibleGreen] = useState(false);
   const [btnModalVisibleRed, setBtnModalVisibleRed] = useState(false);
   const [btnModalVisibleViolet, setBtnModalVisibleViolet] = useState(false);
-
-
-
-  const [secondsRemaining30, setSecondsRemaining30] = useState(30);
-  const [secondsRemaining60, setSecondsRemaining60] = useState(60);
-  const [secondsRemaining300, setSecondsRemaining300] = useState(300); // 5 minutes
-  const [secondsRemaining600, setSecondsRemaining600] = useState(600); // 10 minutes
-  const [modalCountdown, setModalCountdown] = useState(5);
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [serialNumber, setSerialNumber] = useState(1);
-  const [selectedDuration, setSelectedDuration] = useState(null);
-
   const [selectedButton, setSelectedButton] = useState(null);
 
-  const handleButtonClick = (buttonNumber) => {
-    setSelectedButton(buttonNumber);
-  };
+  const [isModalVisible, setModalVisible] = useState(false);
 
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (selectedDuration === 30) {
-        setSecondsRemaining30((prevSeconds) => (prevSeconds > 0 ? prevSeconds - 1 : 0));
-      } else if (selectedDuration === 60) {
-        setSecondsRemaining60((prevSeconds) => (prevSeconds > 0 ? prevSeconds - 1 : 0));
-      } else if (selectedDuration === 300) {
-        setSecondsRemaining300((prevSeconds) => (prevSeconds > 0 ? prevSeconds - 1 : 0));
-      } else if (selectedDuration === 600) {
-        setSecondsRemaining600((prevSeconds) => (prevSeconds > 0 ? prevSeconds - 1 : 0));
-      }
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [selectedDuration, isModalVisible]);
-
-  useEffect(() => {
-    if (
-      (selectedDuration === 30 && secondsRemaining30 === 0) ||
-      (selectedDuration === 60 && secondsRemaining60 === 0) ||
-      (selectedDuration === 300 && secondsRemaining300 === 0) ||
-      (selectedDuration === 600 && secondsRemaining600 === 0)
-    ) {
-      handleTimerCompletion(selectedDuration);
-    } else if (
-      (selectedDuration === 30 && secondsRemaining30 === 5) ||
-      (selectedDuration === 60 && secondsRemaining60 === 5) ||
-      (selectedDuration === 300 && secondsRemaining300 === 5) ||
-      (selectedDuration === 600 && secondsRemaining600 === 5)
-    ) {
-      setModalVisible(true);
-      setModalCountdown(5);
-    }
-  }, [secondsRemaining30, secondsRemaining60, secondsRemaining300, secondsRemaining600, isModalVisible]);
-
-  useEffect(() => {
-    let countdownInterval;
-
-    if (isModalVisible) {
-      countdownInterval = setInterval(() => {
-        setModalCountdown((prevCountdown) => (prevCountdown > 0 ? prevCountdown - 1 : 0));
-      }, 1000);
-    }
-
-    if (modalCountdown === 0) {
-      clearInterval(countdownInterval);
-      setModalVisible(false);
-      resetTimer(selectedDuration);
-      setSerialNumber((prevSerialNumber) => (prevSerialNumber < 30 ? prevSerialNumber + 1 : prevSerialNumber));
-      // Start the timer again
-      setTimeout(() => {
-        startTimer(selectedDuration);
-      }, 1000);
-    }
-
-    return () => clearInterval(countdownInterval);
-  }, [isModalVisible, modalCountdown, selectedDuration]);
-
-  const startTimer = (duration) => {
-    if (!isModalVisible) {
-      setSelectedDuration(duration);
-    }
-  };
-
-  const resetTimer = (duration) => {
-    if (duration === 30) {
-      setSecondsRemaining30(duration);
-    } else if (duration === 60) {
-      setSecondsRemaining60(duration);
-    } else if (duration === 300) {
-      setSecondsRemaining300(duration);
-    } else if (duration === 600) {
-      setSecondsRemaining600(duration);
-    }
-  };
-
-  const handleTimerCompletion = (duration) => {
-    setModalVisible(false);
-    resetTimer(duration);
-    setSerialNumber((prevSerialNumber) => (prevSerialNumber < 30 ? prevSerialNumber + 1 : prevSerialNumber));
-    // Start the timer again
-    setTimeout(() => {
-      startTimer(duration);
-    }, 1000);
-  };
-
-  const formatTime = (timeInSeconds) => {
-    const minutes = Math.floor(timeInSeconds / 60);
-    const seconds = timeInSeconds % 60;
-    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  const openModal = () => {
+    setModalVisible(true);
   };
 
   const closeModal = () => {
@@ -142,28 +39,14 @@ const HomeScreen = ({ navigation }) => {
   };
 
 
-  // ***************************For the timer***************************
+  const handleButtonClick = (buttonNumber) => {
+    setSelectedButton(buttonNumber);
+  };
 
 
 
-  // useEffect(() => {
-  //   // Set the total amount when the component mounts
-  //   const result = parseInt(inputValue || 0, 10);
-  //   setTotalAmount(result.toString());
-  // }, [inputValue]);
 
-  // const handleMultiplierClick = (value) => {
-  //   setInputValue(value.toString());
 
-  //   // Calculate and set the total amount
-  //   const result = parseInt(inputValue || 0, 10) * value;
-  //   setTotalAmount(result.toString());
-  // };
-
-  // const buttonMultiplier = (value) => {
-  //   const result = parseInt(inputValue || 0, 10) * value;
-  //   setTotalAmount(result.toString());
-  // };
 
 
 
@@ -179,390 +62,6 @@ const HomeScreen = ({ navigation }) => {
     setGameHistory(false)
   }
 
-
-  const NewModalGreen = () => {
-    return (
-      <KeyboardAvoidingView style={{ justifyContent: 'flex-end', alignItems: 'center', flex: 1 }}>
-        <View style={styles.diaLogBox}>
-
-          <View style={{ height: '10%', width: '97%', padding: 5, display: 'flex', justifyContent: 'center', backgroundColor: 'green', flexDirection: 'row', borderRadius: 10, marginVertical: 5 }}>
-            <Text style={{ color: 'white' }}>Green</Text>
-          </View>
-
-          <View style={{ height: '15%', width: '97%', padding: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text>Balance</Text>
-            <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity
-                style={{ height: 25, width: 30, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => buttonMultiplier(1)}
-              >
-                <Text style={{ color: 'white' }}>1</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{ height: 25, width: 30, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => buttonMultiplier(10)}
-              >
-                <Text style={{ color: 'white' }}>10</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{ height: 25, width: 30, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => buttonMultiplier(100)}
-              >
-                <Text style={{ color: 'white' }}>100</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{ height: 25, width: 35, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => buttonMultiplier(1000)}
-              >
-                <Text style={{ color: 'white' }}>1000</Text>
-              </TouchableOpacity>
-            </View >
-
-          </View>
-
-
-          <View style={{ height: '15%', width: '97%', padding: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text>Quantity</Text>
-            <View style={{ flexDirection: 'row' }}>
-
-              <TextInput
-                style={styles.input}
-                placeholder="Enter a number"
-                keyboardType="numeric"
-                value={inputValue}
-                onChangeText={(text) => setInputValue(text)}
-              />
-
-
-            </View></View>
-
-          <View style={{ height: '15%', width: '97%', padding: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10 }}>
-            <Text>Times</Text>
-            <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity
-                style={{ height: 25, width: 30, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => handleMultiplierClick(1)}
-              >
-                <Text style={{ color: 'white' }}>X1</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{ height: 25, width: 30, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => handleMultiplierClick(5)}
-              >
-                <Text style={{ color: 'white' }}>X5</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{ height: 25, width: 30, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => handleMultiplierClick(10)}
-              >
-                <Text style={{ color: 'white' }}>X10</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{ height: 25, width: 35, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => handleMultiplierClick(20)}
-              >
-                <Text style={{ color: 'white' }}>X20</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{ height: 25, width: 35, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => handleMultiplierClick(50)}
-              >
-                <Text style={{ color: 'white' }}>X50</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{ height: 25, width: 35, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => handleMultiplierClick(100)}
-              >
-                <Text style={{ color: 'white' }}>X100</Text>
-              </TouchableOpacity>
-            </View >
-
-          </View>
-          <View style={{ flexDirection: 'row', flex: 1, alignItems: 'flex-end', justifyContent: 'space-between', width: '90%' }}>
-            <TouchableOpacity style={{ height: 30, width: 100, justifyContent: 'center', alignItems: 'center', backgroundColor: "green" }} onPress={() => setBtnModalVisibleGreen(false)}>
-              <Text style={{ color: 'white' }}>Cancel</Text>
-            </TouchableOpacity>
-            <View style={{ width: '50%' }}>
-              <Text>Total Amount :{totalAmount}</Text>
-
-            </View>
-          </View>
-        </View>
-      </KeyboardAvoidingView >
-
-    )
-  }
-  const NewModalRed = () => {
-    return (
-      <KeyboardAvoidingView style={{ justifyContent: 'flex-end', alignItems: 'center', flex: 1 }}>
-        <View style={styles.diaLogBoxRed}>
-
-          <View style={{ height: '10%', width: '97%', padding: 5, display: 'flex', justifyContent: 'center', backgroundColor: 'red', flexDirection: 'row', borderRadius: 10, marginVertical: 5 }}>
-            <Text style={{ color: 'white' }}>Red</Text>
-          </View>
-
-          <View style={{ height: '15%', width: '97%', padding: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text>Balance</Text>
-            <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity
-                style={{ height: 25, width: 30, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => buttonMultiplier(1)}
-              >
-                <Text style={{ color: 'white' }}>1</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{ height: 25, width: 30, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => buttonMultiplier(10)}
-              >
-                <Text style={{ color: 'white' }}>10</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{ height: 25, width: 30, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => handleButtonClick(100)}
-              >
-                <Text style={{ color: 'white' }}>100</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{ height: 25, width: 35, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => buttonMultiplier(1000)}
-              >
-                <Text style={{ color: 'white' }}>1000</Text>
-              </TouchableOpacity>
-            </View >
-
-          </View>
-
-
-          <View style={{ height: '15%', width: '97%', padding: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text>Quantity</Text>
-            <View style={{ flexDirection: 'row' }}>
-
-              <TextInput
-                style={styles.input}
-                placeholder="Enter a number"
-                keyboardType="numeric"
-                value={inputValue}
-                onChangeText={(text) => setInputValue(text)}
-              />
-
-
-            </View></View>
-
-          <View style={{ height: '15%', width: '97%', padding: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10 }}>
-            <Text>Times</Text>
-            <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity
-                style={{ height: 25, width: 30, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => handleMultiplierClick(1)}
-              >
-                <Text style={{ color: 'white' }}>X1</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{ height: 25, width: 30, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => handleMultiplierClick(5)}
-              >
-                <Text style={{ color: 'white' }}>X5</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{ height: 25, width: 30, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => handleMultiplierClick(10)}
-              >
-                <Text style={{ color: 'white' }}>X10</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{ height: 25, width: 35, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => handleMultiplierClick(20)}
-              >
-                <Text style={{ color: 'white' }}>X20</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{ height: 25, width: 35, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => handleMultiplierClick(50)}
-              >
-                <Text style={{ color: 'white' }}>X50</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{ height: 25, width: 35, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => handleMultiplierClick(100)}
-              >
-                <Text style={{ color: 'white' }}>X100</Text>
-              </TouchableOpacity>
-            </View >
-
-          </View>
-          <View style={{ flexDirection: 'row', flex: 1, alignItems: 'flex-end', justifyContent: 'space-between', width: '90%' }}>
-            <TouchableOpacity style={{ height: 30, width: 100, justifyContent: 'center', alignItems: 'center', backgroundColor: "red" }} onPress={() => setBtnModalVisibleRed(false)}>
-              <Text style={{ color: 'white' }}>Cancel</Text>
-            </TouchableOpacity>
-            <View style={{ width: '50%' }}>
-              <Text>Total Amount :{totalAmount}</Text>
-
-            </View>
-          </View>
-        </View>
-      </KeyboardAvoidingView >
-
-    )
-  }
-
-  
-  const NewModalViolet = () => {
-    const [inputValue, setInputValue] = useState('1'); // Set default value to '1'
-    const [totalAmount, setTotalAmount] = useState('');
-
-    useEffect(() => {
-      // Set the total amount when the component mounts
-      const result = parseInt(inputValue || 0, 10);
-      setTotalAmount(result.toString());
-    }, [inputValue]);
-
-    const handleMultiplierClick = (value) => {
-      setInputValue(value.toString());
-
-      // Calculate and set the total amount
-      const result = parseInt(inputValue || 0, 10) * value;
-      setTotalAmount(result.toString());
-    };
-
-    const buttonMultiplier = (value) => {
-      const result = parseInt(inputValue || 0, 10) * value;
-      setTotalAmount(result.toString());
-    };
-
-
-    return (
-      <KeyboardAvoidingView style={{ justifyContent: 'flex-end', alignItems: 'center', flex: 1 }}>
-        <View style={styles.diaLogViolet}>
-
-          <View style={{ height: '10%', width: '97%', padding: 5, display: 'flex', justifyContent: 'center', backgroundColor: 'purple', flexDirection: 'row', borderRadius: 10, marginVertical: 5 }}>
-            <Text style={{ color: 'white' }}>Purple</Text>
-          </View>
-          <View style={{ height: '25%', width: '97%', padding: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Text style={{ color: 'purple', fontWeight: 'bold' }}>Quantity</Text>
-            <View style={{ flexDirection: 'row' }}>
-
-              <TextInput
-                style={{ backgroundColor: 'purple' }}
-                placeholder="Enter a number"
-                keyboardType="numeric"
-                value={inputValue}
-                onChangeText={(text) => setInputValue(text)}
-              />
-
-
-            </View></View>
-
-
-
-          <View style={{ height: '15%', width: '97%', padding: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10 }}>
-            <Text style={{ color: 'purple', fontWeight: 'bold' }}>Times</Text>
-            <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity
-                style={{ height: 25, width: 30, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => handleMultiplierClick(1)}
-              >
-                <Text style={{ color: 'white' }}>X1</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{ height: 25, width: 30, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => handleMultiplierClick(5)}
-              >
-                <Text style={{ color: 'white' }}>X5</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{ height: 25, width: 30, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => handleMultiplierClick(10)}
-              >
-                <Text style={{ color: 'white' }}>X10</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{ height: 25, width: 35, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => handleMultiplierClick(20)}
-              >
-                <Text style={{ color: 'white' }}>X20</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{ height: 25, width: 35, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => handleMultiplierClick(50)}
-              >
-                <Text style={{ color: 'white' }}>X50</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{ height: 25, width: 35, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => handleMultiplierClick(100)}
-              >
-                <Text style={{ color: 'white' }}>X100</Text>
-              </TouchableOpacity>
-            </View >
-
-          </View>
-          <View style={{ height: '15%', width: '97%', padding: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text style={{ color: 'purple', fontWeight: 'bold' }}>Balance</Text>
-            <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity
-                style={{ height: 25, width: 50, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => buttonMultiplier(1)}
-              >
-                <Text style={{ color: 'white' }}>₹1</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{ height: 25, width: 50, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => buttonMultiplier(10)}
-              >
-                <Text style={{ color: 'white' }}>₹10</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{ height: 25, width: 50, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => buttonMultiplier(100)}
-              >
-                <Text style={{ color: 'white' }}>₹100</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{ height: 25, width: 50, backgroundColor: "green", borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => buttonMultiplier(1000)}
-              >
-                <Text style={{ color: 'white' }}>₹1000</Text>
-              </TouchableOpacity>
-            </View >
-
-          </View>
-
-
-
-
-
-          <View style={{ flexDirection: 'row', flex: 1, alignItems: 'flex-end', justifyContent: 'space-between', width: '90%' }}>
-            <TouchableOpacity style={{ height: 30, width: 100, justifyContent: 'center', alignItems: 'center', backgroundColor: "purple" }} onPress={() => setBtnModalVisibleViolet(false)}>
-              <Text style={{ color: 'white' }}>Cancel</Text>
-            </TouchableOpacity>
-            <View style={{ width: '50%', marginBottom: 5 }}>
-              <Text style={{ color: 'purple', fontWeight: 'bold' }}>Total Amount :{totalAmount}</Text>
-
-            </View>
-          </View>
-        </View>
-      </KeyboardAvoidingView >
-
-    )
-  }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -612,7 +111,6 @@ const HomeScreen = ({ navigation }) => {
           <TouchableOpacity
             onPress={() => handleButtonClick(2)}
             style={styles.clockBtn}
-          // onPress={() => navigation.navigate('WithdrawScreen')}
           >
             <Image source={require('../assets/clock.png')} style={{ height: 40, width: 40 }} />
             <Text style={{ fontWeight: 'bold', color: 'black' }}>1 Min</Text>
@@ -620,9 +118,8 @@ const HomeScreen = ({ navigation }) => {
         </View>
         <View style={styles.gameButton}>
           <TouchableOpacity
-            onPress={() => startTimer(300)}
+            onPress={() => handleButtonClick(3)}
             style={styles.clockBtn}
-          // onPress={() => navigation.navigate('WithdrawScreen')}
           >
             <Image source={require('../assets/clock.png')} style={{ height: 40, width: 40 }} />
             <Text style={{ fontWeight: 'bold', color: 'black' }}>5 Min</Text>
@@ -630,46 +127,24 @@ const HomeScreen = ({ navigation }) => {
         </View>
         <View style={styles.gameButton}>
           <TouchableOpacity
-            onPress={() => startTimer(600)}
+            onPress={() => handleButtonClick(4)}
             style={styles.clockBtn}
-          // onPress={() => navigation.navigate('WithdrawScreen')}
           >
             <Image source={require('../assets/clock.png')} style={{ height: 40, width: 40 }} />
             <Text style={{ fontWeight: 'bold', color: 'black' }}>10 Min</Text>
           </TouchableOpacity>
         </View>
       </View>
-      {isModalVisible ? (
-        <Modal
-          visible={true}
-          animationType="slide"
-          transparent={false}
-          onRequestClose={closeModal}
-        >
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalText}>{formatTime(modalCountdown)}</Text>
-            <TouchableOpacity onPress={closeModal}>
-              <Text style={styles.closeModalText}>Close</Text>
-            </TouchableOpacity>
-          </View>
-        </Modal>
-      ) : (
-        <View style={{ height: SCREEN_HEIGHT * 0.2, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', justifyContent: 'center', alignItems: 'center', backgroundColor: 'purple', marginVertical: 10, borderRadius: 10 }}>
-          <Text style={{ color: 'white', fontSize: 16, marginVertical: 5 }}>Time remaining</Text>
-          {selectedDuration === 30 ? (
-            <Text style={{ color: 'white', fontSize: 32, marginVertical: 5 }}>{formatTime(secondsRemaining30)}</Text>
-          ) : selectedDuration === 60 ? (
-            <Text style={{ color: 'white', fontSize: 32, marginVertical: 5 }}>{formatTime(secondsRemaining60)}</Text>
-          ) : selectedDuration === 300 ? (
-            <Text style={{ color: 'white', fontSize: 32, marginVertical: 5 }}>{formatTime(secondsRemaining300)}</Text>
-          ) : selectedDuration === 600 ? (
-            <Text style={{ color: 'white', fontSize: 32, marginVertical: 5 }}>{formatTime(secondsRemaining600)}</Text>
-          ) : null}
-          <Text >Serial Number: {serialNumber}</Text>
-        </View>
-      )}
-      {selectedButton === 1 && <TimerWithModal30Sec />}
-      {selectedButton === 2 && <TimerWithModal60Sec />}
+
+
+
+
+
+      {selectedButton === 1 && <CountdownComponent timerName="thirtySecTimer" />}
+      {selectedButton === 2 && <CountdownComponent timerName="oneMinTimer" />}
+      {selectedButton === 3 && <CountdownComponent duration={180} label="3 min" identifier="3min" />}
+      {selectedButton === 4 && <CountdownComponent duration={300} label="5 min" identifier="5min" />}
+
       <Text style={{ fontWeight: '900', fontSize: 18, marginVertical: 10, color: 'black' }}>Prediction Options:</Text>
       <View style={styles.buttonRow}>
         <TouchableOpacity
@@ -750,23 +225,17 @@ const HomeScreen = ({ navigation }) => {
           <Text style={{ fontWeight: 'bold', color: 'white', }}>Red</Text>
         </TouchableOpacity>
 
-        <Modal visible={btnModalVisibleGreen} animationType="slide" transparent={true}   >
-          <NewModalGreen />
-        </Modal>
-        <Modal visible={btnModalVisibleRed} animationType="slide" transparent={true}   >
-          <NewModalRed />
-        </Modal>
-        <Modal visible={btnModalVisibleViolet} animationType="slide" transparent={true}   >
-          <NewModalViolet />
-        </Modal>
-
-
+        {/* *************************************************************** */}
+        <NewModalViolet
+          isVisible={isModalVisible} closeModal={closeModal}
+        />
         <TouchableOpacity
           style={styles.violetBtn}
-          onPress={() => setBtnModalVisibleViolet(true)}
+          onPress={openModal}
         >
           <Text style={{ fontWeight: 'bold', color: 'white', }}>Violet</Text>
         </TouchableOpacity>
+        {/* *********************************************************************** */}
 
         <TouchableOpacity
           style={styles.greenBtn}

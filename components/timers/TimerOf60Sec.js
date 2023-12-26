@@ -11,7 +11,7 @@ const TimerWithModal60Sec = () => {
   const [secondsRemaining60, setSecondsRemaining60] = useState(60);
   const [modalCountdown, setModalCountdown] = useState(5);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [serialNumber, setSerialNumber] = useState(1);
+
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -25,7 +25,7 @@ const TimerWithModal60Sec = () => {
     if (secondsRemaining60 === 0 && isModalVisible) {
       setModalVisible(false);
       setSecondsRemaining60(60);
-      setSerialNumber((prevSerialNumber) => (prevSerialNumber < 60 ? prevSerialNumber + 1 : prevSerialNumber));
+
     } else if (secondsRemaining60 === 5 && secondsRemaining60 > 0) {
       setModalVisible(true);
       setModalCountdown(5);
@@ -45,7 +45,7 @@ const TimerWithModal60Sec = () => {
       clearInterval(countdownInterval);
       setModalVisible(false);
       setSecondsRemaining60(60); // Reset the timer
-      setSerialNumber((prevSerialNumber) => (prevSerialNumber < 60 ? prevSerialNumber + 1 : prevSerialNumber));
+
     }
 
     return () => clearInterval(countdownInterval);
@@ -67,7 +67,7 @@ const TimerWithModal60Sec = () => {
 
   return (
     <View style={styles.container}>
-      {/* <TimerButton onPress={startTimer} /> */}
+
 
       {isModalVisible ? (
         <Modal
@@ -84,7 +84,6 @@ const TimerWithModal60Sec = () => {
       ) : (
         <View>
           <Text style={styles.timerText}>{formatTime(secondsRemaining60)}</Text>
-          <Text style={styles.serialNumberText}>Serial Number: {serialNumber}</Text>
         </View>
       )}
     </View>

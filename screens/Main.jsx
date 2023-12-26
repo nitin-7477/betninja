@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import MainSlider from '../components/sliders/MainSlider';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
 import { Colors } from '../components/Constants/Colors';
+import MessageComponent from '../components/service center/GoogleAuthentication';
 
 export default function Main() {
   const navigation = useNavigation();
@@ -90,9 +91,9 @@ export default function Main() {
       {/* Information Section */}
       <View style={styles.informationSection}>
         <View style={{ width: SCREEN_WIDTH * 0.75, }}>
-          <Text style={styles.informationText2}>Attention for all the members make sure that you filled all the bank details correctly</Text></View>
+          <MessageComponent /></View>
         <TouchableOpacity
-          onPress={() => navigation.navigate('Notification')}
+          onPress={() => navigation.navigate('NotificationFile')}
           style={{ height: 25, width: 45, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
           <Text style={{ color: 'white' }}>Details</Text>
         </TouchableOpacity>

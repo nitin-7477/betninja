@@ -8,7 +8,6 @@ import Main from "./Main";
 import { View, Text, Button, Image, TouchableOpacity, StyleSheet, Modal } from "react-native";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../components/Constants/Screen";
 import { Colors } from "../components/Constants/Colors";
-import CustomButtomTab from "../components/BottomTabs/CustomBottomTab";
 import Entypo from "react-native-vector-icons/Entypo"
 import Feather from "react-native-vector-icons/Feather"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"

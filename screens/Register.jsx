@@ -16,7 +16,6 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [phone, setPhone] = useState('')
   const [invitationCode, setInvitationCode] = useState('')
-  const [isRegistered, setIsRegistered] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [isModalVisible2, setModalVisible2] = useState(false);
 
