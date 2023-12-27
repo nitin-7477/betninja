@@ -1,13 +1,16 @@
 import axios from "axios"
 
-// const ServerURL = `${process.env.SERVERURL}`
-const ServerURL = 'https://0cd4-2402-8100-3850-6c53-b92f-7e21-7113-4f18.ngrok-free.app'
+const ServerURL = `${process.env.SERVERURL}`
+
+// const ServerURL = "https://cbb5-2402-8100-2713-be78-1087-8b12-905e-9a09.ngrok-free.app"
+
 
 
 const getData = async (url) => {
     try {
         var response = await axios.get(`${ServerURL}/${url}`)
         var result = await response.data
+        console.log("This is the get result", result);
         return result
     }
     catch (e) { return null }

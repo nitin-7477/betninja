@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { postData, ServerURL } from "../config/ServerServices";
 import Modal from "react-native-modal";
 import { Colors } from "../components/Constants/Colors";
+import axios from "axios";
 
 const Register = () => {
   const navigation = useNavigation();
@@ -35,8 +36,19 @@ const Register = () => {
       return;
     }
 
-    var body = { email: emailAddress, phone: phone, password: password, inviteCode: invitationCode }
-    var result = await postData('api/auth/register', body)
+    const registrationData = {
+      email: emailAddress,
+      phone: phone,
+      password: password,
+    };
+
+    // Add the invitation code to the registration data if it's provided
+    if (invitationCode.trim() !== '') {
+      registrationData.inviteCode = invitationCode.trim();
+    }
+
+    const result = await axios.post('https://832b-2401-4900-1c19-6daf-d090-aea6-e929-1556.ngrok-free.app/api/auth/register', registrationData);
+
     console.log("xxxxxxxxxxxxxxxxxxxx", result);
     if (result) {
       toggleModal2()
@@ -96,7 +108,7 @@ const Register = () => {
             value={emailAddress} onChangeText={(text) => setEmailAddress(text)} />
           <AppTextInput placeholder="Phone" value={phone} onChangeText={(text) => setPhone(text)} />
           <AppTextInput placeholder='Password' secureTextEntry value={password} onChangeText={(text) => setPassword(text)} />
-          <AppTextInput placeholder='Password' secureTextEntry value={confirmPassword} onChangeText={(text) => setConfirmPassword(text)} />
+          <AppTextInput placeholder='Confirm Password' secureTextEntry value={confirmPassword} onChangeText={(text) => setConfirmPassword(text)} />
           <AppTextInput placeholder="Invite Code" value={invitationCode} onChangeText={(text) => setInvitationCode(text)} />
 
           {!isResetButtonEnabled ? <Text style={{ color: 'red' }}> * Please fill all Details</Text> : <></>}

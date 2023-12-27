@@ -3,7 +3,7 @@ import React from 'react';
 import { Modal, View, Text, TouchableOpacity, StyleSheet, TextInput, KeyboardAvoidingView } from 'react-native';
 import { useState, useEffect } from 'react';
 
-const NewModalViolet = ({ isVisible, closeModal }) => {
+const Modal1 = ({ isVisible, closeModal, number }) => {
 
 
   const [inputValue, setInputValue] = useState('1'); // Set default value to '1'
@@ -40,15 +40,16 @@ const NewModalViolet = ({ isVisible, closeModal }) => {
       <KeyboardAvoidingView style={{ justifyContent: 'flex-end', alignItems: 'center', flex: 1 }}>
         <View style={styles.diaLogViolet}>
 
-          <View style={{ height: 25, width: 150, display: 'flex', justifyContent: 'center', backgroundColor: 'purple', borderRadius: 10, marginVertical: 5, alignItems: 'center' }}>
-            <Text style={{ color: 'white', textAlign: 'center' }}>Purple</Text>
+          <View style={{ height: 25, width: 150, display: 'flex', justifyContent: 'center', backgroundColor: '#fe5a1d', borderRadius: 10, marginVertical: 5, alignItems: 'center' }}>
+            <Text style={{ color: 'white', textAlign: 'center' }}>Select {number}</Text>
           </View>
           <View style={{ height: '25%', width: '97%', padding: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <Text style={{ color: 'purple', fontWeight: 'bold' }}>Quantity</Text>
             <View style={{ flexDirection: 'row' }}>
 
+
               <TextInput
-                style={{ backgroundColor: 'purple', color: 'white' }}
+                style={{ backgroundColor: '#fe5a1d', color: 'white' }}
                 placeholder="Enter a number"
                 keyboardType="numeric"
                 value={inputValue}
@@ -136,9 +137,6 @@ const NewModalViolet = ({ isVisible, closeModal }) => {
             </View >
           </View>
 
-
-
-
           <View style={{ flexDirection: 'row', flex: 1, alignItems: 'flex-end', justifyContent: 'space-between', width: '90%' }}>
             <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
               <Text style={styles.closeButtonText}>Close</Text>
@@ -158,18 +156,7 @@ const NewModalViolet = ({ isVisible, closeModal }) => {
 };
 
 const styles = StyleSheet.create({
-  modalContainer: {
 
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
   modalText: {
     fontSize: 18,
     marginBottom: 20,
@@ -187,8 +174,8 @@ const styles = StyleSheet.create({
     height: '35%', width: '95%', alignItems: 'center', padding: 5, backgroundColor: '#F1EFEF',
     borderTopLeftRadius: 20, borderTopRightRadius: 20,
     shadowColor: 'black', elevation: 10, shadowOffset: { height: 0, width: 0 }, shadowOpacity: 1,
-    backgroundColor: '#D8BFD8', borderColor: 'black', borderWidth: 2
+    backgroundColor: '#ffa343', borderColor: 'black', borderWidth: 2
   },
 });
 
-export default NewModalViolet;
+export default Modal1;

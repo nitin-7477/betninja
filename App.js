@@ -30,6 +30,8 @@ import FeedbackForm from "./components/service center/FeedBack";
 import NotificationFile from "./components/service center/NotificationFile";
 import CustomerServices from "./components/service center/CustomerServices";
 import CountdownComponent from "./components/timers/TimerOf30Sec";
+import Activity from "./screens/Activity";
+import ActivityAward from "./screens/activityAllScreens/ActivityAward";
 
 
 const Stack = createNativeStackNavigator();
@@ -57,11 +59,16 @@ export default function App() {
         {/* {isFirstLaunch && (
           <Stack.Screen options={{ headerShown: false }} name="OnboardingScreen" component={OnboardingScreen} />
         )} */}
-        <Stack.Screen options={{ headerShown: false }} name="Gamescreen" component={Gamescreen} />
 
         <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
-        <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
+        <Stack.Screen options={{ headerShown: false }} name="Gamescreen" component={Gamescreen} />
         <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
+        <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
+        <Stack.Screen options={{ headerShown: false }} name="ActivityAward" component={ActivityAward} />
+        <Stack.Screen options={{ headerShown: false }} name="Activity" component={Activity} />
+
+
+
         <Stack.Screen name="CountdownComponent" options={{ headerShown: false }} component={CountdownComponent} />
         <Stack.Screen name="Language" options={{ headerShown: false }} component={Language} />
         <Stack.Screen options={{ headerShown: false }} name="CustomerServices" component={CustomerServices} />

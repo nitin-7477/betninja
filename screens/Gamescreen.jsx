@@ -7,15 +7,12 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
 import MyHistoryScreen from '../components/GameScreen/MyHistoryScreen';
 import CountdownComponent from '../components/timers/TimerOf30Sec';
 import NewModalViolet from '../components/GamingModal';
-
-
-const myHistoryData = [
-
-  { image: require('../assets/big.png'), id: '1234567854359', date: '11/5/2023', time: '6:24:00', status: 'Succeed', pl: '+17%' },
-  { image: require('../assets/big.png'), id: '6789123345445', date: '12/5/2023', time: '6:25:00', status: 'Failed', pl: '+16%' },
-  { image: require('../assets/big.png'), id: '9312353454589', date: '13/7/2023', time: '6:26:00', status: 'Succeed', pl: '+15%' },
-
-]
+import NewRedModal from '../components/allPopUp/NewRedModal';
+import NewGreenModal from '../components/allPopUp/NewGreenModal';
+import NewBigModal from '../components/allPopUp/NewBigModal';
+import Modal1 from '../components/allPopUp/ModalOfNumber';
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 
@@ -27,29 +24,104 @@ const HomeScreen = ({ navigation }) => {
   const [btnModalVisibleRed, setBtnModalVisibleRed] = useState(false);
   const [btnModalVisibleViolet, setBtnModalVisibleViolet] = useState(false);
   const [selectedButton, setSelectedButton] = useState(null);
+  const [bigModalVisible, setBigModalVisible] = useState(false)
+  const [smallModalVisible, setSmallModalVisible] = useState(false)
+  const [number, setNumber] = useState(null)
+  const [modal1, setModal1] = useState(false)
+  const [modal2, setModal2] = useState(false)
+  const [buttonSize, setButtonSize] = useState(null);
+  const [buttonBackgroundColor, setButtonBackgroundColor] = useState(null);
+  const [userInformation, setUserInformation] = useState([])
+  const [userToken, setUserToken] = useState({})
 
-  const [isModalVisible, setModalVisible] = useState(false);
+
+  useEffect(() => {
+    const retrieveUserData = async () => {
+      try {
+        const storedUserData = await AsyncStorage.getItem('userData');
+        const parsedUserData = JSON.parse(storedUserData);
+        setUserToken(parsedUserData);
+      }
+
+      catch (error) {
+        console.error('Error retrieving user data:', error);
+      }
+    };
+    retrieveUserData();
+  }, []);
+
+  var token = `${userToken.token}`
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+
+
+        const response = await axios.get('https://832b-2401-4900-1c19-6daf-d090-aea6-e929-1556.ngrok-free.app/api/auth/user', {
+          headers: {
+            "Authorization": token, // Replace 'token' with the actual header key 
+          },
+        });
+        setUserInformation(response.data);
+      } catch (error) {
+        console.error('Error checking token with user data:', error);
+      }
+    };
+
+    fetchData();
+  }, [token]);
+
+
+
+  const openModal1 = (number) => {
+    setNumber(number)
+    setModal1(true);
+  };
+
+  const closeModal1 = () => {
+    setModal1(false);
+  };
+
+
 
   const openModal = () => {
-    setModalVisible(true);
+    setBtnModalVisibleViolet(true);
   };
 
   const closeModal = () => {
-    setModalVisible(false);
+    setBtnModalVisibleViolet(false);
   };
 
+  const openRedModal = () => {
+    setBtnModalVisibleRed(true);
+  };
+
+  const closeRedModal = () => {
+    setBtnModalVisibleRed(false);
+  };
+
+  const openGreenModal = () => {
+    setBtnModalVisibleGreen(true);
+  };
+
+  const closeGreenModal = () => {
+    setBtnModalVisibleGreen(false);
+  };
+
+  const openBigModal = (size, backgroundColor) => {
+    setButtonSize(size);
+    setButtonBackgroundColor(backgroundColor);
+    setBigModalVisible(true);
+  };
+
+  const closeBigModal = () => {
+    setBigModalVisible(false);
+  };
 
   const handleButtonClick = (buttonNumber) => {
     setSelectedButton(buttonNumber);
   };
-
-
-
-
-
-
-
-
 
 
 
@@ -78,7 +150,7 @@ const HomeScreen = ({ navigation }) => {
 
       <View style={styles.balanceView}>
         <View style={styles.balanceContainer}>
-          <Text style={{ fontWeight: 'bold' }}>Balance: $1000</Text>
+          <Text style={{ fontWeight: 'bold' }}>Balance: {userInformation.wallet}</Text>
           <AntDesign name="reload1" size={20} color="blue" style={styles.refreshIcon} />
         </View>
         <View style={styles.buttonContainer}>
@@ -97,93 +169,59 @@ const HomeScreen = ({ navigation }) => {
       </View>
 
 
-      <View style={styles.gameContainer}>
-        <View style={styles.gameButton}>
-          <TouchableOpacity
-            style={styles.clockBtn}
-            onPress={() => handleButtonClick(1)}
-          >
-            <Image source={require('../assets/clock.png')} style={{ height: 40, width: 40 }} />
-            <Text style={{ fontWeight: 'bold', color: 'black' }}>30 Sec</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.gameButton}>
-          <TouchableOpacity
-            onPress={() => handleButtonClick(2)}
-            style={styles.clockBtn}
-          >
-            <Image source={require('../assets/clock.png')} style={{ height: 40, width: 40 }} />
-            <Text style={{ fontWeight: 'bold', color: 'black' }}>1 Min</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.gameButton}>
-          <TouchableOpacity
-            onPress={() => handleButtonClick(3)}
-            style={styles.clockBtn}
-          >
-            <Image source={require('../assets/clock.png')} style={{ height: 40, width: 40 }} />
-            <Text style={{ fontWeight: 'bold', color: 'black' }}>5 Min</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.gameButton}>
-          <TouchableOpacity
-            onPress={() => handleButtonClick(4)}
-            style={styles.clockBtn}
-          >
-            <Image source={require('../assets/clock.png')} style={{ height: 40, width: 40 }} />
-            <Text style={{ fontWeight: 'bold', color: 'black' }}>10 Min</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+
+      <View><CountdownComponent /></View>
 
 
-
-
-
-      {selectedButton === 1 && <CountdownComponent timerName="thirtySecTimer" />}
-      {selectedButton === 2 && <CountdownComponent timerName="oneMinTimer" />}
-      {selectedButton === 3 && <CountdownComponent duration={180} label="3 min" identifier="3min" />}
-      {selectedButton === 4 && <CountdownComponent duration={300} label="5 min" identifier="5min" />}
 
       <Text style={{ fontWeight: '900', fontSize: 18, marginVertical: 10, color: 'black' }}>Prediction Options:</Text>
       <View style={styles.buttonRow}>
+        <NewBigModal isVisible={bigModalVisible} closeModal={closeBigModal} buttonSize={buttonSize}
+          backgroundColor={buttonBackgroundColor} />
         <TouchableOpacity
-          onPress={() => alert('Big')}
+          onPress={() => openBigModal('big', '#ffa343')}
           style={styles.bigButton}>
           <Text style={{ fontWeight: 'bold', color: 'white', }}>Big</Text>
         </TouchableOpacity>
         {/* <View style={styles.buttonSpacing} /> */}
+
         <TouchableOpacity
           style={styles.smallBtn}
-          onPress={() => alert('Small')}
+          onPress={() => openBigModal('small', 'skyblue')}
         >
           <Text style={{ fontWeight: 'bold', color: 'white', }}>Small</Text>
         </TouchableOpacity>
       </View>
+      <View style={{ marginVertical: 10 }}></View>
       <View style={{ height: SCREEN_HEIGHT * 0.15, width: SCREEN_WIDTH * 0.94, justifyContent: 'center', backgroundColor: 'white', elevation: 2, borderRadius: 5 }}>
         <View style={styles.buttonRow}>
           <TouchableOpacity
-            style={styles.numberBtn}
+            style={[styles.numberBtn, { backgroundColor: 'blue' }]}
           >
             <Text style={{ fontWeight: 'bold', color: 'white', }}>0</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.numberBtn}
+            onPress={() => openModal1(1)}
+            style={[styles.numberBtn, { backgroundColor: 'blue' }]}
           >
             <Text style={{ fontWeight: 'bold', color: 'white', }}>1</Text>
           </TouchableOpacity>
+          <Modal1 isVisible={modal1} closeModal={closeModal1} number={number} />
           <TouchableOpacity
-            style={styles.numberBtn}
+            onPress={() => openModal1(2)}
+            style={[styles.numberBtn, { backgroundColor: 'blue' }]}
           >
             <Text style={{ fontWeight: 'bold', color: 'white', }}>2</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.numberBtn}
+            onPress={() => openModal1(3)}
+            style={[styles.numberBtn, { backgroundColor: 'blue' }]}
           >
             <Text style={{ fontWeight: 'bold', color: 'white', }}>3</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.numberBtn}
+            onPress={() => openModal1(4)}
+            style={[styles.numberBtn, { backgroundColor: 'blue' }]}
           >
             <Text style={{ fontWeight: 'bold', color: 'white', }}>4</Text>
           </TouchableOpacity>
@@ -191,43 +229,52 @@ const HomeScreen = ({ navigation }) => {
 
         <View style={styles.buttonRow}>
           <TouchableOpacity
-            style={styles.numberBtn}
+            style={[styles.numberBtn, { backgroundColor: 'blue' }]}
           >
             <Text style={{ fontWeight: 'bold', color: 'white', }}>5</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.numberBtn}
+            style={[styles.numberBtn, { backgroundColor: 'blue' }]}
           >
             <Text style={{ fontWeight: 'bold', color: 'white', }}>6</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.numberBtn}
+            style={[styles.numberBtn, { backgroundColor: 'blue' }]}
           >
             <Text style={{ fontWeight: 'bold', color: 'white', }}>7</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.numberBtn}
+            style={[styles.numberBtn, { backgroundColor: 'blue' }]}
           >
             <Text style={{ fontWeight: 'bold', color: 'white', }}>8</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.numberBtn}
+            style={[styles.numberBtn, { backgroundColor: 'blue' }]}
           >
             <Text style={{ fontWeight: 'bold', color: 'white', }}>9</Text>
           </TouchableOpacity>
         </View>
       </View>
+      <View style={{ marginVertical: 20 }}></View>
       <View style={styles.buttonRow}>
+        <NewRedModal
+          //  onAmountChange={handleAmountChange}
+          isVisible={btnModalVisibleRed} closeModal={closeRedModal}
+        />
         <TouchableOpacity
           style={styles.redBtn}
-          onPress={() => setBtnModalVisibleRed(true)}
+          onPress={openRedModal}
         >
           <Text style={{ fontWeight: 'bold', color: 'white', }}>Red</Text>
         </TouchableOpacity>
 
+
+
+
         {/* *************************************************************** */}
         <NewModalViolet
-          isVisible={isModalVisible} closeModal={closeModal}
+          //  onAmountChange={handleAmountChange}
+          isVisible={btnModalVisibleViolet} closeModal={closeModal}
         />
         <TouchableOpacity
           style={styles.violetBtn}
@@ -237,20 +284,28 @@ const HomeScreen = ({ navigation }) => {
         </TouchableOpacity>
         {/* *********************************************************************** */}
 
+
+
+        <NewGreenModal isVisible={btnModalVisibleGreen} closeModal={closeGreenModal} />
+
         <TouchableOpacity
           style={styles.greenBtn}
-          onPress={() => setBtnModalVisibleGreen(true)}
+          onPress={openGreenModal}
         >
+
           <Text style={{ fontWeight: 'bold', color: 'white', }}>Green</Text>
         </TouchableOpacity>
 
         <View style={styles.buttonSpacing} />
       </View>
+      <View style={{ marginVertical: 20 }}></View>
       <View style={styles.horizontalButtonContainer}>
+
         <Button
           title="Game History"
           onPress={handleGameHistory}
         />
+
         <View style={styles.buttonSpacing} />
         <Button title="Chart"
 
@@ -387,13 +442,15 @@ const styles = StyleSheet.create({
     borderTopEndRadius: 10, borderBottomEndRadius: 10, marginTop: 10,
   },
   numberBtn: {
-    backgroundColor: '#000080',
+
     alignItems: 'center',
     width: SCREEN_WIDTH * 0.1,
     paddingVertical: 10,
     borderRadius: 50, marginTop: 10,
     marginLeft: 10,
-    marginHorizontal: 3
+    marginHorizontal: 3,
+    elevation: 5,
+    shadowColor: 'red'
   },
   gameContainer: {
     marginTop: 40,
@@ -444,24 +501,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#fff',
   },
-  diaLogBox: {
-    height: '35%', width: '95%', alignItems: 'center', padding: 5, backgroundColor: '#F1EFEF',
-    borderTopLeftRadius: 20, borderTopRightRadius: 20,
-    shadowColor: 'black', elevation: 10, shadowOffset: { height: 0, width: 0 }, shadowOpacity: 1,
-    backgroundColor: '#90EE90', borderColor: 'black', borderWidth: 2
-  },
-  diaLogBoxRed: {
-    height: '35%', width: '95%', alignItems: 'center', padding: 5, backgroundColor: '#F1EFEF',
-    borderTopLeftRadius: 20, borderTopRightRadius: 20,
-    shadowColor: 'black', elevation: 10, shadowOffset: { height: 0, width: 0 }, shadowOpacity: 1,
-    backgroundColor: '#FFA07A', borderColor: 'black', borderWidth: 2
-  },
-  diaLogViolet: {
-    height: '35%', width: '95%', alignItems: 'center', padding: 5, backgroundColor: '#F1EFEF',
-    borderTopLeftRadius: 20, borderTopRightRadius: 20,
-    shadowColor: 'black', elevation: 10, shadowOffset: { height: 0, width: 0 }, shadowOpacity: 1,
-    backgroundColor: '#D8BFD8', borderColor: 'black', borderWidth: 2
-  },
+
 });
 
 export default HomeScreen;

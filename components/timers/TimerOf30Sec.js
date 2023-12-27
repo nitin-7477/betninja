@@ -1,33 +1,136 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import io from 'socket.io-client';
 
-const CountdownComponent = ({ timerName }) => {
-  const [countdown, setCountdown] = useState(null);
+const CountdownComponent = () => {
+  const [countdowns, setCountdowns] = useState({
+    thirtySec: 0,
+    oneMin: 0,
+    threeMin: 0,
+    fiveMin: 0,
+  });
+  const [selectedCountdown, setSelectedCountdown] = useState('thirtySec');
+  const [defaultCountdown, setDefaultCountdown] = useState('thirtySec');
+  const socketRef = useRef(null);
+
 
 
   useEffect(() => {
-    const socket = io(`${process.env.SERVERURL}`);
-    socket.on(`updateCountdown_${timerName}`, (data) => {
-      console.log("xxxxxxxxxx", data);
-      setCountdown(data.countdown);
-    });
+    // Establish socket connection only if it doesn't exist
+    if (!socketRef.current) {
 
-  }, [timerName]);
+      socketRef.current = io(`${process.env.SOCKETURL}`);
+      // console.log(socketRef.current);
 
-  useEffect(() => {
-    if (countdown !== null) {
-      console.log(`${timerName} Countdown: ${countdown} seconds`);
+      // Replace 'http://your-server-address' with your actual server address
+      socketRef.current.on('updateCountdown_thirtySecTimer', (data) => {
+        setCountdowns((prevCountdowns) => ({ ...prevCountdowns, thirtySec: data.countdown }));
+      });
+
+      socketRef.current.on('updateCountdown_oneMinTimer', (data) => {
+        setCountdowns((prevCountdowns) => ({ ...prevCountdowns, oneMin: data.countdown }));
+      });
+
+      socketRef.current.on('updateCountdown_threeMinTimer', (data) => {
+        setCountdowns((prevCountdowns) => ({ ...prevCountdowns, threeMin: data.countdown }));
+      });
+
+      socketRef.current.on('updateCountdown_fiveMinTimer', (data) => {
+        setCountdowns((prevCountdowns) => ({ ...prevCountdowns, fiveMin: data.countdown }));
+      });
+
+      setDefaultCountdown('thirtySec');
     }
-  }, [countdown, timerName]);
+
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
+    };
+  }, []);
+
+
+  const fetchCountdown = (timerName) => {
+
+    setSelectedCountdown(timerName);
+
+    socketRef.current.emit('fetchCountdown', timerName);
+  };
+
+
+  // console.log(countdowns);
+
+
   return (
     <View>
-      {countdown !== null ? (
-        <Text style={{ color: 'red', fontWeight: 'bold', fontSize: 18 }}>{timerName} Countdown: {countdown} seconds</Text>
-      ) : (
-        <Text>Connecting to countdown...</Text>
-      )}
+      <View style={{
+        marginTop: 40,
+        flexDirection: 'row',
+        backgroundColor: 'white',
+        shadowColor: 'black',
+        elevation: 5,
+        borderRadius: 10
+      }}>
+        <View style={{ marginHorizontal: 8, }}>
+          <TouchableOpacity style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingHorizontal: 10,
+            paddingVertical: 5
+          }} onPress={() => fetchCountdown('thirtySec')}>
+            <Image source={require('../../assets/clock.png')} style={{ height: 40, width: 40 }} />
+            <Text style={{ fontWeight: 'bold', color: 'black' }}>30 sec</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={{ marginHorizontal: 8, }}>
+          <TouchableOpacity style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingHorizontal: 10,
+            paddingVertical: 5
+          }} onPress={() => fetchCountdown('oneMin')}>
+            <Image source={require('../../assets/clock.png')} style={{ height: 40, width: 40 }} />
+            <Text style={{ fontWeight: 'bold', color: 'black' }}>1 Min</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{ marginHorizontal: 8, }}>
+          <TouchableOpacity
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              paddingHorizontal: 10,
+              paddingVertical: 5
+            }} onPress={() => fetchCountdown('threeMin')}>
+            <Image source={require('../../assets/clock.png')} style={{ height: 40, width: 40 }} />
+            <Text style={{ fontWeight: 'bold', color: 'black' }}>3 Min</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{ marginHorizontal: 8, }}>
+          <TouchableOpacity
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              paddingHorizontal: 10,
+              paddingVertical: 5
+            }}
+            onPress={() => fetchCountdown('fiveMin')}>
+            <Image source={require('../../assets/clock.png')} style={{ height: 40, width: 40 }} />
+            <Text style={{ fontWeight: 'bold', color: 'black' }}>5 Min</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      <View>
+        <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'red', textAlign: 'center', marginVertical: 20 }}>
+          {`${selectedCountdown} Countdown: ${countdowns[selectedCountdown]} seconds`}
+        </Text></View>
+      <Text style={{ textAlign: 'center' }}>Serial Number : 121 </Text>
     </View>
   );
 };
+
 export default CountdownComponent;

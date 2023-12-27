@@ -8,6 +8,7 @@ import Font from "../components/Constants/Font";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../components/Constants/Screen";
 import { ServerURL, postData } from "../config/ServerServices";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 const Login = () => {
   const navigation = useNavigation();
@@ -18,17 +19,21 @@ const Login = () => {
     try {
 
       var body = { email: emailAddress, password: password };
-      var result = await postData('api/auth/login', body);
+      const result = await axios.post('https://832b-2401-4900-1c19-6daf-d090-aea6-e929-1556.ngrok-free.app/api/auth/login', body);
 
-      if (result.token) {
-        console.log('Login successful:', result.user);
+      let response = result.data
+      let token = response.token
+
+      if (token) {
+
         Alert.alert("Login Successfully", "Welcome", [
           {
             text: 'OK', onPress: () => { console.log('Closed') }
           }
         ],
         )
-        await AsyncStorage.setItem('userData', JSON.stringify(result));
+        await AsyncStorage.setItem('userData', JSON.stringify(response));
+        console.log(response);
         navigation.navigate('Home', { user: result });
 
 
@@ -42,9 +47,10 @@ const Login = () => {
       console.error('Error during login:', error);
     }
   };
+
   // const printToken = async () => {
-  //   try {  
-  //     const userToken = await AsyncStorage.getItem('userToken');
+  //   try {
+  //     const userToken = await AsyncStorage.getItem('userData');
   //     console.log('User Token:', userToken);
   //   } catch (error) {
   //     console.error('Error retrieving token:', error);
@@ -130,10 +136,6 @@ const Login = () => {
             Sign in
           </Text>
         </TouchableOpacity>
-
-
-
-
 
         <TouchableOpacity
           onPress={() => navigation.navigate('Register')}

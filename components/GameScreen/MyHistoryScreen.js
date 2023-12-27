@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, Pressable, Image, StyleSheet } from 'react-native';
 import { SCREEN_WIDTH } from '../Constants/Screen';
+import axios from 'axios';
+
 
 const myHistoryData = [
   { image: require('../../assets/big.png'), id: '1234567854359', date: '11/5/2023', time: '6:24:00', status: 'Succeed', pl: '+17%', orderNo: 'QBJHLDW565VU4534VHVH', period: '342435234', purchase: '34', quantity: 5, Tax: 4, result: 'Red' },
@@ -10,6 +12,50 @@ const myHistoryData = [
 
 const MyHistoryScreen = () => {
   const [expandedIndex, setExpandedIndex] = useState(null);
+  const [userInformation, setUserInformation] = useState([])
+  const [userToken, setUserToken] = useState({})
+
+  useEffect(() => {
+    const retrieveUserData = async () => {
+      try {
+        const storedUserData = await AsyncStorage.getItem('userData');
+        const parsedUserData = JSON.parse(storedUserData);
+        setUserToken(parsedUserData);
+      }
+
+      catch (error) {
+        console.error('Error retrieving user data in myhistory:', error);
+      }
+    };
+    retrieveUserData();
+  }, []);
+
+  var token = `${userToken.token}`
+  console.log("This is my TOKEN in MyHistory", token);
+
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+
+        console.log("This token is to match in Myhisotry Screen", token);
+
+        const response = await axios.get('https://832b-2401-4900-1c19-6daf-d090-aea6-e929-1556.ngrok-free.app/api/bet/30secbet', {
+          headers: {
+            "Authorization": token,
+          },
+        });
+        setUserInformation(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error('Error checking token with MyHistory Screen:', error);
+      }
+    };
+
+    fetchData();
+  }, [token]);
+
 
   const handleItemPress = (index) => {
     setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
