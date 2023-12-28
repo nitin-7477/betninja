@@ -14,16 +14,16 @@ const CountdownComponent = () => {
   const socketRef = useRef(null);
 
 
-
   useEffect(() => {
     // Establish socket connection only if it doesn't exist
     if (!socketRef.current) {
 
-      socketRef.current = io(`${process.env.SOCKETURL}`);
+      socketRef.current = io("http://152.58.25.79:5001");
       // console.log(socketRef.current);
 
       // Replace 'http://your-server-address' with your actual server address
       socketRef.current.on('updateCountdown_thirtySecTimer', (data) => {
+        console.log('Received updateCountdown_thirtySecTimer event:', data);
         setCountdowns((prevCountdowns) => ({ ...prevCountdowns, thirtySec: data.countdown }));
       });
 
@@ -48,7 +48,7 @@ const CountdownComponent = () => {
       }
     };
   }, []);
-
+  // console.log(socketRef.current);
 
   const fetchCountdown = (timerName) => {
 
@@ -57,9 +57,7 @@ const CountdownComponent = () => {
     socketRef.current.emit('fetchCountdown', timerName);
   };
 
-
   // console.log(countdowns);
-
 
   return (
     <View>
@@ -134,3 +132,5 @@ const CountdownComponent = () => {
 };
 
 export default CountdownComponent;
+
+

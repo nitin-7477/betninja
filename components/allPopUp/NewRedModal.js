@@ -3,7 +3,7 @@ import React from 'react';
 import { Modal, View, Text, TouchableOpacity, StyleSheet, TextInput, KeyboardAvoidingView } from 'react-native';
 import { useState, useEffect } from 'react';
 
-const NewRedModal = ({ isVisible, closeModal }) => {
+const NewRedModal = ({ isVisible, closeModal,  }) => {
 
 
   const [inputValue, setInputValue] = useState('1'); // Set default value to '1'

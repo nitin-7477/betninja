@@ -2,19 +2,84 @@
 import React from 'react';
 import { Modal, View, Text, TouchableOpacity, StyleSheet, TextInput, KeyboardAvoidingView } from 'react-native';
 import { useState, useEffect } from 'react';
-import { postData } from '../../config/ServerServices';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from "@react-navigation/native";
 
-const NewBigModal = ({ isVisible, closeModal, buttonSize, backgroundColor }) => {
+const NewBigModal = ({ isVisible, closeModal, backgroundColor, selectType, select }) => {
 
-
+  const navigation = useNavigation();
   const [inputValue, setInputValue] = useState('1'); // Set default value to '1'
   const [totalAmount, setTotalAmount] = useState('');
+  const [apiData, setApiData] = useState([]);
+  const [ln, setln] = useState(0)
+
+  const [userInformation, setUserInformation] = useState([]);
+  const [userToken, setUserToken] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Retrieve user data from AsyncStorage
+        const storedUserData = await AsyncStorage.getItem('token');
+        const parsedUserData = JSON.parse(storedUserData);
+        setUserToken(parsedUserData);
+
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+  console.log("This is my token in Pop Up", userToken);
+
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('https://9871-2401-4900-1c19-6daf-d33-85ae-dfd7-8e43.ngrok-free.app/api/random/30secLottary');
+
+        // console.log("This is game history Data", response.data);
+
+        setApiData(response.data);
+        // console.log("xxxxxxxxx", response.data.data[0].LN);
+        setln(response.data.data[0].LN + 1)
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, [])
+  // console.log("Its LN is sent to the Modal for bet", apiData.data[0].LN);
+
+  // console.log("This is api data", apiData.data);
+  // console.log(ln);
 
 
   const handleBigData = async () => {
-    var result = await postData('api/')
+    try {
+      console.log("zzzzzzzzzzzzzzz", userToken);
+      var body = { LN: ln, purchaseAmount: totalAmount, selectType: selectType, select: select }
 
-  }
+      const result = await axios.post('https://9871-2401-4900-1c19-6daf-d33-85ae-dfd7-8e43.ngrok-free.app/api/bet/30secbet', body, {
+        headers: {
+          "Authorization": userToken,
+        },
+      });
+
+      console.log(result);
+    } catch (e) {
+      if (401 === e.response.status) {
+        console.log('There is some error');
+        // Handle unauthorized access (e.g., navigate to login screen)
+        // navigation.navigate('Login')
+      }
+    }
+  };
+
 
 
 
@@ -49,8 +114,10 @@ const NewBigModal = ({ isVisible, closeModal, buttonSize, backgroundColor }) => 
       <KeyboardAvoidingView style={{ justifyContent: 'flex-end', alignItems: 'center', flex: 1 }}>
         <View style={[styles.diaLogViolet, { backgroundColor: backgroundColor }]}>
 
-          <View style={{ height: 25, width: 150, display: 'flex', justifyContent: 'center', backgroundColor: '#fe5a1d', borderRadius: 10, marginVertical: 5, alignItems: 'center' }}>
-            <Text style={{ color: 'white', textAlign: 'center' }}>Select {buttonSize}</Text>
+          <View style={{ height: 25, width: 150, display: 'flex', justifyContent: 'center', backgroundColor: 'white', borderRadius: 10, marginVertical: 5, alignItems: 'center' }}>
+            <Text style={{ color: 'black', textAlign: 'center', fontWeight: 'bold' }}>Select {select}</Text>
+            <Text style={{ color: 'black', textAlign: 'center' }}>SelectType {selectType}</Text>
+
           </View>
           <View style={{ height: '25%', width: '97%', padding: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <Text style={{ color: 'purple', fontWeight: 'bold' }}>Quantity</Text>
@@ -58,7 +125,7 @@ const NewBigModal = ({ isVisible, closeModal, buttonSize, backgroundColor }) => 
 
 
               <TextInput
-                style={{ backgroundColor: '#fe5a1d', color: 'white' }}
+                style={{ backgroundColor: 'white', color: 'black', fontWeight: 'bold' }}
                 placeholder="Enter a number"
                 keyboardType="numeric"
                 value={inputValue}
@@ -152,8 +219,8 @@ const NewBigModal = ({ isVisible, closeModal, buttonSize, backgroundColor }) => 
             </TouchableOpacity>
             <TouchableOpacity
               onPress={handleBigData}
-              style={{ width: '50%', marginBottom: 5 }}>
-              <Text style={{ color: 'purple', fontWeight: 'bold' }}>Total Amount :{totalAmount}</Text>
+              style={{ width: '45%', marginBottom: 5, backgroundColor: 'green', padding: 5, borderRadius: 5, justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={{ color: 'white', fontWeight: 'bold' }}>Total Amount :{totalAmount}</Text>
 
             </TouchableOpacity>
           </View>

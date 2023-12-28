@@ -2,8 +2,10 @@ import { View, Text, StyleSheet, Image, ScrollView } from 'react-native'
 import React from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen'
 import { Colors } from '../components/Constants/Colors'
-
+import { useNavigation } from "@react-navigation/native";
+import { TouchableOpacity } from 'react-native';
 const Activity = () => {
+  const navigation = useNavigation();
   return (
     <ScrollView style={styles.container}>
 
@@ -24,10 +26,12 @@ const Activity = () => {
         height: SCREEN_HEIGHT * 0.16, width: SCREEN_WIDTH * 0.96, alignSelf: 'center', padding: 10,
         marginVertical: 10, flexDirection: 'row', justifyContent: 'space-between', elevation: 2,
       }}>
-        <View style={{
-          height: 100, width: '20%',
-          borderRadius: 10, justifyContent: 'center', alignItems: 'center'
-        }}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('ActivityAward')}
+          style={{
+            height: 100, width: '20%',
+            borderRadius: 10, justifyContent: 'center', alignItems: 'center'
+          }}>
           <View style={{ height: 60, width: 60, backgroundColor: 'orange', justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
 
             <Image source={require('../assets/reward.png')} style={{ height: 40, width: 40, borderRadius: 10 }} />
@@ -35,14 +39,16 @@ const Activity = () => {
           </View>
           <Text style={{ marginTop: 5, color: 'black', fontWeight: '600' }}>Activity</Text>
           <Text style={{ color: 'black', fontWeight: '600' }}>Award</Text>
-        </View>
+        </TouchableOpacity>
 
 
 
-        <View style={{
-          height: 100, width: '20%',
-          borderRadius: 10, justifyContent: 'center', alignItems: 'center'
-        }}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('BettingRebate')}
+          style={{
+            height: 100, width: '20%',
+            borderRadius: 10, justifyContent: 'center', alignItems: 'center'
+          }}>
           <View style={{ height: 60, width: 60, backgroundColor: 'green', justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
 
             <Image source={require('../assets/bettingRebate.png')} style={{ height: 40, width: 40, borderRadius: 10 }} />
@@ -50,13 +56,15 @@ const Activity = () => {
           </View>
           <Text style={{ marginTop: 5, color: 'black', fontWeight: '600' }}>Betting</Text>
           <Text style={{ color: 'black', fontWeight: '600' }}>Rebate</Text>
-        </View>
+        </TouchableOpacity>
 
 
-        <View style={{
-          height: 100, width: '20%',
-          borderRadius: 10, justifyContent: 'center', alignItems: 'center'
-        }}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Gifts')}
+          style={{
+            height: 100, width: '20%',
+            borderRadius: 10, justifyContent: 'center', alignItems: 'center'
+          }}>
           <View style={{ height: 60, width: 60, backgroundColor: 'blue', justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
 
             <Image source={require('../assets/reward.png')} style={{ height: 40, width: 40, borderRadius: 10 }} />
@@ -64,13 +72,15 @@ const Activity = () => {
           </View>
           <Text style={{ marginTop: 5, color: 'black', fontWeight: '600' }}>Gifts</Text>
           <Text style={{ color: 'black', fontWeight: '600' }}>& More</Text>
-        </View>
+        </TouchableOpacity>
 
 
-        <View style={{
-          height: 100, width: '20%',
-          borderRadius: 10, justifyContent: 'center', alignItems: 'center'
-        }}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('InvitationBonus')}
+          style={{
+            height: 100, width: '20%',
+            borderRadius: 10, justifyContent: 'center', alignItems: 'center'
+          }}>
           <View style={{ height: 60, width: 60, backgroundColor: 'orange', justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
 
             <Image source={require('../assets/reward.png')} style={{ height: 40, width: 40, borderRadius: 10 }} />
@@ -78,7 +88,7 @@ const Activity = () => {
           </View>
           <Text style={{ marginTop: 5, color: 'black', fontWeight: '600' }}>Invitation</Text>
           <Text style={{ color: 'black', fontWeight: '600' }}>Bonus</Text>
-        </View>
+        </TouchableOpacity>
 
       </View>
       {/* ************************Gifts and bonus card*************** */}

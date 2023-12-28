@@ -17,33 +17,33 @@ const Login = () => {
 
   const checkLogin = async () => {
     try {
-
       var body = { email: emailAddress, password: password };
-      const result = await axios.post('https://832b-2401-4900-1c19-6daf-d090-aea6-e929-1556.ngrok-free.app/api/auth/login', body);
 
-      let response = result.data
-      let token = response.token
+      const result = await axios.post("https://9871-2401-4900-1c19-6daf-d33-85ae-dfd7-8e43.ngrok-free.app/api/auth/login", body);
+      console.log(body);
+
+      let response = result.data;
+      console.log("RESPONSE", response);
+      let token = response.token;
 
       if (token) {
-
         Alert.alert("Login Successfully", "Welcome", [
           {
-            text: 'OK', onPress: () => { console.log('Closed') }
+            text: 'OK',
+            onPress: () => {
+              console.log('Closed');
+            }
           }
-        ],
-        )
-        await AsyncStorage.setItem('userData', JSON.stringify(response));
-        console.log(response);
+        ]);
+
+        await AsyncStorage.setItem('token', JSON.stringify(token));
+        // console.log(response);
         navigation.navigate('Home', { user: result });
-
-
       } else {
-
         console.log('Login failed:');
         Alert.alert('Login Failed');
       }
     } catch (error) {
-
       console.error('Error during login:', error);
     }
   };

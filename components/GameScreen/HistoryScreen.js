@@ -17,8 +17,9 @@ const HistoryScreen = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://832b-2401-4900-1c19-6daf-d090-aea6-e929-1556.ngrok-free.app/api/random/30secLottary');
-        // console.log(response.data);
+        const response = await axios.get('https://9871-2401-4900-1c19-6daf-d33-85ae-dfd7-8e43.ngrok-free.app/api/random/30secLottary');
+
+        console.log("This is game history Data", response.data);
 
         setApiData(response.data);
       } catch (error) {

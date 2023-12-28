@@ -1,25 +1,58 @@
 import { SafeAreaView, StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, TextInput } from 'react-native'
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
 import Entypo from 'react-native-vector-icons/Entypo'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../Constants/Colors'
 import { useNavigation } from "@react-navigation/native";
-import { postData } from '../../config/ServerServices'
+import axios from 'axios'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const WithdrawScreen = () => {
   const navigation = useNavigation();
 
   const [amount, setAmount] = useState('');
+  const [userInformation, setUserInformation] = useState([]);
+  const [userToken, setUserToken] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Retrieve user data from AsyncStorage
+        const storedUserData = await AsyncStorage.getItem('userData');
+        const parsedUserData = JSON.parse(storedUserData);
+        setUserToken(parsedUserData);
+
+        // Use the retrieved token to fetch user information
+        const token = `${parsedUserData.token}`;
+        const response = await axios.get('https://9871-2401-4900-1c19-6daf-d33-85ae-dfd7-8e43.ngrok-free.app/api/auth/user', {
+          headers: {
+            "Authorization": token,
+          },
+        });
+        setUserInformation(response.data);
+      } catch (error) {
+        console.error('Error fetching user data in Wallet Screen:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  console.log("This is user information for Withdraw Screen", userInformation);
 
   const handleDepositWithdraw = async (tab) => {
-
-    var body = { userId: '6585b4a3367ad4750f0b5b59', amount: 100 }
-    var result = await postData('/api/withdraw', body)
-    console.log(result);
-    setActiveTab(tab);
-
+    try {
+      var body = { userId: userInformation.uid, amount: amount }
+      console.log(body);
+      var result = await axios.post('https://9871-2401-4900-1c19-6daf-d33-85ae-dfd7-8e43.ngrok-free.app/api/withdraw', body)
+      console.log(result);
+      setActiveTab(tab);
+    }
+    catch (e) {
+      console.log(e);
+    }
   };
   return (
     <ScrollView style={styles.container}>

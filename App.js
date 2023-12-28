@@ -21,17 +21,14 @@ import Gifts from "./components/notification/Gifts";
 import Setting from "./components/service center/Setting";
 import SettingLogin from "./components/service center/SettingLogin";
 import BindMail from "./components/service center/BindMail";
-import MessageComponent from "./components/service center/GoogleAuthentication";
-import TimerWithModal30Sec from "./components/timers/TimerOf30Sec";
-import TimerWithModal60Sec from "./components/timers/TimerOf60Sec";
-import TimerWithModal3Min from "./components/timers/Timerof3Min";
-import TimerWithModal5Min from "./components/timers/Timerof5min";
 import FeedbackForm from "./components/service center/FeedBack";
 import NotificationFile from "./components/service center/NotificationFile";
 import CustomerServices from "./components/service center/CustomerServices";
 import CountdownComponent from "./components/timers/TimerOf30Sec";
 import Activity from "./screens/Activity";
 import ActivityAward from "./screens/activityAllScreens/ActivityAward";
+import InvitationBonus from "./screens/activityAllScreens/InvitationBonus";
+import BettingRebate from "./screens/activityAllScreens/BettingRebate";
 
 
 const Stack = createNativeStackNavigator();
@@ -56,25 +53,24 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
 
-        {/* {isFirstLaunch && (
+        {isFirstLaunch && (
           <Stack.Screen options={{ headerShown: false }} name="OnboardingScreen" component={OnboardingScreen} />
-        )} */}
-
+        )}
         <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
         <Stack.Screen options={{ headerShown: false }} name="Gamescreen" component={Gamescreen} />
-        <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
         <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
+        <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
+        <Stack.Screen name="Wallet" options={{ headerShown: false }} component={Wallet} />
+        <Stack.Screen options={{ headerShown: false }} name="BettingRebate" component={BettingRebate} />
+        <Stack.Screen options={{ headerShown: false }} name="InvitationBonus" component={InvitationBonus} />
         <Stack.Screen options={{ headerShown: false }} name="ActivityAward" component={ActivityAward} />
         <Stack.Screen options={{ headerShown: false }} name="Activity" component={Activity} />
-
-
 
         <Stack.Screen name="CountdownComponent" options={{ headerShown: false }} component={CountdownComponent} />
         <Stack.Screen name="Language" options={{ headerShown: false }} component={Language} />
         <Stack.Screen options={{ headerShown: false }} name="CustomerServices" component={CustomerServices} />
         <Stack.Screen options={{ headerShown: false }} name="NotificationFile" component={NotificationFile} />
 
-        <Stack.Screen name="Wallet" options={{ headerShown: false }} component={Wallet} />
         <Stack.Screen options={{ headerShown: false }} name="ForgotPassword" component={ForgotPasswordComponent} />
 
         <Stack.Screen options={{ headerShown: false }} name="Notification" component={Notifications} />
@@ -86,11 +82,6 @@ export default function App() {
         <Stack.Screen name="SettingLogin" options={{ headerShown: false }} component={SettingLogin} />
         <Stack.Screen name="BindMail" options={{ headerShown: false }} component={BindMail} />
 
-
-
-        {/* <Stack.Screen name="TimerWithModal60Sec" options={{ headerShown: false }} component={TimerWithModal60Sec} /> */}
-        {/* <Stack.Screen name="TimerWithModal3Min" options={{ headerShown: false }} component={TimerWithModal3Min} /> */}
-        {/* <Stack.Screen name="TimerWithModal5Min" options={{ headerShown: false }} component={TimerWithModal5Min} /> */}
 
         <Stack.Screen name="DepositeScreen" options={{ headerShown: false }} component={DepositeScreen} />
         <Stack.Screen name="WithdrawScreen" options={{ headerShown: false }} component={WithdrawScreen} />

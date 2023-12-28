@@ -5,12 +5,43 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Feather from "react-native-vector-icons/Feather";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen';
 
 const Setting = () => {
   const navigation = useNavigation();
+  const [userInformation, setUserInformation] = useState([]);
+  const [userToken, setUserToken] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Retrieve user data from AsyncStorage
+        const storedUserData = await AsyncStorage.getItem('userData');
+        const parsedUserData = JSON.parse(storedUserData);
+        setUserToken(parsedUserData);
+
+        // Use the retrieved token to fetch user information
+        const token = `${parsedUserData.token}`;
+        const response = await axios.get('https://9871-2401-4900-1c19-6daf-d33-85ae-dfd7-8e43.ngrok-free.app/api/auth/user', {
+          headers: {
+            "Authorization": token,
+          },
+        });
+        setUserInformation(response.data);
+      } catch (error) {
+        console.error('Error fetching user data in Wallet Screen:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  console.log("This is user information for wallet Screen", userInformation);
+
 
   return (
     <ScrollView style={styles.container}>
@@ -46,7 +77,7 @@ const Setting = () => {
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <Text style={{ fontSize: 16, color: Colors.fontGray, fontWeight: '500' }}>UID</Text>
           <View style={{ flexDirection: 'row' }}>
-            <Text style={{ fontSize: 16, color: Colors.fontGray, fontWeight: '500', marginRight: 10 }}>747723</Text>
+            <Text style={{ fontSize: 16, color: Colors.fontGray, fontWeight: '500', marginRight: 10 }}>{userInformation.uid}</Text>
             <Feather name='copy' size={20} color={Colors.fontGray} />
           </View>
         </View>

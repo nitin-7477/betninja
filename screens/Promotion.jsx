@@ -3,6 +3,9 @@ import AntDesign from 'react-native-vector-icons/AntDesign'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../components/Constants/Colors';
 import { useNavigation } from "@react-navigation/native";
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import React from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
@@ -10,6 +13,35 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
 
 const Promotion = () => {
   const navigation = useNavigation();
+
+  const [userInformation, setUserInformation] = useState([]);
+  const [userToken, setUserToken] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Retrieve user data from AsyncStorage
+        const storedUserData = await AsyncStorage.getItem('token');
+        const parsedUserData = JSON.parse(storedUserData);
+        setUserToken(parsedUserData);
+
+        // Use the retrieved token to fetch user information
+        const token = `${parsedUserData.token}`;
+        const response = await axios.get('https://9871-2401-4900-1c19-6daf-d33-85ae-dfd7-8e43.ngrok-free.app/api/auth/user', {
+          headers: {
+            "Authorization": token,
+          },
+        });
+        setUserInformation(response.data);
+      } catch (error) {
+        console.error('Error fetching user data in Promotion Screen:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  console.log("This is user information for Promotion Screen", userInformation);
 
 
   // #d9ad82 Main theme color

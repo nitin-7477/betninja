@@ -6,9 +6,7 @@ import HistoryScreen from '../components/GameScreen/HistoryScreen';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
 import MyHistoryScreen from '../components/GameScreen/MyHistoryScreen';
 import CountdownComponent from '../components/timers/TimerOf30Sec';
-import NewModalViolet from '../components/GamingModal';
 import NewRedModal from '../components/allPopUp/NewRedModal';
-import NewGreenModal from '../components/allPopUp/NewGreenModal';
 import NewBigModal from '../components/allPopUp/NewBigModal';
 import Modal1 from '../components/allPopUp/ModalOfNumber';
 import axios from "axios";
@@ -30,48 +28,34 @@ const HomeScreen = ({ navigation }) => {
   const [modal1, setModal1] = useState(false)
   const [modal2, setModal2] = useState(false)
   const [buttonSize, setButtonSize] = useState(null);
+  const [selectType, setSelectType] = useState(null)
+  const [select, setSelect] = useState(null)
   const [buttonBackgroundColor, setButtonBackgroundColor] = useState(null);
-  const [userInformation, setUserInformation] = useState([])
-  const [userToken, setUserToken] = useState({})
-
-
-  useEffect(() => {
-    const retrieveUserData = async () => {
-      try {
-        const storedUserData = await AsyncStorage.getItem('userData');
-        const parsedUserData = JSON.parse(storedUserData);
-        setUserToken(parsedUserData);
-      }
-
-      catch (error) {
-        console.error('Error retrieving user data:', error);
-      }
-    };
-    retrieveUserData();
-  }, []);
-
-  var token = `${userToken.token}`
-
+  const [userInformation, setUserInformation] = useState([]);
+  const [userToken, setUserToken] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Retrieve user data from AsyncStorage
+        const storedUserData = await AsyncStorage.getItem('token');
+        const parsedUserData = JSON.parse(storedUserData);
+        setUserToken(parsedUserData);
 
-
-        const response = await axios.get('https://832b-2401-4900-1c19-6daf-d090-aea6-e929-1556.ngrok-free.app/api/auth/user', {
+        const token = `${parsedUserData.token}`;
+        const response = await axios.get('https://9871-2401-4900-1c19-6daf-d33-85ae-dfd7-8e43.ngrok-free.app/api/auth/user', {
           headers: {
-            "Authorization": token, // Replace 'token' with the actual header key 
+            "Authorization": parsedUserData,
           },
         });
         setUserInformation(response.data);
       } catch (error) {
-        console.error('Error checking token with user data:', error);
+        console.error('Error fetching user data:', error);
       }
     };
 
     fetchData();
-  }, [token]);
-
+  }, []);
 
 
   const openModal1 = (number) => {
@@ -109,9 +93,11 @@ const HomeScreen = ({ navigation }) => {
     setBtnModalVisibleGreen(false);
   };
 
-  const openBigModal = (size, backgroundColor) => {
-    setButtonSize(size);
+  const openBigModal = (backgroundColor, selectType, select) => {
+
     setButtonBackgroundColor(backgroundColor);
+    setSelectType(selectType)
+    setSelect(select)
     setBigModalVisible(true);
   };
 
@@ -176,10 +162,10 @@ const HomeScreen = ({ navigation }) => {
 
       <Text style={{ fontWeight: '900', fontSize: 18, marginVertical: 10, color: 'black' }}>Prediction Options:</Text>
       <View style={styles.buttonRow}>
-        <NewBigModal isVisible={bigModalVisible} closeModal={closeBigModal} buttonSize={buttonSize}
+        <NewBigModal isVisible={bigModalVisible} closeModal={closeBigModal} selectType={selectType} select={select}
           backgroundColor={buttonBackgroundColor} />
         <TouchableOpacity
-          onPress={() => openBigModal('big', '#ffa343')}
+          onPress={() => openBigModal('#ffa343', 'size', 'big')}
           style={styles.bigButton}>
           <Text style={{ fontWeight: 'bold', color: 'white', }}>Big</Text>
         </TouchableOpacity>
@@ -187,7 +173,7 @@ const HomeScreen = ({ navigation }) => {
 
         <TouchableOpacity
           style={styles.smallBtn}
-          onPress={() => openBigModal('small', 'skyblue')}
+          onPress={() => openBigModal('skyblue', 'size', 'small')}
         >
           <Text style={{ fontWeight: 'bold', color: 'white', }}>Small</Text>
         </TouchableOpacity>
@@ -196,31 +182,32 @@ const HomeScreen = ({ navigation }) => {
       <View style={{ height: SCREEN_HEIGHT * 0.15, width: SCREEN_WIDTH * 0.94, justifyContent: 'center', backgroundColor: 'white', elevation: 2, borderRadius: 5 }}>
         <View style={styles.buttonRow}>
           <TouchableOpacity
+            onPress={() => openBigModal('#89CFF0', 'number', '0')}
             style={[styles.numberBtn, { backgroundColor: 'blue' }]}
           >
             <Text style={{ fontWeight: 'bold', color: 'white', }}>0</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => openModal1(1)}
+            onPress={() => openBigModal('#89CFF0', 'number', '1')}
             style={[styles.numberBtn, { backgroundColor: 'blue' }]}
           >
             <Text style={{ fontWeight: 'bold', color: 'white', }}>1</Text>
           </TouchableOpacity>
           <Modal1 isVisible={modal1} closeModal={closeModal1} number={number} />
           <TouchableOpacity
-            onPress={() => openModal1(2)}
+            onPress={() => openBigModal('#89CFF0', 'number', '2')}
             style={[styles.numberBtn, { backgroundColor: 'blue' }]}
           >
             <Text style={{ fontWeight: 'bold', color: 'white', }}>2</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => openModal1(3)}
+            onPress={() => openBigModal('#89CFF0', 'number', '3')}
             style={[styles.numberBtn, { backgroundColor: 'blue' }]}
           >
             <Text style={{ fontWeight: 'bold', color: 'white', }}>3</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => openModal1(4)}
+            onPress={() => openBigModal('#89CFF0', 'number', '4')}
             style={[styles.numberBtn, { backgroundColor: 'blue' }]}
           >
             <Text style={{ fontWeight: 'bold', color: 'white', }}>4</Text>
@@ -229,26 +216,31 @@ const HomeScreen = ({ navigation }) => {
 
         <View style={styles.buttonRow}>
           <TouchableOpacity
+            onPress={() => openBigModal('#89CFF0', 'number', '5')}
             style={[styles.numberBtn, { backgroundColor: 'blue' }]}
           >
             <Text style={{ fontWeight: 'bold', color: 'white', }}>5</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={() => openBigModal('#89CFF0', 'number', '6')}
             style={[styles.numberBtn, { backgroundColor: 'blue' }]}
           >
             <Text style={{ fontWeight: 'bold', color: 'white', }}>6</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={() => openBigModal('#89CFF0', 'number', '7')}
             style={[styles.numberBtn, { backgroundColor: 'blue' }]}
           >
             <Text style={{ fontWeight: 'bold', color: 'white', }}>7</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={() => openBigModal('#89CFF0', 'number', '8')}
             style={[styles.numberBtn, { backgroundColor: 'blue' }]}
           >
             <Text style={{ fontWeight: 'bold', color: 'white', }}>8</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={() => openBigModal('#89CFF0', 'number', '9')}
             style={[styles.numberBtn, { backgroundColor: 'blue' }]}
           >
             <Text style={{ fontWeight: 'bold', color: 'white', }}>9</Text>
@@ -257,13 +249,10 @@ const HomeScreen = ({ navigation }) => {
       </View>
       <View style={{ marginVertical: 20 }}></View>
       <View style={styles.buttonRow}>
-        <NewRedModal
-          //  onAmountChange={handleAmountChange}
-          isVisible={btnModalVisibleRed} closeModal={closeRedModal}
-        />
+
         <TouchableOpacity
           style={styles.redBtn}
-          onPress={openRedModal}
+          onPress={() => openBigModal('#FFA07A', 'color', 'red')}
         >
           <Text style={{ fontWeight: 'bold', color: 'white', }}>Red</Text>
         </TouchableOpacity>
@@ -272,13 +261,10 @@ const HomeScreen = ({ navigation }) => {
 
 
         {/* *************************************************************** */}
-        <NewModalViolet
-          //  onAmountChange={handleAmountChange}
-          isVisible={btnModalVisibleViolet} closeModal={closeModal}
-        />
+
         <TouchableOpacity
           style={styles.violetBtn}
-          onPress={openModal}
+          onPress={() => openBigModal('#D8BFD8', 'color', 'violet')}
         >
           <Text style={{ fontWeight: 'bold', color: 'white', }}>Violet</Text>
         </TouchableOpacity>
@@ -286,11 +272,9 @@ const HomeScreen = ({ navigation }) => {
 
 
 
-        <NewGreenModal isVisible={btnModalVisibleGreen} closeModal={closeGreenModal} />
-
         <TouchableOpacity
           style={styles.greenBtn}
-          onPress={openGreenModal}
+          onPress={() => openBigModal('#90EE90', 'color', 'green')}
         >
 
           <Text style={{ fontWeight: 'bold', color: 'white', }}>Green</Text>

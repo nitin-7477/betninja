@@ -23,8 +23,8 @@ const DepositeScreen = () => {
 
     RNUpiPayment.initializePayment(
       {
-        vpa: '7477235745@paytm', // or can be john@ybl or mobileNo@upi
-        payeeName: 'Nitin Gautam',
+        vpa: '6265100070@okbizaxis', // or can be john@ybl or mobileNo@upi
+        payeeName: 'CS-Network',
         amount: '1',
         transactionRef: 'aasf-332-aoei-fn',
       },

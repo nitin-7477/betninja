@@ -29,6 +29,21 @@ const Modal1 = ({ isVisible, closeModal, number }) => {
   };
 
 
+  const handleBetOfNumber = () => {
+    // body -- {
+    //   "LN": 35,
+    //   "userId": "6582d2b750c7c42105f0ed6b",
+    //   "phrchaseAmount": 100,
+    //   "selectType": "color",
+    //   "select": "red"
+    // }
+
+    var body = {}
+    alert(totalAmount)
+
+  }
+
+
   return (
     <Modal
       animationType="slide"
@@ -141,10 +156,13 @@ const Modal1 = ({ isVisible, closeModal, number }) => {
             <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
               <Text style={styles.closeButtonText}>Close</Text>
             </TouchableOpacity>
-            <View style={{ width: '50%', marginBottom: 5 }}>
+            <TouchableOpacity
+              onPress={handleBetOfNumber}
+
+              style={{ width: '50%', marginBottom: 5 }}>
               <Text style={{ color: 'purple', fontWeight: 'bold' }}>Total Amount :{totalAmount}</Text>
 
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
       </KeyboardAvoidingView >
@@ -174,7 +192,7 @@ const styles = StyleSheet.create({
     height: '35%', width: '95%', alignItems: 'center', padding: 5, backgroundColor: '#F1EFEF',
     borderTopLeftRadius: 20, borderTopRightRadius: 20,
     shadowColor: 'black', elevation: 10, shadowOffset: { height: 0, width: 0 }, shadowOpacity: 1,
-    backgroundColor: '#ffa343', borderColor: 'black', borderWidth: 2
+    backgroundColor: '#89CFF0', borderColor: 'black', borderWidth: 2
   },
 });
 

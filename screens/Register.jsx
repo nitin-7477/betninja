@@ -30,40 +30,51 @@ const Register = () => {
 
 
   const handleSignUp = async () => {
+    try {
 
-    if (password !== confirmPassword) {
-      toggleModal1(); // Show the modal
-      return;
+      if (password !== confirmPassword) {
+        toggleModal1(); // Show the modal
+        return;
+      }
+
+      const registrationData = {
+        email: emailAddress,
+        phone: phone,
+        password: password,
+      };
+
+      if (invitationCode.trim() !== '') {
+        registrationData.inviteCode = invitationCode.trim();
+      }
+      console.log('Hi');
+
+      const result = await axios.post('https://9871-2401-4900-1c19-6daf-d33-85ae-dfd7-8e43.ngrok-free.app/api/auth/register', registrationData);
+
+      console.log("xxxxxxxxxxxxxxxxxxxx", result);
+      console.log(registrationData);
+
+      if (result) {
+        toggleModal2();
+        navigation.navigate('Login');
+      }
+    } catch (error) {
+      console.error('Error during registration:', error);
+
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error('Server responded with an error status:', error.response.status);
+        console.error('Server response data:', error.response.data);
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error('No response received from the server');
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error('Error setting up the request:', error.message);
+      }
     }
+  };
 
-    const registrationData = {
-      email: emailAddress,
-      phone: phone,
-      password: password,
-    };
-
-    // Add the invitation code to the registration data if it's provided
-    if (invitationCode.trim() !== '') {
-      registrationData.inviteCode = invitationCode.trim();
-    }
-
-    const result = await axios.post('https://832b-2401-4900-1c19-6daf-d090-aea6-e929-1556.ngrok-free.app/api/auth/register', registrationData);
-
-    console.log("xxxxxxxxxxxxxxxxxxxx", result);
-    if (result) {
-      toggleModal2()
-      // Alert.alert("Registered Successfully", "Process to Login", [
-      //   {
-      //     text: 'OK', onPress: () => { console.log('Closed') }
-      //   }
-      // ],
-      // )
-      navigation.navigate('Login')
-    }
-
-
-
-  }
   const isResetButtonEnabled =
     emailAddress !== '' &&
     password !== '' &&

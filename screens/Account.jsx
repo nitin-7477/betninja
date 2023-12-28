@@ -6,9 +6,39 @@ import { useNavigation } from "@react-navigation/native";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
 import { Colors } from "../components/Constants/Colors";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const Account = () => {
   const navigation = useNavigation();
+  const [userInformation, setUserInformation] = useState([]);
+  const [userToken, setUserToken] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Retrieve user data from AsyncStorage
+        const storedUserData = await AsyncStorage.getItem('token');
+        const parsedUserData = JSON.parse(storedUserData);
+        setUserToken(parsedUserData);
+
+        // Use the retrieved token to fetch user information
+        const token = `${parsedUserData.token}`;
+        const response = await axios.get('https://9871-2401-4900-1c19-6daf-d33-85ae-dfd7-8e43.ngrok-free.app/api/auth/user', {
+          headers: {
+            "Authorization": token,
+          },
+        });
+        setUserInformation(response.data);
+      } catch (error) {
+        console.error('Error fetching user data in Account Screen:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  console.log("This is user information for Account Screen", userInformation);
 
   const handleLogOut = async () => {
     try {
@@ -31,15 +61,18 @@ const Account = () => {
 
         <View style={styles.userInfo}>
           <Text style={styles.userName}>User's Name</Text>
-          <Text style={styles.userId}>User ID: 123456</Text>
+          <Text style={styles.userId}>User ID: {userInformation.uid}</Text>
         </View>
-
-        <Text style={styles.level}>Level: 5</Text>
+      </View>
+      {/* *********Total Balance Card********************** */}
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <View style={styles.balance}>
+          <Text style={{ color: 'black' }}>Total Balance:- Rs. {userInformation.wallet}</Text>
+        </View>
+        <Text style={styles.level}>Level: {userInformation.level}</Text>
       </View>
 
-      <View style={styles.balance}>
-        <Text style={{ color: 'black' }}>Total Balance: ₹1,000.00</Text>
-      </View>
+      {/* *********Navigating to different screens********************** */}
 
       <View style={{ flexDirection: 'row', width: SCREEN_WIDTH * 0.9, justifyContent: 'space-between', alignContent: 'center', marginBottom: 10 }}>
 
