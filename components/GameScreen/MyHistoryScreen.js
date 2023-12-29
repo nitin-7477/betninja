@@ -5,11 +5,8 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-const myHistoryData = [
-  { image: require('../../assets/big.png'), id: '1234567854359', date: '11/5/2023', time: '6:24:00', status: 'Succeed', pl: '+17%', orderNo: 'QBJHLDW565VU4534VHVH', period: '342435234', purchase: '34', quantity: 5, Tax: 4, result: 'Red' },
-  { image: require('../../assets/big.png'), id: '6789123345445', date: '12/5/2023', time: '6:25:00', status: 'Failed', pl: '+16%', orderNo: 'YTJHLDW565VU453345VH', period: '442435234', purchase: '44', quantity: 6, Tax: 6, result: 'Blue' },
-  { image: require('../../assets/big.png'), id: '9312353454589', date: '13/7/2023', time: '6:26:00', status: 'Succeed', pl: '+15%', orderNo: 'JGDMJOJ767VU4534VHVH', period: '542435234', purchase: '54', quantity: 7, Tax: 7, result: 'Green' },
-];
+
+
 
 const MyHistoryScreen = () => {
   const [expandedIndex, setExpandedIndex] = useState(null);
@@ -20,20 +17,19 @@ const MyHistoryScreen = () => {
     const fetchData = async () => {
       try {
         // Retrieve user data from AsyncStorage
-        const storedUserData = await AsyncStorage.getItem('token');
-        const parsedUserData = JSON.parse(storedUserData);
-        setUserToken(parsedUserData);
+        const token = await AsyncStorage.getItem('token');
+        console.log(token);
 
-        // Use the retrieved token to fetch user information
-        const token = `${parsedUserData.token}`;
-        const response = await axios.get('https://9871-2401-4900-1c19-6daf-d33-85ae-dfd7-8e43.ngrok-free.app/api/bet/30secbet', {
+        const response = await axios.get(`${process.env.SERVERURL}/api/bet/30secbet`, {
+
           headers: {
-            "Authorization": token,
+            "Authorization": JSON.parse(token),
           },
         });
-        setUserInformation(response.data);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
+        setUserInformation(response.data.thirtyBetOfUser);
+      }
+      catch (error) {
+        console.error('Error fetching user data of My history screen:', error);
       }
     };
 
@@ -41,6 +37,26 @@ const MyHistoryScreen = () => {
   }, []);
 
   console.log(userInformation);
+
+  const imageMapping = {
+    big: require('../../assets/big.png'),
+    small: require('../../assets/small.png'),
+    violet: require('../../assets/yellowdot.png'),
+    red: require('../../assets/reddot.png'),
+    green: require('../../assets/greendot.png'),
+    1: require('../../assets/1.png'),
+    2: require('../../assets/2.png'),
+    3: require('../../assets/3.png'),
+    4: require('../../assets/4.png'),
+    5: require('../../assets/5.png'),
+    6: require('../../assets/6.png'),
+    7: require('../../assets/7.png'),
+    8: require('../../assets/8.png'),
+    9: require('../../assets/9.png'),
+
+
+
+  };
 
 
 
@@ -50,6 +66,7 @@ const MyHistoryScreen = () => {
   };
 
   const renderItem = ({ item, index }) => (
+
     <View>
       <Pressable
         onPress={() => handleItemPress(index)}
@@ -68,12 +85,12 @@ const MyHistoryScreen = () => {
         }}>
         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
           <View style={{ marginRight: 20 }}>
-            <Image source={item.image} style={{ height: 30, width: 30 }} />
+            <Image source={imageMapping[item.select]} style={{ height: 30, width: 30 }} />
           </View>
           <View>
-            <Text style={{ color: 'black' }}>{item.id}</Text>
+            <Text style={{ color: 'black' }}>{item.LN}</Text>
             <Text style={{ color: 'black' }}>
-              {item.date}
+              {item.updatedAt}
               {item.time}
             </Text>
           </View>
@@ -85,14 +102,16 @@ const MyHistoryScreen = () => {
               width: 60,
               border: 1,
               borderWidth: 1,
-              borderColor: 'grey',
+              borderColor: item.status == 'failed' ? 'red' : 'green',
               borderRadius: 10,
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <Text style={{ color: 'green' }}>{item.status}</Text>
+            <Text style={{ color: item.status == 'failed' ? 'red' : 'green' }}>{item.status}</Text>
           </View>
-          <Text style={{ color: 'green' }}>{item.pl}</Text>
+          <Text style={{ color: item.win_loss > 0 ? 'green' : item.win_loss < 0 ? 'red' : 'black' }}>
+            {item.win_loss > 0 ? '+' : ''}{item.win_loss}
+          </Text>
         </View>
       </Pressable>
       {expandedIndex === index ? (
@@ -109,7 +128,7 @@ const MyHistoryScreen = () => {
       <View style={styles.details}>
         <Text style={{ color: 'black' }}>Details</Text>
       </View>
-      <FlatList data={myHistoryData} renderItem={renderItem} keyExtractor={(item) => item.id} />
+      <FlatList data={userInformation} renderItem={renderItem} keyExtractor={(item) => item.id} />
     </View>
   );
 };

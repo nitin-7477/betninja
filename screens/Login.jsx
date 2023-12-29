@@ -19,7 +19,7 @@ const Login = () => {
     try {
       var body = { email: emailAddress, password: password };
 
-      const result = await axios.post("https://9871-2401-4900-1c19-6daf-d33-85ae-dfd7-8e43.ngrok-free.app/api/auth/login", body);
+      const result = await axios.post(`${process.env.SERVERURL}/api/auth/login`, body);
       console.log(body);
 
       let response = result.data;

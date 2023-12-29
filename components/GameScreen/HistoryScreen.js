@@ -15,19 +15,24 @@ const HistoryScreen = () => {
   const [startIndex, setStartIndex] = useState(0);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('https://9871-2401-4900-1c19-6daf-d33-85ae-dfd7-8e43.ngrok-free.app/api/random/30secLottary');
+    try {
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(`${process.env.SERVERURL}/api/random/30seclottary`);
 
-        console.log("This is game history Data", response.data);
+          // console.log("This is game history Data", response.data);
 
-        setApiData(response.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+          setApiData(response.data);
+        } catch (error) {
+          console.error('Error fetching data in game history:', error);
+        }
+      };
 
-    fetchData();
+      fetchData();
+    }
+    catch (e) {
+      console.log("This is error in Game History", e);
+    }
   }, [])
   const displayData = apiData.data
 

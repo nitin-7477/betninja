@@ -20,13 +20,12 @@ const NewBigModal = ({ isVisible, closeModal, backgroundColor, selectType, selec
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Retrieve user data from AsyncStorage
-        const storedUserData = await AsyncStorage.getItem('token');
-        const parsedUserData = JSON.parse(storedUserData);
-        setUserToken(parsedUserData);
+        const token = await AsyncStorage.getItem('token');
+        console.log("Check this token in pop up", token);
+        setUserToken(JSON.parse(token))
 
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error('Error fetching token in pop up:', error);
       }
     };
 
@@ -39,7 +38,7 @@ const NewBigModal = ({ isVisible, closeModal, backgroundColor, selectType, selec
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://9871-2401-4900-1c19-6daf-d33-85ae-dfd7-8e43.ngrok-free.app/api/random/30secLottary');
+        const response = await axios.get(`${process.env.SERVERURL}/api/random/30secLottary`);
 
         // console.log("This is game history Data", response.data);
 
@@ -56,29 +55,66 @@ const NewBigModal = ({ isVisible, closeModal, backgroundColor, selectType, selec
   // console.log("Its LN is sent to the Modal for bet", apiData.data[0].LN);
 
   // console.log("This is api data", apiData.data);
-  // console.log(ln);
-
+  console.log(ln);
 
   const handleBigData = async () => {
     try {
+
+      // body -- {
+      //   "LN": 35,
+      //   "userId": "6582d2b750c7c42105f0ed6b",
+      //   "phrchaseAmount": 100,
+      //   "selectType": "color",
+      //   "select": "red"
+      // }
+
       console.log("zzzzzzzzzzzzzzz", userToken);
-      var body = { LN: ln, purchaseAmount: totalAmount, selectType: selectType, select: select }
 
-      const result = await axios.post('https://9871-2401-4900-1c19-6daf-d33-85ae-dfd7-8e43.ngrok-free.app/api/bet/30secbet', body, {
-        headers: {
-          "Authorization": userToken,
-        },
-      });
+      // Check if userToken is available before making the request
+      if (!userToken) {
+        console.error("User token is missing");
+        return;
+      }
 
-      console.log(result);
-    } catch (e) {
-      if (401 === e.response.status) {
-        console.log('There is some error');
-        // Handle unauthorized access (e.g., navigate to login screen)
-        // navigation.navigate('Login')
+      const body = {
+        LN: ln,
+        phrchaseAmount: Number(totalAmount),
+        selectType: selectType,
+        select: select,
+      };
+
+      console.log("Request Body:", body);
+
+      const response = await axios.post(`${process.env.SERVERURL}/api/bet/30secbet`, body,
+        {
+          headers: {
+            Authorization: userToken,
+          },
+        }
+      );
+
+      console.log("Response:", response.data);
+      if (response.data) {
+        closeModal()
+      }
+    } catch (error) {
+      console.error("Error:", error);
+
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error("Server Response Data:", error.response.data);
+        console.error("Server Response Status:", error.response.status);
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error("No response received from the server");
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error("Error setting up the request:", error.message);
       }
     }
   };
+
 
 
 

@@ -48,7 +48,7 @@ const Register = () => {
       }
       console.log('Hi');
 
-      const result = await axios.post('https://9871-2401-4900-1c19-6daf-d33-85ae-dfd7-8e43.ngrok-free.app/api/auth/register', registrationData);
+      const result = await axios.post(`${process.env.SERVERURL}/api/auth/register`, registrationData);
 
       console.log("xxxxxxxxxxxxxxxxxxxx", result);
       console.log(registrationData);

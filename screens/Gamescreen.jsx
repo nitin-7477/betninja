@@ -11,6 +11,7 @@ import NewBigModal from '../components/allPopUp/NewBigModal';
 import Modal1 from '../components/allPopUp/ModalOfNumber';
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import CountdownApp from '../components/CountDownApp';
 
 
 
@@ -33,29 +34,50 @@ const HomeScreen = ({ navigation }) => {
   const [buttonBackgroundColor, setButtonBackgroundColor] = useState(null);
   const [userInformation, setUserInformation] = useState([]);
   const [userToken, setUserToken] = useState({});
+  const [ln, setln] = useState(0)
+
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Retrieve user data from AsyncStorage
-        const storedUserData = await AsyncStorage.getItem('token');
-        const parsedUserData = JSON.parse(storedUserData);
-        setUserToken(parsedUserData);
-
-        const token = `${parsedUserData.token}`;
-        const response = await axios.get('https://9871-2401-4900-1c19-6daf-d33-85ae-dfd7-8e43.ngrok-free.app/api/auth/user', {
-          headers: {
-            "Authorization": parsedUserData,
-          },
-        });
-        setUserInformation(response.data);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
 
     fetchData();
+    getLotteryNumber()
   }, []);
+
+
+  const getLotteryNumber = async () => {
+    try {
+      const response = await axios.get(`${process.env.SERVERURL}/api/random/30secLottaryLatest`)
+      // console.log("xxxxxxxxxxxxxxxx",response.data.data.LN+1);
+      setln(response.data.data.LN + 1)
+
+    }
+    catch (e) {
+      console.log("Error while getting lottery Number", e);
+
+    }
+  }
+
+
+  const fetchData = async () => {
+    try {
+      // Retrieve user data from AsyncStorage
+      const storedUserData = await AsyncStorage.getItem('token');
+      const parsedUserData = JSON.parse(storedUserData);
+      setUserToken(parsedUserData);
+
+      // const token = `${parsedUserData.token}`;
+      const response = await axios.get(`${process.env.SERVERURL}/api/auth/user`, {
+        headers: {
+          "Authorization": parsedUserData,
+        },
+      });
+
+      setUserInformation(response.data);
+    } catch (error) {
+      console.error('Error fetching user data in Gaming screen:', error);
+    }
+  };
+
 
 
   const openModal1 = (number) => {
@@ -157,6 +179,9 @@ const HomeScreen = ({ navigation }) => {
 
 
       <View><CountdownComponent /></View>
+      <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Serial Number : {ln}</Text>
+
+  
 
 
 
