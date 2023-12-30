@@ -15,21 +15,17 @@ const Promotion = () => {
   const navigation = useNavigation();
 
   const [userInformation, setUserInformation] = useState([]);
-  const [userToken, setUserToken] = useState({});
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Retrieve user data from AsyncStorage
-        const storedUserData = await AsyncStorage.getItem('token');
-        const parsedUserData = JSON.parse(storedUserData);
-        setUserToken(parsedUserData);
+        const token = await AsyncStorage.getItem('token');
 
-        // Use the retrieved token to fetch user information
-        const token = `${parsedUserData.token}`;
-        const response = await axios.get('https://9871-2401-4900-1c19-6daf-d33-85ae-dfd7-8e43.ngrok-free.app/api/auth/user', {
+
+        const response = await axios.get(`${process.env.SERVERURL}/api/auth/user`, {
           headers: {
-            "Authorization": token,
+            "Authorization": JSON.parse(token),
           },
         });
         setUserInformation(response.data);
@@ -131,9 +127,15 @@ const Promotion = () => {
           </View>
 
         </View>
+        {/* **********************Invitation Link Button*********************** */}
+
         <View style={{ marginTop: 140, height: 50, width: 320, backgroundColor: '#d9ad82', alignSelf: 'center', alignItems: 'center', justifyContent: 'center', borderRadius: 20, marginBottom: 20 }}>
           <Text style={{ textAlign: 'center', color: '#770737', fontWeight: 600, fontSize: 20 }}>Invitation Link</Text>
         </View>
+        {/* **********************Invitation Link Button*********************** */}
+
+
+
         <View style={{ height: 50, width: 320, alignSelf: 'center', marginTop: 10, borderRadius: 5, elevation: 3, backgroundColor: 'white' }}>
           <View style={{ height: 50, width: 320, justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, flexDirection: 'row' }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -147,8 +149,8 @@ const Promotion = () => {
 
         </View>
 
-        <View style={{ height: 50, width: 320, alignSelf: 'center', marginTop: 10, borderRadius: 5, elevation: 3, backgroundColor: 'white' }}>
-          <View style={{ height: 50, width: 320, justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, flexDirection: 'row', }}>
+        <View style={styles.tile1}>
+          <View style={styles.tile2}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Ionicons name='person' size={22} color={'black'} />
               <Text style={{ marginLeft: 4, fontWeight: 500, color: 'black' }}>Subordinate Data</Text>
@@ -156,8 +158,42 @@ const Promotion = () => {
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
               <AntDesign name='right' size={16} color={'black'} /></View>
           </View>
-
         </View>
+
+        <View style={styles.tile1}>
+          <View style={styles.tile2}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Ionicons name='person' size={22} color={'black'} />
+              <Text style={{ marginLeft: 4, fontWeight: 500, color: 'black' }}>Commission Details</Text>
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+              <AntDesign name='right' size={16} color={'black'} /></View>
+          </View>
+        </View>
+
+        <View style={styles.tile1}>
+          <View style={styles.tile2}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Ionicons name='person' size={22} color={'black'} />
+              <Text style={{ marginLeft: 4, fontWeight: 500, color: 'black' }}>Invitation Rules</Text>
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+              <AntDesign name='right' size={16} color={'black'} /></View>
+          </View>
+        </View>
+        
+        <View style={styles.tile1}>
+          <View style={styles.tile2}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Ionicons name='person' size={22} color={'black'} />
+              <Text style={{ marginLeft: 4, fontWeight: 500, color: 'black' }}>Agent Line customer services</Text>
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+              <AntDesign name='right' size={16} color={'black'} /></View>
+          </View>
+        </View>
+
+
         <View style={{ height: 220, width: 320, alignSelf: 'center', marginTop: 10, borderRadius: 5, elevation: 3, backgroundColor: 'white', padding: 6 }}>
           <View style={{ height: 30, width: 320, paddingHorizontal: 10, paddingVertical: 3 }}>
             <Text style={{ fontWeight: '700', fontSize: 16, color: 'black' }}>Promotion Data</Text>
@@ -210,4 +246,7 @@ const styles = {
     //  fontSize: '16', 
     fontWeight: '700'
   }
+  , tile1: { height: 50, width: 320, alignSelf: 'center', marginTop: 10, borderRadius: 5, elevation: 3, backgroundColor: 'white' },
+  tile2: { height: 50, width: 320, justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, flexDirection: 'row', },
+
 }

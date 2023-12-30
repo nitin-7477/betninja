@@ -21,7 +21,7 @@ const NewBigModal = ({ isVisible, closeModal, backgroundColor, selectType, selec
     const fetchData = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
-        console.log("Check this token in pop up", token);
+
         setUserToken(JSON.parse(token))
 
       } catch (error) {
@@ -31,7 +31,7 @@ const NewBigModal = ({ isVisible, closeModal, backgroundColor, selectType, selec
 
     fetchData();
   }, []);
-  console.log("This is my token in Pop Up", userToken);
+  // console.log("This is my token in Pop Up", userToken);
 
 
 
@@ -83,7 +83,7 @@ const NewBigModal = ({ isVisible, closeModal, backgroundColor, selectType, selec
         select: select,
       };
 
-      console.log("Request Body:", body);
+      // console.log("Request Body:", body);
 
       const response = await axios.post(`${process.env.SERVERURL}/api/bet/30secbet`, body,
         {

@@ -23,7 +23,7 @@ const CountdownComponent = () => {
   useEffect(() => {
     // Establish socket connection only if it doesn't exist
     if (!socketRef.current) {
-      socketRef.current = io("https://24c9-2409-40c4-ea-b867-1ce4-647f-42ab-f091.ngrok-free.app");
+      socketRef.current = io(`${process.env.SOCKETURL}`);
 
       // setSelectedCountdown('thirtySec')
 

@@ -17,18 +17,14 @@ const Account = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Retrieve user data from AsyncStorage
-        const storedUserData = await AsyncStorage.getItem('token');
-        const parsedUserData = JSON.parse(storedUserData);
-        setUserToken(parsedUserData);
+        const token = await AsyncStorage.getItem('token');
 
-        // Use the retrieved token to fetch user information
-        const token = `${parsedUserData.token}`;
-        const response = await axios.get('https://9871-2401-4900-1c19-6daf-d33-85ae-dfd7-8e43.ngrok-free.app/api/auth/user', {
+        const response = await axios.get(`${process.env.SERVERURL}/api/auth/user`, {
           headers: {
-            "Authorization": token,
+            "Authorization": JSON.parse(token),
           },
         });
+
         setUserInformation(response.data);
       } catch (error) {
         console.error('Error fetching user data in Account Screen:', error);

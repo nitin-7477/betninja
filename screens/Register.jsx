@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, Alert } from "react-native";
+import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, ActivityIndicator } from "react-native";
 import React from "react";
 import AppTextInput from "../components/AppTextInput";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -19,6 +19,8 @@ const Register = () => {
   const [invitationCode, setInvitationCode] = useState('')
   const [isModalVisible, setModalVisible] = useState(false);
   const [isModalVisible2, setModalVisible2] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
 
   const toggleModal1 = () => {
@@ -28,10 +30,18 @@ const Register = () => {
     setModalVisible2(!isModalVisible2);
   };
 
+  const handleResetData = () => {
+    setEmailAddress('')
+    setPhone('')
+    setPassword('')
+    setConfirmPassword('')
+    setInvitationCode('')
+  }
+
 
   const handleSignUp = async () => {
     try {
-
+      setLoading(true);
       if (password !== confirmPassword) {
         toggleModal1(); // Show the modal
         return;
@@ -46,17 +56,22 @@ const Register = () => {
       if (invitationCode.trim() !== '') {
         registrationData.inviteCode = invitationCode.trim();
       }
-      console.log('Hi');
+
 
       const result = await axios.post(`${process.env.SERVERURL}/api/auth/register`, registrationData);
 
       console.log("xxxxxxxxxxxxxxxxxxxx", result);
       console.log(registrationData);
 
+
       if (result) {
         toggleModal2();
+        handleResetData();
+        setRefresh(!refresh);
         navigation.navigate('Login');
       }
+      handleResetData()
+
     } catch (error) {
       console.error('Error during registration:', error);
 
@@ -73,6 +88,10 @@ const Register = () => {
         console.error('Error setting up the request:', error.message);
       }
     }
+    finally {
+      setLoading(false);
+    }
+
   };
 
   const isResetButtonEnabled =
@@ -117,7 +136,7 @@ const Register = () => {
         >
           <AppTextInput placeholder="Email"
             value={emailAddress} onChangeText={(text) => setEmailAddress(text)} />
-          <AppTextInput placeholder="Phone" value={phone} onChangeText={(text) => setPhone(text)} />
+          <AppTextInput maxLength={10} keyboardType="numeric" placeholder="Phone" value={phone} onChangeText={(text) => setPhone(text)} />
           <AppTextInput placeholder='Password' secureTextEntry value={password} onChangeText={(text) => setPassword(text)} />
           <AppTextInput placeholder='Confirm Password' secureTextEntry value={confirmPassword} onChangeText={(text) => setConfirmPassword(text)} />
           <AppTextInput placeholder="Invite Code" value={invitationCode} onChangeText={(text) => setInvitationCode(text)} />
@@ -167,6 +186,7 @@ const Register = () => {
             </TouchableOpacity>
           </View>
         </Modal>
+
 
 
 
@@ -240,9 +260,16 @@ const Register = () => {
                 size={20}
               />
             </TouchableOpacity>
+
           </View>
         </View>
       </View>
+
+      <Modal isVisible={loading} backdropOpacity={0.5} animationIn="fadeIn" animationOut="fadeOut">
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <ActivityIndicator size={100} color="gold" />
+        </View>
+      </Modal>
     </SafeAreaView>
   )
 }

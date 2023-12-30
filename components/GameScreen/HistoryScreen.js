@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image, Button } from 'react-native';
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../Constants/Screen';
 import { useEffect, useState } from 'react';
 import { getData } from '../../config/ServerServices';
@@ -8,11 +8,12 @@ import axios from 'axios';
 
 
 const HistoryScreen = () => {
-
-
-  const [apiData, setApiData] = useState([]);
-  const [visibleData, setVisibleData] = useState([]);
   const [startIndex, setStartIndex] = useState(0);
+  const itemsPerPage = 10;
+  const [apiData, setApiData] = useState([]);
+
+
+
 
   useEffect(() => {
     try {
@@ -34,7 +35,8 @@ const HistoryScreen = () => {
       console.log("This is error in Game History", e);
     }
   }, [])
-  const displayData = apiData.data
+
+  const displayData = apiData?.data || [];
 
 
   const colorImageMapping = {
@@ -45,15 +47,16 @@ const HistoryScreen = () => {
 
   };
 
-  const loadMoreData = () => {
-    const endIndex = startIndex + 10;
-    const newData = apiData.slice(startIndex, endIndex);
-    setVisibleData([...visibleData, ...newData]);
-    setStartIndex(endIndex);
+
+  const totalPages = Math.ceil(displayData.length / itemsPerPage);
+
+  const onNextPress = () => {
+    setStartIndex((prevIndex) => Math.min(prevIndex + itemsPerPage, (totalPages - 1) * itemsPerPage));
   };
 
-  // console.log("This is api data", apiData.data);
-
+  const onPrevPress = () => {
+    setStartIndex((prevIndex) => Math.max(0, prevIndex - itemsPerPage));
+  };
   return (
     <>
       <View style={{ display: 'flex', flexDirection: 'row', width: SCREEN_WIDTH * 0.9, marginTop: 20, height: 45, backgroundColor: '#d9ad82', paddingVertical: 10, borderTopEndRadius: 10, paddingHorizontal: 5, borderTopStartRadius: 10 }}>
@@ -64,7 +67,7 @@ const HistoryScreen = () => {
         <View ><Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>Color</Text></View>
       </View>
 
-      <FlatList data={displayData} renderItem={({ item }) => {
+      <FlatList data={displayData.slice(startIndex, startIndex + itemsPerPage)} renderItem={({ item }) => {
         return <View style={{ display: 'flex', flexDirection: 'row', width: SCREEN_WIDTH * 0.9, marginTop: 2, height: 63, paddingVertical: 10, borderBottomWidth: 0.5, borderBottomColor: 'grey', paddingHorizontal: 5, alignItems: 'center' }}>
           <View style={{ width: SCREEN_WIDTH * 0.25, }}><Text style={{ fontSize: 16, color: 'black' }}>{item.LN}</Text></View>
           <View style={{ width: SCREEN_WIDTH * 0.17, alignItems: 'center', }}>
@@ -82,11 +85,11 @@ const HistoryScreen = () => {
           </View>
         </View>
       }} />
-      <TouchableOpacity onPress={loadMoreData} style={{ alignItems: 'center', marginTop: 10 }}>
-        <View style={{ backgroundColor: 'blue', padding: 10, borderRadius: 5 }}>
-          <Text style={{ color: 'white', fontSize: 16 }}>Load More</Text>
-        </View>
-      </TouchableOpacity>
+
+      <Button title="Previous" onPress={onPrevPress} disabled={startIndex === 0} />
+      <Text style={styles.pageIndicator}>{`Page ${Math.ceil((startIndex + 1) / itemsPerPage)} of ${totalPages}`}</Text>
+
+      <Button title="Next" onPress={onNextPress} disabled={startIndex + itemsPerPage >= displayData.length} />
 
     </>
   );

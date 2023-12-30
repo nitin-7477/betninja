@@ -7,6 +7,7 @@ import RNUpiPayment from 'react-native-upi-payment'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../Constants/Colors'
 import { useNavigation } from "@react-navigation/native";
+import AllInOneSDKManager from 'paytm_allinone_react-native';
 
 
 
@@ -19,28 +20,32 @@ const DepositeScreen = () => {
     setActiveTab(tab);
   };
 
+
   const PaymentGateWay = () => {
 
-    RNUpiPayment.initializePayment(
-      {
-        vpa: '6265100070@okbizaxis', // or can be john@ybl or mobileNo@upi
-        payeeName: 'CS-Network',
-        amount: '1',
-        transactionRef: 'aasf-332-aoei-fn',
-      },
-      successCallback,
-      failureCallback
-    );
+
+
+    AllInOneSDKManager.startTransaction(
+      orderId,
+      mid,
+      tranxToken,
+      amount,
+      callbackUrl,
+      isStaging,
+      appInvokeRestricted,
+      urlScheme
+    )
+      .then((result) => {
+        console.log("RESUTL:-", result);
+        updateUI(result);
+      })
+      .catch((err) => {
+        console.log("RESUTL:-", err);
+        handleError(err);
+      });
   }
 
 
-  function successCallback(data) {
-    console.log(data)
-  }
-
-  function failureCallback(data) {
-    console.log(data)
-  }
 
   return (
     <ScrollView style={styles.container}>

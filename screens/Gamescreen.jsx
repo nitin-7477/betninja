@@ -11,7 +11,6 @@ import NewBigModal from '../components/allPopUp/NewBigModal';
 import Modal1 from '../components/allPopUp/ModalOfNumber';
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import CountdownApp from '../components/CountDownApp';
 
 
 
@@ -19,23 +18,14 @@ const HomeScreen = ({ navigation }) => {
 
   const [gameHistory, setGameHistory] = useState(true)
   const [myHistory, setMyHistory] = useState(false)
-  const [btnModalVisibleGreen, setBtnModalVisibleGreen] = useState(false);
-  const [btnModalVisibleRed, setBtnModalVisibleRed] = useState(false);
-  const [btnModalVisibleViolet, setBtnModalVisibleViolet] = useState(false);
   const [selectedButton, setSelectedButton] = useState(null);
   const [bigModalVisible, setBigModalVisible] = useState(false)
-  const [smallModalVisible, setSmallModalVisible] = useState(false)
-  const [number, setNumber] = useState(null)
-  const [modal1, setModal1] = useState(false)
-  const [modal2, setModal2] = useState(false)
-  const [buttonSize, setButtonSize] = useState(null);
   const [selectType, setSelectType] = useState(null)
   const [select, setSelect] = useState(null)
   const [buttonBackgroundColor, setButtonBackgroundColor] = useState(null);
   const [userInformation, setUserInformation] = useState([]);
   const [userToken, setUserToken] = useState({});
   const [ln, setln] = useState(0)
-
 
   useEffect(() => {
 
@@ -80,40 +70,6 @@ const HomeScreen = ({ navigation }) => {
 
 
 
-  const openModal1 = (number) => {
-    setNumber(number)
-    setModal1(true);
-  };
-
-  const closeModal1 = () => {
-    setModal1(false);
-  };
-
-
-
-  const openModal = () => {
-    setBtnModalVisibleViolet(true);
-  };
-
-  const closeModal = () => {
-    setBtnModalVisibleViolet(false);
-  };
-
-  const openRedModal = () => {
-    setBtnModalVisibleRed(true);
-  };
-
-  const closeRedModal = () => {
-    setBtnModalVisibleRed(false);
-  };
-
-  const openGreenModal = () => {
-    setBtnModalVisibleGreen(true);
-  };
-
-  const closeGreenModal = () => {
-    setBtnModalVisibleGreen(false);
-  };
 
   const openBigModal = (backgroundColor, selectType, select) => {
 
@@ -181,7 +137,7 @@ const HomeScreen = ({ navigation }) => {
       <View><CountdownComponent /></View>
       <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Serial Number : {ln}</Text>
 
-  
+
 
 
 
@@ -218,7 +174,6 @@ const HomeScreen = ({ navigation }) => {
           >
             <Text style={{ fontWeight: 'bold', color: 'white', }}>1</Text>
           </TouchableOpacity>
-          <Modal1 isVisible={modal1} closeModal={closeModal1} number={number} />
           <TouchableOpacity
             onPress={() => openBigModal('#89CFF0', 'number', '2')}
             style={[styles.numberBtn, { backgroundColor: 'blue' }]}

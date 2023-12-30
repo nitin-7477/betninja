@@ -116,6 +116,13 @@ dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
     implementation("com.facebook.react:flipper-integration")
+    implementation "com.squareup.okhttp3:okhttp:4.2.1"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.2.1"
+    implementation "com.squareup.okhttp3:okhttp-urlconnection:4.2.1"
+
+    // implementation('com.paytm.appinvokesdk:appinvokesdk:1.5.4'){
+    // exclude group: "com.squareup.okhttp3", module: 'okhttp3'
+    // }
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")

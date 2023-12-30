@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, TextInput, Image, Alert } from "react-native";
+import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, TextInput, Image, Alert, Modal, } from "react-native";
 import React from "react";
 import { useState } from "react";
 import AppTextInput from "../components/AppTextInput";
@@ -18,6 +18,7 @@ const Login = () => {
   const checkLogin = async () => {
     try {
       var body = { email: emailAddress, password: password };
+      console.log(process.env.SERVERURL);
 
       const result = await axios.post(`${process.env.SERVERURL}/api/auth/login`, body);
       console.log(body);
@@ -224,6 +225,7 @@ const Login = () => {
           </View>
         </View>
       </View>
+
     </SafeAreaView>
   );
 };

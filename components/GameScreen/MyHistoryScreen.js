@@ -3,6 +3,7 @@ import { View, Text, FlatList, Pressable, Image, StyleSheet } from 'react-native
 import { SCREEN_WIDTH } from '../Constants/Screen';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Colors } from '../Constants/Colors';
 
 
 
@@ -36,7 +37,7 @@ const MyHistoryScreen = () => {
     fetchData();
   }, []);
 
-  console.log(userInformation);
+  console.log("xxxxxxxxxxxxxxxxxxxxxxxxxx", userInformation[1].result);
 
   const imageMapping = {
     big: require('../../assets/big.png'),
@@ -76,12 +77,14 @@ const MyHistoryScreen = () => {
           width: SCREEN_WIDTH * 0.9,
           marginTop: 2,
           height: 63,
+
           paddingVertical: 10,
           borderBottomWidth: 0.5,
           borderBottomColor: 'grey',
           paddingHorizontal: 5,
           justifyContent: 'space-between',
           alignItems: 'center',
+          alignSelf: 'center',
         }}>
         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
           <View style={{ marginRight: 20 }}>
@@ -115,9 +118,48 @@ const MyHistoryScreen = () => {
         </View>
       </Pressable>
       {expandedIndex === index ? (
-        <View>
-          <Text style={{ color: 'black' }}>{item.period}</Text>
+        <View style={{ marginTop: 5 }}>
+          <View style={styles.listItem}>
+            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Order No.</Text>
+            <Text style={{ color: 'black' }}>{item.orderNumber}</Text>
+          </View>
           {/* Add more details as needed */}
+          <View style={styles.listItem}>
+            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Lottery No.</Text>
+            <Text style={{ color: 'black' }}>{item.LN}</Text>
+          </View>
+          <View style={styles.listItem}>
+            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Purchase Amount</Text>
+            <Text style={{ color: 'black' }}>{item.phrchaseAmount}</Text>
+          </View>
+          <View style={styles.listItem}>
+            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Amount after tax</Text>
+            <Text style={{ color: 'black' }}>{item.amountAfterTax}</Text>
+          </View>
+          <View style={styles.listItem}>
+            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Tax</Text>
+            <Text style={{ color: 'black' }}>{item.tax}</Text>
+          </View>
+          <View style={styles.listItem}>
+            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Result</Text>
+            <Text style={{ color: 'black' }}>{item.tax}</Text>
+          </View>
+          <View style={styles.listItem}>
+            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Select</Text>
+            <Text style={{ color: 'black' }}>{item.select}</Text>
+          </View>
+          <View style={styles.listItem}>
+            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Select Type</Text>
+            <Text style={{ color: 'black' }}>{item.selectType}</Text>
+          </View>
+          <View style={styles.listItem}>
+            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Status</Text>
+            <Text style={{ color: 'black' }}>{item.status}</Text>
+          </View>
+          <View style={styles.listItem}>
+            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Win/Loss</Text>
+            <Text style={{ color: 'black' }}>{item.win_loss}</Text>
+          </View>
         </View>
       ) : null}
     </View>
@@ -148,7 +190,11 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
+
   },
+  listItem: {
+    height: 25, width: '95%', backgroundColor: Colors.lightGray, justifyContent: 'space-between', alignItems: 'c', flexDirection: 'row', alignSelf: 'center', paddingHorizontal: 5, paddingVertical: 3, borderRadius: 5, marginVertical: 3
+  }
 });
 
 export default MyHistoryScreen;
