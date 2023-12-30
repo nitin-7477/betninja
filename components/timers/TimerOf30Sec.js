@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, Image, Modal } from 'react-native';
 import io from 'socket.io-client';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen';
 const CountdownComponent = () => {
   const [countdowns, setCountdowns] = useState({
     thirtySec: 0,
@@ -31,7 +32,8 @@ const CountdownComponent = () => {
       // Replace 'http://your-server-address' with your actual server address
       socketRef.current.on('updateCountdown_thirtySecTimer', (data) => {
         console.log('Received updateCountdown_thirtySecTimer event:', data);
-        // console.log("IN 30 seczzzzzzzzzzzzzzzzzzzzzzzz", selectedCountdown);
+        const minutes = Math.floor(data.countdown / 60);
+        const seconds = data.countdown % 60;
         if (data.countdown <= 5 && selectedCountdown == 'thirtySec') {
           setShowModal1(true)
         }
@@ -39,29 +41,36 @@ const CountdownComponent = () => {
           setShowModal1(false)
         }
 
-        setCountdowns((prevCountdowns) => ({ ...prevCountdowns, thirtySec: data.countdown }));
+        setCountdowns((prevCountdowns) => ({ ...prevCountdowns, thirtySec: { minutes, seconds } }));
       });
+
       socketRef.current.on('updateCountdown_oneMinTimer', (data) => {
-        // console.log("IN ONE MINUTEaaaaaaaaaaaaaaaaaaaaaaaaaa", data.countdown);
-        // console.log("IN ONE MINUTEaaaaaaaaaaaaaaaaaaaaaaaaaa", selectedCountdown);
+        const minutes = Math.floor(data.countdown / 60);
+        const seconds = data.countdown % 60;
         if (data.countdown <= 5) {
           setShowModal2(true)
         }
         if (data.countdown == 0) {
           setShowModal2(false)
         }
-        setCountdowns((prevCountdowns) => ({ ...prevCountdowns, oneMin: data.countdown }));
+        setCountdowns((prevCountdowns) => ({ ...prevCountdowns, oneMin: { minutes, seconds } }));
       });
+
       socketRef.current.on('updateCountdown_threeMinTimer', (data) => {
+        const minutes = Math.floor(data.countdown / 60);
+        const seconds = data.countdown % 60;
         if (data.countdown <= 5) {
           setShowModal3(true)
         }
         if (data.countdown == 0) {
           setShowModal3(false)
         }
-        setCountdowns((prevCountdowns) => ({ ...prevCountdowns, threeMin: data.countdown }));
+        setCountdowns((prevCountdowns) => ({ ...prevCountdowns, threeMin: { minutes, seconds } }));
       });
       socketRef.current.on('updateCountdown_fiveMinTimer', (data) => {
+
+        const minutes = Math.floor(data.countdown / 60);
+        const seconds = data.countdown % 60;
         if (data.countdown <= 5) {
           setShowModal4(true)
         }
@@ -69,7 +78,7 @@ const CountdownComponent = () => {
         if (data.countdown == 0) {
           setShowModal4(false)
         }
-        setCountdowns((prevCountdowns) => ({ ...prevCountdowns, fiveMin: data.countdown }));
+        setCountdowns((prevCountdowns) => ({ ...prevCountdowns, fiveMin: { minutes, seconds } }));
       });
       setDefaultCountdown('thirtySec');
     }
@@ -79,9 +88,7 @@ const CountdownComponent = () => {
       }
     };
   }, []);
-  // console.log(showModal1);
-  // console.log("zzzzzzzzzzzz", selectedCountdown);
-  // console.log(socketRef.current);
+
 
   const fetchCountdown = (timerName, x) => {
     setSelectedCountdown(timerName);
@@ -90,17 +97,11 @@ const CountdownComponent = () => {
     socketRef.current.emit('fetchCountdown', timerName);
 
   };
-  // console.log(countdowns);
-  console.log("Start thirty sec xxxxxxxx", showModal1 && selectedCountdown == 'thirtySec');
-  console.log("Start One Min yyyyyyy", selectedCountdown == 'oneMin');
-  console.log("Start three Min zzzzzzzzzzzzzz", showModal3 && selectedCountdown == 'threeMin');
-  console.log("Start five Min qqqqqqqqqqqqq", showModal4 && selectedCountdown == 'fiveMin');
-  console.log(countdowns[selectedCountdown])
 
   return (
     <View>
       <View style={{
-        marginTop: 40,
+        marginTop: 15,
         flexDirection: 'row',
         backgroundColor: 'white',
         shadowColor: 'black',
@@ -119,6 +120,7 @@ const CountdownComponent = () => {
             <Text style={{ fontWeight: 'bold', color: 'black' }}>30 sec</Text>
           </TouchableOpacity>
         </View>
+
         <View style={{ marginHorizontal: 8, }}>
           <TouchableOpacity style={{
             display: 'flex',
@@ -159,18 +161,20 @@ const CountdownComponent = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <View>
-        <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'red', textAlign: 'center', marginVertical: 20 }}>
-          {`${selectedCountdown} Countdown: ${countdowns[selectedCountdown]} seconds`}
-        </Text></View>
-      {/* <Text style={{ textAlign: 'center' }}>Serial Number : 121 </Text> */}
-      {/* <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{selectedTime}</Text> */}
+      <View style={{ height: SCREEN_HEIGHT * 0.14, width: SCREEN_WIDTH * 0.9, backgroundColor: 'purple', marginVertical: 10, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
+        <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold', letterSpacing: 1 }}>Time Remaining ...</Text>
+        <Text style={{ fontSize: 32, fontWeight: 'bold', color: 'white', textAlign: 'center', marginVertical: 20 }}>
+          {`${countdowns[selectedCountdown]?.minutes || 0} : ${countdowns[selectedCountdown]?.seconds || 0} `}
+        </Text>
+
+      </View>
 
       <Modal visible={showModal1 && selectedCountdown == 'thirtySec'} animationType="slide" transparent={true}>
-        <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
-          <View style={{ backgroundColor: 'white', padding: 70, borderRadius: 10 }}>
-            <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
-              {showModal1 ? `${selectedCountdown} Countdown: ${countdowns[selectedCountdown]}` : null}
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ backgroundColor: '#CBC3E3', padding: 70, borderRadius: 10, borderRadius: 10, borderColor: 'black', borderWidth: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Image source={require('../../assets/stopwatch.png')} style={{ height: 130, width: 130 }} />
+            <Text style={{ fontSize: 28, fontWeight: 'bold', marginBottom: 10, color: 'black  ' }}>
+              {showModal1 ? `${countdowns[selectedCountdown]?.minutes || 0} : ${countdowns[selectedCountdown]?.seconds || 0} s` : null}
             </Text>
 
           </View>
@@ -178,10 +182,10 @@ const CountdownComponent = () => {
       </Modal>
 
       <Modal visible={showModal2 && selectedCountdown == 'oneMin'} animationType="slide" transparent={true}>
-        <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <View style={{ backgroundColor: 'white', padding: 70, borderRadius: 10 }}>
             <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
-              {showModal2 ? `${selectedCountdown} Countdown: ${countdowns[selectedCountdown]}` : null}
+              {showModal2 ? `${countdowns[selectedCountdown]?.minutes || 0} : ${countdowns[selectedCountdown]?.seconds || 0} s` : null}
             </Text>
 
           </View>
@@ -189,10 +193,10 @@ const CountdownComponent = () => {
       </Modal>
 
       <Modal visible={showModal3 && selectedCountdown == 'threeMin'} animationType="slide" transparent={true}>
-        <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <View style={{ backgroundColor: 'white', padding: 70, borderRadius: 10 }}>
             <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
-              {showModal3 ? `${selectedCountdown} Countdown: ${countdowns[selectedCountdown]}` : null}
+              {showModal3 ? `${countdowns[selectedCountdown]?.minutes || 0} : ${countdowns[selectedCountdown]?.seconds || 0} s` : null}
             </Text>
 
           </View>
@@ -200,10 +204,10 @@ const CountdownComponent = () => {
       </Modal>
 
       <Modal visible={showModal4 && selectedCountdown == 'fiveMin'} animationType="slide" transparent={true}>
-        <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
-          <View style={{ backgroundColor: 'white', padding: 70, borderRadius: 10 }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ backgroundColor: '#CBC3E3', padding: 70, borderRadius: 10, borderColor: 'black', borderWidth: 1, }}>
             <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
-              {showModal4 ? `${selectedCountdown} Countdown: ${countdowns[selectedCountdown]}` : null}
+              {showModal4 ? `${countdowns[selectedCountdown]?.minutes || 0} : ${countdowns[selectedCountdown]?.seconds || 0} s` : null}
             </Text>
 
           </View>

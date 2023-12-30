@@ -30,6 +30,7 @@ import ActivityAward from "./screens/activityAllScreens/ActivityAward";
 import InvitationBonus from "./screens/activityAllScreens/InvitationBonus";
 import BettingRebate from "./screens/activityAllScreens/BettingRebate";
 import DummyListComponent from "./components/DummyListComponent";
+import Payment from "./components/TrialPayment";
 
 
 const Stack = createNativeStackNavigator();
@@ -47,6 +48,7 @@ export default function App() {
         setIsFirstLaunch(false);
       }
     });
+
   }, []);
 
   return (
@@ -59,8 +61,10 @@ export default function App() {
         )}
         <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
         <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
-        <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
         <Stack.Screen options={{ headerShown: false }} name="Gamescreen" component={Gamescreen} />
+        <Stack.Screen options={{ headerShown: false }} name="Payment" component={Payment} />
+
+        <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
         <Stack.Screen options={{ headerShown: false }} name="DummyListComponent" component={DummyListComponent} />
 
         <Stack.Screen name="Wallet" options={{ headerShown: false }} component={Wallet} />

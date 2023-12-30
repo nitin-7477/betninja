@@ -21,6 +21,7 @@ const Register = () => {
   const [isModalVisible2, setModalVisible2] = useState(false);
   const [loading, setLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [otp, setOtp] = useState('')
 
 
   const toggleModal1 = () => {
@@ -38,6 +39,18 @@ const Register = () => {
     setInvitationCode('')
   }
 
+  const isSendButtonEnabled =
+    emailAddress !== '' &&
+    password !== '' &&
+    confirmPassword !== "" &&
+    phone !== '';
+
+  const handleSendOTP = () => {
+    const otp = generateOTP();
+    // For demonstration purposes, you can log the generated OTP to the console
+    console.log('Generated OTP:', otp);
+    alert('OTP Sent', 'OTP sent successfully.');
+  };
 
   const handleSignUp = async () => {
     try {
@@ -139,6 +152,12 @@ const Register = () => {
           <AppTextInput maxLength={10} keyboardType="numeric" placeholder="Phone" value={phone} onChangeText={(text) => setPhone(text)} />
           <AppTextInput placeholder='Password' secureTextEntry value={password} onChangeText={(text) => setPassword(text)} />
           <AppTextInput placeholder='Confirm Password' secureTextEntry value={confirmPassword} onChangeText={(text) => setConfirmPassword(text)} />
+
+          <AppTextInput placeholder='Enter Otp' secureTextEntry value={otp} onChangeText={(text) => setOtp(text)} />
+
+          <TouchableOpacity style={[styles.otpBtn, isSendButtonEnabled ? styles.enabledSendButton : styles.disabledSendButton]} onPress={handleSendOTP} disabled={!isSendButtonEnabled}>
+            <Text style={{ color: 'white', textAlign: 'center', fontSize: 16 }}>Send</Text>
+          </TouchableOpacity>
           <AppTextInput placeholder="Invite Code" value={invitationCode} onChangeText={(text) => setInvitationCode(text)} />
 
           {!isResetButtonEnabled ? <Text style={{ color: 'red' }}> * Please fill all Details</Text> : <></>}
@@ -304,5 +323,19 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: "50%",
     alignItems: "center",
+  },
+  otpBtn: {
+    backgroundColor: 'orange',
+    borderRadius: 10,
+    width: 70,
+    elevation: 5,
+    paddingVertical: 3,
+    marginBottom: 10
+  },
+  enabledSendButton: {
+    backgroundColor: 'orange',
+  },
+  disabledSendButton: {
+    backgroundColor: 'lightgray',
   },
 })

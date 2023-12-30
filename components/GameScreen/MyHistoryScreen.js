@@ -37,7 +37,7 @@ const MyHistoryScreen = () => {
     fetchData();
   }, []);
 
-  console.log("xxxxxxxxxxxxxxxxxxxxxxxxxx", userInformation[1].result);
+ 
 
   const imageMapping = {
     big: require('../../assets/big.png'),

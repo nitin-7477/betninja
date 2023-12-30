@@ -25,7 +25,7 @@ const AppTextInput: React.FC<TextInputProps> = ({ ...otherProps }) => {
           paddingVertical: 12,
           backgroundColor: '#1434A4',
           borderRadius: 10,
-          marginVertical: 10,
+          marginVertical: 5,
           fontWeight: '500',
           color: 'white'
         },

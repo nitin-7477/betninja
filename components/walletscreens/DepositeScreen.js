@@ -7,7 +7,7 @@ import RNUpiPayment from 'react-native-upi-payment'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../Constants/Colors'
 import { useNavigation } from "@react-navigation/native";
-import AllInOneSDKManager from 'paytm_allinone_react-native';
+
 
 
 
@@ -24,25 +24,6 @@ const DepositeScreen = () => {
   const PaymentGateWay = () => {
 
 
-
-    AllInOneSDKManager.startTransaction(
-      orderId,
-      mid,
-      tranxToken,
-      amount,
-      callbackUrl,
-      isStaging,
-      appInvokeRestricted,
-      urlScheme
-    )
-      .then((result) => {
-        console.log("RESUTL:-", result);
-        updateUI(result);
-      })
-      .catch((err) => {
-        console.log("RESUTL:-", err);
-        handleError(err);
-      });
   }
 
 

@@ -101,7 +101,7 @@ const Home = () => {
     //   </Modal> */}
 
     // </View>
-    <Tab.Navigator screenOptions={screenOptions}>
+    <Tab.Navigator initialRouteName="Home" screenOptions={screenOptions}>
       <Tab.Screen name="Promotion" component={Promotion} options={{
         tabBarIcon: ({ focused }) => {
           return (

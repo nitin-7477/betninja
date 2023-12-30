@@ -135,13 +135,14 @@ const HomeScreen = ({ navigation }) => {
 
 
       <View><CountdownComponent /></View>
-      <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Serial Number : {ln}</Text>
+      <View style={{ height: 55, width: '90%', alignSelf: 'center', backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', borderRadius: 10, elevation: 5 }}>
+        <Text style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'center', color: "black" }}>Upcoming : <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 20, }}> {ln}</Text></Text>
 
+      </View>
 
+      {/* 
 
-
-
-      <Text style={{ fontWeight: '900', fontSize: 18, marginVertical: 10, color: 'black' }}>Prediction Options:</Text>
+      <Text style={{ fontWeight: '900', fontSize: 18, marginVertical: 10, color: 'black' }}>Prediction Options:</Text> */}
       <View style={styles.buttonRow}>
         <NewBigModal isVisible={bigModalVisible} closeModal={closeBigModal} selectType={selectType} select={select}
           backgroundColor={buttonBackgroundColor} />

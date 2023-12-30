@@ -10,9 +10,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-         maven {
-         url "https://artifactory.paytm.in/libs-release-local"
-    }
+        
     }
     dependencies {
         classpath("com.android.tools.build:gradle")

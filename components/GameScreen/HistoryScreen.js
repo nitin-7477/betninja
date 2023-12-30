@@ -86,11 +86,13 @@ const HistoryScreen = () => {
         </View>
       }} />
 
-      <Button title="Previous" onPress={onPrevPress} disabled={startIndex === 0} />
-      <Text style={styles.pageIndicator}>{`Page ${Math.ceil((startIndex + 1) / itemsPerPage)} of ${totalPages}`}</Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', 
+      width: '90%', marginVertical: 20 }}>
+        <Button title="Prev" onPress={onPrevPress} disabled={startIndex === 0} />
+        <Text style={styles.pageIndicator}>{`Page ${Math.ceil((startIndex + 1) / itemsPerPage)} of ${totalPages}`}</Text>
 
-      <Button title="Next" onPress={onNextPress} disabled={startIndex + itemsPerPage >= displayData.length} />
-
+        <Button title="Next" onPress={onNextPress} disabled={startIndex + itemsPerPage >= displayData.length} />
+      </View>
     </>
   );
 };

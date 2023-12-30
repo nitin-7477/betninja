@@ -152,8 +152,7 @@ const NewBigModal = ({ isVisible, closeModal, backgroundColor, selectType, selec
 
           <View style={{ height: 25, width: 150, display: 'flex', justifyContent: 'center', backgroundColor: 'white', borderRadius: 10, marginVertical: 5, alignItems: 'center' }}>
             <Text style={{ color: 'black', textAlign: 'center', fontWeight: 'bold' }}>Select {select}</Text>
-            <Text style={{ color: 'black', textAlign: 'center' }}>SelectType {selectType}</Text>
-
+           
           </View>
           <View style={{ height: '25%', width: '97%', padding: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <Text style={{ color: 'purple', fontWeight: 'bold' }}>Quantity</Text>
