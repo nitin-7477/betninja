@@ -22,9 +22,12 @@ const CountdownComponent = () => {
 
 
   useEffect(() => {
+
     // Establish socket connection only if it doesn't exist
+
     if (!socketRef.current) {
       socketRef.current = io(`${process.env.SOCKETURL}`);
+
 
       // setSelectedCountdown('thirtySec')
 
@@ -39,6 +42,7 @@ const CountdownComponent = () => {
         }
         if (data.countdown == 0 && selectedCountdown == 'thirtySec') {
           setShowModal1(false)
+          onTimerFinish();
         }
 
         setCountdowns((prevCountdowns) => ({ ...prevCountdowns, thirtySec: { minutes, seconds } }));
@@ -108,7 +112,7 @@ const CountdownComponent = () => {
         elevation: 5,
         borderRadius: 10
       }}>
-        <View style={{ marginHorizontal: 8, }}>
+        <View style={{ marginHorizontal: 8, backgroundColor: selectedTime == 1 ? 'red' : 'white', borderTopStartRadius: 10, borderTopEndRadius: 10 }}>
           <TouchableOpacity style={{
             display: 'flex',
             justifyContent: 'center',
@@ -117,11 +121,11 @@ const CountdownComponent = () => {
             paddingVertical: 5
           }} onPress={() => fetchCountdown('thirtySec', "1")}>
             <Image source={require('../../assets/clock.png')} style={{ height: 40, width: 40 }} />
-            <Text style={{ fontWeight: 'bold', color: 'black' }}>30 sec</Text>
+            <Text style={{ fontWeight: 'bold', color: selectedTime == 1 ? 'white' : 'black' }}>30 sec</Text>
           </TouchableOpacity>
         </View>
 
-        <View style={{ marginHorizontal: 8, }}>
+        <View style={{ marginHorizontal: 8, backgroundColor: selectedTime == 2 ? 'red' : 'white', borderTopStartRadius: 10, borderTopEndRadius: 10 }}>
           <TouchableOpacity style={{
             display: 'flex',
             justifyContent: 'center',
@@ -130,10 +134,10 @@ const CountdownComponent = () => {
             paddingVertical: 5
           }} onPress={() => fetchCountdown('oneMin', "2")}>
             <Image source={require('../../assets/clock.png')} style={{ height: 40, width: 40 }} />
-            <Text style={{ fontWeight: 'bold', color: 'black' }}>1 Min</Text>
+            <Text style={{ fontWeight: 'bold', color: selectedTime == 2 ? 'white' : 'black' }}>1 Min</Text>
           </TouchableOpacity>
         </View>
-        <View style={{ marginHorizontal: 8, }}>
+        <View style={{ marginHorizontal: 8, backgroundColor: selectedTime == 3 ? 'red' : 'white', borderTopStartRadius: 10, borderTopEndRadius: 10 }}>
           <TouchableOpacity
             style={{
               display: 'flex',
@@ -143,10 +147,10 @@ const CountdownComponent = () => {
               paddingVertical: 5
             }} onPress={() => fetchCountdown('threeMin', "3")}>
             <Image source={require('../../assets/clock.png')} style={{ height: 40, width: 40 }} />
-            <Text style={{ fontWeight: 'bold', color: 'black' }}>3 Min</Text>
+            <Text style={{ fontWeight: 'bold', color: selectedTime == 3 ? 'white' : 'black' }}>3 Min</Text>
           </TouchableOpacity>
         </View>
-        <View style={{ marginHorizontal: 8, }}>
+        <View style={{ marginHorizontal: 8, backgroundColor: selectedTime == 4 ? 'red' : 'white', borderTopStartRadius: 10, borderTopEndRadius: 10 }}>
           <TouchableOpacity
             style={{
               display: 'flex',
@@ -157,7 +161,7 @@ const CountdownComponent = () => {
             }}
             onPress={() => fetchCountdown('fiveMin', "4")}>
             <Image source={require('../../assets/clock.png')} style={{ height: 40, width: 40 }} />
-            <Text style={{ fontWeight: 'bold', color: 'black' }}>5 Min</Text>
+            <Text style={{ fontWeight: 'bold', color: selectedTime == 4 ? 'white' : 'black' }}>5 Min</Text>
           </TouchableOpacity>
         </View>
       </View>

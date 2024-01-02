@@ -181,7 +181,7 @@ const Promotion = () => {
               <AntDesign name='right' size={16} color={'black'} /></View>
           </View>
         </View>
-        
+
         <View style={styles.tile1}>
           <View style={styles.tile2}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>

@@ -2,12 +2,128 @@
 import React from 'react';
 import { Modal, View, Text, TouchableOpacity, StyleSheet, TextInput, KeyboardAvoidingView } from 'react-native';
 import { useState, useEffect } from 'react';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from "@react-navigation/native";
 
-const NewModalViolet = ({ isVisible, closeModal }) => {
+const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType, select, ln, selectedCountdown }) => {
 
-
+  const navigation = useNavigation();
   const [inputValue, setInputValue] = useState('1'); // Set default value to '1'
   const [totalAmount, setTotalAmount] = useState('');
+  const [apiData, setApiData] = useState([]);
+
+
+  const [userInformation, setUserInformation] = useState([]);
+  const [userToken, setUserToken] = useState({});
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+
+        setUserToken(JSON.parse(token))
+
+      } catch (error) {
+        console.error('Error fetching token in pop up:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+  // console.log("This is my token in Pop Up", userToken);
+
+
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(`${process.env.SERVERURL}/api/random/30secLottary`);
+
+  //       // console.log("This is game history Data", response.data);
+
+  //       setApiData(response.data);
+  //       // console.log("xxxxxxxxx", response.data.data[0].LN);
+  //       setln(response.data.data[0].LN + 1)
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [])
+
+
+
+  const handleBigData = async () => {
+    try {
+      let timerBet;
+
+      console.log(selectedCountdown)
+      if (selectedCountdown === 'thirtySec') {
+        timerBet = '30secbet'
+      }
+      else if (selectedCountdown === 'oneMin') {
+        timerBet = '1minbet'
+      }
+      else if (selectedCountdown === 'threeMin') {
+        timerBet = '3minbet'
+      }
+      else {
+        timerBet = '5minbet'
+      }
+
+
+      console.log("zzzzzzzzzzzzzzz", userToken);
+
+      // Check if userToken is available before making the request
+      if (!userToken) {
+        console.error("User token is missing");
+        return;
+      }
+
+      const body = {
+        LN: ln,
+        phrchaseAmount: Number(totalAmount),
+        selectType: selectType,
+        select: select,
+      };
+
+      // console.log("Request Body:", body);
+
+      const response = await axios.post(`${process.env.SERVERURL}/api/bet/`, body,
+        {
+          headers: {
+            Authorization: userToken,
+          },
+        }
+      );
+
+      console.log("Response:", response.data);
+      if (response.data) {
+        closeModal()
+      }
+    } catch (error) {
+      console.error("Error:", error);
+
+      if (error.response) {
+
+        console.error("Server Response Data:", error.response.data);
+        console.error("Server Response Status:", error.response.status);
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error("No response received from the server");
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error("Error setting up the request:", error.message);
+      }
+    }
+  };
+
+  // console.log("This is lottery Number in NewBigModal", ln);
+
+
 
   useEffect(() => {
     // Set the total amount when the component mounts
@@ -30,6 +146,7 @@ const NewModalViolet = ({ isVisible, closeModal }) => {
 
 
   return (
+
     <Modal
       animationType="slide"
       transparent={true}
@@ -38,17 +155,19 @@ const NewModalViolet = ({ isVisible, closeModal }) => {
     >
 
       <KeyboardAvoidingView style={{ justifyContent: 'flex-end', alignItems: 'center', flex: 1 }}>
-        <View style={styles.diaLogViolet}>
+        <View style={[styles.diaLogViolet, { backgroundColor: backgroundColor }]}>
 
-          <View style={{ height: 25, width: 150, display: 'flex', justifyContent: 'center', backgroundColor: 'purple', borderRadius: 10, marginVertical: 5, alignItems: 'center' }}>
-            <Text style={{ color: 'white', textAlign: 'center' }}>Purple</Text>
+          <View style={{ height: 25, width: 150, display: 'flex', justifyContent: 'center', backgroundColor: 'white', borderRadius: 10, marginVertical: 5, alignItems: 'center' }}>
+            <Text style={{ color: 'black', textAlign: 'center', fontWeight: 'bold' }}>Select {select}</Text>
+
           </View>
           <View style={{ height: '25%', width: '97%', padding: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <Text style={{ color: 'purple', fontWeight: 'bold' }}>Quantity</Text>
             <View style={{ flexDirection: 'row' }}>
 
+
               <TextInput
-                style={{ backgroundColor: 'purple', color: 'white' }}
+                style={{ backgroundColor: 'white', color: 'black', fontWeight: 'bold' }}
                 placeholder="Enter a number"
                 keyboardType="numeric"
                 value={inputValue}
@@ -136,17 +255,16 @@ const NewModalViolet = ({ isVisible, closeModal }) => {
             </View >
           </View>
 
-
-
-
           <View style={{ flexDirection: 'row', flex: 1, alignItems: 'flex-end', justifyContent: 'space-between', width: '90%' }}>
             <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
               <Text style={styles.closeButtonText}>Close</Text>
             </TouchableOpacity>
-            <View style={{ width: '50%', marginBottom: 5 }}>
-              <Text style={{ color: 'purple', fontWeight: 'bold' }}>Total Amount :{totalAmount}</Text>
+            <TouchableOpacity
+              onPress={handleBigData}
+              style={{ width: '45%', marginBottom: 5, backgroundColor: 'green', padding: 5, borderRadius: 5, justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={{ color: 'white', fontWeight: 'bold' }}>Total Amount :{totalAmount}</Text>
 
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
       </KeyboardAvoidingView >
@@ -158,18 +276,7 @@ const NewModalViolet = ({ isVisible, closeModal }) => {
 };
 
 const styles = StyleSheet.create({
-  modalContainer: {
 
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
   modalText: {
     fontSize: 18,
     marginBottom: 20,
@@ -187,8 +294,9 @@ const styles = StyleSheet.create({
     height: '35%', width: '95%', alignItems: 'center', padding: 5, backgroundColor: '#F1EFEF',
     borderTopLeftRadius: 20, borderTopRightRadius: 20,
     shadowColor: 'black', elevation: 10, shadowOffset: { height: 0, width: 0 }, shadowOpacity: 1,
-    backgroundColor: '#D8BFD8', borderColor: 'black', borderWidth: 2
+    // backgroundColor: '#ffa343',
+    borderColor: 'black', borderWidth: 2
   },
 });
 
-export default NewModalViolet;
+export default ThirtySecBetModal;

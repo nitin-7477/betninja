@@ -3,6 +3,8 @@ import React from "react";
 import { useState } from "react";
 import AppTextInput from "../components/AppTextInput";
 import AntDesign from "react-native-vector-icons/AntDesign"
+import Feather from "react-native-vector-icons/Feather"
+
 import { useNavigation } from "@react-navigation/native";
 import Font from "../components/Constants/Font";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../components/Constants/Screen";
@@ -14,6 +16,11 @@ const Login = () => {
   const navigation = useNavigation();
   const [emailAddress, setEmailAddress] = useState('')
   const [password, setPassword] = useState('')
+  const [isPasswordVisible, setIsPasswordVisible] = useState(true);
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
 
   const checkLogin = async () => {
     try {
@@ -105,7 +112,37 @@ const Login = () => {
         >
           <AppTextInput value={emailAddress} onChangeText={(text) => setEmailAddress(text)} placeholder="Email" />
 
-          <AppTextInput value={password} onChangeText={(text) => setPassword(text)} placeholder='Password' />
+          <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#1434A4', borderRadius: 10, justifyContent: 'space-between' }}>
+            <TextInput
+              placeholderTextColor={'white'}
+
+              style={{
+                fontSize: 16,
+                paddingHorizontal: 20,
+                paddingVertical: 5,
+                backgroundColor: '#1434A4',
+                borderRadius: 10,
+                marginVertical: 5,
+                fontWeight: '500',
+                color: 'white',
+                width: 150,
+
+
+              }}
+              secureTextEntry={isPasswordVisible}
+              value={password}
+              onChangeText={(text) => setPassword(text)}
+              placeholder="Password"
+            />
+            <TouchableOpacity onPress={togglePasswordVisibility}>
+              <Feather
+                name={isPasswordVisible ? "eye" : "eye-off"}
+                color="white"
+                size={20}
+                style={{ marginRight: 10 }}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
         <TouchableOpacity
           onPress={() => navigation.navigate("ForgotPassword")}

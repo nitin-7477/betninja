@@ -88,31 +88,31 @@ const Wallet = () => {
           <View style={{ borderBottomWidth: 0.5, borderColor: Colors.fontGray, marginVertical: 10 }}></View>
           <View style={{ width: '100%', height: '15%', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, alignItems: 'center', borderRadius: 6 }}>
             <Text style={{ fontWeight: 'bold', color: Colors.fontGray, fontSize: 16 }}>UId</Text>
-            <Text style={{ fontWeight: '400', color: 'black', fontSize: 16 }}>{userInformation.uid}</Text>
+            <Text style={{ fontWeight: '400', color: 'black', fontSize: 16 }}>{userInformation?.uid}</Text>
 
           </View>
           <View style={{ width: '100%', height: '15%', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, alignItems: 'center', borderRadius: 6, }}>
             <Text style={{ fontWeight: 'bold', color: Colors.fontGray, fontSize: 16 }}>Email Id</Text>
-            <Text style={{ fontWeight: '400', color: 'black', fontSize: 16 }}>{userInformation.email}</Text>
+            <Text style={{ fontWeight: '400', color: 'black', fontSize: 16 }}>{userInformation?.email}</Text>
           </View>
           <View style={{ width: '100%', height: '15%', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, alignItems: 'center', borderRadius: 6 }}>
             <Text style={{ fontWeight: 'bold', color: Colors.fontGray, fontSize: 16 }}>Contact</Text>
-            <Text style={{ fontWeight: '400', color: 'black', fontSize: 16 }}>{userInformation.phone}</Text>
+            <Text style={{ fontWeight: '400', color: 'black', fontSize: 16 }}>{userInformation?.phone}</Text>
 
           </View>
           <View style={{ width: '100%', height: '15%', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, alignItems: 'center', borderRadius: 6, }}>
             <Text style={{ fontWeight: 'bold', color: Colors.fontGray, fontSize: 16 }}>Wallet Balance</Text>
-            <Text style={{ fontWeight: '400', color: 'black', fontSize: 16 }}>Rs. {userInformation.wallet}</Text>
+            <Text style={{ fontWeight: '400', color: 'black', fontSize: 16 }}>Rs. {userInformation?.wallet}</Text>
 
           </View>
           <View style={{ width: '100%', height: '15%', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, alignItems: 'center', borderRadius: 6, }}>
             <Text style={{ fontWeight: 'bold', color: Colors.fontGray, fontSize: 16 }}>Invite Code</Text>
-            <Text style={{ fontWeight: '400', color: 'black', fontSize: 16 }}>{userInformation.inviteCode}</Text>
+            <Text style={{ fontWeight: '400', color: 'black', fontSize: 16 }}>{userInformation?.inviteCode}</Text>
 
           </View>
           <View style={{ width: '100%', height: '15%', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, alignItems: 'center', borderRadius: 6, }}>
             <Text style={{ fontWeight: 'bold', color: Colors.fontGray, fontSize: 16 }}>Level :</Text>
-            <Text style={{ fontWeight: '400', color: 'black', fontSize: 16 }}>{userInformation.level}</Text>
+            <Text style={{ fontWeight: '400', color: 'black', fontSize: 16 }}>{userInformation?.level}</Text>
 
           </View>
           {/* <Text style={{ textAlign: 'center', color: 'red', fontSize: 18, fontWeight: '700', letterSpacing: 1, marginTop: 5 }}>Happy Gaming...</Text> */}

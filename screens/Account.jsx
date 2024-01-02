@@ -170,10 +170,12 @@ const Account = () => {
           </View>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10 }}>
-          <View style={styles.serviceIcons}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('NotificationFile')}
+            style={styles.serviceIcons}>
             <Ionicons name="notifications" size={24} color="black" />
             <Text style={{ color: 'black' }}>Notification</Text>
-          </View>
+          </TouchableOpacity>
           <View style={styles.serviceIcons}>
 
             <Ionicons name="book" size={24} color="black" />
