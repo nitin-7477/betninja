@@ -56,6 +56,7 @@ const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType,
 
 
 
+  // console.log("This is lottery Number", ln);
   const handleBigData = async () => {
     try {
       let timerBet;
@@ -92,7 +93,7 @@ const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType,
 
       // console.log("Request Body:", body);
 
-      const response = await axios.post(`${process.env.SERVERURL}/api/bet/`, body,
+      const response = await axios.post(`${process.env.SERVERURL}/api/bet/${timerBet}`, body,
         {
           headers: {
             Authorization: userToken,

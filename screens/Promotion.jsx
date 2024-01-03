@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, StatusBar, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, StatusBar, TouchableOpacity, } from 'react-native'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../components/Constants/Colors';
@@ -6,6 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 import React from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
@@ -14,30 +15,52 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
 const Promotion = () => {
   const navigation = useNavigation();
 
-  const [userInformation, setUserInformation] = useState([]);
+  const [commission, setCommission] = useState([])
+
+  const [referalCode, setReferalCode] = useState('')
+
+  const copyToClipboard = () => {
+    Clipboard.setString(referalCode);
+    alert('Referral code copied to clipboard!');
+  };
+
+
+
+  const fetchCommissionData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      console.log("This is the main token", JSON.parse(token));
+      // console.log("This is server url,,,,,,",process.env.SERVERURL);
+
+      var result = await axios.get(`${process.env.SERVERURL}/api/commission/commission`, {
+
+        headers: {
+          "Authorization": JSON.parse(token),
+        },
+      })
+      console.log(result.data.data);
+      setCommission(result.data.data)
+      setReferalCode(result.data.data.referalCode)
+
+
+    } catch (e) {
+      console.log("ERROR IN FETCHING COMMISSION", e);
+    }
+  }
+
 
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token');
 
-
-        const response = await axios.get(`${process.env.SERVERURL}/api/auth/user`, {
-          headers: {
-            "Authorization": JSON.parse(token),
-          },
-        });
-        setUserInformation(response.data);
-      } catch (error) {
-        console.error('Error fetching user data in Promotion Screen:', error);
-      }
-    };
-
-    fetchData();
+    fetchCommissionData()
+    // fetchData();
   }, []);
 
-  console.log("This is user information for Promotion Screen", userInformation);
+  const directRegisterCount = commission?.direct?.number_of_register || 0;
+  const teamRegisterCount = commission?.team?.number_of_register || 0;
+  const totalRegisterCount = directRegisterCount + teamRegisterCount;
+
+  // console.log("This is user information for Promotion Screen", userInformation);
 
 
   // #d9ad82 Main theme color
@@ -54,7 +77,9 @@ const Promotion = () => {
 
         <View style={{ height: SCREEN_HEIGHT * 0.38, width: SCREEN_WIDTH, backgroundColor: '#d9ad82', }}>
           <View >
-            <Text style={{ textAlign: 'center', color: 'white', fontWeight: '500', fontSize: 22, marginVertical: 10, }}>0</Text>
+            <Text style={{ textAlign: 'center', color: 'white', fontWeight: '500', fontSize: 22, marginVertical: 10, }}>
+              {commission?.total_commission}
+            </Text>
             <Text style={{ textAlign: 'center', color: 'white', fontWeight: '500', fontSize: 16, marginVertical: 10 }}>Yesterday's Total Commission</Text>
             <Text style={{ textAlign: 'center', color: 'white', fontWeight: '500', fontSize: 14, marginVertical: 5 }}>Upgrade the level to increase the Commission income</Text>
           </View>
@@ -76,12 +101,16 @@ const Promotion = () => {
 
             <View style={{ flexDirection: 'row', marginVertical: 10 }}>
               <View style={{ width: '50%', padding: 5, height: 35, justifyContent: 'center', }}>
-                <Text style={{ textAlign: 'center' }}>0</Text>
+                <Text style={{ textAlign: 'center' }}>
+                  {commission?.direct?.number_of_register}
+                </Text>
                 <Text style={{ textAlign: 'center', color: 'grey' }}>no. of register</Text>
 
               </View>
               <View style={{ width: '50%', padding: 5, height: 35, justifyContent: 'center', }}>
-                <Text style={{ textAlign: 'center' }}>0</Text>
+                <Text style={{ textAlign: 'center' }}>
+                  {commission?.team?.number_of_register}
+                </Text>
                 <Text style={{ textAlign: 'center', color: 'grey' }}>no. of register</Text>
 
               </View>
@@ -90,12 +119,16 @@ const Promotion = () => {
 
             <View style={{ flexDirection: 'row', marginVertical: 10 }}>
               <View style={{ width: '50%', padding: 5, height: 35, justifyContent: 'center', }}>
-                <Text style={{ textAlign: 'center', color: 'green' }}>0</Text>
+                <Text style={{ textAlign: 'center', color: 'green' }}>
+                  {commission?.direct?.deposit_number}
+                </Text>
                 <Text style={{ textAlign: 'center', color: 'grey' }}>Deposite number</Text>
 
               </View>
               <View style={{ width: '50%', padding: 5, height: 35, justifyContent: 'center', }}>
-                <Text style={{ textAlign: 'center', color: 'green' }}>0</Text>
+                <Text style={{ textAlign: 'center', color: 'green' }}>
+                  {commission?.team?.deposit_number}
+                </Text>
                 <Text style={{ textAlign: 'center', color: 'grey' }}>Deposite number</Text>
 
               </View>
@@ -104,11 +137,15 @@ const Promotion = () => {
 
             <View style={{ flexDirection: 'row', marginVertical: 10 }}>
               <View style={{ width: '50%', padding: 5, height: 35, justifyContent: 'center', }}>
-                <Text style={{ textAlign: 'center', color: 'red' }}>0</Text>
+                <Text style={{ textAlign: 'center', color: 'red' }}>
+                  {commission?.direct?.deposit_amount}
+                </Text>
                 <Text style={{ textAlign: 'center', color: 'grey' }}>Deposite amount</Text>
               </View>
               <View style={{ width: '50%', padding: 5, height: 35, justifyContent: 'center', }}>
-                <Text style={{ textAlign: 'center', color: 'red' }}>0</Text>
+                <Text style={{ textAlign: 'center', color: 'red' }}>
+                  {commission?.team?.deposit_amount}
+                </Text>
                 <Text style={{ textAlign: 'center', color: 'grey' }}>Deposite amount</Text>
               </View>
             </View>
@@ -116,11 +153,15 @@ const Promotion = () => {
 
             <View style={{ flexDirection: 'row', marginVertical: 5 }}>
               <View style={{ width: '50%', padding: 5, height: 45, justifyContent: 'center', }}>
-                <Text style={{ textAlign: 'center', }}>0</Text>
+                <Text style={{ textAlign: 'center', }}>
+                  {commission?.direct?.deposit_first_time_count}
+                </Text>
                 <Text style={{ textAlign: 'center', color: 'grey' }}>Number of people making first deposite</Text>
               </View>
               <View style={{ width: '50%', padding: 5, height: 45, justifyContent: 'center', }}>
-                <Text style={{ textAlign: 'center' }}>0</Text>
+                <Text style={{ textAlign: 'center' }}>
+                  {commission?.team?.deposit_first_time_count}
+                </Text>
                 <Text style={{ textAlign: 'center', color: 'grey' }}>Number of people making first deposite</Text>
               </View>
             </View>
@@ -138,12 +179,14 @@ const Promotion = () => {
 
         <View style={{ height: 50, width: 320, alignSelf: 'center', marginTop: 10, borderRadius: 5, elevation: 3, backgroundColor: 'white' }}>
           <View style={{ height: 50, width: 320, justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, flexDirection: 'row' }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <TouchableOpacity onPress={copyToClipboard} style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Ionicons name='person' size={22} color={'black'} />
               <Text style={{ marginLeft: 4, fontWeight: 500, color: 'black' }}>Copy Invitation Code</Text>
-            </View>
+            </TouchableOpacity>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-              <Text style={{ fontWeight: 300, marginHorizontal: 10 }}>7477235745</Text>
+              <Text style={{ fontWeight: 300, marginHorizontal: 10 }}>
+                {commission?.referalCode}
+              </Text>
               <AntDesign name='right' size={16} color={'black'} /></View>
           </View>
 
@@ -205,18 +248,18 @@ const Promotion = () => {
 
             </View>
             <View style={{ width: '50%', padding: 5, height: 55, justifyContent: 'center', }}>
-              <Text style={{ textAlign: 'center', color: 'green' }}>0</Text>
+              <Text style={{ textAlign: 'center', color: 'green' }}>{commission?.total_commission}</Text>
               <Text style={{ textAlign: 'center', color: 'grey' }}>Total Commission</Text>
             </View>
           </View>
 
           <View style={{ flexDirection: 'row', marginVertical: 10 }}>
             <View style={{ width: '50%', padding: 5, height: 55, justifyContent: 'center', }}>
-              <Text style={{ textAlign: 'center', color: 'green' }}>0</Text>
+              <Text style={{ textAlign: 'center', color: 'green' }}> {commission?.direct?.number_of_register}</Text>
               <Text style={{ textAlign: 'center', color: 'grey' }}>Direct Subordinate</Text>
             </View>
             <View style={{ width: '50%', padding: 5, height: 55, justifyContent: 'center', borderLeftWidth: 1, borderLeftColor: 'grey', }}>
-              <Text style={{ textAlign: 'center', color: 'green' }}>0</Text>
+              <Text style={{ textAlign: 'center', color: 'green' }}>{totalRegisterCount}</Text>
               <Text style={{ textAlign: 'center', color: 'grey' }}>Total number of Subordinate in the team</Text>
             </View>
 

@@ -21,7 +21,13 @@ const HomeScreen = ({ navigation }) => {
   const [buttonBackgroundColor, setButtonBackgroundColor] = useState(null);
   const [userInformation, setUserInformation] = useState([]);
   const [userToken, setUserToken] = useState({});
-  const [ln, setln] = useState(0)
+  const [ln1, setln1] = useState(0)
+  const [ln2, setln2] = useState(0)
+  const [ln3, setln3] = useState(0)
+  const [ln4, setln4] = useState(0)
+
+
+
 
 
   // *****************This is for timer and socket*********************
@@ -42,48 +48,24 @@ const HomeScreen = ({ navigation }) => {
   const [selectedTime, setSelectedTime] = useState('1')
   const [startIndex, setStartIndex] = useState(0);
   const itemsPerPage = 10;
-  const [apiData, setApiData] = useState([]);
+  const [apiData1, setApiData1] = useState([]);
+  const [apiData2, setApiData2] = useState([]);
+  const [apiData3, setApiData3] = useState([]);
+  const [apiData4, setApiData4] = useState([]);
 
 
   const socketRef = useRef(null);
 
 
-  const fetchGameHistoryData = async () => {
-    try {
-      let timerEndpoint;
-
-      // Determine the API endpoint based on the selected timer
-      switch (selectedCountdown) {
-        case 'thirtySec':
-          timerEndpoint = '30seclottary';
-          break;
-        case 'oneMin':
-          timerEndpoint = '1minLottary';
-          break;
-        case 'threeMin':
-          timerEndpoint = '3minLottary';
-          break;
-        case 'fiveMin':
-          timerEndpoint = '5minLottary';
-          break;
-        // Add cases for other timers as needed
-        default:
-          // Handle the default case if needed
-          break;
-      }
-
-      const response = await axios.get(`${process.env.SERVERURL}/api/random/${timerEndpoint}`);
-
-      setApiData(response.data);
-    } catch (error) {
-      console.error('Error fetching data in game history:', error);
-    }
-  };
 
 
 
 
-  const displayData = apiData?.data || [];
+
+  const displayData1 = apiData1?.data || [];
+  const displayData2 = apiData2?.data || [];
+  const displayData3 = apiData3?.data || [];
+  const displayData4 = apiData4?.data || [];
 
 
   const colorImageMapping = {
@@ -95,7 +77,7 @@ const HomeScreen = ({ navigation }) => {
   };
 
 
-  const totalPages = Math.ceil(displayData.length / itemsPerPage);
+  // const totalPages = Math.ceil(displayData.length / itemsPerPage);
 
   const onNextPress = () => {
     setStartIndex((prevIndex) => Math.min(prevIndex + itemsPerPage, (totalPages - 1) * itemsPerPage));
@@ -105,26 +87,142 @@ const HomeScreen = ({ navigation }) => {
     setStartIndex((prevIndex) => Math.max(0, prevIndex - itemsPerPage));
   };
 
+
+
+
+
   useEffect(() => {
-
-
 
     if (!socketRef.current) {
       socketRef.current = io(`${process.env.SOCKETURL}`);
+      console.log(process.env.SOCKETURL);
 
 
+
+      const fetchGameHistoryData = async (trial) => {
+        // try {
+        //   let timerEndpoint;
+
+
+        //   switch (selectedCountdown) {
+        //     case 'thirtySec':
+        //       timerEndpoint = '30seclottary';
+        //       break;
+        //     case 'oneMin':
+        //       timerEndpoint = '1minLottary';
+        //       break;
+        //     case 'threeMin':
+        //       timerEndpoint = '3minLottary';
+        //       break;
+        //     case 'fiveMin':
+        //       timerEndpoint = '5minLottary';
+        //       break;
+
+        //   }
+
+        //   const response = await axios.get(`${process.env.SERVERURL}/api/random/${timerEndpoint}`);
+
+        //   setApiData(response.data);
+        // } 
+        try {
+
+          switch (trial) {
+            case 30:
+              const response1 = await axios.get(`${process.env.SERVERURL}/api/random/30secLottary`)
+
+              setApiData1(response1.data);
+              break;
+
+            case 60:
+              const response2 = await axios.get(`${process.env.SERVERURL}/api/random/1minLottary`)
+
+              setApiData2(response2.data);
+              break;
+            case 180:
+              const response3 = await axios.get(`${process.env.SERVERURL}/api/random/3minLottary`)
+
+              setApiData3(response3.data);
+              break;
+            case 300:
+              const response4 = await axios.get(`${process.env.SERVERURL}/api/random/5minLottary`)
+
+              setApiData4(response4.data);
+              break;
+
+          }
+
+        }
+        catch (error) {
+          console.error('Error fetching data in game history:', error);
+        }
+      };
+
+
+      const getLotteryNumber = async (trial) => {
+        try {
+
+          switch (trial) {
+            case 30:
+              const response1 = await axios.get(`${process.env.SERVERURL}/api/random/30secLottaryLatest`)
+
+              setln1(response1.data.data.LN + 1)
+              break;
+
+            case 60:
+              const response2 = await axios.get(`${process.env.SERVERURL}/api/random/1minLottaryLatest`)
+
+              setln2(response2.data.data.LN + 1)
+              break;
+            case 180:
+              const response3 = await axios.get(`${process.env.SERVERURL}/api/random/3minLottaryLatest`)
+
+              setln3(response3.data.data.LN + 1)
+              break;
+            case 300:
+              const response4 = await axios.get(`${process.env.SERVERURL}/api/random/5minLottaryLatest`)
+
+              setln4(response4.data.data.LN + 1)
+              break;
+
+          }
+
+        }
+        catch (e) {
+          console.log("Error while getting lottery Number", e);
+
+        }
+      }
+      if (ln1 == 0 && ln2 == 0 && ln3 == 0 && ln4 == 0) {
+        getLotteryNumber(30)
+        getLotteryNumber(60)
+        getLotteryNumber(180)
+        getLotteryNumber(300)
+
+      }
+      if (apiData1.length == 0 && apiData2.length == 0 && apiData3.length == 0 && apiData4.length == 0) {
+        fetchGameHistoryData(30)
+        fetchGameHistoryData(60)
+        fetchGameHistoryData(180)
+        fetchGameHistoryData(300)
+
+      }
 
       socketRef.current.on('updateCountdown_thirtySecTimer', (data) => {
 
         const minutes = Math.floor(data.countdown / 60);
         const seconds = data.countdown % 60;
-        if (data.countdown <= 5 && selectedCountdown == 'thirtySec') {
+        if (data.countdown == 29) {
+
+          getLotteryNumber(30)
+          fetchGameHistoryData(30)
+        }
+
+        if (data.countdown <= 5) {
           setShowModal1(true)
         }
-        if (data.countdown == 0 && selectedCountdown == 'thirtySec') {
+
+        if (data.countdown == 0) {
           setShowModal1(false)
-          fetchGameHistoryData();
-          getLotteryNumber()
 
         }
 
@@ -134,11 +232,19 @@ const HomeScreen = ({ navigation }) => {
       socketRef.current.on('updateCountdown_oneMinTimer', (data) => {
         const minutes = Math.floor(data.countdown / 60);
         const seconds = data.countdown % 60;
+        if (data.countdown == 59) {
+          getLotteryNumber(60)
+          fetchGameHistoryData(60)
+        }
+
         if (data.countdown <= 5) {
           setShowModal2(true)
         }
         if (data.countdown == 0) {
           setShowModal2(false)
+
+
+
         }
         setCountdowns((prevCountdowns) => ({ ...prevCountdowns, oneMin: { minutes, seconds } }));
       });
@@ -146,24 +252,35 @@ const HomeScreen = ({ navigation }) => {
       socketRef.current.on('updateCountdown_threeMinTimer', (data) => {
         const minutes = Math.floor(data.countdown / 60);
         const seconds = data.countdown % 60;
+        if (data.countdown == 179) {
+          getLotteryNumber(180)
+          fetchGameHistoryData(180)
+        }
         if (data.countdown <= 5) {
           setShowModal3(true)
         }
         if (data.countdown == 0) {
           setShowModal3(false)
+
         }
+
         setCountdowns((prevCountdowns) => ({ ...prevCountdowns, threeMin: { minutes, seconds } }));
       });
       socketRef.current.on('updateCountdown_fiveMinTimer', (data) => {
-
+        if (data.countdown == 299) {
+          getLotteryNumber(300)
+          fetchGameHistoryData(300)
+        }
         const minutes = Math.floor(data.countdown / 60);
         const seconds = data.countdown % 60;
+
         if (data.countdown <= 5) {
           setShowModal4(true)
         }
 
         if (data.countdown == 0) {
           setShowModal4(false)
+
         }
         setCountdowns((prevCountdowns) => ({ ...prevCountdowns, fiveMin: { minutes, seconds } }));
       });
@@ -186,50 +303,15 @@ const HomeScreen = ({ navigation }) => {
   };
 
 
-
-
   useEffect(() => {
     fetchData();
-    getLotteryNumber()
-    fetchGameHistoryData();
-
-  }, [selectedCountdown]);
+  }, [])
 
 
-  const getLotteryNumber = async () => {
-    try {
-      let timerEnd;
 
-      // Determine the API endpoint based on the selected timer
-      switch (selectedCountdown) {
-        case 'thirtySec':
-          timerEnd = '30secLottaryLatest';
-          break;
-        case 'oneMin':
-          timerEnd = '1minLottaryLatest';
-          break;
-        case 'threeMin':
-          timerEnd = '3minLottaryLatest';
-          break;
-        case 'fiveMin':
-          timerEnd = '5minLottaryLatest';
-          break;
-        // Add cases for other timers as needed
-        default:
-          // Handle the default case if needed
-          break;
-      }
 
-      const response = await axios.get(`${process.env.SERVERURL}/api/random/${timerEnd}`)
 
-      setln(response.data.data.LN + 1)
 
-    }
-    catch (e) {
-      console.log("Error while getting lottery Number", e);
-
-    }
-  }
 
 
   const fetchData = async () => {
@@ -268,9 +350,6 @@ const HomeScreen = ({ navigation }) => {
     setBigModalVisible(false);
   };
 
-  const handleButtonClick = (buttonNumber) => {
-    setSelectedButton(buttonNumber);
-  };
 
 
 
@@ -395,7 +474,7 @@ const HomeScreen = ({ navigation }) => {
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <View style={{ backgroundColor: '#CBC3E3', padding: 70, borderRadius: 10, borderRadius: 10, borderColor: 'black', borderWidth: 1, justifyContent: 'center', alignItems: 'center' }}>
               <Image source={require('../assets/stopwatch.png')} style={{ height: 130, width: 130 }} />
-              <Text style={{ fontSize: 28, fontWeight: 'bold', marginBottom: 10, color: 'black  ' }}>
+              <Text style={{ fontSize: 28, fontWeight: 'bold', marginBottom: 10, color: 'black' }}>
                 {showModal1 ? `${countdowns[selectedCountdown]?.minutes || 0} : ${countdowns[selectedCountdown]?.seconds || 0} s` : null}
               </Text>
 
@@ -405,8 +484,9 @@ const HomeScreen = ({ navigation }) => {
 
         <Modal visible={showModal2 && selectedCountdown == 'oneMin'} animationType="slide" transparent={true}>
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <View style={{ backgroundColor: 'white', padding: 70, borderRadius: 10 }}>
-              <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
+            <View style={{ backgroundColor: '#CBC3E3', padding: 70, borderRadius: 10, borderRadius: 10, borderColor: 'black', borderWidth: 1, justifyContent: 'center', alignItems: 'center' }}>
+              <Image source={require('../assets/stopwatch.png')} style={{ height: 130, width: 130 }} />
+              <Text style={{ fontSize: 28, fontWeight: 'bold', marginBottom: 10, color: 'black' }}>
                 {showModal2 ? `${countdowns[selectedCountdown]?.minutes || 0} : ${countdowns[selectedCountdown]?.seconds || 0} s` : null}
               </Text>
 
@@ -414,10 +494,12 @@ const HomeScreen = ({ navigation }) => {
           </View>
         </Modal>
 
+
         <Modal visible={showModal3 && selectedCountdown == 'threeMin'} animationType="slide" transparent={true}>
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <View style={{ backgroundColor: 'white', padding: 70, borderRadius: 10 }}>
-              <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
+            <View style={{ backgroundColor: '#CBC3E3', padding: 70, borderRadius: 10, borderRadius: 10, borderColor: 'black', borderWidth: 1, justifyContent: 'center', alignItems: 'center' }}>
+              <Image source={require('../assets/stopwatch.png')} style={{ height: 130, width: 130 }} />
+              <Text style={{ fontSize: 28, fontWeight: 'bold', marginBottom: 10, color: 'black' }}>
                 {showModal3 ? `${countdowns[selectedCountdown]?.minutes || 0} : ${countdowns[selectedCountdown]?.seconds || 0} s` : null}
               </Text>
 
@@ -427,8 +509,9 @@ const HomeScreen = ({ navigation }) => {
 
         <Modal visible={showModal4 && selectedCountdown == 'fiveMin'} animationType="slide" transparent={true}>
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <View style={{ backgroundColor: '#CBC3E3', padding: 70, borderRadius: 10, borderColor: 'black', borderWidth: 1, }}>
-              <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
+            <View style={{ backgroundColor: '#CBC3E3', padding: 70, borderRadius: 10, borderRadius: 10, borderColor: 'black', borderWidth: 1, justifyContent: 'center', alignItems: 'center' }}>
+              <Image source={require('../assets/stopwatch.png')} style={{ height: 130, width: 130 }} />
+              <Text style={{ fontSize: 28, fontWeight: 'bold', marginBottom: 10, color: 'black' }}>
                 {showModal4 ? `${countdowns[selectedCountdown]?.minutes || 0} : ${countdowns[selectedCountdown]?.seconds || 0} s` : null}
               </Text>
 
@@ -443,7 +526,9 @@ const HomeScreen = ({ navigation }) => {
       </View>
 
       <View style={{ height: 55, width: '90%', alignSelf: 'center', backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', borderRadius: 10, elevation: 5 }}>
-        <Text style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'center', color: "black" }}>Upcoming : <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 20, }}> {ln}</Text></Text>
+        <Text style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'center', color: "black" }}>Upcoming : <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 20, }}>
+          {selectedCountdown == 'thirtySec' ? ln1 : selectedCountdown == 'oneMin' ? ln2 : selectedCountdown == 'threeMin' ? ln3 : selectedCountdown == 'fiveMin' ? ln4 : 0}
+        </Text></Text>
 
       </View>
 
@@ -454,7 +539,9 @@ const HomeScreen = ({ navigation }) => {
         {/* *********************** This is the bet modal ********************/}
 
         <ThirtySecBetModal isVisible={bigModalVisible} closeModal={closeBigModal} selectType={selectType} select={select}
-          backgroundColor={buttonBackgroundColor} ln={ln} selectedCountdown={selectedCountdown} />
+          backgroundColor={buttonBackgroundColor}
+          ln={selectedCountdown == 'thirtySec' ? ln1 : selectedCountdown == 'oneMin' ? ln2 : selectedCountdown == 'threeMin' ? ln3 : selectedCountdown == 'fiveMin' ? ln4 : 0}
+          selectedCountdown={selectedCountdown} />
 
         {/* *********************** This is the bet modal ********************/}
 
@@ -606,40 +693,43 @@ const HomeScreen = ({ navigation }) => {
             <View ><Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>Color</Text></View>
           </View>
 
-          <FlatList data={displayData.slice(startIndex, startIndex + itemsPerPage)} renderItem={({ item }) => {
-            return <View style={{ display: 'flex', flexDirection: 'row', width: SCREEN_WIDTH * 0.9, marginTop: 2, height: 63, paddingVertical: 10, borderBottomWidth: 0.5, borderBottomColor: 'grey', paddingHorizontal: 5, alignItems: 'center' }}>
-              <View style={{ width: SCREEN_WIDTH * 0.25, }}><Text style={{ fontSize: 16, color: 'black' }}>{item.LN}</Text></View>
-              <View style={{ width: SCREEN_WIDTH * 0.17, alignItems: 'center', }}>
-                <View style={[styles.numberBtn, { backgroundColor: 'green' }]}>
-                  <Text style={{ fontSize: 16, color: 'white' }}>
-                    {item.number}</Text>
+          <FlatList
+            // data={displayData.slice(startIndex, startIndex + itemsPerPage)}
+            data={selectedCountdown == 'thirtySec' ? displayData1.slice(startIndex, startIndex + itemsPerPage) : selectedCountdown == 'oneMin' ? displayData2.slice(startIndex, startIndex + itemsPerPage) : selectedCountdown == 'threeMin' ? displayData3.slice(startIndex, startIndex + itemsPerPage) : selectedCountdown == 'fiveMin' ? displayData4.slice(startIndex, startIndex + itemsPerPage) : []}
+            renderItem={({ item }) => {
+              return <View style={{ display: 'flex', flexDirection: 'row', width: SCREEN_WIDTH * 0.9, marginTop: 2, height: 63, paddingVertical: 10, borderBottomWidth: 0.5, borderBottomColor: 'grey', paddingHorizontal: 5, alignItems: 'center' }}>
+                <View style={{ width: SCREEN_WIDTH * 0.25, }}><Text style={{ fontSize: 16, color: 'black' }}>{item.LN}</Text></View>
+                <View style={{ width: SCREEN_WIDTH * 0.17, alignItems: 'center', }}>
+                  <View style={[styles.numberBtn, { backgroundColor: 'green' }]}>
+                    <Text style={{ fontSize: 16, color: 'white' }}>
+                      {item.number}</Text>
+                  </View>
+                </View>
+                <View style={{ width: SCREEN_WIDTH * 0.3, alignItems: 'center' }}><Text style={{ fontSize: 16, color: 'black' }}>{item.size}</Text></View>
+                <View style={{ flexDirection: 'row' }}>
+                  {item.color.map((c, index) => (
+                    <Image key={index} source={colorImageMapping[c]} style={{ width: 20, height: 20, marginRight: 5 }} />
+                  ))}
+
                 </View>
               </View>
-              <View style={{ width: SCREEN_WIDTH * 0.3, alignItems: 'center' }}><Text style={{ fontSize: 16, color: 'black' }}>{item.size}</Text></View>
-              <View style={{ flexDirection: 'row' }}>
-                {item.color.map((c, index) => (
-                  <Image key={index} source={colorImageMapping[c]} style={{ width: 20, height: 20, marginRight: 5 }} />
-                ))}
-
-              </View>
-            </View>
-          }} />
+            }} />
 
           <View style={{
             flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
             width: '90%', marginVertical: 20
           }}>
             <Button title="Prev" onPress={onPrevPress} disabled={startIndex === 0} />
-            <Text style={styles.pageIndicator}>{`Page ${Math.ceil((startIndex + 1) / itemsPerPage)} of ${totalPages}`}</Text>
+            {/* <Text style={styles.pageIndicator}>{`Page ${Math.ceil((startIndex + 1) / itemsPerPage)} of ${totalPages}`}</Text> */}
 
-            <Button title="Next" onPress={onNextPress} disabled={startIndex + itemsPerPage >= displayData.length} />
+            <Button title="Next" onPress={onNextPress} disabled={startIndex + itemsPerPage >= displayData1.length} />
           </View>
         </> : <></>
       }
 
       {/*////////////////////////////////////// Myhistory Screen Flatlist Data */}
       {
-        myHistory ? <MyHistoryScreen /> : (<></>)
+        myHistory ? <MyHistoryScreen selectedCountdown={selectedCountdown} /> : (<></>)
       }
 
 
