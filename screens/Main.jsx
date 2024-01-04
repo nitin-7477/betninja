@@ -5,10 +5,33 @@ import MainSlider from '../components/sliders/MainSlider';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
 import { Colors } from '../components/Constants/Colors';
 import MessageComponent from '../components/service center/GoogleAuthentication';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 export default function Main() {
   const navigation = useNavigation();
-  // Sample data for recent winners and top 10 lists
+  const [recentWinners, setRecentWinners] = useState([]);
+
+  useEffect(() => {
+    const fetchRecentWinners = async () => {
+      try {
+        const response = await axios.get(`${process.env.SERVERURL}/api/bet/recentWinner`);
+        console.log(response.data);
+        setRecentWinners(response.data)
+
+      } catch (error) {
+        console.error('Error fetching recent winners:', error);
+      }
+    };
+
+    fetchRecentWinners();
+
+
+  }, []);
+
+
+
+
   const recentWinnersData = [
     {
       name: 'Player 1', amount: '$500', game: 'Slot Machine',
@@ -59,7 +82,8 @@ export default function Main() {
     // Add more game icons with their images
   ];
 
-  // Renders a grid of game icons
+
+
   const renderGameIcon = ({ item }) => (
     <TouchableOpacity style={styles.gameIconContainer}
       onPress={() => navigation.navigate("Gamescreen")}>
@@ -159,8 +183,8 @@ export default function Main() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 30,
-    marginBottom: 30
+    // marginTop: 30,
+    // marginBottom: 30
   },
   backgroundImage: {
     width: Dimensions.get('window').width,

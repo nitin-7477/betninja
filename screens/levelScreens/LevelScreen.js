@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView } from 'react-native'
 import React from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../components/Constants/Screen'
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -9,17 +9,23 @@ import { useState } from 'react';
 
 const LevelScreen = () => {
   const [selectedButton, setSelectedButton] = useState(1)
+  const [showHistory, setShowHistory] = useState(true)
+  const [showRules, setShowRules] = useState(false)
 
 
   const handleHistory = () => {
     setSelectedButton(1)
+    setShowHistory(true)
+    setShowRules(false)
   }
   const handleRules = () => {
     setSelectedButton(2)
+    setShowRules(true)
+    setShowHistory(false)
   }
   const navigation = useNavigation()
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
 
 
       <View style={{ height: SCREEN_HEIGHT * 0.23, width: SCREEN_WIDTH * 0.99, backgroundColor: '#d6aa7f', alignSelf: 'center' }}>
@@ -52,7 +58,7 @@ const LevelScreen = () => {
       <View style={{ marginTop: 40, height: 25, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', borderWidth: 0.5, borderColor: 'grey', padding: 3, borderRadius: 5, justifyContent: 'center' }}><Text style={{ textAlign: 'center', fontSize: 12 }}>Level rewards are settled at 2:00 am on the 1st of every month</Text></View>
 
       {/* ********************* Here is a flatlist card********************* */}
-      <View style={{ height: SCREEN_HEIGHT * 0.5, width: SCREEN_WIDTH * 0.94, backgroundColor: 'white', marginTop: 10, borderRadius: 15, alignSelf: 'center', elevation: 2 }}>
+      <View style={{ height: SCREEN_HEIGHT * 0.3, width: SCREEN_WIDTH * 0.94, backgroundColor: 'white', marginTop: 10, borderRadius: 15, alignSelf: 'center', elevation: 2 }}>
         <View style={{ width: SCREEN_WIDTH * 0.9, flexDirection: 'row', alignItems: 'center', height: 40, marginHorizontal: 10, marginTop: 8 }}>
           <Image source={require('../../assets/diamond.png')} style={{ height: 30, width: 30, marginRight: 10 }} />
           <Text style={{ color: 'grey', fontWeight: '700', fontSize: 18 }}>Level 0 Benefit Level</Text>
@@ -101,44 +107,7 @@ const LevelScreen = () => {
 
         </View>
 
-        <View style={{ height: SCREEN_HEIGHT * 0.1, width: '100%', flexDirection: 'row', alignItems: 'center', }}>
-          <View style={{ width: '20%', marginLeft: 4 }}>
-            <Image source={require('../../assets/safe.png')} style={{ height: 60, width: 60 }} />
-          </View>
-          <View style={{ width: '55%', marginLeft: 10 }}>
-            <Text style={{ fontSize: 16, fontWeight: '500', color: 'black' }}>Safe</Text>
-            <Text style={{ fontSize: 12, marginTop: 6, width: '90%' }}>Increase the extra income of the safe</Text>
-          </View>
-          <View style={{ width: '20%' }}>
-            <View style={{ flexDirection: 'row', height: '15', width: '100%', alignItems: 'center', borderColor: 'red', borderWidth: 0.5, padding: 8, justifyContent: 'center', borderRadius: 10, marginBottom: 5 }}>
-              <Image source={require('../../assets/safe2.png')} style={{ height: 15, width: 15, marginRight: 5 }} />
-              <Text>0.2 %</Text>
-            </View>
-
-          </View>
-
-        </View>
-
-
-        <View style={{ height: SCREEN_HEIGHT * 0.1, width: '100%', flexDirection: 'row', alignItems: 'center', }}>
-          <View style={{ width: '20%', marginLeft: 4 }}>
-            <Image source={require('../../assets/rebateRate.png')} style={{ height: 60, width: 60 }} />
-          </View>
-          <View style={{ width: '55%', marginLeft: 10 }}>
-            <Text style={{ fontSize: 16, fontWeight: '500', color: 'black' }}>Safe</Text>
-            <Text style={{ fontSize: 12, marginTop: 6, width: '90%' }}>Increase the extra income of the safe</Text>
-          </View>
-          <View style={{ width: '20%' }}>
-            <View style={{ flexDirection: 'row', height: '15', width: '100%', alignItems: 'center', borderColor: 'red', borderWidth: 0.5, padding: 4, justifyContent: 'center', borderRadius: 10, marginBottom: 5 }}>
-              <Image source={require('../../assets/rebateRate2.png')} style={{ height: 25, width: 25, marginRight: 5 }} />
-              <Text>0.2 %</Text>
-            </View>
-
-          </View>
-
-        </View>
-
-
+      
       </View>
 
       <View style={{ height: 50, width: SCREEN_WIDTH * 0.95, alignSelf: 'center', marginVertical: 10, flexDirection: 'row' }}>
@@ -160,12 +129,107 @@ const LevelScreen = () => {
         </TouchableOpacity>
 
       </View >
+      {/* ************************************************************************/}
+
+      {showHistory ? <>
+        <View style={{ flex: 1, marginBottom: 20 }}>
+          <View style={styles.smallCard}>
+            <Text style={{ color: 'orange', fontWeight: '500', fontSize: 16, marginVertical: 5 }}>VIP Level Downgrade</Text>
+            <Text style={{ color: '#3a9fbf', marginBottom: 5 }}>Relegation failed, experience point deducted and downgraded [VIP 0]</Text>
+            <Text>2024-01-01 00:05:09</Text>
+          </View>
+          <View style={styles.smallCard}>
+            <Text style={{ color: 'orange', fontWeight: '500', fontSize: 16, marginVertical: 5 }}>Level maintenance</Text>
+            <Text style={{ color: '#3a9fbf', marginBottom: 5 }}>Level maintenance status not complete [0% complete]</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text>2023-12-05 06:40:05</Text>
+              <Text>-250000 EXP</Text>
+
+            </View>
+          </View>
+          <View style={styles.smallCard}>
+            <Text style={{ color: 'blue', fontWeight: '400', fontSize: 16, marginVertical: 5 }}>Experience Bonus</Text>
+            <Text style={{ color: '#3a9fbf', marginBottom: 5 }}>Betting EXP</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text>2023-12-05 06:40:05</Text>
+              <Text style={{ color: 'green' }}>168 EXP</Text>
+
+            </View>
+          </View>
+
+          <View style={styles.smallCard}>
+            <Text style={{ color: 'blue', fontWeight: '400', fontSize: 16, marginVertical: 5 }}>Experience Bonus</Text>
+            <Text style={{ color: '#3a9fbf', marginBottom: 5 }}>Betting EXP</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text>2023-12-05 06:40:05</Text>
+              <Text style={{ color: 'green' }}>168 EXP</Text>
+
+            </View>
+          </View>
+
+          <View style={styles.smallCard}>
+            <Text style={{ color: 'blue', fontWeight: '400', fontSize: 16, marginVertical: 5 }}>Experience Bonus</Text>
+            <Text style={{ color: '#3a9fbf', marginBottom: 5 }}>Betting EXP</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text>2023-12-05 06:40:05</Text>
+              <Text style={{ color: 'green' }}>50 EXP</Text>
+
+            </View>
+          </View>
+
+          <View style={[styles.smallCard, { flexDirection: 'row', alignItems: 'center' }]}>
+            <View style={{ width: '75%', }}>
+              <Text style={{ marginVertical: 5, color: 'green', fontSize: 16, fontWeight: '500' }}>Successfully Received</Text>
+              <Text style={{ marginBottom: 5, color: Colors.fontGray, fontWeight: '400' }}>Successfully Received [Monthly Bonus]</Text>
+              <Text>2023-12-04 23:00:25</Text>
+            </View>
+            <View style={{ width: '20%' }}>
+              <View style={{ flexDirection: 'row', height: '15', width: '100%', alignItems: 'center', borderColor: 'red', borderWidth: 0.5, padding: 2, justifyContent: 'center', borderRadius: 10, marginBottom: 5 }}>
+                <Image source={require('../../assets/vipWallet.png')} style={{ height: 15, width: 15, marginRight: 5 }} />
+                <Text>600</Text>
+              </View>
+              <View style={{ flexDirection: 'row', height: '15', width: '100%', alignItems: 'center', borderColor: 'red', borderWidth: 0.5, padding: 2, justifyContent: 'center', borderRadius: 10 }}>
+                <Image source={require('../../assets/diamond.png')} style={{ height: 15, width: 15, marginRight: 5 }} />
+                <Text>00</Text>
+              </View>
+            </View>
+
+          </View>
+
+          <View style={styles.smallCard}>
+            <Text style={{ color: 'blue', fontWeight: '400', fontSize: 16, marginVertical: 5 }}>Experience Bonus</Text>
+            <Text style={{ color: '#3a9fbf', marginBottom: 5 }}>Betting EXP</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text>2023-12-05 06:40:05</Text>
+              <Text style={{ color: 'green' }}>50 EXP</Text>
+
+            </View>
+          </View>
+          <View style={styles.smallCard}>
+            <Text style={{ color: 'blue', fontWeight: '400', fontSize: 16, marginVertical: 5 }}>Experience Bonus</Text>
+            <Text style={{ color: '#3a9fbf', marginBottom: 5 }}>Betting EXP</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text>2023-12-05 06:40:05</Text>
+              <Text style={{ color: 'green' }}>50 EXP</Text>
+
+            </View>
+          </View>
+          <TouchableOpacity
+            onPress={() => alert('View ALl')}
+            style={{ height: 45, width: SCREEN_WIDTH * 0.95, backgroundColor: 'red', alignSelf: 'center', marginVertical: 20, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={{ fontSize: 18, fontWeight: '800', color: 'white' }}>View All</Text>
+          </TouchableOpacity>
+        </View>
+      </> : <>
+        <View style={{ height: SCREEN_HEIGHT * 1, marginBottom: 20 }}>
+
+          <Text>These are the rules</Text>
+        </View>
+
+      </>}
 
 
-
-
-
-    </View >
+    </ScrollView >
   )
 }
 
@@ -174,6 +238,7 @@ export default LevelScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 5
-  }
+    paddingHorizontal: 5,
+
+  }, smallCard: { height: SCREEN_HEIGHT * 0.12, width: SCREEN_WIDTH * 0.95, alignSelf: 'center', backgroundColor: 'white', elevation: 1, justifyContent: 'center', padding: 10, marginBottom: 10 }
 })

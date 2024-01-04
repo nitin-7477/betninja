@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, Image, TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
@@ -8,16 +8,23 @@ import { Colors } from "../components/Constants/Colors";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Clipboard from "@react-native-clipboard/clipboard";
 
 const Account = () => {
   const navigation = useNavigation();
   const [userInformation, setUserInformation] = useState([]);
   const [userToken, setUserToken] = useState({});
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true)
         const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          navigation.navigate('Login')
+          return;
+        }
 
         const response = await axios.get(`${process.env.SERVERURL}/api/auth/user`, {
           headers: {
@@ -29,6 +36,9 @@ const Account = () => {
       } catch (error) {
         console.error('Error fetching user data in Account Screen:', error);
       }
+      finally {
+        setLoading(false)
+      }
     };
 
     fetchData();
@@ -39,7 +49,7 @@ const Account = () => {
   const handleLogOut = async () => {
     try {
 
-      await AsyncStorage.removeItem('userToken');
+      await AsyncStorage.removeItem('token');
       navigation.navigate('Login');
       console.log('User logged out');
     } catch (error) {
@@ -49,6 +59,7 @@ const Account = () => {
 
   return (
     <ScrollView style={styles.container}>
+
       <View style={styles.header}>
         <Image
           source={require("../image/1.jpg")}
@@ -56,16 +67,23 @@ const Account = () => {
         />
 
         <View style={styles.userInfo}>
-          <Text style={styles.userName}>User's Name</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#F4C2C2', padding: 5, marginTop: 10, borderRadius: 10, borderWidth: 0.5 }}>
+            <Image source={require('../assets/crown.png')} style={{ height: 30, width: 30, marginRight: 10 }} />
+            <Text style={styles.userName}>{userInformation.username}</Text>
+          </View>
           <Text style={styles.userId}>User ID: {userInformation.uid}</Text>
         </View>
       </View>
       {/* *********Total Balance Card********************** */}
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <View style={styles.balance}>
-          <Text style={{ color: 'black' }}>Total Balance:- Rs. {userInformation.wallet}</Text>
+          <Text style={{ color: 'black' }}>Total Balance:- Rs. {userInformation?.wallet?.toFixed(2)}</Text>
         </View>
-        <Text style={styles.level}>Level: {userInformation.level}</Text>
+        <TouchableOpacity
+          style={{ width: 80, height: 35, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center', borderRadius: 10, elevation: 10 }}
+          onPress={() => navigation.navigate('LevelScreen')}>
+          <Text style={styles.level}>Level: {userInformation?.level}</Text>
+        </TouchableOpacity>
       </View>
 
       {/* *********Navigating to different screens********************** */}
@@ -102,6 +120,7 @@ const Account = () => {
       </View>
 
       <View style={styles.section}>
+
         <Text style={styles.sectionTitle}>Account</Text>
         <View style={styles.sectionItems}>
           <TouchableOpacity
@@ -109,18 +128,18 @@ const Account = () => {
             style={styles.sectionItem}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Ionicons name="notifications" size={24} color="black" />
-              <Text style={{ marginLeft: 10, fontSize: 16, color: 'black' }}>Notifications</Text>
+              <Text style={{ marginLeft: 10, fontSize: 15, color: 'black' }}>Notifications</Text>
             </View>
-            <AntDesign name="right" size={20} color="grey" />
+            <AntDesign name="right" size={16} color="grey" />
 
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate("Gifts")}
             style={styles.sectionItem}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Ionicons name="gift" size={24} color="black" />
-              <Text style={{ marginLeft: 10, fontSize: 16, color: 'black' }}>Gifts</Text>
+              <Text style={{ marginLeft: 10, fontSize: 15, color: 'black' }}>Gifts</Text>
             </View>
-            <AntDesign name="right" size={20} color="grey" />
+            <AntDesign name="right" size={16} color="grey" />
 
           </TouchableOpacity>
 
@@ -128,9 +147,9 @@ const Account = () => {
             onPress={() => navigation.navigate("GameStats")} style={styles.sectionItem}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Ionicons name="stats-chart" size={24} color="black" />
-              <Text style={{ marginLeft: 10, fontSize: 16, color: 'black' }}>Game Chart</Text>
+              <Text style={{ marginLeft: 10, fontSize: 15, color: 'black' }}>Game Chart</Text>
             </View>
-            <AntDesign name="right" size={20} color="grey" />
+            <AntDesign name="right" size={16} color="grey" />
 
           </TouchableOpacity>
           <TouchableOpacity
@@ -138,11 +157,11 @@ const Account = () => {
             style={styles.sectionItem}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Ionicons name="language" size={24} color="black" />
-              <Text style={{ marginLeft: 10, fontSize: 16, color: 'black' }}>Languages</Text>
+              <Text style={{ marginLeft: 10, fontSize: 15, color: 'black' }}>Languages</Text>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Text style={{ marginRight: 10 }}>English</Text>
-              <AntDesign name="right" size={20} color="grey" /></View>
+              <AntDesign name="right" size={16} color="grey" /></View>
 
           </TouchableOpacity>
         </View>
@@ -173,28 +192,32 @@ const Account = () => {
           <TouchableOpacity
             onPress={() => navigation.navigate('NotificationFile')}
             style={styles.serviceIcons}>
-            <Ionicons name="notifications" size={24} color="black" />
-            <Text style={{ color: 'black' }}>Notification</Text>
+            <AntDesign name='sound' size={20} color={'black'} />
+            <Text style={{ color: 'black' }}>Announcemet</Text>
           </TouchableOpacity>
           <View style={styles.serviceIcons}>
 
             <Ionicons name="book" size={24} color="black" />
             <Text style={{ color: 'black' }}>Beginner's Guide</Text>
           </View>
-          <View style={styles.serviceIcons}>
+          <TouchableOpacity style={styles.serviceIcons}>
 
             <Ionicons name="information-circle" size={24} color="black" />
             <Text style={{ color: 'black' }}>About Us</Text>
-          </View>
+          </TouchableOpacity >
         </View>
       </View>
 
       <TouchableOpacity
         onPress={() => handleLogOut()}
         style={styles.logoutButton}>
-        <Text style={{ color: 'white' }}>Logout</Text>
+        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16 }}>Logout</Text>
       </TouchableOpacity>
-
+      {loading && (
+        <View style={styles.activityIndicatorContainer}>
+          <ActivityIndicator size={100} color="gold" />
+        </View>
+      )}
     </ScrollView>
   );
 };
@@ -207,7 +230,7 @@ const styles = {
   },
   header: {
     flexDirection: "row",
-    alignItems: "center",
+
     justifyContent: 'space-between'
   },
   profileImage: {
@@ -226,13 +249,15 @@ const styles = {
   },
   userId: {
     fontSize: 14,
-    fontWeight: 'bold',
-    color: 'black'
+    fontWeight: '400',
+    color: 'black',
+    marginVertical: 10,
+    textAlign: 'right'
   },
   level: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: 'purple',
+    color: 'white',
 
   },
   balance: {
@@ -295,6 +320,17 @@ const styles = {
     borderRadius: 5,
     marginVertical: 30,
     marginBottom: 50
+  },
+  activityIndicatorContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
 };
 

@@ -4,21 +4,30 @@ import { Colors } from '../Constants/Colors';
 import { SCREEN_WIDTH } from '../Constants/Screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
-import { postData } from '../../config/ServerServices';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const FeedbackForm = () => {
-  
+
   const navigation = useNavigation();
   const [feedback, setFeedback] = useState('');
 
   const handleSubmit = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
 
-    var body = { userId: 2, rating: 5, comment: feedback }
-    var result = await postData('api/feedback', body);
-
-    console.log('Bodyxxxxxxxxxx', body);
-    console.log(result);
-    setFeedback('');
-
+      var body = { rating: 5, comment: feedback }
+      console.log(body);
+      var result = await axios.get(`${process.env.SERVERURL}/api/feedback/feedback`, {
+        headers: {
+          "Authorization": JSON.parse(token),
+        },
+      })
+      console.log(result);
+      setFeedback('');
+    }
+    catch (e) {
+      console.log(e);
+    }
   };
 
   return (

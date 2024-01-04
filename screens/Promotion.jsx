@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, StatusBar, TouchableOpacity, } from 'react-native'
+import { View, Text, ScrollView, StatusBar, TouchableOpacity, ActivityIndicator } from 'react-native'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../components/Constants/Colors';
@@ -14,7 +14,7 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
 
 const Promotion = () => {
   const navigation = useNavigation();
-
+  const [loading, setLoading] = useState(false)
   const [commission, setCommission] = useState([])
 
   const [referalCode, setReferalCode] = useState('')
@@ -28,9 +28,14 @@ const Promotion = () => {
 
   const fetchCommissionData = async () => {
     try {
+      setLoading(true)
       const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        navigation.navigate('Login')
+        return;
+      }
       console.log("This is the main token", JSON.parse(token));
-      // console.log("This is server url,,,,,,",process.env.SERVERURL);
+
 
       var result = await axios.get(`${process.env.SERVERURL}/api/commission/commission`, {
 
@@ -46,14 +51,13 @@ const Promotion = () => {
     } catch (e) {
       console.log("ERROR IN FETCHING COMMISSION", e);
     }
+    finally {
+      setLoading(false)
+    }
   }
 
-
-
   useEffect(() => {
-
     fetchCommissionData()
-    // fetchData();
   }, []);
 
   const directRegisterCount = commission?.direct?.number_of_register || 0;
@@ -165,6 +169,11 @@ const Promotion = () => {
                 <Text style={{ textAlign: 'center', color: 'grey' }}>Number of people making first deposite</Text>
               </View>
             </View>
+            {loading && (
+              <View style={styles.activityIndicatorContainer}>
+                <ActivityIndicator size={100} color="gold" />
+              </View>
+            )}
           </View>
 
         </View>
@@ -268,6 +277,7 @@ const Promotion = () => {
         </View>
 
       </View>
+
     </ScrollView>
   )
 }
@@ -291,5 +301,16 @@ const styles = {
   }
   , tile1: { height: 50, width: 320, alignSelf: 'center', marginTop: 10, borderRadius: 5, elevation: 3, backgroundColor: 'white' },
   tile2: { height: 50, width: 320, justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, flexDirection: 'row', },
+  activityIndicatorContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
 
 }

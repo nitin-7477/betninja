@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, TextInput, Image, Alert, Modal, } from "react-native";
+import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, TextInput, Image, Alert, Modal, ActivityIndicator } from "react-native";
 import React from "react";
 import { useState } from "react";
 import AppTextInput from "../components/AppTextInput";
@@ -17,6 +17,7 @@ const Login = () => {
   const [emailAddress, setEmailAddress] = useState('')
   const [password, setPassword] = useState('')
   const [isPasswordVisible, setIsPasswordVisible] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -24,28 +25,20 @@ const Login = () => {
 
   const checkLogin = async () => {
     try {
+      setLoading(true);
       var body = { email: emailAddress, password: password };
-      console.log(process.env.SERVERURL);
 
       const result = await axios.post(`${process.env.SERVERURL}/api/auth/login`, body);
       console.log(body);
 
       let response = result.data;
-      console.log("RESPONSE", response);
+
       let token = response.token;
 
       if (token) {
-        Alert.alert("Login Successfully", "Welcome", [
-          {
-            text: 'OK',
-            onPress: () => {
-              console.log('Closed');
-            }
-          }
-        ]);
 
         await AsyncStorage.setItem('token', JSON.stringify(token));
-        // console.log(response);
+
         navigation.navigate('Home', { user: result });
       } else {
         console.log('Login failed:');
@@ -53,6 +46,9 @@ const Login = () => {
       }
     } catch (error) {
       console.error('Error during login:', error);
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -110,7 +106,9 @@ const Login = () => {
             marginVertical: 30,
           }}
         >
-          <AppTextInput value={emailAddress} onChangeText={(text) => setEmailAddress(text)} placeholder="Email" />
+          <AppTextInput value={emailAddress}
+            onChangeText={(text) => setEmailAddress(text.toLowerCase())}
+            placeholder="Email" />
 
           <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#1434A4', borderRadius: 10, justifyContent: 'space-between' }}>
             <TextInput
@@ -174,6 +172,11 @@ const Login = () => {
             Sign in
           </Text>
         </TouchableOpacity>
+        {loading && (
+          <View style={Styles.activityIndicatorContainer}>
+            <ActivityIndicator size={100} color="gold" />
+          </View>
+        )}
 
         <TouchableOpacity
           onPress={() => navigation.navigate('Register')}
@@ -282,7 +285,17 @@ const Styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 10,
     elevation: 5
-  }
+  },
+  activityIndicatorContainer: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 })
 
 export default Login;

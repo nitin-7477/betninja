@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Image, Button, ScrollView, StyleSheet, TouchableOpacity, Modal, FlatList } from 'react-native';
+import { View, Text, Image, Button, ScrollView, StyleSheet, TouchableOpacity, Modal, FlatList, ActivityIndicator } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
@@ -14,7 +14,7 @@ const HomeScreen = ({ navigation }) => {
 
   const [gameHistory, setGameHistory] = useState(true)
   const [myHistory, setMyHistory] = useState(false)
-  const [selectedButton, setSelectedButton] = useState(null);
+
   const [bigModalVisible, setBigModalVisible] = useState(false)
   const [selectType, setSelectType] = useState(null)
   const [select, setSelect] = useState(null)
@@ -25,20 +25,12 @@ const HomeScreen = ({ navigation }) => {
   const [ln2, setln2] = useState(0)
   const [ln3, setln3] = useState(0)
   const [ln4, setln4] = useState(0)
+  const [loading1, setLoading1] = useState(false);
 
 
 
 
 
-  // *****************This is for timer and socket*********************
-
-  const [timerFinished, setTimerFinished] = useState(false);
-  const [countdowns, setCountdowns] = useState({
-    thirtySec: 0,
-    oneMin: 0,
-    threeMin: 0,
-    fiveMin: 0,
-  });
   const [selectedCountdown, setSelectedCountdown] = useState('thirtySec');
   const [defaultCountdown, setDefaultCountdown] = useState('thirtySec');
   const [showModal1, setShowModal1] = useState(false);
@@ -52,7 +44,15 @@ const HomeScreen = ({ navigation }) => {
   const [apiData2, setApiData2] = useState([]);
   const [apiData3, setApiData3] = useState([]);
   const [apiData4, setApiData4] = useState([]);
+  // *****************This is for timer and socket*********************
 
+  const [timerFinished, setTimerFinished] = useState(false);
+  const [countdowns, setCountdowns] = useState({
+    thirtySec: 0,
+    oneMin: 0,
+    threeMin: 0,
+    fiveMin: 0,
+  });
 
   const socketRef = useRef(null);
 
@@ -95,36 +95,15 @@ const HomeScreen = ({ navigation }) => {
 
     if (!socketRef.current) {
       socketRef.current = io(`${process.env.SOCKETURL}`);
-      console.log(process.env.SOCKETURL);
 
+      // console.log(process.env.SOCKETURL);
 
 
       const fetchGameHistoryData = async (trial) => {
-        // try {
-        //   let timerEndpoint;
 
 
-        //   switch (selectedCountdown) {
-        //     case 'thirtySec':
-        //       timerEndpoint = '30seclottary';
-        //       break;
-        //     case 'oneMin':
-        //       timerEndpoint = '1minLottary';
-        //       break;
-        //     case 'threeMin':
-        //       timerEndpoint = '3minLottary';
-        //       break;
-        //     case 'fiveMin':
-        //       timerEndpoint = '5minLottary';
-        //       break;
-
-        //   }
-
-        //   const response = await axios.get(`${process.env.SERVERURL}/api/random/${timerEndpoint}`);
-
-        //   setApiData(response.data);
-        // } 
         try {
+          setLoading1(true);
 
           switch (trial) {
             case 30:
@@ -154,6 +133,9 @@ const HomeScreen = ({ navigation }) => {
         }
         catch (error) {
           console.error('Error fetching data in game history:', error);
+        }
+        finally {
+          setLoading1(false)
         }
       };
 
@@ -316,25 +298,27 @@ const HomeScreen = ({ navigation }) => {
 
   const fetchData = async () => {
     try {
-
-      // Retrieve user data from AsyncStorage
-      const storedUserData = await AsyncStorage.getItem('token');
-      const parsedUserData = JSON.parse(storedUserData);
-      setUserToken(parsedUserData);
-
-      // const token = `${parsedUserData.token}`;
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        navigation.navigate('Login')
+        return;
+      }
       const response = await axios.get(`${process.env.SERVERURL}/api/auth/user`, {
         headers: {
-          "Authorization": parsedUserData,
+          "Authorization": JSON.parse(token),
         },
       });
-
       setUserInformation(response.data);
+      await AsyncStorage.setItem('email', response.data.email);
+      await AsyncStorage.setItem('phone', response.data.phone);
+      await AsyncStorage.setItem('username', response.data.username);
+      await AsyncStorage.setItem('uid', response.data.uid);
+      await AsyncStorage.setItem('inviteCode', response.data.inviteCode);
     } catch (error) {
       console.error('Error fetching user data in Gaming screen:', error);
     }
   };
-
+  // console.log("xxxxxxxxxxxxxxxxxxx", userInformation);
 
 
 
@@ -358,10 +342,19 @@ const HomeScreen = ({ navigation }) => {
     setMyHistory(false)
   }
   const handleMyHistory = () => {
-    setMyHistory(!myHistory)
+    setMyHistory(true)
     setGameHistory(false)
   }
 
+  const toggleMyHistory = () => {
+    setMyHistory(!myHistory);
+  };
+
+  // Callback function to refresh MyHistoryScreen
+  const refreshMyHistory = () => {
+    // You can add additional logic here if needed
+    toggleMyHistory();
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -378,7 +371,7 @@ const HomeScreen = ({ navigation }) => {
 
       <View style={styles.balanceView}>
         <View style={styles.balanceContainer}>
-          <Text style={{ fontWeight: 'bold' }}>Balance: {userInformation.wallet}</Text>
+          <Text style={{ fontWeight: 'bold' }}>Balance: {userInformation?.wallet?.toFixed(2)}</Text>
           <TouchableOpacity onPress={fetchData}>
             <AntDesign name="reload1" size={20} color="blue" style={styles.refreshIcon} />
           </TouchableOpacity>
@@ -541,7 +534,7 @@ const HomeScreen = ({ navigation }) => {
         <ThirtySecBetModal isVisible={bigModalVisible} closeModal={closeBigModal} selectType={selectType} select={select}
           backgroundColor={buttonBackgroundColor}
           ln={selectedCountdown == 'thirtySec' ? ln1 : selectedCountdown == 'oneMin' ? ln2 : selectedCountdown == 'threeMin' ? ln3 : selectedCountdown == 'fiveMin' ? ln4 : 0}
-          selectedCountdown={selectedCountdown} />
+          selectedCountdown={selectedCountdown} refreshMyHistory={refreshMyHistory} />
 
         {/* *********************** This is the bet modal ********************/}
 
@@ -644,9 +637,9 @@ const HomeScreen = ({ navigation }) => {
 
         <TouchableOpacity
           style={styles.violetBtn}
-          onPress={() => openBigModal('#D8BFD8', 'color', 'violet')}
+          onPress={() => openBigModal('#D8BFD8', 'color', 'yellow')}
         >
-          <Text style={{ fontWeight: 'bold', color: 'white', }}>Violet</Text>
+          <Text style={{ fontWeight: 'bold', color: 'white', }}>Yellow</Text>
         </TouchableOpacity>
         {/* *********************************************************************** */}
 
@@ -734,6 +727,7 @@ const HomeScreen = ({ navigation }) => {
 
 
 
+
     </ScrollView >
   );
 };
@@ -810,7 +804,7 @@ const styles = StyleSheet.create({
 
   },
   violetBtn: {
-    backgroundColor: 'purple',
+    backgroundColor: 'orange',
     alignItems: 'center',
     width: SCREEN_WIDTH * 0.25,
     paddingVertical: 10,

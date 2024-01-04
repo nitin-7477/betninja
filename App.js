@@ -30,7 +30,10 @@ import ActivityAward from "./screens/activityAllScreens/ActivityAward";
 import InvitationBonus from "./screens/activityAllScreens/InvitationBonus";
 import BettingRebate from "./screens/activityAllScreens/BettingRebate";
 import LevelScreen from "./screens/levelScreens/LevelScreen";
-
+import AboutUs from "./components/service center/aboutus/AboutUs";
+import Confidential from "./components/service center/aboutus/Confidential";
+import RiskDisclosure from "./components/service center/aboutus/RiskDisclosure";
+import ChangePasswordScreen from "./components/service center/ChangePasswordScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -60,11 +63,17 @@ export default function App() {
         )}
 
         <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
-        <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
+        <Stack.Screen options={{ headerShown: false }} name="ChangePasswordScreen" component={ChangePasswordScreen} />
+        <Stack.Screen options={{ headerShown: false }} name="RiskDisclosures" component={RiskDisclosure} />
+
+        <Stack.Screen options={{ headerShown: false }} name="Confidential" component={Confidential} />
+        <Stack.Screen options={{ headerShown: false }} name="AboutUs" component={AboutUs} />
+
         <Stack.Screen options={{ headerShown: false }} name="LevelScreen" component={LevelScreen} />
-        <Stack.Screen options={{ headerShown: false }} name="Gamescreen" component={Gamescreen} />
+        <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
         <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
 
+        <Stack.Screen options={{ headerShown: false }} name="Gamescreen" component={Gamescreen} />
         <Stack.Screen name="Wallet" options={{ headerShown: false }} component={Wallet} />
         <Stack.Screen options={{ headerShown: false }} name="BettingRebate" component={BettingRebate} />
         <Stack.Screen options={{ headerShown: false }} name="InvitationBonus" component={InvitationBonus} />

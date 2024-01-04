@@ -6,7 +6,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
 
-const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType, select, ln, selectedCountdown }) => {
+const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType, select, ln, selectedCountdown, refreshMyHistory, }) => {
 
   const navigation = useNavigation();
   const [inputValue, setInputValue] = useState('1'); // Set default value to '1'
@@ -59,6 +59,7 @@ const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType,
   // console.log("This is lottery Number", ln);
   const handleBigData = async () => {
     try {
+
       let timerBet;
 
       console.log(selectedCountdown)
@@ -92,7 +93,7 @@ const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType,
       };
 
       // console.log("Request Body:", body);
-
+      closeModal()
       const response = await axios.post(`${process.env.SERVERURL}/api/bet/${timerBet}`, body,
         {
           headers: {
@@ -104,6 +105,7 @@ const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType,
       console.log("Response:", response.data);
       if (response.data) {
         closeModal()
+        refreshMyHistory();
       }
     } catch (error) {
       console.error("Error:", error);

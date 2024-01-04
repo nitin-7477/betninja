@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, Pressable, Image, StyleSheet } from 'react-native';
-import { SCREEN_WIDTH } from '../Constants/Screen';
+import { View, Text, FlatList, Pressable, Image, StyleSheet, ActivityIndicator } from 'react-native';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Colors } from '../Constants/Colors';
@@ -13,6 +13,7 @@ const MyHistoryScreen = ({ selectedCountdown }) => {
   const [expandedIndex, setExpandedIndex] = useState(null);
   const [userInformation, setUserInformation] = useState([]);
   const [userToken, setUserToken] = useState({});
+  const [loading, setLoading] = useState(false);
 
 
 
@@ -20,6 +21,7 @@ const MyHistoryScreen = ({ selectedCountdown }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true)
 
         let timerBet;
 
@@ -78,6 +80,9 @@ const MyHistoryScreen = ({ selectedCountdown }) => {
       }
       catch (error) {
         console.error('Error fetching user data of My history screen:', error);
+      }
+      finally {
+        setLoading(false)
       }
     };
 
@@ -152,12 +157,12 @@ const MyHistoryScreen = ({ selectedCountdown }) => {
               width: 60,
               border: 1,
               borderWidth: 1,
-              borderColor: item.status == 'failed' ? 'red' : 'green',
+              borderColor: item.status == 'failed' ? 'red' : item.status == 'pending' ? 'orange' : 'green',
               borderRadius: 10,
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <Text style={{ color: item.status == 'failed' ? 'red' : 'green' }}>{item.status}</Text>
+            <Text style={{ color: item.status == 'failed' ? 'red' : item.status == 'pending' ? 'orange' : 'green' }}>{item.status}</Text>
           </View>
           <Text style={{ color: item.win_loss > 0 ? 'green' : item.win_loss < 0 ? 'red' : 'black' }}>
             {item.win_loss > 0 ? '+' : ''}{item.win_loss}
@@ -214,9 +219,11 @@ const MyHistoryScreen = ({ selectedCountdown }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.details}>
-        <Text style={{ color: 'black' }}>Details</Text>
-      </View>
+      {loading && (
+        <View style={styles.activityIndicatorContainer}>
+          <ActivityIndicator size={50} color="gold" />
+        </View>
+      )}
       <FlatList data={userInformation} renderItem={renderItem} keyExtractor={(item) => item.id} />
     </View>
   );
@@ -227,6 +234,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     marginTop: 20,
+    minHeight: SCREEN_HEIGHT * 0.3,
+    maxHeight: SCREEN_HEIGHT * 2
   },
   details: {
     height: 30,
@@ -241,7 +250,17 @@ const styles = StyleSheet.create({
   },
   listItem: {
     height: 25, width: '95%', backgroundColor: Colors.lightGray, justifyContent: 'space-between', alignItems: 'c', flexDirection: 'row', alignSelf: 'center', paddingHorizontal: 5, paddingVertical: 3, borderRadius: 5, marginVertical: 3
-  }
+  },
+  activityIndicatorContainer: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 export default MyHistoryScreen;

@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, View, TouchableOpacity, ScrollView, Image } from 'react-native'
+import { FlatList, StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, ActivityIndicator } from 'react-native'
 import React from 'react'
 import { Colors } from '../Constants/Colors';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -8,32 +8,35 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import Clipboard from '@react-native-clipboard/clipboard';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen';
 
 const Setting = () => {
   const navigation = useNavigation();
   const [userInformation, setUserInformation] = useState([]);
   const [userToken, setUserToken] = useState({});
+  const [copiedText, setCopiedText] = useState('');
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Retrieve user data from AsyncStorage
-        const storedUserData = await AsyncStorage.getItem('userData');
-        const parsedUserData = JSON.parse(storedUserData);
-        setUserToken(parsedUserData);
+        setLoading(true)
+        const token = await AsyncStorage.getItem('token');
 
-        // Use the retrieved token to fetch user information
-        const token = `${parsedUserData.token}`;
-        const response = await axios.get('https://9871-2401-4900-1c19-6daf-d33-85ae-dfd7-8e43.ngrok-free.app/api/auth/user', {
+        const response = await axios.get(`${process.env.SERVERURL}/api/auth/user`, {
           headers: {
-            "Authorization": token,
+            "Authorization": JSON.parse(token),
           },
         });
+
         setUserInformation(response.data);
+        setCopiedText(response?.data?.uid)
       } catch (error) {
         console.error('Error fetching user data in Wallet Screen:', error);
+      }
+      finally {
+        setLoading(false)
       }
     };
 
@@ -43,13 +46,21 @@ const Setting = () => {
   console.log("This is user information for wallet Screen", userInformation);
 
 
+  const copyToClipboard = () => {
+
+    Clipboard.setString(copiedText);
+    alert('UID copied')
+  };
+
+
+
   return (
     <ScrollView style={styles.container}>
       {/* header */}
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}><TouchableOpacity
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20, alignSelf: 'center', width: SCREEN_WIDTH * 0.95, marginTop: 5, marginLeft: 20 }}><TouchableOpacity
         onPress={() => navigation.navigate('Account')}
         style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
-        <Ionicons name='return-up-back' color={'white'} size={30} />
+        <Ionicons name='return-up-back' color={'white'} size={25} />
       </TouchableOpacity>
         <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.purple, marginLeft: 30 }}>Setting</Text></View>
       <View style={styles.section}>
@@ -66,7 +77,7 @@ const Setting = () => {
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <Text style={{ fontSize: 16, color: Colors.fontGray, fontWeight: '500' }}>NickName</Text>
           <View style={{ flexDirection: 'row' }}>
-            <Text style={{ fontSize: 16, color: Colors.fontGray, fontWeight: '500' }}>Nitin Gautam</Text>
+            <Text style={{ fontSize: 16, color: Colors.fontGray, fontWeight: '500' }}>{userInformation?.username}</Text>
             <Feather name='chevron-right' size={20} />
           </View>
         </View>
@@ -78,13 +89,15 @@ const Setting = () => {
           <Text style={{ fontSize: 16, color: Colors.fontGray, fontWeight: '500' }}>UID</Text>
           <View style={{ flexDirection: 'row' }}>
             <Text style={{ fontSize: 16, color: Colors.fontGray, fontWeight: '500', marginRight: 10 }}>{userInformation.uid}</Text>
-            <Feather name='copy' size={20} color={Colors.fontGray} />
+            <TouchableOpacity onPress={copyToClipboard}>
+              <Feather name='copy' size={20} color={Colors.fontGray} />
+            </TouchableOpacity>
           </View>
         </View>
       </View>
 
       <TouchableOpacity
-        onPress={() => navigation.navigate('Login')}
+        onPress={() => navigation.navigate('ChangePasswordScreen')}
         style={styles.history}>
 
         <View style={{ flexDirection: 'row' }}>
@@ -137,7 +150,11 @@ const Setting = () => {
           <Feather name='chevron-right' size={20} color={Colors.fontGray} />
         </View>
       </TouchableOpacity>
-
+      {loading && (
+        <View style={styles.activityIndicatorContainer}>
+          <ActivityIndicator size={100} color="gold" />
+        </View>
+      )}
     </ScrollView>
   )
 }
@@ -147,8 +164,8 @@ export default Setting
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginVertical: 20,
-    padding: 20
+    marginTop: 5
+
   },
   header: {
     height: SCREEN_HEIGHT * 0.05,
@@ -209,6 +226,16 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginBottom: 5,
     marginTop: 15
-  }
+  },
+  activityIndicatorContainer: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 
 })
