@@ -21,15 +21,17 @@ const ForgotPasswordComponent = () => {
     return otp;
   };
 
-  const handleVerifyCode = () => {
-    const enteredOTP = verificationCode.trim();
+  // const handleVerifyCode = () => {
+  //   const enteredOTP = verificationCode.trim();
 
-    if (enteredOTP === generatedOTP) {
-      alert('Verification Successful', 'Code verified successfully.');
-    } else {
-      alert('Verification Failed', 'Invalid verification code. Please try again.');
-    }
-  };
+  //   if (enteredOTP === generatedOTP) {
+  //     alert('Verification Successful', 'Code verified successfully.');
+  //   } else {
+  //     alert('Verification Failed', 'Invalid verification code. Please try again.');
+  //   }
+  // };
+
+
 
   const handleResetPassword = () => {
     const enteredOTP = verificationCode.trim();

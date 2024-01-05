@@ -1,56 +1,78 @@
+
+import React, { useState } from "react";
 import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, ActivityIndicator } from "react-native";
-import React from "react";
 import AppTextInput from "../components/AppTextInput";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useNavigation } from "@react-navigation/native";
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../components/Constants/Screen";
-import { useState, useEffect } from "react";
-import { postData, ServerURL } from "../config/ServerServices";
 import Modal from "react-native-modal";
-import { Colors } from "../components/Constants/Colors";
 import axios from "axios";
+import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../components/Constants/Screen";
 
 const Register = () => {
   const navigation = useNavigation();
-  const [emailAddress, setEmailAddress] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [phone, setPhone] = useState('')
-  const [invitationCode, setInvitationCode] = useState('')
+  const [emailAddress, setEmailAddress] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [phone, setPhone] = useState('');
+  const [invitationCode, setInvitationCode] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
   const [isModalVisible2, setModalVisible2] = useState(false);
   const [loading, setLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
-  const [otp, setOtp] = useState('')
+  const [otp, setOtp] = useState('');
+
+  const [isResendEnabled, setResendEnabled] = useState(true);
+  const [timer, setTimer] = useState(59);
+
+  const handleSendOTP = async () => {
+    try {
+
+      // const response = await axios.post("https://dummy-api.com/send-otp", { email: emailAddress });
+
+      setResendEnabled(false);
+      startTimer();
+
+
+      // console.log("API Response:", response);
+    } catch (error) {
+      // Handle errors during the API request
+      console.error('Error sending OTP:', error);
+    }
+  };
+
+  const startTimer = () => {
+    const interval = setInterval(() => {
+      setTimer((prevTimer) => {
+        if (prevTimer === 0) {
+          clearInterval(interval);
+          setResendEnabled(true);
+          return 59;
+        }
+        return prevTimer - 1;
+      });
+    }, 1000);
+  };
+
 
 
   const toggleModal1 = () => {
     setModalVisible(!isModalVisible);
   };
+
   const toggleModal2 = () => {
     setModalVisible2(!isModalVisible2);
   };
 
   const handleResetData = () => {
-    setEmailAddress('')
-    setPhone('')
-    setPassword('')
-    setConfirmPassword('')
-    setInvitationCode('')
+    setEmailAddress('');
+    setPhone('');
+    setPassword('');
+    setConfirmPassword('');
+    setInvitationCode('');
   }
 
-  const isSendButtonEnabled =
-    emailAddress !== '' &&
-    password !== '' &&
-    confirmPassword !== "" &&
-    phone !== '';
+  const isSendButtonEnabled = emailAddress !== '' && password !== '' && confirmPassword !== '' && phone !== '';
 
-  const handleSendOTP = () => {
-    const otp = generateOTP();
-    // For demonstration purposes, you can log the generated OTP to the console
-    console.log('Generated OTP:', otp);
-    alert('OTP Sent', 'OTP sent successfully.');
-  };
 
   const handleSignUp = async () => {
     try {
@@ -70,12 +92,10 @@ const Register = () => {
         registrationData.inviteCode = invitationCode.trim();
       }
 
-
       const result = await axios.post(`${process.env.SERVERURL}/api/auth/register`, registrationData);
 
       console.log("xxxxxxxxxxxxxxxxxxxx", result);
       console.log(registrationData);
-
 
       if (result) {
         toggleModal2();
@@ -83,7 +103,7 @@ const Register = () => {
         setRefresh(!refresh);
         navigation.navigate('Login');
       }
-      handleResetData()
+      handleResetData();
 
     } catch (error) {
       console.error('Error during registration:', error);
@@ -100,66 +120,71 @@ const Register = () => {
         // Something happened in setting up the request that triggered an Error
         console.error('Error setting up the request:', error.message);
       }
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
-
   };
 
-  const isResetButtonEnabled =
-    emailAddress !== '' &&
-    password !== '' &&
-    confirmPassword !== '' &&
-    phone !== '';
-
+  const isResetButtonEnabled = emailAddress !== '' && password !== '' && confirmPassword !== '' && phone !== '';
 
   return (
     <SafeAreaView>
-      <View style={{ padding: 20, }} >
-        {/* #29fd53 */}
+      <View style={{ padding: 20 }}>
         <View style={{ alignItems: "center" }}>
           <Text style={{ fontSize: 30, color: 'purple', fontWeight: 'bold', marginVertical: 3 }}>
             Create Account
           </Text>
           <View style={{ width: SCREEN_WIDTH * 0.8, alignSelf: 'center', borderBottomWidth: 0.3, marginBottom: 3, borderBottomColor: 'gray' }}></View>
-          <View style={{
-            width: SCREEN_WIDTH * 0.8,
-          }}>
-            <Text
-              style={{
-                fontFamily: "",
-                fontSize: 18,
-                maxWidth: "100%",
-                fontWeight: '700',
-                textAlign: "center",
-                lineHeight: 30,
-                color: 'black'
-              }}
-            >
-              Create an account so you can explore all the exisiting games
+          <View style={{ width: SCREEN_WIDTH * 0.8 }}>
+            <Text style={{ fontFamily: "", fontSize: 18, maxWidth: "100%", fontWeight: '700', textAlign: "center", lineHeight: 30, color: 'black' }}>
+              Create an account so you can explore all the existing games
             </Text>
-            {/* <Text style={{ color: 'red' }}>{ServerURL}</Text> */}
           </View>
         </View>
-        <View
-          style={{
-            marginVertical: 30,
-          }}
-        >
-          <AppTextInput placeholder="Email"
-            value={emailAddress} onChangeText={(text) => setEmailAddress(text)} />
-          <AppTextInput maxLength={10} keyboardType="numeric" placeholder="Phone" value={phone} onChangeText={(text) => setPhone(text)} />
-          <AppTextInput placeholder='Password' secureTextEntry value={password} onChangeText={(text) => setPassword(text)} />
-          <AppTextInput placeholder='Confirm Password' secureTextEntry value={confirmPassword} onChangeText={(text) => setConfirmPassword(text)} />
-
-          <AppTextInput placeholder='Enter Otp' secureTextEntry value={otp} onChangeText={(text) => setOtp(text)} />
-
-          <TouchableOpacity style={[styles.otpBtn, isSendButtonEnabled ? styles.enabledSendButton : styles.disabledSendButton]} onPress={handleSendOTP} disabled={!isSendButtonEnabled}>
-            <Text style={{ color: 'white', textAlign: 'center', fontSize: 16 }}>Send</Text>
-          </TouchableOpacity>
+        <View style={{ marginVertical: 30 }}>
+          <AppTextInput
+            placeholder="Email"
+            value={emailAddress}
+            onChangeText={(text) => setEmailAddress(text)}
+            errorMessage={emailAddress === '' ? 'Email is required' : ''}
+          />
+          <AppTextInput
+            maxLength={10}
+            keyboardType="numeric"
+            placeholder="Phone"
+            value={phone}
+            onChangeText={(text) => setPhone(text)}
+            errorMessage={phone === '' ? 'Phone is required' : ''}
+          />
+          <AppTextInput
+            placeholder='Password'
+            secureTextEntry
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            errorMessage={password === '' ? 'Password is required' : ''}
+          />
+          <AppTextInput
+            placeholder='Confirm Password'
+            secureTextEntry
+            value={confirmPassword}
+            onChangeText={(text) => setConfirmPassword(text)}
+            errorMessage={confirmPassword === '' ? 'Confirm Password is required' : ''}
+          />
+          <AppTextInput
+            placeholder='Enter Otp'
+            secureTextEntry
+            value={otp}
+            onChangeText={(text) => setOtp(text)}
+          />
+          <View style={{ flexDirection: 'row' }}>
+            <TouchableOpacity style={[styles.otpBtn, isSendButtonEnabled ? styles.enabledSendButton : styles.disabledSendButton]} onPress={handleSendOTP} disabled={!isSendButtonEnabled}>
+              <Text style={{ color: 'white', textAlign: 'center', fontSize: 16 }}>{isResendEnabled ? 'Send' : 'Resend'}</Text>
+            </TouchableOpacity>
+            {!isResendEnabled && (
+              <Text style={{ color: 'black', fontSize: 16, marginLeft: 200 }}>{`(${timer}s)`}</Text>
+            )}
+          </View>
           <AppTextInput placeholder="Invite Code" value={invitationCode} onChangeText={(text) => setInvitationCode(text)} />
-
           {!isResetButtonEnabled ? <Text style={{ color: 'red' }}> * Please fill all Details</Text> : <></>}
         </View>
         <View>
@@ -169,14 +194,11 @@ const Register = () => {
           style={[styles.signIn, isResetButtonEnabled ? styles.enabledButton : styles.disabledButton]}
           disabled={!isResetButtonEnabled}
         >
-          <Text style={{ color: 'white', textAlign: "center", fontSize: 20, }}>
+          <Text style={{ color: 'white', textAlign: "center", fontSize: 20 }}>
             Sign Up
           </Text>
         </TouchableOpacity>
 
-
-
-        {/* Modal */}
         <Modal isVisible={isModalVisible} onBackdropPress={toggleModal1}>
           <View style={styles.modalContainer}>
             <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10, color: 'black' }}>
@@ -190,13 +212,12 @@ const Register = () => {
             </TouchableOpacity>
           </View>
         </Modal>
-        {/* Modal2 to navigate to login page */}
         <Modal isVisible={isModalVisible2} onBackdropPress={toggleModal2}>
           <View style={styles.modalContainer}>
             <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10, color: 'black' }}>
-              Registered Succesfully
+              Registered Successfully
             </Text>
-            <Text style={{ color: 'black', fontSize: 12, fontWeight: '500' }}>Process to login</Text>
+            <Text style={{ color: 'black', fontSize: 12, fontWeight: '500' }}>Proceed to login</Text>
             <TouchableOpacity
               style={styles.closeButton}
               onPress={toggleModal2}
@@ -206,95 +227,38 @@ const Register = () => {
           </View>
         </Modal>
 
-
-
-
-        <TouchableOpacity onPress={() => navigation.navigate('Login')} style={{ padding: 10, }} >
-          <Text style={{ color: 'black', textAlign: "center", fontSize: 14, }}>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')} style={{ padding: 10 }}>
+          <Text style={{ color: 'black', textAlign: "center", fontSize: 14 }}>
             Already have an account?
           </Text>
         </TouchableOpacity>
-        <View
-          style={{
-            marginVertical: 30,
-          }}
-        >
-          <Text
-            style={{
-              // fontFamily: "poppins-semiBold",
-              color: 'blue',
-              textAlign: "center",
-              fontSize: 14,
-            }}
-          >
+        <View style={{ marginVertical: 30 }}>
+          <Text style={{ color: 'blue', textAlign: "center", fontSize: 14 }}>
             Or continue with
           </Text>
-
-          <View
-            style={{
-              marginTop: 10,
-              flexDirection: "row",
-              justifyContent: "center",
-            }}
-          >
-            <TouchableOpacity
-              style={{
-                padding: 10,
-                backgroundColor: '#D3D3D3',
-                borderRadius: 5,
-                marginHorizontal: 10,
-              }}
-            >
-              <AntDesign
-                name="google"
-                color="black"
-                size={20}
-              />
+          <View style={{ marginTop: 10, flexDirection: "row", justifyContent: "center" }}>
+            <TouchableOpacity style={{ padding: 10, backgroundColor: '#D3D3D3', borderRadius: 5, marginHorizontal: 10 }}>
+              <AntDesign name="google" color="black" size={20} />
             </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                padding: 10,
-                backgroundColor: '#D3D3D3',
-                borderRadius: 5,
-                marginHorizontal: 10,
-              }}
-            >
-              <AntDesign
-                name="apple1"
-                color={'black'}
-                size={20}
-              />
+            <TouchableOpacity style={{ padding: 10, backgroundColor: '#D3D3D3', borderRadius: 5, marginHorizontal: 10 }}>
+              <AntDesign name="apple1" color={'black'} size={20} />
             </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                padding: 10,
-                backgroundColor: '#D3D3D3',
-                borderRadius: 5,
-                marginHorizontal: 10,
-              }}
-            >
-              <AntDesign
-                name="facebook-square"
-                color={'black'}
-                size={20}
-              />
+            <TouchableOpacity style={{ padding: 10, backgroundColor: '#D3D3D3', borderRadius: 5, marginHorizontal: 10 }}>
+              <AntDesign name="facebook-square" color={'black'} size={20} />
             </TouchableOpacity>
-
           </View>
         </View>
       </View>
-
       <Modal isVisible={loading} backdropOpacity={0.5} animationIn="fadeIn" animationOut="fadeOut">
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <ActivityIndicator size={100} color="gold" />
         </View>
       </Modal>
     </SafeAreaView>
-  )
+  );
 }
 
-export default Register
-
+export default Register;
 
 const styles = StyleSheet.create({
   signIn: {
@@ -338,4 +302,4 @@ const styles = StyleSheet.create({
   disabledSendButton: {
     backgroundColor: 'lightgray',
   },
-})
+});

@@ -32,7 +32,7 @@ const DepositeScreen = () => {
     <ScrollView style={styles.container}>
       <View style={styles.depositSection}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}><TouchableOpacity
-          onPress={() => navigation.navigate('Wallet')}
+          onPress={() => navigation.goBack()}
           style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
           <Ionicons name='return-up-back' color={'white'} size={30} />
         </TouchableOpacity>

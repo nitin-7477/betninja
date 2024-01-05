@@ -1,23 +1,32 @@
-import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, TextInput, Image, Alert, Modal, ActivityIndicator } from "react-native";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  SafeAreaView,
+  StyleSheet,
+  TextInput,
+  Image,
+  Alert,
+  Modal,
+  ActivityIndicator,
+} from "react-native";
 import AppTextInput from "../components/AppTextInput";
-import AntDesign from "react-native-vector-icons/AntDesign"
-import Feather from "react-native-vector-icons/Feather"
-
+import AntDesign from "react-native-vector-icons/AntDesign";
+import Feather from "react-native-vector-icons/Feather";
 import { useNavigation } from "@react-navigation/native";
-import Font from "../components/Constants/Font";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../components/Constants/Screen";
-import { ServerURL, postData } from "../config/ServerServices";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
 const Login = () => {
   const navigation = useNavigation();
-  const [emailAddress, setEmailAddress] = useState('')
-  const [password, setPassword] = useState('')
+  const [emailAddress, setEmailAddress] = useState("");
+  const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -26,106 +35,113 @@ const Login = () => {
   const checkLogin = async () => {
     try {
       setLoading(true);
+
+      // Validation
+      if (!emailAddress.trim()) {
+        setEmailError("Email is required");
+        return;
+      } else {
+        setEmailError("");
+      }
+
+      if (!password.trim()) {
+        setPasswordError("Password is required");
+        return;
+      } else {
+        setPasswordError("");
+      }
+
       var body = { email: emailAddress, password: password };
 
-      const result = await axios.post(`${process.env.SERVERURL}/api/auth/login`, body);
+      const result = await axios.post(
+        `${process.env.SERVERURL}/api/auth/login`,
+        body
+      );
       console.log(body);
 
       let response = result.data;
-
       let token = response.token;
 
       if (token) {
-
-        await AsyncStorage.setItem('token', JSON.stringify(token));
-
-        navigation.navigate('Home', { user: result });
+        await AsyncStorage.setItem("token", JSON.stringify(token));
+        navigation.navigate("Home", token);
       } else {
-        console.log('Login failed:');
-        Alert.alert('Login Failed');
+        console.log("Login failed:");
+        Alert.alert("Login Failed");
       }
     } catch (error) {
-      console.error('Error during login:', error);
-    }
-    finally {
+      console.error("Error during login:", error);
+    } finally {
       setLoading(false);
     }
   };
 
-  // const printToken = async () => {
-  //   try {
-  //     const userToken = await AsyncStorage.getItem('userData');
-  //     console.log('User Token:', userToken);
-  //   } catch (error) {
-  //     console.error('Error retrieving token:', error);
-  //   }
-  // };
-
-
-
-
   return (
     <SafeAreaView>
-      <View
-        style={{
-          padding: 20,
-        }}
-      >
-        {/* #29fd53 */}
+      <View style={{ padding: 20 }}>
         <View style={{ alignItems: "center" }}>
           <Text
             style={{
               fontSize: 30,
-              color: 'purple',
-              // fontFamily:Font('poppins-bold'),
-              fontWeight: 'bold',
+              color: "purple",
+              fontWeight: "bold",
               marginVertical: 30,
-
             }}
           >
             Login here
           </Text>
-          <View style={{ width: SCREEN_WIDTH * 0.8, alignSelf: 'center', borderBottomWidth: 0.3, marginBottom: 20, borderBottomColor: 'gray' }}></View>
+          <View
+            style={{
+              width: SCREEN_WIDTH * 0.8,
+              alignSelf: "center",
+              borderBottomWidth: 0.3,
+              marginBottom: 20,
+              borderBottomColor: "gray",
+            }}
+          ></View>
           <Text
             style={{
-              fontFamily: "",
               fontSize: 20,
               maxWidth: "60%",
-              fontWeight: '700',
+              fontWeight: "700",
               textAlign: "center",
               letterSpacing: 0.5,
               lineHeight: 30,
-              color: "black"
+              color: "black",
             }}
           >
             Welcome back you've been missed!
           </Text>
         </View>
-        <View
-          style={{
-            marginVertical: 30,
-          }}
-        >
-          <AppTextInput value={emailAddress}
+        <View style={{ marginVertical: 30 }}>
+          <AppTextInput
+            value={emailAddress}
             onChangeText={(text) => setEmailAddress(text.toLowerCase())}
-            placeholder="Email" />
+            placeholder="Email"
+          />
+          {emailError ? <Text style={{ color: "red", marginLeft: 20 }}>{emailError}</Text> : null}
 
-          <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#1434A4', borderRadius: 10, justifyContent: 'space-between' }}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              backgroundColor: "#1434A4",
+              borderRadius: 10,
+              justifyContent: "space-between",
+            }}
+          >
             <TextInput
-              placeholderTextColor={'white'}
-
+              placeholderTextColor={"white"}
               style={{
                 fontSize: 16,
                 paddingHorizontal: 20,
                 paddingVertical: 5,
-                backgroundColor: '#1434A4',
+                backgroundColor: "#1434A4",
                 borderRadius: 10,
                 marginVertical: 5,
-                fontWeight: '500',
-                color: 'white',
+                fontWeight: "500",
+                color: "white",
                 width: 150,
-
-
               }}
               secureTextEntry={isPasswordVisible}
               value={password}
@@ -141,34 +157,22 @@ const Login = () => {
               />
             </TouchableOpacity>
           </View>
+          {passwordError ? (
+            <Text style={{ color: "red", marginLeft: 20 }}>{passwordError}</Text>
+          ) : null}
         </View>
+
         <TouchableOpacity
           onPress={() => navigation.navigate("ForgotPassword")}
-
-          style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
-          <Image source={require('../assets/lock.png')} style={{ height: 30, width: 30 }} />
-          <Text
-            style={{
-              // fontFamily: Font('poppins-bold'),
-              fontSize: 14,
-              color: 'blue',
-            }}
-          >
+          style={{ flexDirection: "row", alignItems: "center", justifyContent: "flex-end" }}
+        >
+          <Image source={require("../assets/lock.png")} style={{ height: 30, width: 30 }} />
+          <Text style={{ fontSize: 14, color: "blue" }}>
             Forgot your password ?
           </Text>
-        </TouchableOpacity >
-        <TouchableOpacity
-          onPress={checkLogin}
-          style={Styles.signIn}
-        >
-          <Text
-            style={{
-              // fontFamily: Font("poppins-bold"),
-              color: 'white',
-              textAlign: "center",
-              fontSize: 20,
-            }}
-          >
+        </TouchableOpacity>
+        <TouchableOpacity onPress={checkLogin} style={Styles.signIn}>
+          <Text style={{ color: "white", textAlign: "center", fontSize: 20 }}>
             Sign in
           </Text>
         </TouchableOpacity>
@@ -179,93 +183,31 @@ const Login = () => {
         )}
 
         <TouchableOpacity
-          onPress={() => navigation.navigate('Register')}
-          style={{
-            padding: 10,
-          }}
+          onPress={() => navigation.navigate("Register")}
+          style={{ padding: 10 }}
         >
-          <Text
-            style={{
-
-              color: 'black',
-              textAlign: "center",
-              fontSize: 14,
-              fontWeight: '600',
-            }}
-          >
+          <Text style={{ color: "black", textAlign: "center", fontSize: 14, fontWeight: "600" }}>
             Create new account
           </Text>
         </TouchableOpacity>
-        <View
-          style={{
-            marginVertical: 30,
-          }}
-        >
-          <Text
-            style={{
-
-              color: 'blue',
-              textAlign: "center",
-              fontSize: 14,
-              marginBottom: 10
-            }}
-          >
+        <View style={{ marginVertical: 30 }}>
+          <Text style={{ color: "blue", textAlign: "center", fontSize: 14, marginBottom: 10 }}>
             Or continue with
           </Text>
 
-          <View
-            style={{
-              marginTop: 10,
-              flexDirection: "row",
-              justifyContent: "center",
-            }}
-          >
-            <TouchableOpacity
-              style={{
-                padding: 10,
-                backgroundColor: '#D3D3D3',
-                borderRadius: 5,
-                marginHorizontal: 10,
-              }}
-            >
-              <AntDesign
-                name="google"
-                color="black"
-                size={20}
-              />
+          <View style={{ marginTop: 10, flexDirection: "row", justifyContent: "center" }}>
+            <TouchableOpacity style={{ padding: 10, backgroundColor: "#D3D3D3", borderRadius: 5, marginHorizontal: 10 }}>
+              <AntDesign name="google" color="black" size={20} />
             </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                padding: 10,
-                backgroundColor: '#D3D3D3',
-                borderRadius: 5,
-                marginHorizontal: 10,
-              }}
-            >
-              <AntDesign
-                name="apple1"
-                color={'black'}
-                size={20}
-              />
+            <TouchableOpacity style={{ padding: 10, backgroundColor: "#D3D3D3", borderRadius: 5, marginHorizontal: 10 }}>
+              <AntDesign name="apple1" color={"black"} size={20} />
             </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                padding: 10,
-                backgroundColor: '#D3D3D3',
-                borderRadius: 5,
-                marginHorizontal: 10,
-              }}
-            >
-              <AntDesign
-                name="facebook-square"
-                color={'black'}
-                size={20}
-              />
+            <TouchableOpacity style={{ padding: 10, backgroundColor: "#D3D3D3", borderRadius: 5, marginHorizontal: 10 }}>
+              <AntDesign name="facebook-square" color={"black"} size={20} />
             </TouchableOpacity>
           </View>
         </View>
       </View>
-
     </SafeAreaView>
   );
 };
@@ -274,28 +216,28 @@ const Styles = StyleSheet.create({
   signIn: {
     paddingHorizontal: 20,
     paddingVertical: 10,
-    backgroundColor: 'purple',
+    backgroundColor: "purple",
     marginVertical: 30,
     borderRadius: 10,
-    shadowColor: 'red',
+    shadowColor: "red",
     shadowOffset: {
       width: 0,
       height: 10,
     },
     shadowOpacity: 0.3,
     shadowRadius: 10,
-    elevation: 5
+    elevation: 5,
   },
   activityIndicatorContainer: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
+    justifyContent: "center",
+    alignItems: "center",
   },
-})
+});
 
 export default Login;

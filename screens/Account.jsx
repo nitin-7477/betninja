@@ -183,10 +183,13 @@ const Account = () => {
             <Ionicons name="chatbubble" size={24} color="black" />
             <Text style={{ color: 'black' }}>Feedback</Text>
           </TouchableOpacity>
-          <View style={styles.serviceIcons}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('CustomerServices')}
+            style={styles.serviceIcons}>
             <Ionicons name="person-sharp" size={24} color="black" />
             <Text style={{ color: 'black' }}>Customer Service</Text>
-          </View>
+          </TouchableOpacity>
+
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10 }}>
           <TouchableOpacity
@@ -200,7 +203,9 @@ const Account = () => {
             <Ionicons name="book" size={24} color="black" />
             <Text style={{ color: 'black' }}>Beginner's Guide</Text>
           </View>
-          <TouchableOpacity style={styles.serviceIcons}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('AboutUs')}
+            style={styles.serviceIcons}>
 
             <Ionicons name="information-circle" size={24} color="black" />
             <Text style={{ color: 'black' }}>About Us</Text>

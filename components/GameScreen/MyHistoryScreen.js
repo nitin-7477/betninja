@@ -9,19 +9,38 @@ import { Colors } from '../Constants/Colors';
 
 
 
-const MyHistoryScreen = ({ selectedCountdown }) => {
+const MyHistoryScreen = ({ selectedCountdown, showWinEmojiPopUp, showLoseEmojiPopUp }) => {
   const [expandedIndex, setExpandedIndex] = useState(null);
   const [userInformation, setUserInformation] = useState([]);
   const [userToken, setUserToken] = useState({});
   const [loading, setLoading] = useState(false);
 
 
+  const fetchUserData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        navigation.navigate('Login')
+        return;
+      }
+      const response = await axios.get(`${process.env.SERVERURL}/api/auth/user`, {
+        headers: {
+          "Authorization": JSON.parse(token),
+        },
+      });
 
+
+    } catch (error) {
+      console.error('Error fetching user data in Gaming screen:', error);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+
         setLoading(true)
+        fetchUserData()
 
         let timerBet;
 
@@ -56,6 +75,9 @@ const MyHistoryScreen = ({ selectedCountdown }) => {
             "Authorization": JSON.parse(token),
           },
         });
+        if (response.data) {
+          fetchUserData()
+        }
         console.log(response.data);
 
         let userBet;
@@ -76,6 +98,21 @@ const MyHistoryScreen = ({ selectedCountdown }) => {
             break;
         }
 
+        console.log("xxxxxxxxxxxxxxxxxxxxx", userBet[0].status);
+
+        if (userBet[0].status == 'success') {
+          showWinEmojiPopUp()
+          fetchData()
+        }
+        if (userBet[0].status == 'failed') {
+          fetchData()
+          showLoseEmojiPopUp()
+        }
+        if (userBet[0].status == 'pending') {
+          fetchData()
+        }
+
+
         setUserInformation(userBet);
       }
       catch (error) {
@@ -94,7 +131,7 @@ const MyHistoryScreen = ({ selectedCountdown }) => {
   const imageMapping = {
     big: require('../../assets/big.png'),
     small: require('../../assets/small.png'),
-    violet: require('../../assets/yellowdot.png'),
+    yellow: require('../../assets/yellowdot.png'),
     red: require('../../assets/reddot.png'),
     green: require('../../assets/greendot.png'),
     1: require('../../assets/1.png'),
@@ -182,11 +219,11 @@ const MyHistoryScreen = ({ selectedCountdown }) => {
           </View>
           <View style={styles.listItem}>
             <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Purchase Amount</Text>
-            <Text style={{ color: 'black' }}>{item.phrchaseAmount}</Text>
+            <Text style={{ color: 'black' }}>{item.phrchaseAmount.toFixed(2)}</Text>
           </View>
           <View style={styles.listItem}>
             <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Amount after tax</Text>
-            <Text style={{ color: 'black' }}>{item.amountAfterTax}</Text>
+            <Text style={{ color: 'black' }}>{item.amountAfterTax.toFixed(2)}</Text>
           </View>
           <View style={styles.listItem}>
             <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Tax</Text>
@@ -235,7 +272,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
     minHeight: SCREEN_HEIGHT * 0.3,
-    maxHeight: SCREEN_HEIGHT * 2
+    maxHeight: 'auto'
   },
   details: {
     height: 30,

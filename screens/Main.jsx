@@ -7,10 +7,44 @@ import { Colors } from '../components/Constants/Colors';
 import MessageComponent from '../components/service center/GoogleAuthentication';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Main() {
   const navigation = useNavigation();
   const [recentWinners, setRecentWinners] = useState([]);
+  const [userInformation, setUserInformation] = useState([]);
+
+
+  useEffect(() => {
+
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+
+      const token = await AsyncStorage.getItem('token');
+
+      if (!token) {
+        navigation.navigate('Login')
+        return;
+      }
+
+      const response = await axios.get(`${process.env.SERVERURL}/api/auth/user`, {
+        headers: {
+          "Authorization": JSON.parse(token),
+        },
+      });
+      setUserInformation(response.data);
+    }
+
+    catch (error) {
+      console.error('Error fetching user data in Account Screen:', error);
+    }
+
+  };
+
+
 
   useEffect(() => {
     const fetchRecentWinners = async () => {
@@ -25,7 +59,6 @@ export default function Main() {
     };
 
     fetchRecentWinners();
-
 
   }, []);
 

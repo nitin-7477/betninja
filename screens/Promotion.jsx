@@ -72,12 +72,12 @@ const Promotion = () => {
     <ScrollView>
       <View style={styles.container}>
         <StatusBar style='dark' />
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, padding: 7 }}><TouchableOpacity
+        {/* <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, padding: 7 }}><TouchableOpacity
           onPress={() => navigation.navigate('Home')}
           style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
           <Ionicons name='return-up-back' color={'white'} size={30} />
         </TouchableOpacity>
-          <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.purple, marginLeft: 30 }}>Promotion</Text></View>
+          <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.purple, marginLeft: 30 }}>Promotion</Text></View> */}
 
         <View style={{ height: SCREEN_HEIGHT * 0.38, width: SCREEN_WIDTH, backgroundColor: '#d9ad82', }}>
           <View >
@@ -202,47 +202,53 @@ const Promotion = () => {
         </View>
 
         <View style={styles.tile1}>
-          <View style={styles.tile2}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('SubOrdinate')}
+            style={styles.tile2}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Ionicons name='person' size={22} color={'black'} />
               <Text style={{ marginLeft: 4, fontWeight: 500, color: 'black' }}>Subordinate Data</Text>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
               <AntDesign name='right' size={16} color={'black'} /></View>
-          </View>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.tile1}>
-          <View style={styles.tile2}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('CommissionDetails')}
+            style={styles.tile2}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Ionicons name='person' size={22} color={'black'} />
               <Text style={{ marginLeft: 4, fontWeight: 500, color: 'black' }}>Commission Details</Text>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
               <AntDesign name='right' size={16} color={'black'} /></View>
-          </View>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.tile1}>
-          <View style={styles.tile2}>
+          <TouchableOpacity style={styles.tile2}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Ionicons name='person' size={22} color={'black'} />
               <Text style={{ marginLeft: 4, fontWeight: 500, color: 'black' }}>Invitation Rules</Text>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
               <AntDesign name='right' size={16} color={'black'} /></View>
-          </View>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.tile1}>
-          <View style={styles.tile2}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('CustomerServices')}
+            style={styles.tile2}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Ionicons name='person' size={22} color={'black'} />
               <Text style={{ marginLeft: 4, fontWeight: 500, color: 'black' }}>Agent Line customer services</Text>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
               <AntDesign name='right' size={16} color={'black'} /></View>
-          </View>
+          </TouchableOpacity>
         </View>
 
 

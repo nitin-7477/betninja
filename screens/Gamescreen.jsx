@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Image, Button, ScrollView, StyleSheet, TouchableOpacity, Modal, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, Image, Button, ScrollView, StyleSheet, TouchableOpacity, Modal, FlatList, ActivityIndicator, RefreshControl } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
@@ -12,9 +12,9 @@ import io from 'socket.io-client';
 
 const HomeScreen = ({ navigation }) => {
 
+  const [loading, setLoading] = useState(true)
   const [gameHistory, setGameHistory] = useState(true)
   const [myHistory, setMyHistory] = useState(false)
-
   const [bigModalVisible, setBigModalVisible] = useState(false)
   const [selectType, setSelectType] = useState(null)
   const [select, setSelect] = useState(null)
@@ -25,7 +25,9 @@ const HomeScreen = ({ navigation }) => {
   const [ln2, setln2] = useState(0)
   const [ln3, setln3] = useState(0)
   const [ln4, setln4] = useState(0)
-  const [loading1, setLoading1] = useState(false);
+
+  const [refreshing, setRefreshing] = useState(false);
+
 
 
 
@@ -44,7 +46,32 @@ const HomeScreen = ({ navigation }) => {
   const [apiData2, setApiData2] = useState([]);
   const [apiData3, setApiData3] = useState([]);
   const [apiData4, setApiData4] = useState([]);
+  const [showWinEmoji, setShowWinEmoji] = useState(false)
+  const [showWinFor30, setShowWinFor30] = useState(false)
+  const [showWinFor60, setShowWinFor60] = useState(false)
+  const [showWinFor180, setShowWinFor180] = useState(false)
+  const [showWinFor300, setShowWinFor300] = useState(false)
+
+  const [showLoseEmoji, setShowLoseEmoji] = useState(false)
   // *****************This is for timer and socket*********************
+
+
+  const showWinEmojiPopUp = () => {
+    setShowWinEmoji(true)
+    setTimeout(() => {
+      setShowWinEmoji(false);
+    }, 2000);
+  }
+
+  const showLoseEmojiPopUp = () => {
+    setShowLoseEmoji(true)
+    setTimeout(() => {
+      setShowLoseEmoji(false);
+    }, 2000);
+  }
+
+
+
 
   const [timerFinished, setTimerFinished] = useState(false);
   const [countdowns, setCountdowns] = useState({
@@ -88,6 +115,22 @@ const HomeScreen = ({ navigation }) => {
   };
 
 
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchUserData()
+
+  };
+
+
+  // useEffect(() => {
+
+  //   const hideActivityIndicator = () => {
+  //     setLoading(false);
+  //   };
+
+  //   const timerId = setTimeout(hideActivityIndicator, 3000);
+  //   return () => clearTimeout(timerId);
+  // }, []);
 
 
 
@@ -103,7 +146,7 @@ const HomeScreen = ({ navigation }) => {
 
 
         try {
-          setLoading1(true);
+
 
           switch (trial) {
             case 30:
@@ -134,9 +177,7 @@ const HomeScreen = ({ navigation }) => {
         catch (error) {
           console.error('Error fetching data in game history:', error);
         }
-        finally {
-          setLoading1(false)
-        }
+
       };
 
 
@@ -173,6 +214,7 @@ const HomeScreen = ({ navigation }) => {
           console.log("Error while getting lottery Number", e);
 
         }
+
       }
       if (ln1 == 0 && ln2 == 0 && ln3 == 0 && ln4 == 0) {
         getLotteryNumber(30)
@@ -194,9 +236,10 @@ const HomeScreen = ({ navigation }) => {
         const minutes = Math.floor(data.countdown / 60);
         const seconds = data.countdown % 60;
         if (data.countdown == 29) {
-
+          fetchUserData()
           getLotteryNumber(30)
           fetchGameHistoryData(30)
+          setShowWinFor30(true)
         }
 
         if (data.countdown <= 5) {
@@ -205,6 +248,7 @@ const HomeScreen = ({ navigation }) => {
 
         if (data.countdown == 0) {
           setShowModal1(false)
+          fetchUserData()
 
         }
 
@@ -215,6 +259,7 @@ const HomeScreen = ({ navigation }) => {
         const minutes = Math.floor(data.countdown / 60);
         const seconds = data.countdown % 60;
         if (data.countdown == 59) {
+          fetchUserData()
           getLotteryNumber(60)
           fetchGameHistoryData(60)
         }
@@ -224,6 +269,7 @@ const HomeScreen = ({ navigation }) => {
         }
         if (data.countdown == 0) {
           setShowModal2(false)
+          fetchUserData()
 
 
 
@@ -235,6 +281,7 @@ const HomeScreen = ({ navigation }) => {
         const minutes = Math.floor(data.countdown / 60);
         const seconds = data.countdown % 60;
         if (data.countdown == 179) {
+          fetchUserData()
           getLotteryNumber(180)
           fetchGameHistoryData(180)
         }
@@ -243,13 +290,16 @@ const HomeScreen = ({ navigation }) => {
         }
         if (data.countdown == 0) {
           setShowModal3(false)
+          fetchUserData()
 
         }
 
         setCountdowns((prevCountdowns) => ({ ...prevCountdowns, threeMin: { minutes, seconds } }));
       });
+
       socketRef.current.on('updateCountdown_fiveMinTimer', (data) => {
         if (data.countdown == 299) {
+          fetchUserData()
           getLotteryNumber(300)
           fetchGameHistoryData(300)
         }
@@ -262,6 +312,7 @@ const HomeScreen = ({ navigation }) => {
 
         if (data.countdown == 0) {
           setShowModal4(false)
+          fetchUserData()
 
         }
         setCountdowns((prevCountdowns) => ({ ...prevCountdowns, fiveMin: { minutes, seconds } }));
@@ -286,7 +337,7 @@ const HomeScreen = ({ navigation }) => {
 
 
   useEffect(() => {
-    fetchData();
+    fetchUserData();
   }, [])
 
 
@@ -296,8 +347,9 @@ const HomeScreen = ({ navigation }) => {
 
 
 
-  const fetchData = async () => {
+  const fetchUserData = async () => {
     try {
+
       const token = await AsyncStorage.getItem('token');
       if (!token) {
         navigation.navigate('Login')
@@ -316,6 +368,10 @@ const HomeScreen = ({ navigation }) => {
       await AsyncStorage.setItem('inviteCode', response.data.inviteCode);
     } catch (error) {
       console.error('Error fetching user data in Gaming screen:', error);
+    }
+    finally {
+      setRefreshing(false);
+
     }
   };
   // console.log("xxxxxxxxxxxxxxxxxxx", userInformation);
@@ -357,7 +413,14 @@ const HomeScreen = ({ navigation }) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView refreshControl={
+      <RefreshControl
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+        colors={['#4285F4', '#34A853', '#FBBC05', '#EA4335']} // Android only
+        progressBackgroundColor="#ffffff" // Android only
+      />
+    } contentContainerStyle={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => navigation.navigate('Home')}
@@ -368,32 +431,37 @@ const HomeScreen = ({ navigation }) => {
         <Image source={require('../image/1.jpg')} style={styles.logo} />
       </View>
 
-
-      <View style={styles.balanceView}>
-        <View style={styles.balanceContainer}>
-          <Text style={{ fontWeight: 'bold' }}>Balance: {userInformation?.wallet?.toFixed(2)}</Text>
-          <TouchableOpacity onPress={fetchData}>
-            <AntDesign name="reload1" size={20} color="blue" style={styles.refreshIcon} />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.withdrowBtn}
-            onPress={() => navigation.navigate('WithdrawScreen')}
-          >
-            <Text style={{ fontWeight: 'bold', color: 'white', }}>WithDraw</Text>
-          </TouchableOpacity>
-          <View style={styles.buttonSpacing} />
-          <TouchableOpacity
-            style={styles.depositeBtn}
-            onPress={() => navigation.navigate("DepositeScreen")}
-          ><Text style={{ fontWeight: 'bold', color: 'white', }}>Deposite</Text></TouchableOpacity>
-        </View>
-      </View>
-
-
-
       <View>
+        <View style={styles.balanceView}>
+
+          <View style={styles.balanceContainer}>
+
+            <Text style={{ fontWeight: 'bold' }}>Balance: {userInformation?.wallet?.toFixed(2)}</Text>
+            <TouchableOpacity onPress={fetchUserData}>
+
+              <AntDesign name="reload1" size={20} color="blue" style={styles.refreshIcon} />
+            </TouchableOpacity>
+
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.withdrowBtn}
+              onPress={() => navigation.navigate('WithdrawScreen')}
+            >
+              <Text style={{ fontWeight: 'bold', color: 'white', }}>WithDraw</Text>
+            </TouchableOpacity>
+            <View style={styles.buttonSpacing} />
+            <TouchableOpacity
+              style={styles.depositeBtn}
+              onPress={() => navigation.navigate("DepositeScreen")}
+            ><Text style={{ fontWeight: 'bold', color: 'white', }}>Deposite</Text></TouchableOpacity>
+          </View>
+
+        </View>
+
+
+
+
         <View style={{
           marginTop: 15,
           flexDirection: 'row',
@@ -455,6 +523,7 @@ const HomeScreen = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
+
         <View style={{ height: SCREEN_HEIGHT * 0.14, width: SCREEN_WIDTH * 0.9, backgroundColor: 'purple', marginVertical: 10, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
           <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold', letterSpacing: 1 }}>Time Remaining ...</Text>
           <Text style={{ fontSize: 32, fontWeight: 'bold', color: 'white', textAlign: 'center', marginVertical: 20 }}>
@@ -512,29 +581,52 @@ const HomeScreen = ({ navigation }) => {
           </View>
         </Modal>
 
+        {/* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX */}
+
+        <Modal visible={showWinEmoji && setShowWinFor30} animationType='slide' transparent={true}>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={{ color: 'white', fontSize: 34 }}>Win</Text>
+          </View>
+        </Modal>
 
 
+        {/* 
+             XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX 
+        */}
 
 
       </View>
 
-      <View style={{ height: 55, width: '90%', alignSelf: 'center', backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', borderRadius: 10, elevation: 5 }}>
+      {/* {loading && (
+        <View style={styles.activityIndicatorContainer}>
+          <ActivityIndicator size={100} color="gold" />
+        </View>
+      )} */}
+
+
+
+      <View style={{ height: 55, width: '90%', alignSelf: 'center', backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', borderRadius: 10, elevation: 1 }}>
+
         <Text style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'center', color: "black" }}>Upcoming : <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 20, }}>
           {selectedCountdown == 'thirtySec' ? ln1 : selectedCountdown == 'oneMin' ? ln2 : selectedCountdown == 'threeMin' ? ln3 : selectedCountdown == 'fiveMin' ? ln4 : 0}
         </Text></Text>
 
       </View>
 
-      {/* 
 
-        <Text style={{ fontWeight: '900', fontSize: 18, marginVertical: 10, color: 'black' }}>Prediction Options:</Text> */}
+      {/* Your other component content goes here */}
+
       <View style={styles.buttonRow}>
+
+
+
         {/* *********************** This is the bet modal ********************/}
 
         <ThirtySecBetModal isVisible={bigModalVisible} closeModal={closeBigModal} selectType={selectType} select={select}
           backgroundColor={buttonBackgroundColor}
+
           ln={selectedCountdown == 'thirtySec' ? ln1 : selectedCountdown == 'oneMin' ? ln2 : selectedCountdown == 'threeMin' ? ln3 : selectedCountdown == 'fiveMin' ? ln4 : 0}
-          selectedCountdown={selectedCountdown} refreshMyHistory={refreshMyHistory} />
+          selectedCountdown={selectedCountdown} refreshMyHistory={refreshMyHistory} fetchUserData={fetchUserData} />
 
         {/* *********************** This is the bet modal ********************/}
 
@@ -722,10 +814,8 @@ const HomeScreen = ({ navigation }) => {
 
       {/*////////////////////////////////////// Myhistory Screen Flatlist Data */}
       {
-        myHistory ? <MyHistoryScreen selectedCountdown={selectedCountdown} /> : (<></>)
+        myHistory ? <MyHistoryScreen showLoseEmojiPopUp={showLoseEmojiPopUp} showWinEmojiPopUp={showWinEmojiPopUp} selectedCountdown={selectedCountdown} /> : (<></>)
       }
-
-
 
 
     </ScrollView >
@@ -734,6 +824,11 @@ const HomeScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
+    alignItems: 'center',
+    paddingVertical: 20,
+  },
+  container2: {
+    flex: 1,
     alignItems: 'center',
     paddingVertical: 20,
   },
@@ -900,6 +995,19 @@ const styles = StyleSheet.create({
   closeModalText: {
     fontSize: 16,
     color: '#fff',
+  },
+  activityIndicatorContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1
+
   },
 
 });

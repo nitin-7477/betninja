@@ -6,16 +6,82 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
 
-const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType, select, ln, selectedCountdown, refreshMyHistory, }) => {
+const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType, select, ln, selectedCountdown, refreshMyHistory, fetchUserData, }) => {
 
   const navigation = useNavigation();
   const [inputValue, setInputValue] = useState('1'); // Set default value to '1'
   const [totalAmount, setTotalAmount] = useState('');
   const [apiData, setApiData] = useState([]);
 
-
   const [userInformation, setUserInformation] = useState([]);
   const [userToken, setUserToken] = useState({});
+
+
+  const fetchHistoryData = async () => {
+    try {
+
+      let timerBet;
+
+
+      switch (selectedCountdown) {
+        case 'thirtySec':
+          timerBet = '30secbet'
+          break;
+        case 'oneMin':
+          timerBet = '1minbet'
+          break;
+        case 'threeMin':
+          timerBet = '3minbet'
+          break;
+        case 'fiveMin':
+          timerBet = '5minbet'
+          break;
+
+        default:
+          break;
+      }
+      console.log(timerBet);
+
+
+      const token = await AsyncStorage.getItem('token');
+      console.log(token);
+
+
+      const response = await axios.get(`${process.env.SERVERURL}/api/bet/${timerBet}`, {
+
+        headers: {
+          "Authorization": JSON.parse(token),
+        },
+      });
+      console.log(response.data);
+
+      let userBet;
+      switch (selectedCountdown) {
+        case 'thirtySec':
+          userBet = response.data.thirtyBetOfUser;
+          break;
+        case 'oneMin':
+          userBet = response.data.oneBetOfUser;
+          break;
+        case 'threeMin':
+          userBet = response.data.threeBetOfUser;
+          break;
+        case 'fiveMin':
+          userBet = response.data.fiveBetOfUser;
+          break;
+        default:
+          break;
+      }
+
+      setUserInformation(userBet);
+    }
+    catch (error) {
+      console.error('Error fetching user data of My history screen:', error);
+    }
+
+  };
+
+
 
 
   useEffect(() => {
@@ -36,31 +102,13 @@ const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType,
 
 
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get(`${process.env.SERVERURL}/api/random/30secLottary`);
-
-  //       // console.log("This is game history Data", response.data);
-
-  //       setApiData(response.data);
-  //       // console.log("xxxxxxxxx", response.data.data[0].LN);
-  //       setln(response.data.data[0].LN + 1)
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [])
-
-
 
   // console.log("This is lottery Number", ln);
   const handleBigData = async () => {
     try {
 
       let timerBet;
+      fetchHistoryData()
 
       console.log(selectedCountdown)
       if (selectedCountdown === 'thirtySec') {
@@ -94,6 +142,8 @@ const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType,
 
       // console.log("Request Body:", body);
       closeModal()
+      fetchHistoryData()
+
       const response = await axios.post(`${process.env.SERVERURL}/api/bet/${timerBet}`, body,
         {
           headers: {
@@ -101,11 +151,12 @@ const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType,
           },
         }
       );
-
+      fetchUserData()
       console.log("Response:", response.data);
       if (response.data) {
         closeModal()
-        refreshMyHistory();
+        fetchUserData()
+        fetchHistoryData()
       }
     } catch (error) {
       console.error("Error:", error);
@@ -129,6 +180,7 @@ const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType,
 
 
   useEffect(() => {
+    fetchHistoryData()
     // Set the total amount when the component mounts
     const result = parseInt(inputValue || 0, 10);
     setTotalAmount(result.toString());

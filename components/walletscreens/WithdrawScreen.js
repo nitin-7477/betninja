@@ -19,16 +19,10 @@ const WithdrawScreen = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Retrieve user data from AsyncStorage
-        const storedUserData = await AsyncStorage.getItem('userData');
-        const parsedUserData = JSON.parse(storedUserData);
-        setUserToken(parsedUserData);
-
-        // Use the retrieved token to fetch user information
-        const token = `${parsedUserData.token}`;
-        const response = await axios.get('https://9871-2401-4900-1c19-6daf-d33-85ae-dfd7-8e43.ngrok-free.app/api/auth/user', {
+        const token = await AsyncStorage.getItem('token')
+        const response = await axios.get(`${process.env.SERVERURL}/api/auth/user`, {
           headers: {
-            "Authorization": token,
+            "Authorization": JSON.parse(token),
           },
         });
         setUserInformation(response.data);
@@ -44,11 +38,11 @@ const WithdrawScreen = () => {
 
   const handleDepositWithdraw = async (tab) => {
     try {
-      var body = { userId: userInformation.uid, amount: amount }
-      console.log(body);
-      var result = await axios.post('https://9871-2401-4900-1c19-6daf-d33-85ae-dfd7-8e43.ngrok-free.app/api/withdraw', body)
-      console.log(result);
-      setActiveTab(tab);
+      // var body = { userId: userInformation.uid, amount: amount }
+      // console.log(body);
+      // var result = await axios.post('https://9871-2401-4900-1c19-6daf-d33-85ae-dfd7-8e43.ngrok-free.app/api/withdraw', body)
+      // console.log(result);
+      // setActiveTab(tab);
     }
     catch (e) {
       console.log(e);
@@ -58,7 +52,7 @@ const WithdrawScreen = () => {
     <ScrollView style={styles.container}>
       <View style={styles.depositSection}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}><TouchableOpacity
-          onPress={() => navigation.navigate('Wallet')}
+          onPress={() => navigation.goBack()}
           style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
           <Ionicons name='return-up-back' color={'white'} size={30} />
         </TouchableOpacity>
@@ -91,11 +85,14 @@ const WithdrawScreen = () => {
 
         </View>
 
+        <TouchableOpacity style={{ height: SCREEN_HEIGHT * 0.1, marginBottom: 10, width: SCREEN_WIDTH * 0.95, alignSelf: 'center', backgroundColor: Colors.lightGray, justifyContent: 'center', alignItems: 'center' }}>
+          <Image source={require('../../assets/plus.png')} style={{ height: 40, width: 40 }} />
+          <Text>Add your bank</Text>
+        </TouchableOpacity>
 
-        {/* *********************Select the Bank******************* */}
 
-        {/* *********************Select the Channel******************* */}
-        <View style={{ height: SCREEN_HEIGHT * 0.1, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: '#D3D3D3', marginBottom: 10, borderRadius: 10, padding: 10, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
+
+        <TouchableOpacity style={{ height: SCREEN_HEIGHT * 0.1, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: '#D3D3D3', marginBottom: 10, borderRadius: 10, padding: 10, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
           <View style={{ marginBottom: 10, alignItems: 'center', width: '30%', }}>
             <Image source={require('../../assets/wallet/bank-logo.png')} style={{ height: 40, width: 40 }} />
 
@@ -104,10 +101,8 @@ const WithdrawScreen = () => {
           <View style={{ borderLeftWidth: 0.4, flexDirection: 'row', justifyContent: 'space-between', width: '65%' }}>
             <Text style={{ color: 'grey', marginLeft: 10 }}>7477*****45</Text>
             <Entypo name='chevron-small-right' size={25} />
-
           </View>
-
-        </View>
+        </TouchableOpacity>
         {/* *********************Select the Channel******************* */}
         {/* *********************Withdraw Amount******************* */}
         <View style={{ height: SCREEN_HEIGHT * 0.5, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: '#D3D3D3', marginBottom: 10, borderRadius: 10, padding: 10, }}>

@@ -35,7 +35,9 @@ const AboutUs = () => {
         <Feather name='chevron-right' size={20} color={Colors.fontGray} />
       </TouchableOpacity >
 
-      <TouchableOpacity style={{ height: SCREEN_HEIGHT * 0.1, width: SCREEN_WIDTH * 1, backgroundColor: 'white', justifyContent: 'space-between', paddingHorizontal: 5, alignItems: 'center', flexDirection: 'row' }}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('RiskDisclosure')}
+        style={{ height: SCREEN_HEIGHT * 0.1, width: SCREEN_WIDTH * 1, backgroundColor: 'white', justifyContent: 'space-between', paddingHorizontal: 5, alignItems: 'center', flexDirection: 'row' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Image source={require('../../../assets/agreement2.png')} style={{ height: 40, width: 40, resizeMode: 'contain' }} />
           <Text style={{ marginLeft: 15, fontSize: 18, fontWeight: '500' }}>Risk Disclosure Agreement</Text>

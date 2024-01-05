@@ -49,7 +49,7 @@ const Setting = () => {
   const copyToClipboard = () => {
 
     Clipboard.setString(copiedText);
-    alert('UID copied')
+   
   };
 
 
