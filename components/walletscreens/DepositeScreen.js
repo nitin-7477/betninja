@@ -1,13 +1,14 @@
-import { SafeAreaView, StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, TextInput } from 'react-native'
+import { Text, View, ScrollView, Image, TouchableOpacity, TextInput, Alert, ActivityIndicator } from 'react-native'
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
 import Entypo from 'react-native-vector-icons/Entypo'
 import RNUpiPayment from 'react-native-upi-payment'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../Constants/Colors'
 import { useNavigation } from "@react-navigation/native";
-
+import axios from 'axios'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 
@@ -15,11 +16,81 @@ const DepositeScreen = () => {
   const navigation = useNavigation();
 
   const [amount, setAmount] = useState('');
+  const [userInformation, setUserInformation] = useState('')
+  const [selectedBtn, setSelectedBtn] = useState(0)
+  const [loading, setLoading] = useState(false)
 
-  const handleDepositWithdraw = (tab) => {
-    setActiveTab(tab);
+
+  useEffect(() => {
+    fetchUserData()
+  }, [])
+
+
+  const fetchUserData = async () => {
+    try {
+      setLoading(true)
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        navigation.navigate('Login')
+        return;
+      }
+      const response = await axios.get(`${process.env.SERVERURL}/api/auth/user`, {
+        headers: {
+          "Authorization": JSON.parse(token),
+        },
+      });
+      setUserInformation(response.data);
+
+    } catch (error) {
+      console.error('Error fetching user data in Gaming screen:', error);
+    }
+    finally {
+      setLoading(false)
+    }
+
   };
 
+  const handleDeposite = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        navigation.navigate('Login')
+        return;
+      }
+      var body = { amount: amount }
+      const response = await axios.post(`${process.env.SERVERURL}/api/deposit/deposits`, body, {
+        headers: {
+          "Authorization": JSON.parse(token),
+        },
+      });
+
+      console.log("This is response of hitting deposite api", response);
+    }
+    catch (error) {
+      console.log(error);
+
+    }
+
+  }
+
+  const handleDepositeMoney = (value, btn) => {
+    setAmount(value.toString())
+    setSelectedBtn(btn)
+  }
+
+  const handleAmountChange = (text) => {
+
+    let enteredAmount = parseFloat(text);
+
+    if (isNaN(enteredAmount) || enteredAmount < 100) {
+
+      setAmount('100');
+      // Alert.alert('Minimum 100 is required')
+    } else {
+
+      setAmount(enteredAmount.toString());
+    }
+  };
 
   const PaymentGateWay = () => {
 
@@ -42,13 +113,17 @@ const DepositeScreen = () => {
 
           <Text style={{ color: 'white', fontSize: 16 }}>Balance</Text>
           <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ color: 'white', fontSize: 26, fontWeight: 'bold', marginTop: 5 }}>₹0.69</Text>
+            <Text style={{ color: 'white', fontSize: 26, fontWeight: 'bold', marginTop: 5 }}>₹{userInformation?.wallet?.toFixed(2)}</Text>
             <Image source={require('../../assets/wallet/arrow.png')} style={{ height: 15, width: 15, marginHorizontal: 5 }} /></View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <Image source={require('../../assets/wallet/chip.png')} style={{ height: 20, width: 30, marginTop: 10 }} />
             <Text style={{ color: 'white', fontSize: 18, marginTop: 10, fontWeight: 'bold' }}>***  ***</Text>
           </View>
-
+          {loading && (
+            <View style={styles.activityIndicatorContainer}>
+              <ActivityIndicator size={50} color="gold" />
+            </View>
+          )}
         </View>
         {/* *********************balance card******************* */}
 
@@ -77,25 +152,7 @@ const DepositeScreen = () => {
 
 
 
-        {/* *********************Select the Bank******************* */}
 
-        {/* *********************Select the Channel******************* */}
-        <View style={{ height: SCREEN_HEIGHT * 0.17, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: '#D3D3D3', marginBottom: 10, borderRadius: 10, padding: 10, justifyContent: 'center' }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
-            <Image source={require('../../assets/wallet/payment1.png')} style={{ height: 20, width: 20 }} />
-
-            <Text style={{ marginLeft: 10, fontSize: 16, fontWeight: 'bold', color: 'black' }} >Select Channel</Text>
-          </View>
-          <View style={{ height: SCREEN_HEIGHT * 0.1, width: SCREEN_WIDTH * 0.8, alignSelf: 'center', backgroundColor: '#d9ad82', borderRadius: 10, padding: 10 }}>
-
-            <Text style={{ color: 'white', fontSize: 16 }}>TB Bank</Text>
-            <Text style={{ color: 'white', fontSize: 16 }}>Balance 100-100K</Text>
-            <Text style={{ color: 'white', fontSize: 16 }}>2% Bonus</Text>
-
-          </View>
-        </View>
-        {/* *********************Select the Channel******************* */}
-        {/* *********************Deposite Amount******************* */}
         <View style={{ height: SCREEN_HEIGHT * 0.3, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: '#D3D3D3', marginBottom: 10, borderRadius: 10, padding: 10, }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
             <Image source={require('../../assets/wallet/payment1.png')} style={{ height: 20, width: 20 }} />
@@ -103,26 +160,27 @@ const DepositeScreen = () => {
             <Text style={{ marginLeft: 10, fontSize: 16, fontWeight: 'bold', color: 'black' }} >Deposite Amount</Text>
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-            <TouchableOpacity style={styles.redBtn} onPress={() => setAmount(500)}>
-              <Text style={{ fontWeight: 'bold', color: 'grey', }}>₹ 500</Text>
+            <TouchableOpacity style={[styles.redBtn, { backgroundColor: selectedBtn == 1 ? 'red' : '#D3D3D3', }]} onPress={() => handleDepositeMoney(500, 1)}>
+
+              <Text style={{ fontWeight: 'bold', color: selectedBtn == 1 ? 'white' : 'grey' }}>₹ 500</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.redBtn} onPress={() => setAmount(1000)}>
-              <Text style={{ fontWeight: 'bold', color: 'grey' }}>₹ 1K</Text>
+            <TouchableOpacity style={[styles.redBtn, { backgroundColor: selectedBtn == 2 ? 'red' : '#D3D3D3', }]} onPress={() => handleDepositeMoney(1000, 2)}>
+              <Text style={{ fontWeight: 'bold', color: selectedBtn == 2 ? 'white' : 'grey' }}>₹ 1K</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.redBtn} onPress={() => setAmount(5000)}>
-              <Text style={{ fontWeight: 'bold', color: 'grey', }}>₹ 5K</Text>
+            <TouchableOpacity style={[styles.redBtn, { backgroundColor: selectedBtn == 3 ? 'red' : '#D3D3D3', }]} onPress={() => handleDepositeMoney(5000, 3)}>
+              <Text style={{ fontWeight: 'bold', color: selectedBtn == 3 ? 'white' : 'grey' }}>₹ 5K</Text>
             </TouchableOpacity>
 
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginVertical: 10 }}>
-            <TouchableOpacity style={styles.redBtn} onPress={() => setAmount(10000)}>
-              <Text style={{ fontWeight: 'bold', color: 'grey', }}>₹ 10K</Text>
+            <TouchableOpacity style={[styles.redBtn, { backgroundColor: selectedBtn == 4 ? 'red' : '#D3D3D3', }]} onPress={() => handleDepositeMoney(10000, 4)}>
+              <Text style={{ fontWeight: 'bold', color: selectedBtn == 4 ? 'white' : 'grey' }}>₹ 10K</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.redBtn} onPress={() => setAmount(20000)}>
-              <Text style={{ fontWeight: 'bold', color: 'grey', }}>₹ 20K</Text>
+            <TouchableOpacity style={[styles.redBtn, { backgroundColor: selectedBtn == 5 ? 'red' : '#D3D3D3', }]} onPress={() => handleDepositeMoney(20000, 5)}>
+              <Text style={{ fontWeight: 'bold', color: selectedBtn == 5 ? 'white' : 'grey' }}>₹ 20K</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.redBtn} onPress={() => setAmount(50000)}>
-              <Text style={{ fontWeight: 'bold', color: 'grey', }}>₹ 50K</Text>
+            <TouchableOpacity style={[styles.redBtn, { backgroundColor: selectedBtn == 6 ? 'red' : '#D3D3D3', }]} onPress={() => handleDepositeMoney(50000, 6)}>
+              <Text style={{ fontWeight: 'bold', color: selectedBtn == 6 ? 'white' : 'grey' }}>₹ 50K</Text>
             </TouchableOpacity>
 
           </View>
@@ -133,9 +191,10 @@ const DepositeScreen = () => {
 
             <TextInput
               style={styles.amountInput}
+              keyboardType="numeric"
               placeholder="Enter Amount"
               value={amount}
-              onChangeText={(text) => setAmount(text)}
+              onChangeText={handleAmountChange}
             />
           </View>
 
@@ -145,7 +204,7 @@ const DepositeScreen = () => {
 
         <TouchableOpacity
           style={styles.depositButton}
-          onPress={handleDepositWithdraw}
+          onPress={handleDeposite}
         >
           <Text style={styles.depositButtonText}>Deposit</Text>
         </TouchableOpacity>
@@ -194,7 +253,7 @@ const styles = {
 
   },
   redBtn: {
-    backgroundColor: '#D3D3D3',
+
     alignItems: 'center',
     width: SCREEN_WIDTH * 0.25,
     paddingVertical: 10,
@@ -280,5 +339,14 @@ const styles = {
   rechargeInstructionItem: {
     fontSize: 16,
     marginBottom: 5,
+  }, activityIndicatorContainer: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
+    justifyContent: "center",
+    alignItems: "center",
   },
 };

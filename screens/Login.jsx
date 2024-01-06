@@ -28,6 +28,12 @@ const Login = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
+
+
+
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
@@ -71,6 +77,15 @@ const Login = () => {
       }
     } catch (error) {
       console.error("Error during login:", error);
+
+      if (error.response && error.response.data) {
+        const errorMessage = error.response.data.message;
+        setErrorMessage(errorMessage);
+        setErrorModalVisible(true);
+      } else {
+        setErrorMessage("An unexpected error occurred");
+        setErrorModalVisible(true);
+      }
     } finally {
       setLoading(false);
     }
@@ -208,6 +223,24 @@ const Login = () => {
           </View>
         </View>
       </View>
+      <Modal
+        visible={errorModalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setErrorModalVisible(false)}
+      >
+        <View style={Styles.modalContainer}>
+          <View style={Styles.modalContent}>
+            <Text style={{ fontSize: 20, marginBottom: 10, color: 'black', fontWeight: 'bold' }}>Error</Text>
+            <Text style={{ color: 'grey', fontSize: 16 }}>{errorMessage}</Text>
+            <TouchableOpacity
+
+              onPress={() => setErrorModalVisible(false)}>
+              <Text style={{ color: "blue", marginTop: 20 }}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -237,6 +270,18 @@ const Styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.7)",
     justifyContent: "center",
     alignItems: "center",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
+  },
+  modalContent: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+    width: SCREEN_WIDTH * 0.8,
   },
 });
 

@@ -9,7 +9,7 @@ import { Colors } from '../Constants/Colors';
 
 
 
-const MyHistoryScreen = ({ selectedCountdown, showWinEmojiPopUp, showLoseEmojiPopUp }) => {
+const MyHistoryScreen = ({ selectedCountdown, showWinEmojiPopUp, showLoseEmojiPopUp, }) => {
   const [expandedIndex, setExpandedIndex] = useState(null);
   const [userInformation, setUserInformation] = useState([]);
   const [userToken, setUserToken] = useState({});
@@ -62,11 +62,11 @@ const MyHistoryScreen = ({ selectedCountdown, showWinEmojiPopUp, showLoseEmojiPo
           default:
             break;
         }
-        console.log(timerBet);
+
 
 
         const token = await AsyncStorage.getItem('token');
-        console.log(token);
+
 
 
         const response = await axios.get(`${process.env.SERVERURL}/api/bet/${timerBet}`, {
@@ -78,12 +78,13 @@ const MyHistoryScreen = ({ selectedCountdown, showWinEmojiPopUp, showLoseEmojiPo
         if (response.data) {
           fetchUserData()
         }
-        console.log(response.data);
+
 
         let userBet;
         switch (selectedCountdown) {
           case 'thirtySec':
             userBet = response.data.thirtyBetOfUser;
+
             break;
           case 'oneMin':
             userBet = response.data.oneBetOfUser;
@@ -96,20 +97,6 @@ const MyHistoryScreen = ({ selectedCountdown, showWinEmojiPopUp, showLoseEmojiPo
             break;
           default:
             break;
-        }
-
-        console.log("xxxxxxxxxxxxxxxxxxxxx", userBet[0].status);
-
-        if (userBet[0].status == 'success') {
-          showWinEmojiPopUp()
-          fetchData()
-        }
-        if (userBet[0].status == 'failed') {
-          fetchData()
-          showLoseEmojiPopUp()
-        }
-        if (userBet[0].status == 'pending') {
-          fetchData()
         }
 
 
@@ -148,7 +135,7 @@ const MyHistoryScreen = ({ selectedCountdown, showWinEmojiPopUp, showLoseEmojiPo
 
   };
 
-  // console.log(userInformation);
+
 
 
   const handleItemPress = (index) => {

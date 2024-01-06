@@ -5,24 +5,56 @@ import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../components/Constants/Screen'
 import EvilIcons from "react-native-vector-icons/EvilIcons"
 import { useNavigation } from "@react-navigation/native";
 import { useState } from 'react'
+import axios from 'axios'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 
 const AddBank = () => {
   const [name, setName] = useState('')
   const [account, setAccount] = useState('')
   const [IFSC, setIFSC] = useState('')
   const [phone, setPhone] = useState('')
+  const [bankDetails, setBankDetails] = useState([])
 
 
-  const handleSaveChanges = () => {
+  const handleSaveChanges = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token')
+      var body = {
+        "userId": "65969f7478b780c734302177",
+        "bankName": "SBI",
+        "acountNumber": account,
+        "ifscCode": IFSC,
+        "phoneNumber": phone,
+        "Name": name
+      }
+      const result = await axios.post(`${process.env.SERVERURL}/api/bank/addBank`, body, {
+        headers: {
+          "Authorization": JSON.parse(token),
+        },
+      })
 
-    alert('Changes saved')
+      setBankDetails(result.data.data)
+      console.log("This is result to add bank", result.data.status);
+
+
+
+
+    }
+    catch (error) {
+      console.log(error);
+    }
+    finally {
+
+    }
+
   }
 
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <View style={{ marginBottom: 50, alignItems: 'center', flexDirection: 'row', height: 30, }}>
-        <TouchableOpacity onPress={() => navigation.navigate('Setting')}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <EvilIcons name='chevron-left' size={35} color={'black'} />
         </TouchableOpacity>
         <Text style={{ fontSize: 20, fontWeight: '500', marginTop: 5, marginLeft: 40 }}>Add a bank account number</Text>
@@ -38,7 +70,7 @@ const AddBank = () => {
       </TouchableOpacity>
       <View>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
-          <Image source={require('../assets/lock.png')} style={{ height: 25, width: 25 }} />
+          <Image source={require('../assets/person.png')} style={{ height: 25, width: 25 }} />
           <Text style={{ fontSize: 16, fontWeight: '500', marginLeft: 15 }}>Full recipient's name</Text>
         </View>
         <AppTextInput value={name}
@@ -46,30 +78,33 @@ const AddBank = () => {
       </View>
       <View>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10, marginTop: 10 }}>
-          <Image source={require('../assets/lock.png')} style={{ height: 25, width: 25 }} />
+          <Image source={require('../assets/accountnumber.png')} style={{ height: 20, width: 20 }} />
           <Text style={{ fontSize: 16, fontWeight: '500', marginLeft: 15 }}>Bank Account Number</Text>
         </View>
         <AppTextInput
           value={account}
+          keyboardType='numeric'
           onChangeText={(text) => setAccount(text)}
           placeholder='Enter your bank account number' />
       </View>
       <View>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10, marginTop: 10 }}>
-          <Image source={require('../assets/lock.png')} style={{ height: 25, width: 25 }} />
+          <Image source={require('../assets/phone.png')} style={{ height: 25, width: 25 }} />
           <Text style={{ fontSize: 16, fontWeight: '500', marginLeft: 15 }}>Phone Number</Text>
         </View>
-        <AppTextInput value={phone}
+        <AppTextInput
+          keyboardType='numeric'
+          value={phone}
           onChangeText={(text) => setPhone(text)} placeholder='Please Enter Phone Number' />
       </View>
       <View>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10, marginTop: 10 }}>
-          <Image source={require('../assets/lock.png')} style={{ height: 25, width: 25 }} />
+          <Image source={require('../assets/ifsce.png')} style={{ height: 25, width: 25 }} />
           <Text style={{ fontSize: 16, fontWeight: '500', marginLeft: 15 }}>IFSC code</Text>
         </View>
         <AppTextInput
           value={IFSC}
-          onChangeText={(text) => setIFSC(text)}
+          onChangeText={(text) => setIFSC(text.toUpperCase())}
           placeholder='Please Enter IFSC code' />
       </View>
 

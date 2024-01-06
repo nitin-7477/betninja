@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, TextInput } from 'react-native'
+import { SafeAreaView, StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, TextInput, Alert } from 'react-native'
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
@@ -15,6 +15,11 @@ const WithdrawScreen = () => {
   const [amount, setAmount] = useState('');
   const [userInformation, setUserInformation] = useState([]);
   const [userToken, setUserToken] = useState({});
+  const isButtonDisabled = parseInt(amount) >= 200;
+
+  const handleAmountChange = (value) => {
+    setAmount(value);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,20 +39,32 @@ const WithdrawScreen = () => {
     fetchData();
   }, []);
 
-  console.log("This is user information for Withdraw Screen", userInformation);
+  // console.log("This is user information for Withdraw Screen", userInformation);
 
-  const handleDepositWithdraw = async (tab) => {
+  const handleDepositWithdraw = async () => {
     try {
-      // var body = { userId: userInformation.uid, amount: amount }
-      // console.log(body);
-      // var result = await axios.post('https://9871-2401-4900-1c19-6daf-d33-85ae-dfd7-8e43.ngrok-free.app/api/withdraw', body)
-      // console.log(result);
-      // setActiveTab(tab);
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        navigation.navigate('Login')
+        return;
+      }
+      var body = { amount: amount }
+      const response = await axios.post(`${process.env.SERVERURL}/api/withdraw/withdraw`, body, {
+        headers: {
+          "Authorization": JSON.parse(token),
+        },
+      });
+      if (response.data) {
+        Alert.alert(response.data.message)
+      }
+
     }
     catch (e) {
       console.log(e);
     }
   };
+
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.depositSection}>
@@ -60,13 +77,13 @@ const WithdrawScreen = () => {
         {/* *********************balance card******************* */}
         <View style={{ height: SCREEN_HEIGHT * 0.15, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: '#d9ad82', marginVertical: 10, borderRadius: 10, padding: 10 }}>
 
-          <Text style={{ color: 'black', fontSize: 16 }}>Balance</Text>
+          <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold' }}>Balance</Text>
           <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ color: 'black', fontSize: 26, fontWeight: 'bold', marginTop: 5 }}>₹0.69</Text>
+            <Text style={{ color: 'white', fontSize: 26, fontWeight: 'bold', marginTop: 5 }}>{userInformation?.wallet?.toFixed(2)}</Text>
             <Image source={require('../../assets/wallet/arrow.png')} style={{ height: 15, width: 15, marginHorizontal: 5 }} /></View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <Image source={require('../../assets/wallet/chip.png')} style={{ height: 20, width: 30, marginTop: 10 }} />
-            <Text style={{ color: 'black', fontSize: 18, marginTop: 10, fontWeight: 'bold' }}>***  ***</Text>
+            <Text style={{ color: 'white', fontSize: 18, marginTop: 10, fontWeight: 'bold' }}>***  ***</Text>
           </View>
 
         </View>
@@ -78,14 +95,16 @@ const WithdrawScreen = () => {
             <Image source={require('../../assets/wallet/payment1.png')} style={{ height: 40, width: 40 }} />
             <Text style={{ color: 'black' }}>Bank Transfer</Text>
           </View>
-          <View style={{ height: 100, width: 100, backgroundColor: '#D3D3D3', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginHorizontal: 10 }}>
+          {/* <View style={{ height: 100, width: 100, backgroundColor: '#D3D3D3', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginHorizontal: 10 }}>
             <Image source={require('../../assets/wallet/payment5.png')} style={{ height: 40, width: 40 }} />
             <Text >USDT</Text>
-          </View>
+          </View> */}
 
         </View>
 
-        <TouchableOpacity style={{ height: SCREEN_HEIGHT * 0.1, marginBottom: 10, width: SCREEN_WIDTH * 0.95, alignSelf: 'center', backgroundColor: Colors.lightGray, justifyContent: 'center', alignItems: 'center' }}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('AddBank')}
+          style={{ height: SCREEN_HEIGHT * 0.1, marginBottom: 10, width: SCREEN_WIDTH * 0.95, alignSelf: 'center', backgroundColor: Colors.lightGray, justifyContent: 'center', alignItems: 'center' }}>
           <Image source={require('../../assets/plus.png')} style={{ height: 40, width: 40 }} />
           <Text>Add your bank</Text>
         </TouchableOpacity>
@@ -113,10 +132,10 @@ const WithdrawScreen = () => {
 
             <TextInput
               style={styles.amountInput}
+              keyboardType='numeric'
               placeholder="Enter Amount"
               value={amount}
-              onChangeText={(text) => setAmount(text)}
-
+              onChangeText={handleAmountChange}
             />
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 5 }}>
@@ -128,8 +147,8 @@ const WithdrawScreen = () => {
             <View><Text style={{ color: 'red' }}>0.00</Text></View>
           </View>
           <TouchableOpacity
-            style={styles.withDrawButton}
-
+            style={[styles.withDrawButton, { backgroundColor: isButtonDisabled ? '#d9ad82' : 'grey' }]}
+            disabled={!isButtonDisabled}
             onPress={handleDepositWithdraw}
           >
             <Text style={styles.depositButtonText}>Withdraw</Text>
@@ -235,7 +254,7 @@ const styles = {
     alignItems: 'center',
   },
   withDrawButton: {
-    backgroundColor: '#d9ad82',
+
     paddingVertical: 12,
     borderRadius: 25,
     alignItems: 'center',

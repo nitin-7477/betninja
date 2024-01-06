@@ -38,11 +38,14 @@ import AddBank from "./screens/AddBank";
 import SubOrdinate from "./screens/promotionAllScreens/SubOrdinate";
 import CommissionDetails from "./screens/promotionAllScreens/CommissionDetails";
 CommissionDetails
+import BankAccount from "./screens/BankAccount";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [isFirstLaunch, setIsFirstLaunch] = useState(false);
+
+
 
   useEffect(() => {
     // Use getItem instead of getItems
@@ -66,10 +69,12 @@ export default function App() {
           <Stack.Screen options={{ headerShown: false }} name="OnboardingScreen" component={OnboardingScreen} />
         )}
 
+        <Stack.Screen options={{ headerShown: false }} name="Gamescreen" component={Gamescreen} />
+        <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
         <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
         <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
+        <Stack.Screen options={{ headerShown: false }} name="BankAccount" component={BankAccount} />
         <Stack.Screen options={{ headerShown: false }} name="SubOrdinate" component={SubOrdinate} />
-        <Stack.Screen options={{ headerShown: false }} name="Gamescreen" component={Gamescreen} />
         <Stack.Screen name="WithdrawScreen" options={{ headerShown: false }} component={WithdrawScreen} />
         <Stack.Screen options={{ headerShown: false }} name="CommissionDetails" component={CommissionDetails} />
 
@@ -82,7 +87,6 @@ export default function App() {
         <Stack.Screen options={{ headerShown: false }} name="AboutUs" component={AboutUs} />
 
         <Stack.Screen options={{ headerShown: false }} name="LevelScreen" component={LevelScreen} />
-        <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
 
         <Stack.Screen name="Wallet" options={{ headerShown: false }} component={Wallet} />
         <Stack.Screen options={{ headerShown: false }} name="BettingRebate" component={BettingRebate} />

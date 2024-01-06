@@ -28,7 +28,7 @@ const HomeScreen = ({ navigation }) => {
 
   const [refreshing, setRefreshing] = useState(false);
 
-
+  const [apiDataofMyHistory, setApiDataofMyHistory] = useState([])
 
 
 
@@ -47,28 +47,24 @@ const HomeScreen = ({ navigation }) => {
   const [apiData3, setApiData3] = useState([]);
   const [apiData4, setApiData4] = useState([]);
   const [showWinEmoji, setShowWinEmoji] = useState(false)
-  const [showWinFor30, setShowWinFor30] = useState(false)
-  const [showWinFor60, setShowWinFor60] = useState(false)
-  const [showWinFor180, setShowWinFor180] = useState(false)
-  const [showWinFor300, setShowWinFor300] = useState(false)
-
   const [showLoseEmoji, setShowLoseEmoji] = useState(false)
+  const [historyResponse1, setHistoryResponse1] = useState([])
+  const [historyResponse2, setHistoryResponse2] = useState([])
+  const [historyResponse3, setHistoryResponse3] = useState([])
+  const [historyResponse4, setHistoryResponse4] = useState([])
+
+
   // *****************This is for timer and socket*********************
 
 
   const showWinEmojiPopUp = () => {
-    setShowWinEmoji(true)
-    setTimeout(() => {
-      setShowWinEmoji(false);
-    }, 2000);
+
   }
 
   const showLoseEmojiPopUp = () => {
-    setShowLoseEmoji(true)
-    setTimeout(() => {
-      setShowLoseEmoji(false);
-    }, 2000);
+
   }
+
 
 
 
@@ -147,12 +143,12 @@ const HomeScreen = ({ navigation }) => {
 
         try {
 
-
           switch (trial) {
             case 30:
               const response1 = await axios.get(`${process.env.SERVERURL}/api/random/30secLottary`)
 
               setApiData1(response1.data);
+
               break;
 
             case 60:
@@ -205,6 +201,7 @@ const HomeScreen = ({ navigation }) => {
               const response4 = await axios.get(`${process.env.SERVERURL}/api/random/5minLottaryLatest`)
 
               setln4(response4.data.data.LN + 1)
+
               break;
 
           }
@@ -216,6 +213,7 @@ const HomeScreen = ({ navigation }) => {
         }
 
       }
+
       if (ln1 == 0 && ln2 == 0 && ln3 == 0 && ln4 == 0) {
         getLotteryNumber(30)
         getLotteryNumber(60)
@@ -235,12 +233,40 @@ const HomeScreen = ({ navigation }) => {
 
         const minutes = Math.floor(data.countdown / 60);
         const seconds = data.countdown % 60;
-        if (data.countdown == 29) {
+        if (data.countdown == 30) {
           fetchUserData()
           getLotteryNumber(30)
           fetchGameHistoryData(30)
-          setShowWinFor30(true)
+
+
         }
+        if (data.countdown == 29) {
+
+          const fetchLatestHistoryData = async () => {
+            try {
+
+
+              const token = await AsyncStorage.getItem('token');
+
+              const response = await axios.get(`${process.env.SERVERURL}/api/bet/30secbetLatest`, {
+
+                headers: {
+                  "Authorization": JSON.parse(token),
+                },
+              });
+              setHistoryResponse1(response.data.thirtyBetOfUser)
+            }
+            catch (error) {
+              console.log(error);
+            }
+          }
+
+
+
+          fetchLatestHistoryData()
+
+        }
+
 
         if (data.countdown <= 5) {
           setShowModal1(true)
@@ -250,6 +276,7 @@ const HomeScreen = ({ navigation }) => {
           setShowModal1(false)
           fetchUserData()
 
+
         }
 
         setCountdowns((prevCountdowns) => ({ ...prevCountdowns, thirtySec: { minutes, seconds } }));
@@ -258,7 +285,7 @@ const HomeScreen = ({ navigation }) => {
       socketRef.current.on('updateCountdown_oneMinTimer', (data) => {
         const minutes = Math.floor(data.countdown / 60);
         const seconds = data.countdown % 60;
-        if (data.countdown == 59) {
+        if (data.countdown == 60) {
           fetchUserData()
           getLotteryNumber(60)
           fetchGameHistoryData(60)
@@ -266,6 +293,30 @@ const HomeScreen = ({ navigation }) => {
 
         if (data.countdown <= 5) {
           setShowModal2(true)
+        }
+        if (data.countdown == 59) {
+          const fetchLatestHistoryData = async () => {
+            try {
+
+
+              const token = await AsyncStorage.getItem('token');
+
+              const response = await axios.get(`${process.env.SERVERURL}/api/bet/1minbetLatest`, {
+
+                headers: {
+                  "Authorization": JSON.parse(token),
+                },
+              });
+              setHistoryResponse2(response.data.oneBetOfUser)
+            }
+            catch (error) {
+              console.log(error);
+            }
+          }
+
+
+
+          fetchLatestHistoryData()
         }
         if (data.countdown == 0) {
           setShowModal2(false)
@@ -280,10 +331,31 @@ const HomeScreen = ({ navigation }) => {
       socketRef.current.on('updateCountdown_threeMinTimer', (data) => {
         const minutes = Math.floor(data.countdown / 60);
         const seconds = data.countdown % 60;
-        if (data.countdown == 179) {
+        if (data.countdown == 180) {
           fetchUserData()
           getLotteryNumber(180)
           fetchGameHistoryData(180)
+        }
+        if (data.countdown == 179) {
+          const fetchLatestHistoryData = async () => {
+            try {
+
+              const response = await axios.get(`${process.env.SERVERURL}/api/bet/3minbetLatest`, {
+
+                headers: {
+                  "Authorization": JSON.parse(token),
+                },
+              });
+              setHistoryResponse3(response.data.threeBetOfUser)
+            }
+            catch (error) {
+              console.log(error);
+            }
+          }
+
+
+
+          fetchLatestHistoryData()
         }
         if (data.countdown <= 5) {
           setShowModal3(true)
@@ -292,13 +364,14 @@ const HomeScreen = ({ navigation }) => {
           setShowModal3(false)
           fetchUserData()
 
+
         }
 
         setCountdowns((prevCountdowns) => ({ ...prevCountdowns, threeMin: { minutes, seconds } }));
       });
 
       socketRef.current.on('updateCountdown_fiveMinTimer', (data) => {
-        if (data.countdown == 299) {
+        if (data.countdown == 300) {
           fetchUserData()
           getLotteryNumber(300)
           fetchGameHistoryData(300)
@@ -309,7 +382,30 @@ const HomeScreen = ({ navigation }) => {
         if (data.countdown <= 5) {
           setShowModal4(true)
         }
+        if (data.countdown == 299) {
+          const fetchLatestHistoryData = async () => {
+            try {
 
+
+              const token = await AsyncStorage.getItem('token');
+
+              const response = await axios.get(`${process.env.SERVERURL}/api/bet/5minbetLatest`, {
+
+                headers: {
+                  "Authorization": JSON.parse(token),
+                },
+              });
+              setHistoryResponse4(response.data.fiveBetOfUser)
+            }
+            catch (error) {
+              console.log(error);
+            }
+          }
+
+
+
+          fetchLatestHistoryData()
+        }
         if (data.countdown == 0) {
           setShowModal4(false)
           fetchUserData()
@@ -341,8 +437,74 @@ const HomeScreen = ({ navigation }) => {
   }, [])
 
 
+  const checkWinEmoji = () => {
+    console.log("A", ln1 - 1);
+    console.log("B", apiDataofMyHistory.LN);
+    console.log("xxxxxxxxxxxxx", historyResponse1);
 
 
+    if (ln1 - 1 == historyResponse1.LN && historyResponse1.status == 'success') {
+      setShowWinEmoji(true)
+      setTimeout(() => {
+        setShowWinEmoji(false)
+      }, 2000);
+    }
+    if (ln2 - 1 == historyResponse2.LN && historyResponse2.status == 'success') {
+      setShowWinEmoji(true)
+      setTimeout(() => {
+        setShowWinEmoji(false)
+      }, 2000);
+    }
+    if (ln3 - 1 == historyResponse3.LN && historyResponse3.status == 'success') {
+      setShowWinEmoji(true)
+
+      setTimeout(() => {
+        setShowWinEmoji(false)
+      }, 2000);
+    }
+    if (ln4 - 1 == historyResponse4.LN && historyResponse4.status == 'success') {
+      setShowWinEmoji(true)
+
+      setTimeout(() => {
+        setShowWinEmoji(false)
+      }, 2000);
+    }
+
+
+    if (ln1 - 1 == historyResponse1.LN && historyResponse1.status == 'failed') {
+      setShowLoseEmoji(true)
+      setTimeout(() => {
+        setShowLoseEmoji(false)
+      }, 2000);
+    }
+    if (ln2 - 1 == historyResponse2.LN && historyResponse2.status == 'failed') {
+      setShowLoseEmoji(true)
+      setTimeout(() => {
+        setShowLoseEmoji(false)
+      }, 2000);
+    }
+    if (ln3 - 1 == historyResponse3.LN && historyResponse3.status == 'failed') {
+      setShowLoseEmoji(true)
+
+      setTimeout(() => {
+        setShowLoseEmoji(false)
+      }, 2000);
+    }
+    if (ln4 - 1 == historyResponse4.LN && historyResponse4.status == 'failed') {
+      setShowLoseEmoji(true)
+
+      setTimeout(() => {
+        setShowLoseEmoji(false)
+      }, 2000);
+    }
+
+  }
+
+
+  useEffect(() => {
+    checkWinEmoji();
+
+  }, [ln1, ln2, ln3, ln4]);
 
 
 
@@ -406,9 +568,9 @@ const HomeScreen = ({ navigation }) => {
     setMyHistory(!myHistory);
   };
 
-  // Callback function to refresh MyHistoryScreen
+
   const refreshMyHistory = () => {
-    // You can add additional logic here if needed
+
     toggleMyHistory();
   };
 
@@ -458,8 +620,6 @@ const HomeScreen = ({ navigation }) => {
           </View>
 
         </View>
-
-
 
 
         <View style={{
@@ -583,12 +743,16 @@ const HomeScreen = ({ navigation }) => {
 
         {/* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX */}
 
-        <Modal visible={showWinEmoji && setShowWinFor30} animationType='slide' transparent={true}>
+        <Modal visible={showWinEmoji} animationType='slide' transparent={true}>
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{ color: 'white', fontSize: 34 }}>Win</Text>
+            <Image source={require('../assets/winEmoji.png')} style={{ height: 100, width: 100 }} />
           </View>
         </Modal>
-
+        <Modal visible={showLoseEmoji} animationType='slide' transparent={true}>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Image source={require('../assets/loseEmoji.png')} style={{ height: 100, width: 100 }} />
+          </View>
+        </Modal>
 
         {/* 
              XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX 
@@ -717,7 +881,7 @@ const HomeScreen = ({ navigation }) => {
 
         <TouchableOpacity
           style={styles.redBtn}
-          onPress={() => openBigModal('#FFA07A', 'color', 'red')}
+          onPress={() => openBigModal('red', 'color', 'red')}
         >
           <Text style={{ fontWeight: 'bold', color: 'white', }}>Red</Text>
         </TouchableOpacity>
@@ -729,7 +893,7 @@ const HomeScreen = ({ navigation }) => {
 
         <TouchableOpacity
           style={styles.violetBtn}
-          onPress={() => openBigModal('#D8BFD8', 'color', 'yellow')}
+          onPress={() => openBigModal('orange', 'color', 'yellow')}
         >
           <Text style={{ fontWeight: 'bold', color: 'white', }}>Yellow</Text>
         </TouchableOpacity>
@@ -739,7 +903,7 @@ const HomeScreen = ({ navigation }) => {
 
         <TouchableOpacity
           style={styles.greenBtn}
-          onPress={() => openBigModal('#90EE90', 'color', 'green')}
+          onPress={() => openBigModal('green', 'color', 'green')}
         >
 
           <Text style={{ fontWeight: 'bold', color: 'white', }}>Green</Text>
@@ -814,7 +978,7 @@ const HomeScreen = ({ navigation }) => {
 
       {/*////////////////////////////////////// Myhistory Screen Flatlist Data */}
       {
-        myHistory ? <MyHistoryScreen showLoseEmojiPopUp={showLoseEmojiPopUp} showWinEmojiPopUp={showWinEmojiPopUp} selectedCountdown={selectedCountdown} /> : (<></>)
+        myHistory ? <MyHistoryScreen selectedCountdown={selectedCountdown} /> : (<></>)
       }
 
 

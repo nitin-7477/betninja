@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, ActivityIndicator } from "react-native";
+import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, ActivityIndicator, ScrollView } from "react-native";
 import AppTextInput from "../components/AppTextInput";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useNavigation } from "@react-navigation/native";
@@ -23,6 +23,9 @@ const Register = () => {
 
   const [isResendEnabled, setResendEnabled] = useState(true);
   const [timer, setTimer] = useState(59);
+
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSendOTP = async () => {
     try {
@@ -106,21 +109,18 @@ const Register = () => {
       handleResetData();
 
     } catch (error) {
-      console.error('Error during registration:', error);
+      console.error("Error during login:", error);
 
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.error('Server responded with an error status:', error.response.status);
-        console.error('Server response data:', error.response.data);
-      } else if (error.request) {
-        // The request was made but no response was received
-        console.error('No response received from the server');
+      if (error.response && error.response.data) {
+        const errorMessage = error.response.data.message;
+        setErrorMessage(errorMessage);
+        setErrorModalVisible(true);
       } else {
-        // Something happened in setting up the request that triggered an Error
-        console.error('Error setting up the request:', error.message);
+        setErrorMessage("An unexpected error occurred");
+        setErrorModalVisible(true);
       }
-    } finally {
+    }
+    finally {
       setLoading(false);
     }
   };
@@ -128,7 +128,7 @@ const Register = () => {
   const isResetButtonEnabled = emailAddress !== '' && password !== '' && confirmPassword !== '' && phone !== '';
 
   return (
-    <SafeAreaView>
+    <ScrollView>
       <View style={{ padding: 20 }}>
         <View style={{ alignItems: "center" }}>
           <Text style={{ fontSize: 30, color: 'purple', fontWeight: 'bold', marginVertical: 3 }}>
@@ -254,7 +254,26 @@ const Register = () => {
           <ActivityIndicator size={100} color="gold" />
         </View>
       </Modal>
-    </SafeAreaView>
+
+      <Modal
+        visible={errorModalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setErrorModalVisible(false)}
+      >
+        <View style={styles.modalContainer2}>
+          <View style={styles.modalContent}>
+            <Text style={{ fontSize: 20, marginBottom: 10, color: 'black', fontWeight: 'bold' }}>Error</Text>
+            <Text style={{ color: 'grey', fontSize: 16 }}>{errorMessage}</Text>
+            <TouchableOpacity
+
+              onPress={() => setErrorModalVisible(false)}>
+              <Text style={{ color: "blue", marginTop: 20 }}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    </ScrollView>
   );
 }
 
@@ -301,5 +320,17 @@ const styles = StyleSheet.create({
   },
   disabledSendButton: {
     backgroundColor: 'lightgray',
+  },
+  modalContainer2: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
+  },
+  modalContent: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+    width: SCREEN_WIDTH * 0.8,
   },
 });
