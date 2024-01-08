@@ -1,161 +1,49 @@
 
 import React from 'react';
-import { Modal, View, Text, TouchableOpacity, StyleSheet, TextInput, KeyboardAvoidingView } from 'react-native';
+import { Modal, View, Text, TouchableOpacity, StyleSheet, TextInput, KeyboardAvoidingView, ActivityIndicator } from 'react-native';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
 import { SCREEN_WIDTH } from '../Constants/Screen';
 
-const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType, select, ln, selectedCountdown, refreshMyHistory, fetchUserData, }) => {
+const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType, select, ln, selectedCountdown, fetchUserData, countdowns }) => {
 
   const navigation = useNavigation();
   const [amount, setAmount] = useState(1)
   const [totalAmount, setTotalAmount] = useState(1);
   const [inputValue, setInputValue] = useState(1); // Set default value to '1'
   const [times, setTimes] = useState('1')
-  const [apiData, setApiData] = useState([]);
 
-  const [userInformation, setUserInformation] = useState([]);
   const [userToken, setUserToken] = useState({});
   const [selectedAmount, setSelectedAmount] = useState(1)
   const [selectedTimes, setSelectedTimes] = useState(1)
+  const [loading, setLoading] = useState(false)
 
 
-  const fetchHistoryData = async () => {
-    try {
-
-      let timerBet;
-
-
-      switch (selectedCountdown) {
-        case 'thirtySec':
-          timerBet = '30secbet'
-          break;
-        case 'oneMin':
-          timerBet = '1minbet'
-          break;
-        case 'threeMin':
-          timerBet = '3minbet'
-          break;
-        case 'fiveMin':
-          timerBet = '5minbet'
-          break;
-
-        default:
-          break;
-      }
-
-
-
-      const token = await AsyncStorage.getItem('token');
-
-
-
-      const response = await axios.get(`${process.env.SERVERURL}/api/bet/${timerBet}`, {
-
-        headers: {
-          "Authorization": JSON.parse(token),
-        },
-      });
-
-
-      let userBet;
-      switch (selectedCountdown) {
-        case 'thirtySec':
-          userBet = response.data.thirtyBetOfUser;
-          break;
-        case 'oneMin':
-          userBet = response.data.oneBetOfUser;
-          break;
-        case 'threeMin':
-          userBet = response.data.threeBetOfUser;
-          break;
-        case 'fiveMin':
-          userBet = response.data.fiveBetOfUser;
-          break;
-        default:
-          break;
-      }
-
-      setUserInformation(userBet);
-    }
-    catch (error) {
-      console.error('Error fetching user data of My history screen:', error);
-    }
-
-  };
-
-
-
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token');
-
-        setUserToken(JSON.parse(token))
-
-      } catch (error) {
-        console.error('Error fetching token in pop up:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const handleBigData = async () => {
     try {
-
+      setLoading(true)
+      const token = await AsyncStorage.getItem('token')
       let timerBet;
-      fetchHistoryData()
 
-
-      if (selectedCountdown === 'thirtySec') {
-        timerBet = '30secbet'
-      }
-      else if (selectedCountdown === 'oneMin') {
-        timerBet = '1minbet'
-      }
-      else if (selectedCountdown === 'threeMin') {
-        timerBet = '3minbet'
-      }
-      else {
-        timerBet = '5minbet'
-      }
-
-
-
-      // Check if userToken is available before making the request
-      if (!userToken) {
-        console.error("User token is missing");
-        return;
-      }
+      if (selectedCountdown === 'thirtySec') { timerBet = '30secbet' }
+      else if (selectedCountdown === 'oneMin') { timerBet = '1minbet' }
+      else if (selectedCountdown === 'threeMin') { timerBet = '3minbet' }
+      else if (selectedCountdown === 'fiveMin') { timerBet = '5minbet' }
 
       const body = {
-        LN: ln,
-        phrchaseAmount: Number(totalAmount),
-        selectType: selectType,
-        select: select,
+        LN: ln, phrchaseAmount: Number(totalAmount), selectType: selectType, select: select,
       };
 
-
-      closeModal()
-      fetchHistoryData()
-
       const response = await axios.post(`${process.env.SERVERURL}/api/bet/${timerBet}`, body,
-        {
-          headers: {
-            Authorization: userToken,
-          },
-        }
-      );
-      fetchUserData()
+        { headers: { Authorization: JSON.parse(token), } });
 
       if (response.data) {
         closeModal()
         fetchUserData()
-        fetchHistoryData()
+
       }
     } catch (error) {
       console.error("Error:", error);
@@ -172,23 +60,16 @@ const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType,
         console.error("Error setting up the request:", error.message);
       }
     }
+    finally {
+      setLoading(false)
+    }
   };
-
-
-
-
-  useEffect(() => {
-    fetchHistoryData()
-
-  }, []);
 
 
   useEffect(() => {
     const showTotalAmount = () => {
       const amounts = amount
       const quantity = parseInt(times)
-
-
 
       setTotalAmount(amounts * quantity)
     }
@@ -236,6 +117,23 @@ const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType,
   }
 
 
+  useEffect(() => {
+
+
+    const closeModalOnTime = () => {
+      if (
+        (countdowns.thirtySec.seconds == 5 && selectedCountdown == 'thirtySec' && countdowns.thirtySec.minutes == 0) ||
+        (countdowns.oneMin.seconds == 5 && selectedCountdown == 'oneMin' && countdowns.oneMin.minutes == 0) ||
+        (countdowns.threeMin.seconds == 5 && selectedCountdown == 'threeMin' && countdowns.threeMin.minutes == 0) ||
+        (countdowns.fiveMin.seconds == 5 && selectedCountdown == 'fiveMin' && countdowns.fiveMin.minutes == 0)
+      ) {
+
+        closeModal();
+      }
+    };
+
+    closeModalOnTime();
+  }, [countdowns, selectedCountdown, closeModal]);
 
   return (
 
@@ -366,13 +264,26 @@ const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType,
               <Text style={styles.closeButtonText}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={handleBigData}
+              onPress={loading ? null : handleBigData}  // Disable the button during loading
               style={{
-                width: '55%', marginBottom: 5, backgroundColor: 'purple', paddingVertical: 15,
-                paddingHorizontal: 20, borderRadius: 5, justifyContent: 'center', alignItems: 'center'
-              }}>
-              <Text style={{ color: 'white', fontWeight: 'bold' }}>Total Amount :₹{totalAmount}</Text>
-
+                width: '55%',
+                marginBottom: 5,
+                backgroundColor: 'purple',
+                paddingVertical: 15,
+                paddingHorizontal: 20,
+                borderRadius: 5,
+                justifyContent: 'center',
+                alignItems: 'center',
+                opacity: loading ? 0.5 : 1,  // Optionally reduce opacity during loading
+              }}
+            >
+              {loading ? (
+                <ActivityIndicator size={20} color="red" />
+              ) : (
+                <Text style={{ color: 'white', fontWeight: 'bold' }}>
+                  Total Amount :₹{totalAmount}
+                </Text>
+              )}
             </TouchableOpacity>
           </View>
 
@@ -408,6 +319,19 @@ const styles = StyleSheet.create({
     shadowColor: 'black', elevation: 10, shadowOffset: { height: 0, width: 0 }, shadowOpacity: 1,
     // backgroundColor: '#ffa343',
     borderColor: 'white', borderWidth: 1
+  },
+  activityIndicatorContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1
+
   },
 });
 

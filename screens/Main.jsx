@@ -115,11 +115,15 @@ export default function Main() {
     // Add more game icons with their images
   ];
 
+  const handleJumpToGameScreen = (index) => {
+
+    navigation.navigate('Gamescreen', index);
+  }
 
 
-  const renderGameIcon = ({ item }) => (
+  const renderGameIcon = ({ item, index }) => (
     <TouchableOpacity style={styles.gameIconContainer}
-      onPress={() => navigation.navigate("Gamescreen")}>
+      onPress={() => handleJumpToGameScreen(index)}>
 
       <Image source={item.icon} style={styles.gameIcon} />
       <Text style={styles.gameIconText}>{item.name}</Text>

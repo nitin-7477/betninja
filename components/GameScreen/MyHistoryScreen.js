@@ -153,7 +153,6 @@ const MyHistoryScreen = ({ selectedCountdown, showWinEmojiPopUp, showLoseEmojiPo
           width: SCREEN_WIDTH * 0.9,
           marginTop: 2,
           height: 63,
-
           paddingVertical: 10,
           borderBottomWidth: 0.5,
           borderBottomColor: 'grey',
