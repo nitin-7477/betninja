@@ -43,8 +43,7 @@ export default Gifts
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginVertical: 20,
-    padding: 20
+    padding: 10
   },
   header: {
     height: SCREEN_HEIGHT * 0.05,

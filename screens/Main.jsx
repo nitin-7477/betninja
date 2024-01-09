@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, FlatList, Dimensions, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image, FlatList, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 import MainSlider from '../components/sliders/MainSlider';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
@@ -16,16 +16,16 @@ export default function Main() {
 
 
   useEffect(() => {
-
-    fetchData();
+    fetchToken();
   }, []);
 
-  const fetchData = async () => {
+  const fetchToken = async () => {
     try {
 
       const token = await AsyncStorage.getItem('token');
 
       if (!token) {
+        alert('Token Expired')
         navigation.navigate('Login')
         return;
       }
@@ -67,40 +67,40 @@ export default function Main() {
 
   const recentWinnersData = [
     {
-      name: 'Player 1', amount: '$500', game: 'Slot Machine',
+      name: 'JackpotJester', amount: '₹500', game: 'rapid fire',
       image: require('../assets/player.png')
     },
     {
-      name: 'Player 2', amount: '$1000', game: 'Roulette',
+      name: 'Gambler', amount: '₹700', game: 'win 1 min',
       image: require('../assets/player.png')
     },
     {
-      name: 'Player 3', amount: '$3000', game: 'Slot Machine',
+      name: 'Adventurer', amount: '₹700', game: 'win 3 min',
       image: require('../assets/player.png')
     },
     {
-      name: 'Player 4', amount: '$500', game: 'Slot Machine',
+      name: 'VelvetVegas', amount: '₹500', game: 'win 3 min',
       image: require('../assets/player.png')
     },
     {
-      name: 'Player 5', amount: '$1000', game: 'Roulette',
+      name: 'LuckChaser', amount: '₹1000', game: 'win 3 min',
       image: require('../assets/player.png')
     },
     {
-      name: 'Player 6', amount: '$3000', game: 'Slot Machine',
+      name: 'FortuneSeeker', amount: '₹3000', game: 'win 5 min',
       image: require('../assets/player.png')
     },
     // Add more recent winners data
   ];
 
   const top10ListsData = [
-    { rank: 1, name: 'Player 1', earnings: '$12000', image: require('../assets/casino-player.png') },
-    { rank: 2, name: 'Player 2', earnings: '$9500', image: require('../assets/casino-player.png') },
-    { rank: 1, name: 'Player 3', earnings: '$12000', image: require('../assets/casino-player.png') },
-    { rank: 2, name: 'Player 4', earnings: '$9500', image: require('../assets/casino-player.png') }, { rank: 1, name: 'Player 5', earnings: '$12000', image: require('../assets/casino-player.png') },
-    { rank: 2, name: 'Player 6', earnings: '$9500', image: require('../assets/casino-player.png') }, { rank: 1, name: 'Player 7', earnings: '$12000', image: require('../assets/casino-player.png') },
-    { rank: 2, name: 'Player 8', earnings: '$9500', image: require('../assets/casino-player.png') }, { rank: 1, name: 'Player 9', earnings: '$12000', image: require('../assets/casino-player.png') },
-    { rank: 2, name: 'Player 10', earnings: '$9500', image: require('../assets/casino-player.png') },
+    { rank: 1, name: 'JackpotJester', earnings: '₹3,180,233', image: require('../assets/casino-player.png') },
+    { rank: 2, name: 'VelvetVegas', earnings: '₹3,14,233', image: require('../assets/casino-player.png') },
+    { rank: 1, name: 'GoldenGambit', earnings: '₹2,80,233', image: require('../assets/casino-player.png') },
+    { rank: 2, name: 'DiamondDasher', earnings: '₹1,10,233', image: require('../assets/casino-player.png') }, { rank: 1, name: 'Player 5', earnings: '₹12000', image: require('../assets/casino-player.png') },
+    { rank: 2, name: 'LuckyRoller', earnings: '₹9500', image: require('../assets/casino-player.png') }, { rank: 1, name: 'Player 7', earnings: '₹12000', image: require('../assets/casino-player.png') },
+    { rank: 2, name: 'LuckChaser', earnings: '₹9500', image: require('../assets/casino-player.png') }, { rank: 1, name: 'Player 9', earnings: '₹12000', image: require('../assets/casino-player.png') },
+    { rank: 2, name: 'Queen', earnings: '₹9500', image: require('../assets/casino-player.png') },
     // Add more top 10 lists data
   ];
 
@@ -183,7 +183,7 @@ export default function Main() {
               <Image source={item.image} style={{ height: 60, width: 60 }} />
               <Text style={{ color: Colors.black, fontWeight: '500', marginVertical: 3 }}>{item.name}</Text>
               <View style={{ borderBottomWidth: 0.3, width: '100%', marginVertical: 10, borderColor: Colors.fontGray }}></View>
-              <Text style={{ color: 'red' }}>{item.amount}</Text>
+              <Text style={{ color: 'red', fontWeight: 'bold' }}>{item.amount}</Text>
               <Text style={{ color: Colors.fontGray, fontWeight: '500' }}>{item.game}</Text>
             </View>
           )}
@@ -198,15 +198,15 @@ export default function Main() {
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
             <View style={styles.top10}>
-              <View style={{ justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center', width: '35%' }}>
+              <View style={{ justifyContent: 'start', flexDirection: 'row', alignItems: 'center', width: '75%', }}>
 
-                <Image source={item.image} style={{ height: 30, width: 30 }} />
-                <View>
-                  <Text style={{ fontWeight: 'bold', color: 'green' }}>{item.rank}</Text>
+                <Image source={item.image} style={{ height: 30, width: 30, marginRight: 20 }} />
+                <View style={{ justifyContent: 'start', }}>
                   <Text style={{ fontWeight: 'bold', color: 'black' }}>{item.name}</Text>
+                  <Text style={{ fontWeight: 'bold', color: 'green' }}>No.{item.rank}</Text>
                 </View>
               </View>
-              <Text style={{ color: 'orange', fontWeight: '800', fontSize: 18 }}>{item.earnings}</Text>
+              <Text style={{ color: 'black', fontWeight: '800', fontSize: 14 }}>{item.earnings}</Text>
 
             </View>
 
@@ -309,8 +309,8 @@ const styles = StyleSheet.create({
   },
   section2: {
     backgroundColor: 'white',
-    padding: 10,
-    margin: 10,
+    padding: 5,
+    margin: 5,
     borderRadius: 10,
     marginTop: 30,
     marginBottom: 0
@@ -339,12 +339,12 @@ const styles = StyleSheet.create({
   top10:
   {
     alignItems: 'center',
-    marginHorizontal: 5,
-    backgroundColor: Colors.white,
+    marginHorizontal: 1,
+    backgroundColor: '#FAFAFA',
     paddingVertical: 5,
     paddingHorizontal: 10,
-    width: SCREEN_WIDTH * 0.88,
-    borderRadius: 10,
+    width: SCREEN_WIDTH * 0.93,
+    borderRadius: 5,
     height: SCREEN_HEIGHT * 0.07,
     marginVertical: 1,
     flexDirection: 'row',

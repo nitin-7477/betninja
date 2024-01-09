@@ -140,10 +140,10 @@ const DepositeScreen = () => {
             <Image source={require('../../assets/wallet/payment2.png')} style={{ height: 40, width: 50 }} />
             <Text >UPI-APP</Text>
           </TouchableOpacity>
-          <View style={{ height: 100, width: 100, backgroundColor: '#D3D3D3', borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
+          <TouchableOpacity onPress={() => navigation.navigate('QrScanner')} style={{ height: 100, width: 100, backgroundColor: '#D3D3D3', borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
             <Image source={require('../../assets/wallet/payment3.png')} style={{ height: 40, width: 50 }} />
             <Text >UPI-QR</Text>
-          </View>
+          </TouchableOpacity>
 
         </View>
         <View style={{ flexDirection: 'row', width: SCREEN_WIDTH * 0.9, justifyContent: 'space-between', alignContent: 'center', marginBottom: 10 }}>

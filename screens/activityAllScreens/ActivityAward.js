@@ -10,19 +10,20 @@ const ActivityAward = () => {
   return (
     <ScrollView style={styles.container}>
 
-      <View style={{ height: SCREEN_HEIGHT * 0.22, width: SCREEN_WIDTH * 1, backgroundColor: "chocolate" }}>
+      <View style={{ height: SCREEN_HEIGHT * 0.25, width: SCREEN_WIDTH * 1, backgroundColor: "chocolate" }}>
         {/* **********navigation********** */}
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5, paddingHorizontal: 10 }}><TouchableOpacity
-          onPress={() => navigation.navigate('Activity')}
-          style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
-          <Ionicons name='return-up-back' color={'white'} size={30} />
-        </TouchableOpacity>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5, paddingHorizontal: 10 }}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Activity')}
+            style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
+            <Ionicons name='return-up-back' color={'white'} size={30} />
+          </TouchableOpacity>
           <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.white, marginLeft: 70 }}>Activity Award</Text></View>
         <View style={{ flexDirection: 'row', marginTop: 20, padding: 10 }}>
           <Image source={require('../../assets/activityAward.png')} style={{ height: 100, width: 100 }} />
           <View>
             <Text style={{ color: 'white', fontSize: 18, fontWeight: '700', marginBottom: 15 }}>Activity Award</Text>
-            <Text style={{ width: '25%', color: 'white' }}>Complete weekly/daily tasks to receive rich rewards weekly rewards cannot be accumulated to the next week, and daily rewards cannot be accumulated to the next day</Text>
+            <Text style={{ width: '28%', color: 'white' }}>Complete weekly/daily tasks to receive rich rewards weekly rewards cannot be accumulated to the next week,daily rewards cannot be accumulated to the next day</Text>
           </View>
         </View>
 
@@ -51,7 +52,7 @@ const ActivityAward = () => {
         <View style={{ paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text>Award Amount</Text>
           <View style={{ flexDirection: 'row' }}>
-            <Text>Nitin</Text>
+
             <Text>Rs 4999.00</Text>
           </View>
         </View>
@@ -81,7 +82,7 @@ const ActivityAward = () => {
         <View style={{ paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text>Award Amount</Text>
           <View style={{ flexDirection: 'row' }}>
-            <Text>Nitin</Text>
+
             <Text>Rs 4999.00</Text>
           </View>
         </View>
@@ -111,7 +112,7 @@ const ActivityAward = () => {
         <View style={{ paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text>Award Amount</Text>
           <View style={{ flexDirection: 'row' }}>
-            <Text>Nitin</Text>
+
             <Text>Rs 4999.00</Text>
           </View>
         </View>

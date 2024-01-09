@@ -1,18 +1,32 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, ImageBackground, Dimensions } from 'react-native'
 import React from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../components/Constants/Screen'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import { Colors } from '../../components/Constants/Colors';
 import { useState } from 'react';
+import LinearGradient from 'react-native-linear-gradient';
 
 const LevelScreen = () => {
   const [selectedButton, setSelectedButton] = useState(1)
   const [showHistory, setShowHistory] = useState(true)
   const [showRules, setShowRules] = useState(false)
+  const navigation = useNavigation()
 
+  const [currentPage, setCurrentPage] = useState(0);
 
+  // const getContentBasedOnView = () => {
+  //   switch (currentPage) {
+  //     case 0:
+  //       return 'Amount: ₹100';
+  //     case 1:
+  //       return 'Amount: ₹200';
+  //     case 2:
+  //       return 'Amount: ₹300';
+  //     default:
+  //       return '';
+  //   }
+  // };
   const handleHistory = () => {
     setSelectedButton(1)
     setShowHistory(true)
@@ -23,7 +37,14 @@ const LevelScreen = () => {
     setShowRules(true)
     setShowHistory(false)
   }
-  const navigation = useNavigation()
+
+  const handleScroll = (event) => {
+    const { x } = event.nativeEvent.contentOffset;
+    const page = Math.round(x / Dimensions.get('window').width);
+    if (page !== currentPage) {
+      setCurrentPage(page);
+    }
+  };
   return (
     <ScrollView style={styles.container}>
 
@@ -57,11 +78,115 @@ const LevelScreen = () => {
       </View>
       <View style={{ marginTop: 40, height: 25, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', borderWidth: 0.5, borderColor: 'grey', padding: 3, borderRadius: 5, justifyContent: 'center' }}><Text style={{ textAlign: 'center', fontSize: 12 }}>Level rewards are settled at 2:00 am on the 1st of every month</Text></View>
 
+      <ScrollView onScroll={handleScroll}
+        scrollEventThrottle={16}
+        pagingEnabled horizontal showsHorizontalScrollIndicator={false}>
+        <LinearGradient colors={['#a6b7d0', '#95a8c5', '#93a8c5',]} style={styles.vipCard}>
+          <View style={{ height: '60%', width: '100%', flexDirection: 'row', }}>
+
+
+            <View style={{ width: '70%', }}>
+              <View style={{ flexDirection: 'row', }}>
+                <Image source={require('../../assets/vipcard/image1.png')} style={{ height: 30, width: 30 }} />
+                <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold', marginLeft: 10 }}>LEVEL 1</Text>
+                <Image source={require('../../assets/vipcard/image2.png')} style={{ height: 20, width: 20, marginLeft: 10 }} />
+                <Text style={{ color: 'white', fontSize: 12, marginLeft: 10 }}>Not Open yet</Text>
+              </View>
+
+              <View>
+                <Text style={{ color: 'white', fontSize: 12, fontWeight: 'bold' }}>Upgrading LEVEL 1 requires</Text>
+                <Text style={{ color: 'white', fontSize: 12, fontWeight: 'bold', marginVertical: 5 }}>3000EXP</Text>
+              </View>
+              <View style={{ borderWidth: 1, padding: 2, width: 80, borderColor: 'white', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
+                <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>Bet ₹1=1EXP</Text>
+              </View>
+
+            </View>
+            <View style={{ width: '35%', alignItems: 'center', height: '70%', }}>
+              <Image source={require('../../assets/vipcard/star1.png')} style={{ height: 70, width: 70, marginLeft: 5 }} />
+              <Text style={{ color: 'white', fontSize: 12, fontWeight: 'bold', textAlign: 'right', marginTop: 20, marginLeft: 20 }}>LEVEL 1</Text>
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 30 }}>
+            <View style={{ borderWidth: 1, padding: 2, width: 60, borderColor: 'white', borderRadius: 10, justifyContent: 'center', alignItems: 'center', backgroundColor: '#93a8c5' }}>
+              <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>0/3000</Text>
+            </View>
+            <Text style={{ color: 'white', fontWeight: 'bold' }}>3000 EXP can be levelled up</Text>
+          </View>
+        </LinearGradient>
+        <LinearGradient colors={['#f8bd83', '#eca967', '#e39950',]} style={styles.vipCard}>
+          <View style={{ height: '60%', width: '100%', flexDirection: 'row', }}>
+
+
+            <View style={{ width: '70%', }}>
+              <View style={{ flexDirection: 'row', }}>
+                <Image source={require('../../assets/vipcard/image1.png')} style={{ height: 30, width: 30 }} />
+                <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold', marginLeft: 10 }}>LEVEL 2</Text>
+                <Image source={require('../../assets/vipcard/image2.png')} style={{ height: 20, width: 20, marginLeft: 10 }} />
+                <Text style={{ color: 'white', fontSize: 12, marginLeft: 10 }}>Not Open yet</Text>
+              </View>
+
+              <View>
+                <Text style={{ color: 'white', fontSize: 12, fontWeight: 'bold' }}>Upgrading LEVEL 2 requires</Text>
+                <Text style={{ color: 'white', fontSize: 12, fontWeight: 'bold', marginVertical: 5 }}>3000EXP</Text>
+              </View>
+              <View style={{ borderWidth: 1, padding: 2, width: 80, borderColor: 'white', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
+                <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>Bet ₹1=1EXP</Text>
+              </View>
+
+            </View>
+            <View style={{ width: '35%', alignItems: 'center', height: '70%', }}>
+              <Image source={require('../../assets/vipcard/star2.png')} style={{ height: 70, width: 70, marginLeft: 5 }} />
+              <Text style={{ color: 'white', fontSize: 12, fontWeight: 'bold', textAlign: 'right', marginTop: 20, marginLeft: 20 }}>LEVEL 2</Text>
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 30 }}>
+            <View style={{ borderWidth: 1, padding: 2, width: 60, borderColor: 'white', borderRadius: 10, justifyContent: 'center', alignItems: 'center', backgroundColor: '#e39950' }}>
+              <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>0/3000</Text>
+            </View>
+            <Text style={{ color: 'white', fontWeight: 'bold' }}>3000 EXP can be levelled up</Text>
+          </View>
+        </LinearGradient>
+        <LinearGradient colors={['#ffa493', '#ff8c84', '#ff7878',]} style={styles.vipCard}>
+          <View style={{ height: '60%', width: '100%', flexDirection: 'row', }}>
+
+
+            <View style={{ width: '70%', }}>
+              <View style={{ flexDirection: 'row', }}>
+                <Image source={require('../../assets/vipcard/image1.png')} style={{ height: 30, width: 30 }} />
+                <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold', marginLeft: 10 }}>LEVEL 3</Text>
+                <Image source={require('../../assets/vipcard/image2.png')} style={{ height: 20, width: 20, marginLeft: 10 }} />
+                <Text style={{ color: 'white', fontSize: 12, marginLeft: 10 }}>Not Open yet</Text>
+              </View>
+
+              <View>
+                <Text style={{ color: 'white', fontSize: 12, fontWeight: 'bold' }}>Upgrading LEVEL 3 requires</Text>
+                <Text style={{ color: 'white', fontSize: 12, fontWeight: 'bold', marginVertical: 5 }}>80000EXP</Text>
+              </View>
+              <View style={{ borderWidth: 1, padding: 2, width: 80, borderColor: 'white', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
+                <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>Bet ₹1=1EXP</Text>
+              </View>
+
+            </View>
+            <View style={{ width: '35%', alignItems: 'center', height: '70%', }}>
+              <Image source={require('../../assets/vipcard/star2.png')} style={{ height: 70, width: 70, marginLeft: 5 }} />
+              <Text style={{ color: 'white', fontSize: 12, fontWeight: 'bold', textAlign: 'right', marginTop: 20, marginLeft: 20 }}>LEVEL 3</Text>
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 30 }}>
+            <View style={{ borderWidth: 1, padding: 2, width: 60, borderColor: 'white', borderRadius: 10, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ff7878' }}>
+              <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>0/80000</Text>
+            </View>
+            <Text style={{ color: 'white', fontWeight: 'bold' }}>3000 EXP can be levelled up</Text>
+          </View>
+        </LinearGradient>
+      </ScrollView>
+
       {/* ********************* Here is a flatlist card********************* */}
       <View style={{ height: SCREEN_HEIGHT * 0.3, width: SCREEN_WIDTH * 0.94, backgroundColor: 'white', marginTop: 10, borderRadius: 15, alignSelf: 'center', elevation: 2 }}>
         <View style={{ width: SCREEN_WIDTH * 0.9, flexDirection: 'row', alignItems: 'center', height: 40, marginHorizontal: 10, marginTop: 8 }}>
           <Image source={require('../../assets/diamond.png')} style={{ height: 30, width: 30, marginRight: 10 }} />
-          <Text style={{ color: 'grey', fontWeight: '700', fontSize: 18 }}>Level 0 Benefit Level</Text>
+          <Text style={{ color: 'grey', fontWeight: '700', fontSize: 18 }}>Level {currentPage + 1} Benefit Level</Text>
         </View>
         <View style={{ borderBottomWidth: 0.5, borderBottomColor: 'grey', marginVertical: 10 }}></View>
 
@@ -107,7 +232,7 @@ const LevelScreen = () => {
 
         </View>
 
-      
+
       </View>
 
       <View style={{ height: 50, width: SCREEN_WIDTH * 0.95, alignSelf: 'center', marginVertical: 10, flexDirection: 'row' }}>
@@ -240,5 +365,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 5,
 
-  }, smallCard: { height: SCREEN_HEIGHT * 0.12, width: SCREEN_WIDTH * 0.95, alignSelf: 'center', backgroundColor: 'white', elevation: 1, justifyContent: 'center', padding: 10, marginBottom: 10 }
+  }, smallCard: { height: SCREEN_HEIGHT * 0.12, width: SCREEN_WIDTH * 0.95, alignSelf: 'center', backgroundColor: 'white', elevation: 1, justifyContent: 'center', padding: 10, marginBottom: 10 },
+  vipCard: { borderRadius: 10, height: 180, width: 340, backgroundColor: 'blue', marginVertical: 10, padding: 5, alignSelf: 'center', marginHorizontal: 5 }
 })

@@ -845,7 +845,7 @@ const HomeScreen = ({ navigation, index }) => {
 
         <Modal visible={selectedCountdown == 'thirtySec' && popWinThirtySec} animationType='slide' transparent={true}>
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-            <Image source={require('../assets/winbet.png')} style={{ height: 320, width: 250, borderRadius: 15 }} />
+            <Image source={require('../assets/winEmoji.png')} style={{ height: 200, width: 200, borderRadius: 15 }} />
             <TouchableOpacity
               onPress={() => setPopWinThirtySec(false)}
               style={{ backgroundColor: 'red', padding: 5, marginTop: 10, borderRadius: 10 }}>
@@ -855,7 +855,7 @@ const HomeScreen = ({ navigation, index }) => {
         </Modal>
         <Modal visible={selectedCountdown == 'oneMin' && popWinOneMin} animationType='slide' transparent={true}>
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-            <Image source={require('../assets/winbet.png')} style={{ height: 320, width: 250, borderRadius: 15 }} />
+            <Image source={require('../assets/winEmoji.png')} style={{ height: 200, width: 200, borderRadius: 15 }} />
             <TouchableOpacity
               onPress={() => setPopWinOneMin(false)}
               style={{ backgroundColor: 'red', padding: 5, marginTop: 10, borderRadius: 10 }}>
@@ -865,7 +865,7 @@ const HomeScreen = ({ navigation, index }) => {
         </Modal>
         <Modal visible={selectedCountdown == 'threeMin' && popWinThreeMin} animationType='slide' transparent={true}>
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-            <Image source={require('../assets/winbet.png')} style={{ height: 320, width: 250, borderRadius: 15 }} />
+            <Image source={require('../assets/winEmoji.png')} style={{ height: 200, width: 200, borderRadius: 15 }} />
             <TouchableOpacity
               onPress={() => setPopWinThreeMin(false)}
               style={{ backgroundColor: 'red', padding: 5, marginTop: 10, borderRadius: 10 }}>
@@ -876,7 +876,7 @@ const HomeScreen = ({ navigation, index }) => {
 
         <Modal visible={selectedCountdown == 'fiveMin' && popWinFiveMin == true} animationType='slide' transparent={true}>
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-            <Image source={require('../assets/winbet.png')} style={{ height: 320, width: 250, borderRadius: 15 }} />
+            <Image source={require('../assets/winEmoji.png')} style={{ height: 200, width: 200, borderRadius: 15 }} />
             <TouchableOpacity
               onPress={() => setPopWinFiveMin(false)}
               style={{ backgroundColor: 'red', padding: 5, marginTop: 10, borderRadius: 10 }}>
@@ -887,7 +887,7 @@ const HomeScreen = ({ navigation, index }) => {
 
         <Modal visible={selectedCountdown === 'thirtySec' && popLoseThirtySec == true} animationType='slide' transparent={true}>
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-            <Image source={require('../assets/losebet.png')} style={{ height: 320, width: 250, borderRadius: 15 }} />
+            <Image source={require('../assets/loseEmoji.png')} style={{ height: 200, width: 200, borderRadius: 15 }} />
             <TouchableOpacity
               onPress={() => setPopLoseThirtySec(false)}
               style={{ backgroundColor: 'red', padding: 5, marginTop: 10, borderRadius: 10 }}>
@@ -897,7 +897,7 @@ const HomeScreen = ({ navigation, index }) => {
         </Modal>
         <Modal visible={selectedCountdown == 'oneMin' && popLoseOneMin} animationType='slide' transparent={true}>
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-            <Image source={require('../assets/losebet.png')} style={{ height: 320, width: 250, borderRadius: 15 }} />
+            <Image source={require('../assets/loseEmoji.png')} style={{ height: 200, width: 200, borderRadius: 15 }} />
             <TouchableOpacity
               onPress={() => setPopLoseOneMin(false)}
               style={{ backgroundColor: 'red', padding: 5, marginTop: 10, borderRadius: 10 }}>
@@ -907,17 +907,17 @@ const HomeScreen = ({ navigation, index }) => {
         </Modal>
         <Modal visible={selectedCountdown == 'threeMin' && popLoseThreeMin} animationType='slide' transparent={true}>
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-            <Image source={require('../assets/losebet.png')} style={{ height: 320, width: 250, borderRadius: 15 }} />
+            <Image source={require('../assets/loseEmoji.png')} style={{ height: 200, width: 200, borderRadius: 15 }} />
             <TouchableOpacity
               onPress={() => setPopLoseThreeMin(false)}
               style={{ backgroundColor: 'red', padding: 5, marginTop: 10, borderRadius: 10 }}>
               <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>Close</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> borderBottomColor: 'pink',
           </View>
         </Modal>
         <Modal visible={selectedCountdown == 'fiveMin' && popLoseFiveMin} animationType='slide' transparent={true}>
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-            <Image source={require('../assets/losebet.png')} style={{ height: 320, width: 250, borderRadius: 15 }} />
+            <Image source={require('../assets/loseEmoji.png')} style={{ height: 200, width: 200, borderRadius: 15 }} />
             <TouchableOpacity
               onPress={() => setPopLoseFiveMin(false)}
               style={{ backgroundColor: 'red', padding: 5, marginTop: 10, borderRadius: 10 }}>
@@ -1396,7 +1396,7 @@ const styles = StyleSheet.create({
   view2: {
     backgroundColor: 'rgba(128, 128, 128, 0.3)', // Use rgba to set opacity
     position: 'absolute',
-    top: -220,
+    top: -230,
     left: 0,
     right: 0,
     bottom: 0,

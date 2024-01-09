@@ -100,12 +100,12 @@ const Activity = () => {
         </View>
 
 
-        <View style={{ width: '47%' }}>
+        <TouchableOpacity onPress={() => navigation.navigate('AttendanceBonus')} style={{ width: '47%' }}>
           <Image source={require('../assets/attendanceBanner.png')} style={{ height: 150, width: 150, borderRadius: 10 }} />
           <Text style={{ color: 'black', fontSize: 18, fontWeight: '500' }}>Attendance Bonus</Text>
           <Text style={{ fontWeight: '500', marginTop: 3 }}>Enter the redemption code to receive gift rewards</Text>
-        </View>
 
+        </TouchableOpacity>
       </View>
 
       {/* ************************Banners********************************* */}

@@ -26,6 +26,23 @@ const Promotion = () => {
 
 
 
+  const fetchToken = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+
+      if (!token) {
+        alert('Token Expired')
+        navigation.navigate('Login')
+        return;
+      }
+    }
+
+    catch (error) {
+      console.error('Error fetching user data in Account Screen:', error);
+    }
+
+  };
+
   const fetchCommissionData = async () => {
     try {
       setLoading(true)
@@ -58,6 +75,7 @@ const Promotion = () => {
 
   useEffect(() => {
     fetchCommissionData()
+    fetchToken()
   }, []);
 
   const directRegisterCount = commission?.direct?.number_of_register || 0;
