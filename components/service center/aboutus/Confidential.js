@@ -10,7 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 const Confidential = () => {
   const navigation = useNavigation();
   return (
-    <ScrollView showsVerticalScrollIndicator={false}
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}
     >
       <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10, paddingHorizontal: 10 }}><TouchableOpacity
         onPress={() => navigation.navigate('AboutUs')}
@@ -123,4 +123,8 @@ const Confidential = () => {
 
 export default Confidential
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    flex: 1, alignSelf: 'center'
+  }
+})

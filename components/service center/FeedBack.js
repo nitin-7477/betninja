@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Image, Text, TouchableOpacity, Alert } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Image, Text, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { Colors } from '../Constants/Colors';
 import { SCREEN_WIDTH } from '../Constants/Screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Rating, AirbnbRating } from 'react-native-ratings';
 const FeedbackForm = () => {
 
   const navigation = useNavigation();
@@ -31,7 +32,7 @@ const FeedbackForm = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}><TouchableOpacity
         onPress={() => navigation.navigate('Account')}
         style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
@@ -48,22 +49,30 @@ const FeedbackForm = () => {
         value={feedback}
         onChangeText={(text) => setFeedback(text)}
       />
+      <View>
+        <Text style={{ textAlign: 'center' }}>Plz Rate the app</Text>
+      </View>
+      <Rating
+        type='heart'
+        ratingCount={5}
+        imageSize={40}
+        showRating
+        onFinishRating={this.ratingCompleted}
+      />
       <Image source={require('../../assets/feedback.png')} style={{ height: 200, width: 300, marginVertical: 40 }} />
-
-
-      <TouchableOpacity onPress={handleSubmit} style={{ height: 40, width: SCREEN_WIDTH * 0.9, backgroundColor: 'red', marginVertical: 20, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
+      <TouchableOpacity onPress={handleSubmit} style={{ height: 40, width: SCREEN_WIDTH * 0.9, backgroundColor: 'red', marginVertical: 20, borderRadius: 10, justifyContent: 'center', alignItems: 'center', alignSelf: 'center' }}>
         <Text style={{ color: "white", fontWeight: 'bold' }}>Submit Feedback</Text>
       </TouchableOpacity>
 
-
-    </View >
+    </ScrollView >
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-
+    flex: 1,
     margin: 20,
+    alignSelf: 'center', width: SCREEN_WIDTH * 1
   },
   title: {
     fontSize: 20,
@@ -79,7 +88,7 @@ const styles = StyleSheet.create({
     padding: 10,
     color: 'black',
     backgroundColor: Colors.lightGray,
-    borderRadius: 10
+    borderRadius: 10, alignSelf: 'center',
   },
 });
 

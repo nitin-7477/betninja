@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import AppTextInput from '../AppTextInput'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
@@ -19,7 +19,7 @@ const ChangePasswordScreen = () => {
 
   const navigation = useNavigation();
   return (
-    <View style={styles.container}>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       <View style={{ marginBottom: 90, alignItems: 'center', flexDirection: 'row', height: 30, }}>
         <TouchableOpacity onPress={() => navigation.navigate('Setting')}>
           <EvilIcons name='chevron-left' size={35} color={'black'} />
@@ -55,7 +55,7 @@ const ChangePasswordScreen = () => {
         onPress={handleSaveChanges} style={{ height: SCREEN_HEIGHT * 0.06, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: 'red', marginTop: 50, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
         <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>Save Changes</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   )
 }
 
@@ -64,6 +64,6 @@ export default ChangePasswordScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 10
+    paddingHorizontal: 10, alignSelf: 'center'
   }
 })

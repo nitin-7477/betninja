@@ -11,8 +11,8 @@ const WithdrawHistoryScreen = () => {
 
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.depositSection}>  
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+      <View style={styles.depositSection}>
 
         <View style={{ flexDirection: 'row', alignItems: 'center' }}><TouchableOpacity
           onPress={() => navigation.navigate('Wallet')}
@@ -135,7 +135,7 @@ const styles = {
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f5f5f5', alignSelf: 'center'
 
   },
   redBtn: {

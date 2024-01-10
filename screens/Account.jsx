@@ -58,7 +58,7 @@ const Account = () => {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
 
       <View style={styles.header}>
         <Image
@@ -231,6 +231,7 @@ const styles = {
   container: {
     flex: 1,
     padding: 20,
+    alignSelf: 'center', backgroundColor: 'white'
 
   },
   header: {

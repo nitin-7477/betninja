@@ -3,14 +3,14 @@ import React from 'react'
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../../Constants/Screen'
 import { Colors } from '../../Constants/Colors'
 import Ionicons from "react-native-vector-icons/Ionicons"
-import Feather from "react-native-vector-icons/Feather"
+
 import { useNavigation } from "@react-navigation/native";
 
 
 const RiskDisclosure = () => {
   const navigation = useNavigation();
   return (
-    <ScrollView showsVerticalScrollIndicator={false}
+    <ScrollView style={{ flex: 1, alignSelf: 'center' }} showsVerticalScrollIndicator={false}
     >
       <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10, paddingHorizontal: 10 }}><TouchableOpacity
         onPress={() => navigation.navigate('AboutUs')}

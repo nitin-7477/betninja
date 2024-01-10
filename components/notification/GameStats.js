@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginVertical: 20,
-    padding: 20
+    padding: 20, alignSelf: 'center'
   },
   header: {
     height: SCREEN_HEIGHT * 0.05,

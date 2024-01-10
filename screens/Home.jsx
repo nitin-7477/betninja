@@ -36,43 +36,12 @@ const Home = () => {
       elevation: 5,
       height: 80,
       backgroundColor: '#FFF',
-      borderRadius: 20
+      borderRadius: 20, width: SCREEN_WIDTH * 1, alignSelf: 'center'
 
     }
   }
 
   return (
-    // <View style={{ flex: 1 }}>
-    //   <Tab.Navigator
-    //   //  tabBar={props => <CustomButtomTab {...props} />} 
-    //    initialRouteName="Home">
-    //     <Tab.Screen
-    //       options={{ tabBarLabel: "Promotion", headerShown: false }}
-    //       name="Promotion"
-    //       component={Promotion}
-    //     />
-    //     <Tab.Screen
-    //       options={{ tabBarLabel: "Activity", headerShown: false }}
-    //       name="Activity"
-    //       component={Activity}
-    //     />
-    //     <Tab.Screen
-    //       options={{ tabBarLabel: "Home", headerShown: false }}
-    //       name="Home"
-    //       component={Main}
-    //     />
-    //     <Tab.Screen
-    //       options={{ tabBarLabel: "Wallet", headerShown: false }}
-    //       name="Wallet"
-    //       component={Wallet}
-    //     />
-    //     <Tab.Screen
-    //       options={{ tabBarLabel: "Account", headerShown: false }}
-    //       name="Account"
-    //       component={Account}
-    //     />
-    //   </Tab.Navigator>
-
 
     //   {/* <Modal isVisible={isNotificationVisible}>
     //     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -105,7 +74,7 @@ const Home = () => {
       <Tab.Screen name="Promotion" component={Promotion} options={{
         tabBarIcon: ({ focused }) => {
           return (
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ alignItems: 'center', justifyContent: 'center', width: '250%' }}>
               <FontAwesome name="line-chart" size={20} color={focused ? 'red' : '#16247d'} />
               <Text style={{ color: focused ? 'red' : '#16247d' }}>Promotion</Text>
             </View>
@@ -115,8 +84,8 @@ const Home = () => {
       <Tab.Screen name="Activity" component={Activity} options={{
         tabBarIcon: ({ focused }) => {
           return (
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-              <Feather name="activity" size={20} color={focused ? 'red' : '#16247d'} />
+            <View style={{ alignItems: 'center', justifyContent: 'center', width: '250%' }}>
+              <Feather name="activity" size={15} color={focused ? 'red' : '#16247d'} />
               <Text style={{ color: focused ? 'red' : '#16247d' }}>Activity</Text>
             </View>
           )
@@ -136,7 +105,7 @@ const Home = () => {
       <Tab.Screen name="Wallet" component={Wallet} options={{
         tabBarIcon: ({ focused }) => {
           return (
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ alignItems: 'center', justifyContent: 'center', width: '250%' }}>
               <Entypo name="wallet" size={20} color={focused ? 'red' : '#16247d'} />
               <Text style={{ color: focused ? 'red' : '#16247d' }}>Wallet</Text>
             </View>
@@ -146,7 +115,7 @@ const Home = () => {
       <Tab.Screen name="Account" component={Account} options={{
         tabBarIcon: ({ focused }) => {
           return (
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ alignItems: 'center', justifyContent: 'center', width: '250%' }}>
               <MaterialCommunityIcons name="account" size={20} color={focused ? 'red' : '#16247d'} />
               <Text style={{ color: focused ? 'red' : '#16247d' }}>Account</Text>
             </View>

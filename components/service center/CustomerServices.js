@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Image, Text, TouchableOpacity, Alert } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Image, Text, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { Colors } from '../Constants/Colors';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -12,7 +12,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 const CustomerServices = () => {
   const navigation = useNavigation();
   return (
-    <View style={styles.container}>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       <View style={styles.notification}>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}><TouchableOpacity
           onPress={() => navigation.goBack()}
@@ -24,7 +24,7 @@ const CustomerServices = () => {
         <Image source={require('../../assets/customerService.png')} style={{ height: 200, width: 300, resizeMode: 'contain' }} />
       </View>
 
-      <View style={{ flex: 1, backgroundColor: 'white', width: SCREEN_WIDTH * 0.98, borderRadius: 40, marginTop: -30 }}>
+      <View style={{ flex: 1, backgroundColor: 'white', width: SCREEN_WIDTH * 0.98, borderRadius: 40, marginTop: -30, marginBottom: 50, height: 300 }}>
 
         <TouchableOpacity onPress={() => alert('Welcome to live chat')} style={{ height: 50, width: 320, alignSelf: 'center', marginTop: 30, borderRadius: 5, elevation: 3, backgroundColor: 'white' }}>
           <View style={{ height: 50, width: 320, justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, flexDirection: 'row' }}>
@@ -52,7 +52,7 @@ const CustomerServices = () => {
 
 
         <TouchableOpacity onPress={() => alert('Welcome to telegram')} style={{ height: 50, width: 320, alignSelf: 'center', marginTop: 30, borderRadius: 5, elevation: 3, backgroundColor: 'white' }}>
-          <View style={{ height: 50, width: 320, justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, flexDirection: 'row' }}>
+          <View style={{ height: 50, width: 320, justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, flexDirection: 'row', }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <FontAwesome name='telegram' size={32} color={'green'} />
               <Text style={{ marginLeft: 18, fontWeight: 500, color: 'black' }}>Telegram</Text>
@@ -64,7 +64,7 @@ const CustomerServices = () => {
 
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   )
 }
 
@@ -73,7 +73,7 @@ export default CustomerServices
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center'
+    alignSelf: 'center',
 
   },
   notification: {

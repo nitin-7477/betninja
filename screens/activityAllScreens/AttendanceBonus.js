@@ -15,7 +15,7 @@ const AttendanceBonus = () => {
 
   const navigation = useNavigation();
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       <View style={{ height: SCREEN_HEIGHT * 0.3, width: SCREEN_WIDTH * 1, backgroundColor: '#d9ad82' }}>
         <View style={{ width: '100%', flexDirection: 'row', paddingHorizontal: 5, paddingVertical: 10 }}>
 
@@ -24,7 +24,7 @@ const AttendanceBonus = () => {
           </TouchableOpacity>
           <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>Attendance</Text>
         </View>
-        
+
         <View style={{ width: '100%', flexDirection: 'row', paddingHorizontal: 5 }}>
           <View style={{ width: '60%' }}>
             <Text style={{ color: 'white', fontSize: 22, fontWeight: '400', marginHorizontal: 5, marginVertical: 10, }}>Attendance Bonus</Text>
@@ -87,6 +87,7 @@ export default AttendanceBonus
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignSelf: 'center'
 
   }
 })

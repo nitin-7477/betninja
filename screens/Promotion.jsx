@@ -311,6 +311,7 @@ export default Promotion
 const styles = {
   container: {
     flex: 1,
+    alignSelf: 'center'
     // padding: 20,
   },
   heading: {

@@ -1,5 +1,8 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useEffect, useState } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import Register from "./screens/Register";
 import Wallet from "./screens/Wallet";
 import Account from "./screens/Account";
@@ -7,8 +10,6 @@ import Gamescreen from "./screens/Gamescreen";
 import Login from "./screens/Login";
 import Home from "./screens/Home";
 import OnboardingScreen from "./screens/OnboardingScreen";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect, useState } from "react";
 import ForgotPasswordComponent from "./screens/ForgotPasswordScreen";
 import DepositHistoryScreen from "./components/walletscreens/DepositHistoryScreen";
 import DepositeScreen from "./components/walletscreens/DepositeScreen";
@@ -37,29 +38,28 @@ import ChangePasswordScreen from "./components/service center/ChangePasswordScre
 import AddBank from "./screens/AddBank";
 import SubOrdinate from "./screens/promotionAllScreens/SubOrdinate";
 import CommissionDetails from "./screens/promotionAllScreens/CommissionDetails";
-CommissionDetails
 import BankAccount from "./screens/BankAccount";
 import QrScanner from "./screens/QrScanner";
 import AttendanceBonus from "./screens/activityAllScreens/AttendanceBonus";
 
+// Navigation Configuration
 const Stack = createNativeStackNavigator();
+const defaultScreenOptions = {
+  headerShown: false,
+};
 
+// Main App Component
 export default function App() {
   const [isFirstLaunch, setIsFirstLaunch] = useState(false);
 
-
-
-  useEffect(() => {
-    // Use getItem instead of getItems
-    AsyncStorage.getItem("alreadyLaunched").then((value) => {
-      if (value === null) {
-        AsyncStorage.setItem("alreadyLaunched", "true");
-        setIsFirstLaunch(true);
-      } else {
-        setIsFirstLaunch(false);
-      }
-    });
-
+  useEffect(async () => {
+    const value = await AsyncStorage.getItem("alreadyLaunched");
+    if (value === null) {
+      AsyncStorage.setItem("alreadyLaunched", "true");
+      setIsFirstLaunch(true);
+    } else {
+      setIsFirstLaunch(false);
+    }
   }, []);
 
   return (
@@ -70,11 +70,11 @@ export default function App() {
         {isFirstLaunch && (
           <Stack.Screen options={{ headerShown: false }} name="OnboardingScreen" component={OnboardingScreen} />
         )}
+        <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
+        <Stack.Screen options={{ headerShown: false }} name="LevelScreen" component={LevelScreen} />
         <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
         <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
-        <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
         <Stack.Screen options={{ headerShown: false }} name="AttendanceBonus" component={AttendanceBonus} />
-        <Stack.Screen options={{ headerShown: false }} name="LevelScreen" component={LevelScreen} />
         <Stack.Screen options={{ headerShown: false }} name="QrScanner" component={QrScanner} />
         <Stack.Screen options={{ headerShown: false }} name="Gamescreen" component={Gamescreen} />
         <Stack.Screen options={{ headerShown: false }} name="BankAccount" component={BankAccount} />

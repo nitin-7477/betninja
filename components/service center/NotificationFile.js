@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Image, Text, TouchableOpacity, Alert } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Image, Text, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { Colors } from '../Constants/Colors';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -10,7 +10,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 const NotificationFile = () => {
   const navigation = useNavigation();
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}><TouchableOpacity
         onPress={() => navigation.navigate('Account')}
         style={{ height: 35, width: 35, justifyContent: 'center', alignItems: 'center', borderRadius: 20, backgroundColor: Colors.gray }}>
@@ -54,7 +54,7 @@ const NotificationFile = () => {
 
       </View>
       <Text style={{ width: SCREEN_WIDTH, textAlign: 'center', }}>No More</Text>
-    </View>
+    </ScrollView >
   )
 }
 
@@ -63,7 +63,7 @@ export default NotificationFile
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
+    alignSelf: 'center',
     padding: 10
   },
   notification: {

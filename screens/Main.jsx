@@ -96,11 +96,13 @@ export default function Main() {
   const top10ListsData = [
     { rank: 1, name: 'JackpotJester', earnings: '₹3,180,233', image: require('../assets/casino-player.png') },
     { rank: 2, name: 'VelvetVegas', earnings: '₹3,14,233', image: require('../assets/casino-player.png') },
-    { rank: 1, name: 'GoldenGambit', earnings: '₹2,80,233', image: require('../assets/casino-player.png') },
-    { rank: 2, name: 'DiamondDasher', earnings: '₹1,10,233', image: require('../assets/casino-player.png') }, { rank: 1, name: 'Player 5', earnings: '₹12000', image: require('../assets/casino-player.png') },
-    { rank: 2, name: 'LuckyRoller', earnings: '₹9500', image: require('../assets/casino-player.png') }, { rank: 1, name: 'Player 7', earnings: '₹12000', image: require('../assets/casino-player.png') },
-    { rank: 2, name: 'LuckChaser', earnings: '₹9500', image: require('../assets/casino-player.png') }, { rank: 1, name: 'Player 9', earnings: '₹12000', image: require('../assets/casino-player.png') },
-    { rank: 2, name: 'Queen', earnings: '₹9500', image: require('../assets/casino-player.png') },
+    { rank: 3, name: 'GoldenGambit', earnings: '₹2,80,233', image: require('../assets/casino-player.png') },
+    { rank: 4, name: 'DiamondDasher', earnings: '₹1,10,233', image: require('../assets/casino-player.png') },
+    { rank: 5, name: 'Player 5', earnings: '₹12000', image: require('../assets/casino-player.png') },
+    { rank: 6, name: 'LuckyRoller', earnings: '₹9500', image: require('../assets/casino-player.png') },
+    { rank: 7, name: 'Player 7', earnings: '₹12000', image: require('../assets/casino-player.png') },
+    { rank: 8, name: 'LuckChaser', earnings: '₹9500', image: require('../assets/casino-player.png') }, { rank: 9, name: 'Player 9', earnings: '₹12000', image: require('../assets/casino-player.png') },
+    { rank: 10, name: 'Queen', earnings: '₹9500', image: require('../assets/casino-player.png') },
     // Add more top 10 lists data
   ];
 
@@ -220,8 +222,7 @@ export default function Main() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // marginTop: 30,
-    // marginBottom: 30
+    alignSelf: 'center', width: SCREEN_WIDTH * 1
   },
   backgroundImage: {
     width: Dimensions.get('window').width,

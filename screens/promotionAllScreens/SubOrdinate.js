@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native'
 import React from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../components/Constants/Screen'
 import { Colors } from '../../components/Constants/Colors'
@@ -49,7 +49,7 @@ const SubOrdinate = () => {
   console.log(downline);
 
   return (
-    <View style={styles.container}>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}><TouchableOpacity
         onPress={() => navigation.navigate('Promotion')}
         style={{ height: 35, width: 35, justifyContent: 'center', alignItems: 'center', borderRadius: 20, backgroundColor: Colors?.lightGray, marginHorizontal: 10 }}>
@@ -112,7 +112,7 @@ const SubOrdinate = () => {
 
 
       </View>
-    </View>
+    </ScrollView>
   )
 }
 
@@ -121,6 +121,6 @@ export default SubOrdinate
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
+    alignSelf: 'center'
   }
 })

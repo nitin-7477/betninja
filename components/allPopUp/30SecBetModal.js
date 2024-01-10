@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
-import { SCREEN_WIDTH } from '../Constants/Screen';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen';
 
 const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType, select, ln, selectedCountdown, fetchUserData, countdowns }) => {
 
@@ -136,168 +136,170 @@ const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType,
   }, [countdowns, selectedCountdown, closeModal]);
 
   return (
+    <View style={styles.container}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isVisible}
+        onRequestClose={closeModal}
 
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={isVisible}
-      onRequestClose={closeModal}
-    >
+      >
 
-      <KeyboardAvoidingView style={{ justifyContent: 'flex-end', alignItems: 'center', flex: 1 }}>
-        <View style={[styles.diaLogViolet]}>
-          <View style={{ height: 60, width: SCREEN_WIDTH * 0.99, backgroundColor: backgroundColor, justifyContent: 'center', alignItems: 'center', borderTopStartRadius: 18, borderTopEndRadius: 18, }}>
-            <View style={{ height: '50%', width: 150, display: 'flex', justifyContent: 'center', backgroundColor: 'white', borderRadius: 10, marginVertical: 5, alignItems: 'center' }}>
-              <Text style={{ color: 'black', textAlign: 'center', fontWeight: 'bold' }}>Select {select}</Text>
+        <KeyboardAvoidingView style={{ justifyContent: 'flex-end', alignItems: 'center', flex: 1, width: SCREEN_WIDTH * 1, alignSelf: 'center' }}>
+          <View style={[styles.diaLogViolet]}>
+            <View style={{ height: 60, width: SCREEN_WIDTH * 0.99, backgroundColor: backgroundColor, justifyContent: 'center', alignItems: 'center', borderTopStartRadius: 18, borderTopEndRadius: 18, }}>
+              <View style={{ height: '50%', width: 150, display: 'flex', justifyContent: 'center', backgroundColor: 'white', borderRadius: 10, marginVertical: 5, alignItems: 'center' }}>
+                <Text style={{ color: 'black', textAlign: 'center', fontWeight: 'bold' }}>Select {select}</Text>
+
+              </View>
+            </View>
+            <View style={{ height: '15%', width: '97%', paddingVertical: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', }}>
+              <Text style={{ color: 'purple', fontWeight: 'bold' }}>Amount</Text>
+              <View style={{ flexDirection: 'row' }}>
+                <TouchableOpacity
+                  style={{ height: 25, width: 40, backgroundColor: selectedAmount == 1 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 1 }}
+                  onPress={() => amountMultiplier(1, 1)}
+                >
+                  <Text style={{ color: selectedAmount == 1 ? "white" : "black", }}>₹1</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={{ height: 25, width: 40, backgroundColor: selectedAmount == 2 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 1 }}
+                  onPress={() => amountMultiplier(10, 2)}
+                >
+                  <Text style={{ color: selectedAmount == 2 ? "white" : "black", }}>₹10</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={{ height: 25, width: 40, backgroundColor: selectedAmount == 3 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 1 }}
+                  onPress={() => amountMultiplier(100, 3)}
+                >
+                  <Text style={{ color: selectedAmount == 3 ? "white" : "black", }}>₹100</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={{ height: 25, width: 50, backgroundColor: selectedAmount == 4 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 1 }}
+                  onPress={() => amountMultiplier(1000, 4)}
+                >
+                  <Text style={{ color: selectedAmount == 4 ? "white" : "black", }}>₹1000</Text>
+                </TouchableOpacity>
+              </View >
+            </View>
+
+
+
+
+            <View style={{ height: '18%', width: '97%', paddingVertical: 5, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}>
+              <Text style={{ color: 'purple', fontWeight: 'bold' }}>Quantity</Text>
+              <View style={{ flexDirection: 'row' }}>
+
+                <TouchableOpacity
+                  onPress={handlePlus}
+                  style={{ height: 30, width: 30, justifyContent: 'center', alignItems: 'center', backgroundColor: backgroundColor, marginHorizontal: 5 }}>
+                  <Text style={{ color: 'white', fontSize: 16 }}>+</Text>
+                </TouchableOpacity>
+
+                <TextInput
+                  style={{ backgroundColor: 'white', color: 'black', fontWeight: 'bold', fontSize: 10, width: 100, height: 30, paddingVertical: 0 }}
+                  placeholder={`${times}`}
+                  keyboardType="numeric"
+                  value={times}
+                  onChangeText={(text) => setTimes(text)}
+                />
+                <TouchableOpacity
+                  onPress={handleMinus}
+                  style={{ height: 30, width: 30, justifyContent: 'center', alignItems: 'center', backgroundColor: backgroundColor, marginHorizontal: 5 }}>
+                  <Text style={{ color: 'white', fontSize: 24 }}>-</Text>
+                </TouchableOpacity>
+
+              </View></View>
+
+
+            <View style={{ height: '15%', width: '97%', paddingVertical: 8, display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: 6 }}>
+
+              <View style={{ flexDirection: 'row' }}>
+                <TouchableOpacity
+                  style={{ height: 25, width: 30, backgroundColor: selectedTimes == 1 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
+                  onPress={() => handleMultiplierClick(1, 1)}
+                >
+                  <Text style={{ color: selectedTimes == 1 ? "white" : "black", }}>X1</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={{ height: 25, width: 30, backgroundColor: selectedTimes == 2 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
+                  onPress={() => handleMultiplierClick(5, 2)}
+                >
+                  <Text style={{ color: selectedTimes == 2 ? "white" : "black", }}>X5</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={{ height: 25, width: 30, backgroundColor: selectedTimes == 3 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
+                  onPress={() => handleMultiplierClick(10, 3)}
+                >
+                  <Text style={{ color: selectedTimes == 3 ? "white" : "black", }}>X10</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={{ height: 25, width: 35, backgroundColor: selectedTimes == 4 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
+                  onPress={() => handleMultiplierClick(20, 4)}
+                >
+                  <Text style={{ color: selectedTimes == 4 ? "white" : "black", }}>X20</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{ height: 25, width: 35, backgroundColor: selectedTimes == 5 ? "green" : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
+                  onPress={() => handleMultiplierClick(50, 5)}
+                >
+                  <Text style={{ color: selectedTimes == 5 ? "white" : "black", }}>X50</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{ height: 25, width: 35, backgroundColor: selectedTimes == 6 ? "green" : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
+                  onPress={() => handleMultiplierClick(100, 6)}
+                >
+                  <Text style={{ color: selectedTimes == 6 ? "white" : "black", }}>X100</Text>
+                </TouchableOpacity>
+              </View >
 
             </View>
-          </View>
-          <View style={{ height: '15%', width: '97%', paddingVertical: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', }}>
-            <Text style={{ color: 'purple', fontWeight: 'bold' }}>Amount</Text>
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: 'row', flex: 1, alignItems: 'flex-end', justifyContent: 'space-between', width: '90%' }}>
+              <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
+                <Text style={styles.closeButtonText}>Cancel</Text>
+              </TouchableOpacity>
               <TouchableOpacity
-                style={{ height: 25, width: 40, backgroundColor: selectedAmount == 1 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 1 }}
-                onPress={() => amountMultiplier(1, 1)}
+                onPress={loading ? null : handleBigData}  // Disable the button during loading
+                style={{
+                  width: '55%',
+                  marginBottom: 5,
+                  backgroundColor: 'purple',
+                  paddingVertical: 15,
+                  paddingHorizontal: 20,
+                  borderRadius: 5,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  opacity: loading ? 0.5 : 1,  // Optionally reduce opacity during loading
+                }}
               >
-                <Text style={{ color: selectedAmount == 1 ? "white" : "black", }}>₹1</Text>
+                {loading ? (
+                  <ActivityIndicator size={20} color="red" />
+                ) : (
+                  <Text style={{ color: 'white', fontWeight: 'bold' }}>
+                    Total Amount :₹{totalAmount}
+                  </Text>
+                )}
               </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{ height: 25, width: 40, backgroundColor: selectedAmount == 2 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 1 }}
-                onPress={() => amountMultiplier(10, 2)}
-              >
-                <Text style={{ color: selectedAmount == 2 ? "white" : "black", }}>₹10</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{ height: 25, width: 40, backgroundColor: selectedAmount == 3 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 1 }}
-                onPress={() => amountMultiplier(100, 3)}
-              >
-                <Text style={{ color: selectedAmount == 3 ? "white" : "black", }}>₹100</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{ height: 25, width: 50, backgroundColor: selectedAmount == 4 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 1 }}
-                onPress={() => amountMultiplier(1000, 4)}
-              >
-                <Text style={{ color: selectedAmount == 4 ? "white" : "black", }}>₹1000</Text>
-              </TouchableOpacity>
-            </View >
-          </View>
-
-
-
-
-          <View style={{ height: '18%', width: '97%', paddingVertical: 5, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}>
-            <Text style={{ color: 'purple', fontWeight: 'bold' }}>Quantity</Text>
-            <View style={{ flexDirection: 'row' }}>
-
-              <TouchableOpacity
-                onPress={handlePlus}
-                style={{ height: 30, width: 30, justifyContent: 'center', alignItems: 'center', backgroundColor: backgroundColor, marginHorizontal: 5 }}>
-                <Text style={{ color: 'white', fontSize: 16 }}>+</Text>
-              </TouchableOpacity>
-
-              <TextInput
-                style={{ backgroundColor: 'white', color: 'black', fontWeight: 'bold', fontSize: 10, width: 100, height: 30, paddingVertical: 0 }}
-                placeholder={`${times}`}
-                keyboardType="numeric"
-                value={times}
-                onChangeText={(text) => setTimes(text)}
-              />
-              <TouchableOpacity
-                onPress={handleMinus}
-                style={{ height: 30, width: 30, justifyContent: 'center', alignItems: 'center', backgroundColor: backgroundColor, marginHorizontal: 5 }}>
-                <Text style={{ color: 'white', fontSize: 24 }}>-</Text>
-              </TouchableOpacity>
-
-            </View></View>
-
-
-          <View style={{ height: '15%', width: '97%', paddingVertical: 8, display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: 6 }}>
-
-            <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity
-                style={{ height: 25, width: 30, backgroundColor: selectedTimes == 1 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => handleMultiplierClick(1, 1)}
-              >
-                <Text style={{ color: selectedTimes == 1 ? "white" : "black", }}>X1</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{ height: 25, width: 30, backgroundColor: selectedTimes == 2 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => handleMultiplierClick(5, 2)}
-              >
-                <Text style={{ color: selectedTimes == 2 ? "white" : "black", }}>X5</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{ height: 25, width: 30, backgroundColor: selectedTimes == 3 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => handleMultiplierClick(10, 3)}
-              >
-                <Text style={{ color: selectedTimes == 3 ? "white" : "black", }}>X10</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{ height: 25, width: 35, backgroundColor: selectedTimes == 4 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => handleMultiplierClick(20, 4)}
-              >
-                <Text style={{ color: selectedTimes == 4 ? "white" : "black", }}>X20</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{ height: 25, width: 35, backgroundColor: selectedTimes == 5 ? "green" : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => handleMultiplierClick(50, 5)}
-              >
-                <Text style={{ color: selectedTimes == 5 ? "white" : "black", }}>X50</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{ height: 25, width: 35, backgroundColor: selectedTimes == 6 ? "green" : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
-                onPress={() => handleMultiplierClick(100, 6)}
-              >
-                <Text style={{ color: selectedTimes == 6 ? "white" : "black", }}>X100</Text>
-              </TouchableOpacity>
-            </View >
+            </View>
 
           </View>
-          <View style={{ flexDirection: 'row', flex: 1, alignItems: 'flex-end', justifyContent: 'space-between', width: '90%' }}>
-            <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
-              <Text style={styles.closeButtonText}>Cancel</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={loading ? null : handleBigData}  // Disable the button during loading
-              style={{
-                width: '55%',
-                marginBottom: 5,
-                backgroundColor: 'purple',
-                paddingVertical: 15,
-                paddingHorizontal: 20,
-                borderRadius: 5,
-                justifyContent: 'center',
-                alignItems: 'center',
-                opacity: loading ? 0.5 : 1,  // Optionally reduce opacity during loading
-              }}
-            >
-              {loading ? (
-                <ActivityIndicator size={20} color="red" />
-              ) : (
-                <Text style={{ color: 'white', fontWeight: 'bold' }}>
-                  Total Amount :₹{totalAmount}
-                </Text>
-              )}
-            </TouchableOpacity>
-          </View>
+        </KeyboardAvoidingView >
 
-        </View>
-      </KeyboardAvoidingView >
-
-
-
-    </Modal>
+      </Modal>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-
+  container: {
+    flex: 1, alignSelf: 'center', width: SCREEN_WIDTH * 1
+  },
   modalText: {
     fontSize: 18,
     marginBottom: 20,
@@ -314,7 +316,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   diaLogViolet: {
-    height: '35%', width: '99%', alignItems: 'center', padding: 0, backgroundColor: '#F1EFEF',
+    height: SCREEN_HEIGHT * 0.34, width: '99%', alignItems: 'center', padding: 0, backgroundColor: '#F1EFEF',
     borderTopLeftRadius: 20, borderTopRightRadius: 20,
     shadowColor: 'black', elevation: 10, shadowOffset: { height: 0, width: 0 }, shadowOpacity: 1,
     // backgroundColor: '#ffa343',

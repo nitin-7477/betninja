@@ -100,7 +100,7 @@ const DepositeScreen = () => {
 
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       <View style={styles.depositSection}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}><TouchableOpacity
           onPress={() => navigation.goBack()}
@@ -250,6 +250,7 @@ const styles = {
     flex: 1,
     padding: 20,
     backgroundColor: '#f5f5f5',
+    alignSelf: 'center'
 
   },
   redBtn: {

@@ -60,7 +60,7 @@ export default Notifications
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20
+    padding: 20, alignSelf: 'center'
   },
   header: {
     height: SCREEN_HEIGHT * 0.06,

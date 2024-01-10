@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { Image, StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native'
 import React from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../Constants/Screen'
 import { Colors } from '../../Constants/Colors'
@@ -11,7 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 const AboutUs = () => {
   const navigation = useNavigation();
   return (
-    <View style={styles.container}>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       <View style={{ height: SCREEN_HEIGHT * 0.3, width: SCREEN_WIDTH * 1, alignSelf: 'center', backgroundColor: '#d6aa7f', paddingHorizontal: 10 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}><TouchableOpacity
           onPress={() => navigation.navigate('Account')}
@@ -44,7 +44,7 @@ const AboutUs = () => {
         </View>
         <Feather name='chevron-right' size={20} color={Colors.fontGray} />
       </TouchableOpacity >
-    </View >
+    </ScrollView>
   )
 }
 
@@ -52,6 +52,7 @@ export default AboutUs
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    alignSelf: 'center'
   }
 })

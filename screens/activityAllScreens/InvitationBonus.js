@@ -1,14 +1,112 @@
-import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, FlatList } from 'react-native'
 import React from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../components/Constants/Screen'
 import { Colors } from '../../components/Constants/Colors'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
 
+
+
+const data = [
+  {
+    id: '1',
+    bonusTitle: 'Bonus 1',
+    bonusAmount: 'Rs 55.00',
+    numberOfInvitees: 1,
+    rechargePerPerson: 'Rs 333.00',
+    inviteesStatus: '0/1',
+    depositNumberStatus: '0/1',
+  },
+  {
+    id: '2',
+    bonusTitle: 'Bonus 2',
+    bonusAmount: 'Rs 919.00',
+    numberOfInvitees: 1,
+    rechargePerPerson: 'Rs 5553.00',
+    inviteesStatus: '0/1',
+    depositNumberStatus: '0/1',
+  },
+  {
+    id: '3',
+    bonusTitle: 'Bonus 3',
+    bonusAmount: 'Rs 919.00',
+    numberOfInvitees: 1,
+    rechargePerPerson: 'Rs 3455.00',
+    inviteesStatus: '0/1',
+    depositNumberStatus: '0/1',
+  },
+  {
+    id: '4',
+    bonusTitle: 'Bonus 4',
+    bonusAmount: 'Rs 239.00',
+    numberOfInvitees: 1,
+    rechargePerPerson: 'Rs 43.00',
+    inviteesStatus: '0/1',
+    depositNumberStatus: '0/1',
+  },
+  {
+    id: '5',
+    bonusTitle: 'Bonus 5',
+    bonusAmount: 'Rs 9349.00',
+    numberOfInvitees: 1,
+    rechargePerPerson: 'Rs 55345.00',
+    inviteesStatus: '0/1',
+    depositNumberStatus: '0/1',
+  },
+  {
+    id: '6',
+    bonusTitle: 'Bonus 6',
+    bonusAmount: 'Rs 995.00',
+    numberOfInvitees: 1,
+    rechargePerPerson: 'Rs 5455.00',
+    inviteesStatus: '0/1',
+    depositNumberStatus: '0/1',
+  },
+  {
+    id: '7',
+    bonusTitle: 'Bonus 7',
+    bonusAmount: 'Rs 9339.00',
+    numberOfInvitees: 1,
+    rechargePerPerson: 'Rs 44.00',
+    inviteesStatus: '0/1',
+    depositNumberStatus: '0/1',
+  },
+  {
+    id: '8',
+    bonusTitle: 'Bonus 8',
+    bonusAmount: 'Rs 696.00',
+    numberOfInvitees: 1,
+    rechargePerPerson: 'Rs 425.00',
+    inviteesStatus: '0/1',
+    depositNumberStatus: '0/1',
+  },
+
+  {
+    id: '9',
+    bonusTitle: 'Bonus 9',
+    bonusAmount: 'Rs 659.00',
+    numberOfInvitees: 1,
+    rechargePerPerson: 'Rs 5455.00',
+    inviteesStatus: '0/1',
+    depositNumberStatus: '0/1',
+  },
+
+  {
+    id: '10',
+    bonusTitle: 'Bonus 10',
+    bonusAmount: 'Rs 3329.00',
+    numberOfInvitees: 1,
+    rechargePerPerson: 'Rs 55.00',
+    inviteesStatus: '0/1',
+    depositNumberStatus: '0/1',
+  },
+
+  // Add more data as needed
+];
 const InvitationBonus = () => {
   const navigation = useNavigation();
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container1}>
 
       <View style={{ height: SCREEN_HEIGHT * 0.32, width: SCREEN_WIDTH * 1, backgroundColor: "chocolate" }}>
         {/* **********navigation********** */}
@@ -59,118 +157,52 @@ const InvitationBonus = () => {
 
       </View>
 
-      <View style={{
-        height: SCREEN_HEIGHT * 0.4,
-        width: SCREEN_WIDTH * 0.95, marginVertical: 10, backgroundColor: Colors.lightGray, alignSelf: 'center', borderRadius: 10, elevation: 2
-      }}>
-        <View style={{
-          height: SCREEN_HEIGHT * 0.07,
-          width: SCREEN_WIDTH * 0.95, backgroundColor: Colors.lightblue, alignSelf: 'center', borderRadius: 10, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center', paddingRight: 5
-        }}>
-          <View style={{ height: 50, width: 150, backgroundColor: 'purple', justifyContent: 'center', alignItems: 'center', borderTopStartRadius: 10, borderBottomEndRadius: 10 }}>
-            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>Bonus 1</Text></View>
-          <Text style={{ color: 'red', fontWeight: 'bold' }}>Rs 99.00</Text>
-        </View>
+      <FlatList
+        data={data}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.container}>
+            <View style={styles.cardContainer}>
+              <View style={styles.header}>
+                <View style={styles.bonusTitleContainer}>
+                  <Text style={styles.bonusTitleText}>{item.bonusTitle}</Text>
+                </View>
+                <Text style={styles.bonusAmountText}>{item.bonusAmount}</Text>
+              </View>
 
-        <View style={{ marginTop: 10, paddingHorizontal: 10, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: Colors.fontGray, height: '40', padding: 5, borderRadius: 10, justifyContent: 'space-between', flexDirection: 'row' }}>
-          <Text style={{ color: 'white' }}>Number of Invitees</Text>
-          <Text style={{ color: 'white' }}>1</Text>
-        </View>
-        <View style={{ marginTop: 10, paddingHorizontal: 10, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: Colors.fontGray, height: '40', padding: 5, borderRadius: 10, justifyContent: 'space-between', flexDirection: 'row' }}>
-          <Text style={{ color: 'white' }}>Rechage per People</Text>
-          <Text style={{ color: 'white' }}>Rs 555.00</Text>
-        </View>
-        <View style={{ borderBottomWidth: 0.2, borderColor: Colors.fontGray, marginVertical: 20 }}></View>
-        <View style={{ paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-          <View style={{ width: '50%', justifyContent: 'center', alignItems: 'center' }}>
-            <Text>0/1</Text>
-            <Text>Number of Invitees</Text>
+              <View style={styles.detailsContainer}>
+                <View style={styles.detailRow}>
+                  <Text style={styles.detailText}>Number of Invitees</Text>
+                  <Text style={styles.detailText}>{item.numberOfInvitees}</Text>
+                </View>
+
+                <View style={styles.detailRow}>
+                  <Text style={styles.detailText}>Recharge per People</Text>
+                  <Text style={styles.detailText}>{item.rechargePerPerson}</Text>
+                </View>
+
+                <View style={styles.separator}></View>
+
+                <View style={styles.statusContainer}>
+                  <View style={styles.statusItem}>
+                    <Text style={styles.statusNumber}>{item.inviteesStatus}</Text>
+                    <Text>Number of Invitees</Text>
+                  </View>
+                  <View style={styles.statusItem}>
+                    <Text style={styles.statusNumber}>{item.depositNumberStatus}</Text>
+                    <Text>Deposit Number</Text>
+                  </View>
+                </View>
+              </View>
+
+              <TouchableOpacity style={styles.button}>
+                <Text style={styles.buttonText}>Unfinished</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={{ width: '50%', justifyContent: 'center', alignItems: 'center' }}>
-            <Text>0/1</Text>
-            <Text>Deposite Number</Text>
-          </View>
-        </View>
-        <TouchableOpacity style={{ width: SCREEN_WIDTH * 0.9, height: SCREEN_HEIGHT * 0.05, backgroundColor: 'red', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', marginTop: 30, borderRadius: 10 }}>
-          <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16 }}>Unfinished</Text>
-        </TouchableOpacity>
+        )}
+      />
 
-      </View>
-
-      <View style={{
-        height: SCREEN_HEIGHT * 0.4,
-        width: SCREEN_WIDTH * 0.95, marginVertical: 10, backgroundColor: Colors.lightGray, alignSelf: 'center', borderRadius: 10, elevation: 2
-      }}>
-        <View style={{
-          height: SCREEN_HEIGHT * 0.07,
-          width: SCREEN_WIDTH * 0.95, backgroundColor: Colors.lightblue, alignSelf: 'center', borderRadius: 10, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center', paddingRight: 5
-        }}>
-          <View style={{ height: 50, width: 150, backgroundColor: 'purple', justifyContent: 'center', alignItems: 'center', borderTopStartRadius: 10, borderBottomEndRadius: 10 }}>
-            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>Bonus 1</Text></View>
-          <Text style={{ color: 'red', fontWeight: 'bold' }}>Rs 99.00</Text>
-        </View>
-
-        <View style={{ marginTop: 10, paddingHorizontal: 10, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: Colors.fontGray, height: '40', padding: 5, borderRadius: 10, justifyContent: 'space-between', flexDirection: 'row' }}>
-          <Text style={{ color: 'white' }}>Number of Invitees</Text>
-          <Text style={{ color: 'white' }}>1</Text>
-        </View>
-        <View style={{ marginTop: 10, paddingHorizontal: 10, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: Colors.fontGray, height: '40', padding: 5, borderRadius: 10, justifyContent: 'space-between', flexDirection: 'row' }}>
-          <Text style={{ color: 'white' }}>Rechage per People</Text>
-          <Text style={{ color: 'white' }}>Rs 555.00</Text>
-        </View>
-        <View style={{ borderBottomWidth: 0.2, borderColor: Colors.fontGray, marginVertical: 20 }}></View>
-        <View style={{ paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-          <View style={{ width: '50%', justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{ fontSize: 18, color: 'red' }}>0/1</Text>
-            <Text>Number of Invitees</Text>
-          </View>
-          <View style={{ width: '50%', justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{ fontSize: 18, color: 'red' }}>0/1</Text>
-            <Text>Deposite Number</Text>
-          </View>
-        </View>
-        <TouchableOpacity style={{ width: SCREEN_WIDTH * 0.9, height: SCREEN_HEIGHT * 0.05, backgroundColor: 'red', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', marginTop: 30, borderRadius: 10 }}>
-          <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16 }}>Unfinished</Text>
-        </TouchableOpacity>
-
-      </View>
-      <View style={{
-        height: SCREEN_HEIGHT * 0.4,
-        width: SCREEN_WIDTH * 0.95, marginVertical: 10, backgroundColor: Colors.lightGray, alignSelf: 'center', borderRadius: 10, elevation: 2
-      }}>
-        <View style={{
-          height: SCREEN_HEIGHT * 0.07,
-          width: SCREEN_WIDTH * 0.95, backgroundColor: Colors.lightblue, alignSelf: 'center', borderRadius: 10, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center', paddingRight: 5
-        }}>
-          <View style={{ height: 50, width: 150, backgroundColor: 'purple', justifyContent: 'center', alignItems: 'center', borderTopStartRadius: 10, borderBottomEndRadius: 10 }}>
-            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>Bonus 1</Text></View>
-          <Text style={{ color: 'red', fontWeight: 'bold' }}>Rs 99.00</Text>
-        </View>
-
-        <View style={{ marginTop: 10, paddingHorizontal: 10, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: Colors.fontGray, height: '40', padding: 5, borderRadius: 10, justifyContent: 'space-between', flexDirection: 'row' }}>
-          <Text style={{ color: 'white' }}>Number of Invitees</Text>
-          <Text style={{ color: 'white' }}>1</Text>
-        </View>
-        <View style={{ marginTop: 10, paddingHorizontal: 10, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: Colors.fontGray, height: '40', padding: 5, borderRadius: 10, justifyContent: 'space-between', flexDirection: 'row' }}>
-          <Text style={{ color: 'white' }}>Rechage per People</Text>
-          <Text style={{ color: 'white' }}>Rs 555.00</Text>
-        </View>
-        <View style={{ borderBottomWidth: 0.2, borderColor: Colors.fontGray, marginVertical: 20 }}></View>
-        <View style={{ paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-          <View style={{ width: '50%', justifyContent: 'center', alignItems: 'center' }}>
-            <Text>0/1</Text>
-            <Text>Number of Invitees</Text>
-          </View>
-          <View style={{ width: '50%', justifyContent: 'center', alignItems: 'center' }}>
-            <Text>0/1</Text>
-            <Text>Deposite Number</Text>
-          </View>
-        </View>
-        <TouchableOpacity style={{ width: SCREEN_WIDTH * 0.9, height: SCREEN_HEIGHT * 0.05, backgroundColor: 'red', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', marginTop: 30, borderRadius: 10 }}>
-          <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16 }}>Unfinished</Text>
-        </TouchableOpacity>
-
-      </View>
 
     </ScrollView>
   )
@@ -179,9 +211,101 @@ const InvitationBonus = () => {
 export default InvitationBonus
 
 const styles = StyleSheet.create({
-  container: {
+  container1: {
     flex: 1,
     paddingHorizontal: 1,
+    alignSelf: 'center'
 
-  }
+  },
+  container: {
+    height: SCREEN_HEIGHT * 0.4,
+    width: SCREEN_WIDTH * 0.95,
+    marginVertical: 10,
+    backgroundColor: Colors.lightGray,
+    alignSelf: 'center',
+    borderRadius: 10,
+    elevation: 2,
+  },
+  cardContainer: {
+    flex: 1,
+  },
+  header: {
+    height: SCREEN_HEIGHT * 0.07,
+    width: SCREEN_WIDTH * 0.95,
+    backgroundColor: Colors.lightblue,
+    alignSelf: 'center',
+    borderRadius: 10,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingRight: 5,
+  },
+  bonusTitleContainer: {
+    height: 50,
+    width: 150,
+    backgroundColor: 'purple',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderTopStartRadius: 10,
+    borderBottomEndRadius: 10,
+  },
+  bonusTitleText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  bonusAmountText: {
+    color: 'red',
+    fontWeight: 'bold',
+  },
+  detailsContainer: {
+    marginTop: 10,
+    paddingHorizontal: 10,
+    width: SCREEN_WIDTH * 0.9,
+    alignSelf: 'center',
+  },
+  detailRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginVertical: 5,
+  },
+  detailText: {
+    color: 'black',
+  },
+  separator: {
+    borderBottomWidth: 0.2,
+    borderColor: Colors.fontGray,
+    marginVertical: 20,
+  },
+  statusContainer: {
+    paddingHorizontal: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  statusItem: {
+    width: '50%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  statusNumber: {
+    fontSize: 18,
+    color: 'red',
+  },
+  button: {
+    width: SCREEN_WIDTH * 0.9,
+    height: SCREEN_HEIGHT * 0.05,
+    backgroundColor: 'red',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 30,
+    borderRadius: 10,
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+
 })

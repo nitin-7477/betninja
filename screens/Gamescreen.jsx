@@ -724,7 +724,7 @@ const HomeScreen = ({ navigation, index }) => {
 
 
   return (
-    <ScrollView refreshControl={
+    <ScrollView style={styles.mainContainer} refreshControl={
       <RefreshControl
         refreshing={refreshing}
         onRefresh={onRefresh}
@@ -951,13 +951,7 @@ const HomeScreen = ({ navigation, index }) => {
 
 
       {/* Your other component content goes here */}
-
-      <View style={styles.buttonRow}>
-
-
-
-        {/* *********************** This is the bet modal ********************/}
-
+      <View style={{ flex: 1, width: SCREEN_WIDTH * 1, alignSelf: 'center' }}>
         <ThirtySecBetModal
           countdowns={countdowns}
           isVisible={bigModalVisible}
@@ -969,6 +963,15 @@ const HomeScreen = ({ navigation, index }) => {
           fetchUserData={fetchUserData}
           ln={selectedCountdown == 'thirtySec' ? gameHistoryThirtySec[0]?.LN + 1 : selectedCountdown == 'oneMin' ? gameHistoryOneMin[0]?.LN + 1 : selectedCountdown == 'threeMin' ? gameHistoryThreeMin[0]?.LN + 1 : selectedCountdown == 'fiveMin' ? gameHistoryFiveMin[0]?.LN + 1 : 0}
         />
+      </View>
+
+      <View style={styles.buttonRow}>
+
+
+
+        {/* *********************** This is the bet modal ********************/}
+
+
 
         {/* *********************** This is the bet modal ********************/}
 
@@ -1186,6 +1189,10 @@ const HomeScreen = ({ navigation, index }) => {
 };
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1, alignSelf: 'center', width: SCREEN_WIDTH * 1
+  },
+
   container: {
     alignItems: 'center',
     paddingVertical: 20,

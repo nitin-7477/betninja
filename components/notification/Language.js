@@ -47,8 +47,9 @@ export default Language
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginVertical: 20,
-    padding: 20
+    marginVertical: 1,
+    padding: 10,
+    alignSelf: 'center', backgroundColor: 'white'
   },
   header: {
     height: SCREEN_HEIGHT * 0.05,

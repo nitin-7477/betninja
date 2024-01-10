@@ -1,13 +1,28 @@
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, FlatList } from 'react-native'
 import React from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../components/Constants/Screen'
 import Ionicons from "react-native-vector-icons/Ionicons"
 import { Colors } from '../../components/Constants/Colors'
 import { useNavigation } from "@react-navigation/native";
+
+
+const data = [
+  { id: '1', type: 'Lottery', date: '2023-12-06 1:00:10', status: 'Completed', rebate: '₹ 429', rebateRate: '0.1%', rebateAmount: '0.43' },
+  { id: '2', type: 'Lottery', date: '2023-12-06 1:00:10', status: 'Completed', rebate: '₹ 1237', rebateRate: '0.3%', rebateAmount: '0.43' },
+  { id: '3', type: 'Lottery', date: '2023-12-06 1:00:10', status: 'Completed', rebate: '₹ 4239', rebateRate: '0.19%', rebateAmount: '0.43' },
+  { id: '4', type: 'Lottery', date: '2023-12-06 1:00:10', status: 'Completed', rebate: '₹ 13327', rebateRate: '0.3%', rebateAmount: '0.43' },
+  { id: '5', type: 'Lottery', date: '2023-12-06 1:00:10', status: 'Completed', rebate: '₹ 4249', rebateRate: '0.15%', rebateAmount: '0.43' },
+  { id: '6', type: 'Lottery', date: '2023-12-06 1:00:10', status: 'Completed', rebate: '₹ 12337', rebateRate: '0.35%', rebateAmount: '0.43' },
+  { id: '7', type: 'Lottery', date: '2023-12-06 1:00:10', status: 'Completed', rebate: '₹ 429', rebateRate: '0.1%', rebateAmount: '0.43' },
+  { id: '8', type: 'Lottery', date: '2023-12-06 1:00:10', status: 'Completed', rebate: '₹ 127', rebateRate: '0.3%', rebateAmount: '0.43' },
+  { id: '9', type: 'Lottery', date: '2023-12-06 1:00:10', status: 'Completed', rebate: '₹ 429', rebateRate: '0.1%', rebateAmount: '0.43' },
+  { id: '10', type: 'Lottery', date: '2023-12-06 1:00:10', status: 'Completed', rebate: '₹ 127', rebateRate: '0.3%', rebateAmount: '0.43' },
+
+];
 const BettingRebate = () => {
   const navigation = useNavigation();
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container1}>
       <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10 }}><TouchableOpacity
         onPress={() => navigation.navigate('Activity')}
         style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
@@ -41,40 +56,42 @@ const BettingRebate = () => {
 
       <Text style={{ marginLeft: 20, fontSize: 20, fontWeight: 'bold', marginTop: 10 }}>Rebate History</Text>
 
-      <View style={{ height: SCREEN_HEIGHT * 0.24, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: '#e1edf0', marginBottom: 10, borderRadius: 10, padding: 10, }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10, justifyContent: 'space-between' }}>
-          <TouchableOpacity style={{
-            backgroundColor: '#50C878',
-            alignItems: 'center',
-            width: SCREEN_WIDTH * 0.25,
-            paddingVertical: 5,
-            borderRadius: 7
+      <FlatList
+        data={data}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.container}>
+            <View style={styles.cardContainer}>
+              <View style={styles.header}>
+                <TouchableOpacity style={styles.button}>
+                  <Text style={styles.buttonText}>{item.type}</Text>
+                </TouchableOpacity>
+                <Text>{item.date}</Text>
+                <Text style={styles.statusCompleted}>{item.status}</Text>
+              </View>
 
-          }}>
-            <View>
-              <Text style={{ fontWeight: 'bold', color: 'white', }}>Lottery</Text>
+              {/* Deposit History Card */}
+              <View style={styles.depositHistoryCard}>
+                <View style={styles.historyRow}>
+                  <Text style={styles.historyText}>Betting Rebate</Text>
+                  <Text style={styles.historyAmount}>{item.rebate}</Text>
+                </View>
+
+                <View style={styles.historyRow}>
+                  <Text style={styles.historyText}>Rebate Rate</Text>
+                  <Text style={styles.historyAmount}>{item.rebateRate}</Text>
+                </View>
+
+                <View style={styles.historyRow}>
+                  <Text style={styles.historyText}>Rebate Amount</Text>
+                  <Text style={styles.historyAmount}>{item.rebateAmount}</Text>
+                </View>
+              </View>
             </View>
-          </TouchableOpacity>
-          <Text>2023-12-06 1:00:10  </Text>
-          <Text style={{ marginLeft: 10, fontSize: 16, color: 'green' }} >Completed</Text>
-        </View>
-
-        {/* *********************************Deposit History Card ****************************** */}
-
-        <View style={{ height: SCREEN_HEIGHT * 0.28, width: SCREEN_WIDTH * 0.85, borderTopWidth: 0.4, borderColor: 'grey', borderRadius: 10, padding: 10 }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-            <Text style={{ fontSize: 16, color: 'black' }}>Betting Rebate</Text><Text style={{ color: 'black', fontSize: 18 }}>₹ 429</Text>
           </View>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-            <Text style={{ fontSize: 16, color: 'black' }}>Rebate Rate</Text><Text style={{ color: "black" }}>0.1%</Text>
-          </View>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-            <Text style={{ fontSize: 16, color: 'black' }}>Rebate Amount</Text><Text style={{ color: "black" }}>0.43</Text>
-          </View>
+        )}
+      />
 
-
-        </View>
-      </View>
 
     </ScrollView>
   )
@@ -83,8 +100,66 @@ const BettingRebate = () => {
 export default BettingRebate
 
 const styles = StyleSheet.create({
-  container: {
+  container1: {
     flex: 1,
-    marginVertical: 10
-  }
+    marginVertical: 10,
+    alignSelf: 'center'
+  },
+  container: {
+    height: SCREEN_HEIGHT * 0.24,
+    width: SCREEN_WIDTH * 0.9,
+    alignSelf: 'center',
+    backgroundColor: '#e1edf0',
+    marginBottom: 10,
+    borderRadius: 10,
+    padding: 10,
+  },
+  cardContainer: {
+    flex: 1,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+    justifyContent: 'space-between',
+  },
+  button: {
+    backgroundColor: '#50C878',
+    alignItems: 'center',
+    width: SCREEN_WIDTH * 0.25,
+    paddingVertical: 5,
+    borderRadius: 7,
+  },
+  buttonText: {
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  statusCompleted: {
+    marginLeft: 10,
+    fontSize: 16,
+    color: 'green',
+  },
+  depositHistoryCard: {
+    height: SCREEN_HEIGHT * 0.28,
+    width: SCREEN_WIDTH * 0.85,
+    borderTopWidth: 0.4,
+    borderColor: 'grey',
+    borderRadius: 10,
+    padding: 10,
+  },
+  historyRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginVertical: 5,
+  },
+  historyText: {
+    fontSize: 16,
+    color: 'black',
+  },
+  historyAmount: {
+    color: 'black',
+    fontSize: 18,
+  },
+
 })

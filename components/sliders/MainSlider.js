@@ -15,13 +15,13 @@ const sliderImages = [
 
 const MainSlider = () => {
   return (
-    <View>
-      <FlatList data={sliderImages} horizontal contentContainerStyle={{paddingHorizontal:5}}
-        renderItem={({ item }) => {
-          return <View style={styles.slider}>
-            <Image source={item.image} style={{ height: 170, width: 330, borderRadius: 10, marginHorizontal: 10 }} /></View>
-        }} />
-    </View>
+
+    <FlatList pagingEnabled data={sliderImages} horizontal contentContainerStyle={{ paddingHorizontal: 5 }}
+      renderItem={({ item }) => {
+        return <View style={styles.slider}>
+          <Image source={item.image} style={{ height: 170, width: 330, borderRadius: 10, marginHorizontal: 10 }} /></View>
+      }} />
+
   )
 }
 

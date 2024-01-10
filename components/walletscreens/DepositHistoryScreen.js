@@ -15,7 +15,7 @@ const DepositHistoryScreen = () => {
     setActiveTab(tab);
   };
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       <View style={styles.depositSection}>
 
         <View style={{ flexDirection: 'row', alignItems: 'center' }}><TouchableOpacity
@@ -140,7 +140,7 @@ const styles = {
     flex: 1,
     padding: 20,
     backgroundColor: '#f5f5f5',
-    marginTop: 30
+    marginTop: 30, alignSelf: 'center'
   },
   redBtn: {
     backgroundColor: '#D3D3D3',
