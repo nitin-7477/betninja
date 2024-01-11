@@ -9,16 +9,17 @@ import { useNavigation } from "@react-navigation/native";
 
 const ActivityAward = () => {
   const navigation = useNavigation();
-  data = [{ id: 10, total: 4999, amount: 5000000 },
-  { id: 9, total: 2999, amount: 2000000 },
-  { id: 8, total: 1111, amount: 1000000 },
-  { id: 7, total: 581, amount: 600000 },
-  { id: 6, total: 281, amount: 300000 },
-  { id: 5, total: 181, amount: 100000 },
-  { id: 4, total: 99, amount: 50000 },
-  { id: 3, total: 29, amount: 10000 },
-  { id: 2, total: 19, amount: 5000 },
-  { id: 1, total: 9, amount: 1000 },
+  data = [
+    { id: 1, total: 9, amount: 1000, bonus: 1000 },
+    { id: 2, total: 19, amount: 5000, bonus: 5000 },
+    { id: 3, total: 29, amount: 10000, bonus: 10000 },
+    { id: 4, total: 99, amount: 50000, bonus: 50000 },
+    { id: 5, total: 181, amount: 100000, bonus: 30000 },
+    { id: 6, total: 281, amount: 300000, bonus: 60000 },
+    { id: 7, total: 581, amount: 600000, bonus: 100000 },
+    { id: 8, total: 1111, amount: 1000000, bonus: 200000 },
+    { id: 9, total: 2999, amount: 2000000, bonus: 300000 },
+    { id: 10, total: 4999, amount: 5000000, bonus: 500000 },
 
   ]
   return (
@@ -85,7 +86,7 @@ const ActivityAward = () => {
             </View>
 
             <View style={{ marginTop: 10, paddingHorizontal: 10 }}>
-              <Text>Bettin Bonus {item.id}   <Text style={{ color: 'purple' }}>0/1000</Text></Text>
+              <Text>Betting Bonus {item.id}   <Text style={{ color: 'purple' }}>0 /{item.bonus}</Text></Text>
             </View>
             <View style={{ borderBottomWidth: 0.2, borderColor: Colors.fontGray, marginVertical: 20 }}></View>
             <View style={{ paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between' }}>

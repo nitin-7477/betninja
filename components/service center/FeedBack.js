@@ -60,6 +60,7 @@ const FeedbackForm = () => {
         onFinishRating={this.ratingCompleted}
       />
       <Image source={require('../../assets/feedback.png')} style={{ height: 200, width: 300, marginVertical: 40 }} />
+
       <TouchableOpacity onPress={handleSubmit} style={{ height: 40, width: SCREEN_WIDTH * 0.9, backgroundColor: 'red', marginVertical: 20, borderRadius: 10, justifyContent: 'center', alignItems: 'center', alignSelf: 'center' }}>
         <Text style={{ color: "white", fontWeight: 'bold' }}>Submit Feedback</Text>
       </TouchableOpacity>

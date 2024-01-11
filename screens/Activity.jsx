@@ -109,31 +109,31 @@ const Activity = () => {
       </View>
 
       {/* ************************Banners********************************* */}
-      <View style={{ height: SCREEN_HEIGHT * 0.25, width: SCREEN_WIDTH * 0.95, alignSelf: 'center', padding: 10, backgroundColor: Colors.lightGray, borderRadius: 10, marginVertical: 5 }}>
+      {/* <View style={{ height: SCREEN_HEIGHT * 0.25, width: SCREEN_WIDTH * 0.95, alignSelf: 'center', padding: 10, backgroundColor: Colors.lightGray, borderRadius: 10, marginVertical: 5 }}>
         <Image source={require('../assets/activityBanner1.png')} style={{ height: 150, width: 330, borderRadius: 10, resizeMode: 'contain' }} />
         <Text style={{ color: 'black', fontSize: 18, fontWeight: '900' }}>Bonus Winnig Streak</Text>
-      </View>
+      </View> */}
       {/* ************************Banners********************************* */}
-      <View style={{ height: SCREEN_HEIGHT * 0.25, width: SCREEN_WIDTH * 0.95, alignSelf: 'center', padding: 10, backgroundColor: Colors.lightGray, borderRadius: 10, marginVertical: 5 }}>
+      {/* <View style={{ height: SCREEN_HEIGHT * 0.25, width: SCREEN_WIDTH * 0.95, alignSelf: 'center', padding: 10, backgroundColor: Colors.lightGray, borderRadius: 10, marginVertical: 5 }}>
         <Image source={require('../assets/activityBanner2.png')} style={{ height: 150, width: 330, borderRadius: 10, resizeMode: 'contain' }} />
         <Text style={{ color: 'black', fontSize: 18, fontWeight: '900' }}>Complete Awesome rewards Mission</Text>
-      </View>
+      </View> */}
       {/* ************************Banners********************************* */}
-      <View style={{ height: SCREEN_HEIGHT * 0.25, width: SCREEN_WIDTH * 0.95, alignSelf: 'center', padding: 10, backgroundColor: Colors.lightGray, borderRadius: 10, marginVertical: 5 }}>
+      {/* <View style={{ height: SCREEN_HEIGHT * 0.25, width: SCREEN_WIDTH * 0.95, alignSelf: 'center', padding: 10, backgroundColor: Colors.lightGray, borderRadius: 10, marginVertical: 5 }}>
         <Image source={require('../assets/activityBanner1.png')} style={{ height: 150, width: 330, borderRadius: 10, resizeMode: 'contain' }} />
         <Text style={{ color: 'black', fontSize: 18, fontWeight: '900' }}>"Loss Bonus"- Turn Losses into WIns</Text>
-      </View>
+      </View> */}
       {/* ************************Banners********************************* */}
-      <View style={{ height: SCREEN_HEIGHT * 0.25, width: SCREEN_WIDTH * 0.95, alignSelf: 'center', padding: 10, backgroundColor: Colors.lightGray, borderRadius: 10, marginVertical: 5 }}>
+      {/* <View style={{ height: SCREEN_HEIGHT * 0.25, width: SCREEN_WIDTH * 0.95, alignSelf: 'center', padding: 10, backgroundColor: Colors.lightGray, borderRadius: 10, marginVertical: 5 }}>
         <Image source={require('../assets/activityBanner4.png')} style={{ height: 150, width: 330, borderRadius: 10, resizeMode: 'contain' }} />
         <Text style={{ color: 'black', fontSize: 18, fontWeight: '900' }}>Monthly Bonus Promotion</Text>
-      </View>
+      </View> */}
 
       {/* ************************Banners********************************* */}
-      <View style={{ height: SCREEN_HEIGHT * 0.25, width: SCREEN_WIDTH * 0.95, alignSelf: 'center', padding: 10, backgroundColor: Colors.lightGray, borderRadius: 10, marginVertical: 5, marginBottom: 30 }}>
+      {/* <View style={{ height: SCREEN_HEIGHT * 0.25, width: SCREEN_WIDTH * 0.95, alignSelf: 'center', padding: 10, backgroundColor: Colors.lightGray, borderRadius: 10, marginVertical: 5, marginBottom: 30 }}>
         <Image source={require('../assets/activityBanner1.png')} style={{ height: 150, width: 330, borderRadius: 10, resizeMode: 'contain' }} />
         <Text style={{ color: 'black', fontSize: 18, fontWeight: '900' }}>Play Game Get Super Bonuses</Text>
-      </View>
+      </View> */}
 
 
 

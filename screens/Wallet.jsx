@@ -235,6 +235,7 @@ const styles = {
   container: {
     flex: 1,
     backgroundColor: 'white',
+    // marginBottom: 80
   },
   header: {
     alignItems: 'center',

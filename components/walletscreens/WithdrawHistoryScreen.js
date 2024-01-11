@@ -1,14 +1,52 @@
 import { SafeAreaView, StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, TextInput } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../Constants/Colors'
 import { useNavigation } from "@react-navigation/native";
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const WithdrawHistoryScreen = () => {
   const navigation = useNavigation();
 
+  useEffect(() => {
+    handleDepositWithdraw();
+  }, []);
+
+  const handleDepositWithdraw = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        navigation.navigate('Login');
+        return;
+      }
+
+      const response = await axios.get(`${process.env.SERVERURL}/api/withdraw/withdraw`, {
+        headers: {
+          Authorization: JSON.parse(token),
+        },
+      });
+
+      console.log("Withdraw History Data:", response.data);
+      // Handle the data, update state, etc.
+
+    } catch (error) {
+      console.error('Error fetching withdraw history:', error);
+
+      // You might want to handle different error scenarios
+      if (error.response) {
+        console.error('Server responded with a non-2xx status:', error.response.status, error.response.data);
+      } else if (error.request) {
+        console.error('Request made but no response received:', error.request);
+      } else {
+        console.error('Error setting up the request:', error.message);
+      }
+
+      // Handle navigation or any other error-related logic here
+    }
+  };
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>

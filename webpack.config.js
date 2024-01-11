@@ -1,36 +1,34 @@
+// Import necessary modules
 const path = require('path');
-
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+// Resolve the app directory
 const appDirectory = path.resolve(__dirname);
 const { presets } = require(`${appDirectory}/babel.config.js`);
 
-const compileNodeModules = [
-  // Add every react-native package that needs compiling
-  // 'react-native-gesture-handler',
-].map((moduleName) => path.resolve(appDirectory, `node_modules/${moduleName}`));
-
+// Create a Babel loader configuration
 const babelLoaderConfiguration = {
-  test: /\.(js|jsx|tsx?)$/,
-  // Add every directory that needs to be compiled by Babel during the build.
+  test: /\.js$|jsx/,
   include: [
+    path.resolve(__dirname, 'node_modules/react-native-vector-icons'),
     path.resolve(__dirname, 'index.web.js'), // Entry to your application
     path.resolve(__dirname, 'App.web.js'), // Change this to your main App file
-    path.resolve(__dirname, 'src'),
-    ...compileNodeModules,
+    path.resolve(__dirname, 'screens'), // Adjusted to include the 'screens' directory
+    path.resolve(__dirname, 'components'), // Include other directories as needed
+    path.resolve(__dirname, 'assets'),
   ],
   use: {
     loader: 'babel-loader',
     options: {
       cacheDirectory: true,
-      presets,
+      presets: ['@babel/preset-react'],
       plugins: ['react-native-web'],
     },
   },
 };
 
-
+// Create an SVG loader configuration
 const svgLoaderConfiguration = {
   test: /\.svg$/,
   use: [
@@ -40,12 +38,25 @@ const svgLoaderConfiguration = {
   ],
 };
 
+// Create an image loader configuration
 const imageLoaderConfiguration = {
   test: /\.(gif|jpe?g|png)$/,
   use: {
     loader: 'url-loader',
     options: {
       name: '[name].[ext]',
+    },
+  },
+};
+const jsxLoaderConfiguration = {
+  test: /\.jsx?$/,
+  include: [
+    path.resolve(__dirname, 'node_modules/react-native-vector-icons'),
+  ],
+  use: {
+    loader: 'babel-loader',
+    options: {
+      presets: ['@babel/preset-react'],
     },
   },
 };
@@ -70,13 +81,14 @@ module.exports = {
       babelLoaderConfiguration,
       imageLoaderConfiguration,
       svgLoaderConfiguration,
+      jsxLoaderConfiguration,
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-react'],
+            presets: ['@babel/preset-env', '@babel/preset-react'],
           },
         },
       },
@@ -89,9 +101,7 @@ module.exports = {
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
-      // See: https://github.com/necolas/react-native-web/issues/349
       __DEV__: JSON.stringify(true),
     }),
   ],
 };
-

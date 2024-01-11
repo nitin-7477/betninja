@@ -3,7 +3,6 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
 import Entypo from 'react-native-vector-icons/Entypo'
-import RNUpiPayment from 'react-native-upi-payment'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../Constants/Colors'
 import { useNavigation } from "@react-navigation/native";

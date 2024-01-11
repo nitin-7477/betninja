@@ -4,30 +4,50 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../components/Constants/Screen'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
 import { Colors } from '../../components/Constants/Colors';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LevelScreen = () => {
+  const navigation = useNavigation()
   const [selectedButton, setSelectedButton] = useState(1)
   const [showHistory, setShowHistory] = useState(true)
   const [showRules, setShowRules] = useState(false)
-
-  const navigation = useNavigation()
-
   const [currentPage, setCurrentPage] = useState(0);
+  const [userInformation, setUserInformation] = useState([])
+  const [currentLevel, setCurrentLevel] = useState('')
 
-  // const getContentBasedOnView = () => {
-  //   switch (currentPage) {
-  //     case 0:
-  //       return 'Amount: ₹100';
-  //     case 1:
-  //       return 'Amount: ₹200';
-  //     case 2:
-  //       return 'Amount: ₹300';
-  //     default:
-  //       return '';
-  //   }
-  // };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          navigation.navigate('Login')
+          return;
+        }
+        const response = await axios.get(`${process.env.SERVERURL}/api/auth/user`, {
+          headers: {
+            "Authorization": JSON.parse(token),
+          },
+        });
+        setUserInformation(response.data.user_level);
+        setCurrentLevel(response.data.user_level.levels["1"])
+
+
+      } catch (error) {
+        console.error('Error fetching user data in  Level Screen:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  console.log(currentLevel);
+
+
+
   const handleHistory = () => {
     setSelectedButton(1)
     setShowHistory(true)
@@ -45,11 +65,15 @@ const LevelScreen = () => {
     const page = Math.round(x / Dimensions.get('window').width);
     if (page !== currentPage) {
       setCurrentPage(page);
-    }
+      setCurrentLevel(userInformation.levels[`${page + 1}`])
 
+    }
     setCurrentPage(page);
+    setCurrentLevel(userInformation.levels[`${page + 1}`])
 
   };
+
+
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
 
@@ -66,11 +90,11 @@ const LevelScreen = () => {
         {/* *******************This is for Avatar and Level check*************** */}
         <View style={{ height: SCREEN_HEIGHT * 0.1, width: SCREEN_WIDTH * 0.97, alignSelf: 'center', flexDirection: 'row', alignItems: 'center' }}>
           <View style={{ width: 120 }}><Image source={require('../../assets/player.png')} /></View>
-          <View><Text style={{ fontWeight: 'bold', color: 'black' }}>LEVEL 0</Text><Text style={{ fontSize: 18, fontWeight: '600', color: 'white' }}>Nitin Gautam</Text></View>
+          <View><Text style={{ fontWeight: 'bold', color: 'black' }}>LEVEL {userInformation?.level}</Text><Text style={{ fontSize: 18, fontWeight: '600', color: 'white' }}>Nitin Gautam</Text></View>
         </View>
         <View style={{ height: 70, width: SCREEN_WIDTH * 1, justifyContent: 'space-around', alignItems: 'center', flexDirection: 'row', marginTop: 10 }}>
           <View style={{ height: 60, width: '45%', backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', borderRadius: 10, elevation: 2 }}>
-            <Text style={{ color: '#d6aa7f', fontWeight: 'bold' }}>0 EXP</Text>
+            <Text style={{ color: '#d6aa7f', fontWeight: 'bold' }}>{userInformation?.exp} EXP</Text>
             <Text style={{ marginVertical: 5 }}>My Experience</Text>
 
           </View>
@@ -88,7 +112,6 @@ const LevelScreen = () => {
         pagingEnabled horizontal showsHorizontalScrollIndicator={false}>
         <LinearGradient colors={['#a6b7d0', '#95a8c5', '#93a8c5',]} style={styles.vipCard}>
           <View style={{ height: '60%', width: '100%', flexDirection: 'row', }}>
-
 
             <View style={{ width: '70%', }}>
               <View style={{ flexDirection: 'row', }}>
@@ -422,7 +445,7 @@ const LevelScreen = () => {
       <View style={{ height: SCREEN_HEIGHT * 0.3, width: SCREEN_WIDTH * 0.94, backgroundColor: 'white', marginTop: 10, borderRadius: 15, alignSelf: 'center', elevation: 2 }}>
         <View style={{ width: SCREEN_WIDTH * 0.9, flexDirection: 'row', alignItems: 'center', height: 40, marginHorizontal: 10, marginTop: 8 }}>
           <Image source={require('../../assets/diamond.png')} style={{ height: 30, width: 30, marginRight: 10 }} />
-          <Text style={{ color: 'grey', fontWeight: '700', fontSize: 18 }}>Level {currentPage + 1} Benefit Level</Text>
+          <Text style={{ color: 'grey', fontWeight: '700', fontSize: 18 }}>Level{currentPage + 1} Benefit Level</Text>
         </View>
         <View style={{ borderBottomWidth: 0.5, borderBottomColor: 'grey', marginVertical: 10 }}></View>
 

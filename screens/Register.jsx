@@ -1,12 +1,13 @@
 
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, ActivityIndicator, ScrollView } from "react-native";
+import { jsx } from '@emotion/react';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, ScrollView, Alert } from "react-native";
 import AppTextInput from "../components/AppTextInput";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useNavigation } from "@react-navigation/native";
 import Modal from "react-native-modal";
 import axios from "axios";
-import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../components/Constants/Screen";
+import { SCREEN_WIDTH, } from "../components/Constants/Screen";
 
 const Register = () => {
   const navigation = useNavigation();
@@ -29,8 +30,12 @@ const Register = () => {
 
   const handleSendOTP = async () => {
     try {
+      var body = { email: emailAddress }
+      const result = await axios.post(`${process.env.SERVERURL}/api/auth/sendOtp`,
+        body
+      );
+      console.log(result.data);
 
-      // const response = await axios.post("https://dummy-api.com/send-otp", { email: emailAddress });
 
       setResendEnabled(false);
       startTimer();
@@ -62,9 +67,14 @@ const Register = () => {
     setModalVisible(!isModalVisible);
   };
 
-  const toggleModal2 = () => {
-    setModalVisible2(!isModalVisible2);
+  const openModal2 = () => {
+    setModalVisible2(true);
+
   };
+  const closeModal2 = () => {
+    setModalVisible2(false)
+    navigation.navigate('Login')
+  }
 
   const handleResetData = () => {
     setEmailAddress('');
@@ -89,27 +99,28 @@ const Register = () => {
         email: emailAddress,
         phone: phone,
         password: password,
+        otp: otp
       };
 
       if (invitationCode.trim() !== '') {
         registrationData.inviteCode = invitationCode.trim();
       }
 
+      console.log(registrationData);
       const result = await axios.post(`${process.env.SERVERURL}/api/auth/register`, registrationData);
 
       console.log("xxxxxxxxxxxxxxxxxxxx", result);
       console.log(registrationData);
 
       if (result) {
-        toggleModal2();
+        openModal2()
         handleResetData();
         setRefresh(!refresh);
-        navigation.navigate('Login');
       }
       handleResetData();
 
     } catch (error) {
-      console.error("Error during login:", error);
+      console.error("Error during Registration:", error);
 
       if (error.response && error.response.data) {
         const errorMessage = error.response.data.message;
@@ -145,7 +156,7 @@ const Register = () => {
           <AppTextInput
             placeholder="Email"
             value={emailAddress}
-            onChangeText={(text) => setEmailAddress(text)}
+            onChangeText={(text) => setEmailAddress(text.toLowerCase())}
             errorMessage={emailAddress === '' ? 'Email is required' : ''}
           />
           <AppTextInput
@@ -172,19 +183,18 @@ const Register = () => {
           />
           <AppTextInput
             placeholder='Enter Otp'
-            secureTextEntry
             value={otp}
             onChangeText={(text) => setOtp(text)}
           />
           <View style={{ flexDirection: 'row' }}>
             <TouchableOpacity style={[styles.otpBtn, isSendButtonEnabled ? styles.enabledSendButton : styles.disabledSendButton]} onPress={handleSendOTP} disabled={!isSendButtonEnabled}>
-              <Text style={{ color: 'white', textAlign: 'center', fontSize: 16 }}>{isResendEnabled ? 'Send' : 'Resend'}</Text>
+              <Text style={{ color: 'white', textAlign: 'center', fontSize: 16 }}>{isResendEnabled ? 'Send otp' : 'Resend'}</Text>
             </TouchableOpacity>
             {!isResendEnabled && (
               <Text style={{ color: 'black', fontSize: 16, marginLeft: 200 }}>{`(${timer}s)`}</Text>
             )}
           </View>
-          <AppTextInput placeholder="Invite Code" value={invitationCode} onChangeText={(text) => setInvitationCode(text)} />
+          <AppTextInput placeholder="Invite Code" value={invitationCode} onChangeText={(text) => setInvitationCode(text.toUpperCase())} />
           {!isResetButtonEnabled ? <Text style={{ color: 'red' }}> * Please fill all Details</Text> : <></>}
         </View>
         <View>
@@ -204,6 +214,7 @@ const Register = () => {
             <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10, color: 'black' }}>
               Passwords Do Not Match
             </Text>
+
             <TouchableOpacity
               style={styles.closeButton}
               onPress={toggleModal1}
@@ -212,7 +223,7 @@ const Register = () => {
             </TouchableOpacity>
           </View>
         </Modal>
-        <Modal isVisible={isModalVisible2} onBackdropPress={toggleModal2}>
+        <Modal isVisible={isModalVisible2} onRequestClose={closeModal2}>
           <View style={styles.modalContainer}>
             <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10, color: 'black' }}>
               Registered Successfully
@@ -220,9 +231,9 @@ const Register = () => {
             <Text style={{ color: 'black', fontSize: 12, fontWeight: '500' }}>Proceed to login</Text>
             <TouchableOpacity
               style={styles.closeButton}
-              onPress={toggleModal2}
+              onPress={closeModal2}
             >
-              <Text style={{ color: "white" }}>Close</Text>
+              <Text style={{ color: "white" }}>OK</Text>
             </TouchableOpacity>
           </View>
         </Modal>

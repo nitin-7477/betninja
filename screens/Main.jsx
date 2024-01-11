@@ -143,8 +143,13 @@ export default function Main() {
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerTextContainer}>
-          <Text style={styles.headerTitle}>BetNinja</Text>
-          <Text style={styles.headerSubtitle}>Your Ultimate Gaming Experience</Text>
+
+          <Image
+            source={require('../image/1.jpg')} // Replace with your gaming-themed background image
+            style={{ height: 50, width: 130 }}
+          />
+
+          <Text style={styles.headerSubtitle}>Desire comes to reality</Text>
         </View>
       </View>
       <View style={{ borderRadius: 10 }}>
@@ -222,7 +227,9 @@ export default function Main() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignSelf: 'center', width: SCREEN_WIDTH * 1
+    alignSelf: 'center',
+    width: SCREEN_WIDTH * 1,
+    // marginBottom: 80
   },
   backgroundImage: {
     width: Dimensions.get('window').width,
@@ -233,10 +240,12 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 20,
+    padding: 10, justifyContent: 'center'
   },
   headerTextContainer: {
-    marginLeft: 20,
+    width: SCREEN_WIDTH * 1, alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   headerTitle: {
     color: 'white',

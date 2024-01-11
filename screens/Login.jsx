@@ -27,12 +27,20 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-
-
-
-
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isModalVisible, setModalVisible] = useState(false)
+
+
+
+  // const openModal = () => {
+  //   setModalVisible(true);
+
+  // };
+  // const closeModal = () => {
+  //   setModalVisible(false)
+  //   navigation.navigate('Home')
+  // }
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -63,14 +71,15 @@ const Login = () => {
         `${process.env.SERVERURL}/api/auth/login`,
         body
       );
-      console.log(body);
+
 
       let response = result.data;
       let token = response.token;
 
       if (token) {
         await AsyncStorage.setItem("token", JSON.stringify(token));
-        navigation.navigate("Home", token);
+        navigation.navigate('Home')
+        // openModal()
       } else {
         console.log("Login failed:");
         Alert.alert("Login Failed");
@@ -92,7 +101,9 @@ const Login = () => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView
+    //  style={{ width: 500, alignSelf: 'center' }}
+    >
       <View style={{ padding: 20 }}>
         <View style={{ alignItems: "center" }}>
           <Text
@@ -241,6 +252,21 @@ const Login = () => {
           </View>
         </View>
       </Modal>
+      {/* 
+      <Modal transparent={true} isVisible={isModalVisible} onRequestClose={closeModal}>
+        <View style={Styles.modalContainerPopUp}>
+          <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10, color: 'black' }}>
+            Login Successfully
+          </Text>
+          <Text style={{ color: 'black', fontSize: 12, fontWeight: '500' }}>Welcome to Bet Ninja</Text>
+          <TouchableOpacity
+            style={Styles.closeButtonPopUp}
+            onPress={closeModal}
+          >
+            <Text style={{ color: "white" }}>OK</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal> */}
     </SafeAreaView>
   );
 };
@@ -282,6 +308,22 @@ const Styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     width: SCREEN_WIDTH * 0.8,
+  },
+  modalContainerPopUp: {
+    backgroundColor: "white",
+    padding: 40,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: 'center',
+    alignSelf: 'center',
+  },
+  closeButtonPopUp: {
+    backgroundColor: "purple",
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+    width: "50%",
+    alignItems: "center",
   },
 });
 

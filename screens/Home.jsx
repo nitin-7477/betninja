@@ -29,14 +29,17 @@ const Home = () => {
     tabBarShowLabel: false,
     headerShown: false,
     tabBarStyle: {
-      position: 'absoulte',
+
+      position: 'relative',
       bottom: 0,
       right: 0,
       left: 0,
       elevation: 5,
-      height: 80,
+      height: SCREEN_HEIGHT * 0.1,
       backgroundColor: '#FFF',
-      borderRadius: 20, width: SCREEN_WIDTH * 1, alignSelf: 'center'
+      borderRadius: 20,
+      width: SCREEN_WIDTH * 0.96,
+      alignSelf: 'center'
 
     }
   }

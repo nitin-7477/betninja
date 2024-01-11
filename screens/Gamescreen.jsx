@@ -418,12 +418,12 @@ const HomeScreen = ({ navigation, index }) => {
       );
       setMyHistoryThirtySec(myHistory.data.thirtyBetOfUser)
 
-      if (myHistory.data.thirtyBetOfUser[0].LN == gameHistory.data.data[0].LN && myHistory.data.thirtyBetOfUser[0].status == "success") {
+      if (myHistory?.data?.thirtyBetOfUser[0]?.LN == gameHistory?.data?.data[0]?.LN && myHistory?.data?.thirtyBetOfUser[0]?.status == "success") {
         console.log(countdowns);
         setPopWinThirtySec(true)
 
       }
-      if (myHistory.data.thirtyBetOfUser[0].LN == gameHistory.data.data[0].LN && myHistory.data.thirtyBetOfUser[0].status == "failed") {
+      if (myHistory?.data?.thirtyBetOfUser[0]?.LN == gameHistory?.data?.data[0]?.LN && myHistory?.data?.thirtyBetOfUser[0]?.status == "failed") {
         setPopLoseThirtySec(true)
 
       }
@@ -475,12 +475,12 @@ const HomeScreen = ({ navigation, index }) => {
       );
       setMyHistoryOneMin(myHistory.data.oneBetOfUser)
 
-      console.log("This is 1 min", selectedCountdown == "onMin", myHistory.data.oneBetOfUser[0].LN == gameHistory.data.data[0].LN && myHistory.data.oneBetOfUser[0].status == "success");
 
-      if (myHistory.data.oneBetOfUser[0].LN == gameHistory.data.data[0].LN && myHistory.data.oneBetOfUser[0].status == "success") {
+
+      if (myHistory?.data?.oneBetOfUser[0]?.LN == gameHistory?.data?.data[0]?.LN && myHistory?.data?.oneBetOfUser[0]?.status == "success") {
         setPopWinOneMin(true)
       }
-      if (myHistory.data.oneBetOfUser[0].LN == gameHistory.data.data[0].LN && myHistory.data.oneBetOfUser[0].status == "failed") {
+      if (myHistory?.data?.oneBetOfUser[0]?.LN == gameHistory?.data?.data[0]?.LN && myHistory?.data?.oneBetOfUser[0]?.status == "failed") {
         setPopLoseOneMin(true)
 
       }
@@ -530,11 +530,11 @@ const HomeScreen = ({ navigation, index }) => {
         },
       );
       setMyHistoryThreeMin(myHistory.data.threeBetOfUser)
-      if (myHistory.data.threeBetOfUser[0].LN == gameHistory.data.data[0].LN && myHistory.data.threeBetOfUser[0].status == "success") {
+      if (myHistory?.data?.threeBetOfUser[0]?.LN == gameHistory?.data?.data[0]?.LN && myHistory?.data?.threeBetOfUser[0]?.status == "success") {
         setPopWinThreeMin(true)
 
       }
-      if (myHistory.data.threeBetOfUser[0].LN == gameHistory.data.data[0].LN && myHistory.data.threeBetOfUser[0].status == "failed") {
+      if (myHistory?.data?.threeBetOfUser[0]?.LN == gameHistory?.data?.data[0]?.LN && myHistory?.data?.threeBetOfUser[0]?.status == "failed") {
         setPopLoseThreeMin(true)
 
       }
@@ -584,10 +584,10 @@ const HomeScreen = ({ navigation, index }) => {
         },
       );
       setMyHistoryFiveMin(myHistory.data.fiveBetOfUser)
-      if (myHistory.data.fiveBetOfUser[0].LN == gameHistory.data.data[0].LN && myHistory.data.fiveBetOfUser[0].status == "success") {
+      if (myHistory?.data?.fiveBetOfUser[0]?.LN == gameHistory?.data?.data[0]?.LN && myHistory?.data?.fiveBetOfUser[0]?.status == "success") {
         setPopWinFiveMin(true)
       }
-      if (myHistory.data.fiveBetOfUser[0].LN == gameHistory.data.data[0].LN && myHistory.data.fiveBetOfUser[0].status == "failed") {
+      if (myHistory?.data?.fiveBetOfUser[0]?.LN == gameHistory?.data?.data[0]?.LN && myHistory?.data?.fiveBetOfUser[0]?.status == "failed") {
         setPopLoseFiveMin(true)
 
       }
@@ -777,7 +777,7 @@ const HomeScreen = ({ navigation, index }) => {
           backgroundColor: 'white',
           shadowColor: 'black',
           elevation: 5,
-          borderRadius: 10
+          borderRadius: 10, alignSelf: 'center'
         }}>
           <View style={{ marginHorizontal: 8, backgroundColor: selectedTime == 1 ? '#fbaed2' : 'white', borderTopStartRadius: 10, borderTopEndRadius: 10, borderWidth: selectedTime == 1 ? 0.5 : 0 }}>
             <TouchableOpacity style={{

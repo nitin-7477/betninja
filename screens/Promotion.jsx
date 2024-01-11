@@ -21,7 +21,7 @@ const Promotion = () => {
 
   const copyToClipboard = () => {
     Clipboard.setString(referalCode);
-    alert('Referral code copied to clipboard!');
+    alert('Copied Successfully!');
   };
 
 
@@ -198,15 +198,15 @@ const Promotion = () => {
         {/* **********************Invitation Link Button*********************** */}
 
         <View style={{ marginTop: 140, height: 50, width: 320, backgroundColor: '#d9ad82', alignSelf: 'center', alignItems: 'center', justifyContent: 'center', borderRadius: 20, marginBottom: 20 }}>
-          <Text style={{ textAlign: 'center', color: '#770737', fontWeight: 600, fontSize: 20 }}>Invitation Link</Text>
+          <Text style={{ textAlign: 'center', color: '#770737', fontWeight: 600, fontSize: 20 }}>Invite Your Friends</Text>
         </View>
         {/* **********************Invitation Link Button*********************** */}
 
 
 
-        <View style={{ height: 50, width: 320, alignSelf: 'center', marginTop: 10, borderRadius: 5, elevation: 3, backgroundColor: 'white' }}>
+        <TouchableOpacity onPress={copyToClipboard} style={{ height: 50, width: 320, alignSelf: 'center', marginTop: 10, borderRadius: 5, elevation: 3, backgroundColor: 'white' }}>
           <View style={{ height: 50, width: 320, justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, flexDirection: 'row' }}>
-            <TouchableOpacity onPress={copyToClipboard} style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Ionicons name='person' size={22} color={'black'} />
               <Text style={{ marginLeft: 4, fontWeight: 500, color: 'black' }}>Copy Invitation Code</Text>
             </TouchableOpacity>
@@ -217,7 +217,7 @@ const Promotion = () => {
               <AntDesign name='right' size={16} color={'black'} /></View>
           </View>
 
-        </View>
+        </TouchableOpacity>
 
         <View style={styles.tile1}>
           <TouchableOpacity
@@ -311,7 +311,8 @@ export default Promotion
 const styles = {
   container: {
     flex: 1,
-    alignSelf: 'center'
+    alignSelf: 'center',
+    // marginBottom: 80
     // padding: 20,
   },
   heading: {
