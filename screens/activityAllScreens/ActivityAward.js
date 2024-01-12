@@ -4,7 +4,9 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../components/Constants/Screen'
 import { Colors } from '../../components/Constants/Colors'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
-
+import { Dimensions } from 'react-native';
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 
 const ActivityAward = () => {
@@ -86,11 +88,11 @@ const ActivityAward = () => {
             </View>
 
             <View style={{ marginTop: 10, paddingHorizontal: 10 }}>
-              <Text>Betting Bonus {item.id}   <Text style={{ color: 'purple' }}>0 /{item.bonus}</Text></Text>
+              <Text style={{ color: 'black' }}>Betting Bonus {item.id}   <Text style={{ color: 'purple' }}>0 /{item.bonus}</Text></Text>
             </View>
             <View style={{ borderBottomWidth: 0.2, borderColor: Colors.fontGray, marginVertical: 20 }}></View>
             <View style={{ paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text>Award Amount</Text>
+              <Text style={{ color: 'black' }}>Award Amount</Text>
               <View style={{ flexDirection: 'row' }}>
                 <Text style={{ color: 'red' }}>Rs {item.amount}.00</Text>
               </View>

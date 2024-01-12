@@ -16,7 +16,7 @@ const AttendanceBonus = () => {
   const navigation = useNavigation();
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-      <View style={{ height: SCREEN_HEIGHT * 0.3, width: SCREEN_WIDTH * 1, backgroundColor: '#d9ad82' }}>
+      <View style={{ flex: 1, height: SCREEN_HEIGHT * 0.3, width: SCREEN_WIDTH * 1, backgroundColor: '#d9ad82' }}>
         <View style={{ width: '100%', flexDirection: 'row', paddingHorizontal: 5, paddingVertical: 10 }}>
 
           <TouchableOpacity onPress={() => navigation.navigate('Activity')} style={{ width: '40%' }}>
@@ -32,22 +32,23 @@ const AttendanceBonus = () => {
             <Text style={{ color: 'white', fontSize: 14, fontWeight: '400', marginHorizontal: 5, width: '100%', marginVertical: 5 }}>Attended consecutive 0 Day</Text>
             <Text style={{ color: 'white', fontSize: 14, fontWeight: '400', marginHorizontal: 5 }}>Accumulated 0.00</Text>
           </View>
-          <View style={{ width: '40%' }}>
-            <Image source={require('../../assets/attendanceBonus.jpg')} style={{ height: 150, width: 140, resizeMode: 'contain' }} />
+          <View style={{ width: '40%', height: '100%', alignSelf: 'flex-end' }}>
+            <Image source={require('../../assets/attendanceBonus.jpg')} style={{ height: 150, width: 140, resizeMode: 'contain', alignSelf: 'flex-end' }} />
           </View>
         </View>
-        <View style={{ width: SCREEN_WIDTH * 0.95, height: 100, backgroundColor: '#F0F0F0', alignSelf: 'center', borderRadius: 15, elevation: 2, alignItems: 'center', flexDirection: 'row', justifyContent: 'space-evenly' }}>
-          <TouchableOpacity style={{ width: 160, height: 40, backgroundColor: 'orange', borderRadius: 20, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>Game Rules</Text>
+
+        <View style={{ width: SCREEN_WIDTH * 0.95, height: SCREEN_HEIGHT * 0.1, backgroundColor: '#F0F0F0', alignSelf: 'center', borderRadius: 15, elevation: 2, alignItems: 'center', flexDirection: 'row', justifyContent: 'space-evenly' }}>
+          <TouchableOpacity style={{ width: SCREEN_WIDTH * 0.45, height: 40, backgroundColor: 'orange', borderRadius: 20, justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={{ color: 'white', fontSize: 14, fontWeight: '600' }}>Game Rules</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={{ width: 160, height: 40, backgroundColor: 'orange', borderRadius: 20, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>Attendance history</Text>
+          <TouchableOpacity style={{ width: SCREEN_WIDTH * 0.45, height: 40, backgroundColor: 'orange', borderRadius: 20, justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={{ color: 'white', fontSize: 14, fontWeight: '600' }}>Attendance history</Text>
           </TouchableOpacity>
         </View>
       </View>
 
-      <View style={{ width: SCREEN_WIDTH * 0.97, height: SCREEN_HEIGHT * 0.4, backgroundColor: 'white', marginTop: 80, alignSelf: 'center', borderRadius: 20, elevation: 1, padding: 10 }}>
+      <View style={{ width: SCREEN_WIDTH * 0.97, height: SCREEN_HEIGHT * 0.4, backgroundColor: 'white', marginTop: SCREEN_HEIGHT * 0.09, alignSelf: 'center', borderRadius: 20, elevation: 1, padding: 10, justifyContent: 'center', alignItems: 'center' }}>
 
         <FlatList
 
@@ -56,7 +57,7 @@ const AttendanceBonus = () => {
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
 
-            <View style={{ height: 120, width: 100, backgroundColor: 'white', borderRadius: 10, alignItems: 'center', elevation: 5, margin: 5 }}>
+            <View style={{ height: SCREEN_HEIGHT * 0.17, width: SCREEN_WIDTH * 0.28, backgroundColor: 'white', borderRadius: 10, alignItems: 'center', elevation: 5, margin: 5, alignSelf: 'center' }}>
               <Text style={{ color: 'black', marginBottom: 5 }}>₹{item.money}</Text>
               <Image source={item.icon} style={{ width: 60, height: 60, resizeMode: 'contain', marginBottom: 5 }} />
               <Text style={{ color: 'black' }}>{item.day}</Text>

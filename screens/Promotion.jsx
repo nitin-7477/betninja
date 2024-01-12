@@ -74,8 +74,16 @@ const Promotion = () => {
   }
 
   useEffect(() => {
-    fetchCommissionData()
-    fetchToken()
+    const fetchData = async () => {
+      try {
+        await fetchToken();
+        await fetchCommissionData();
+      } catch (error) {
+        console.error('Error in useEffect:', error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   const directRegisterCount = commission?.direct?.number_of_register || 0;

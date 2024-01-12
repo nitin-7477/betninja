@@ -104,8 +104,8 @@ const Wallet = () => {
   const renderButton = (buttonName, iconSource) => {
     const isSelected = selectedButton === buttonName;
     const buttonStyle = {
-      height: 80,
-      width: 80,
+      height: '100%',
+      width: '24%',
       backgroundColor: isSelected ? '#d9ad82' : '#D3D3D3',
       borderRadius: 10,
       justifyContent: 'center',
@@ -139,7 +139,7 @@ const Wallet = () => {
       </View>
 
       <View style={{ height: SCREEN_HEIGHT * 0.15, width: SCREEN_WIDTH * 0.95, alignSelf: 'center', backgroundColor: 'white', elevation: 2, borderRadius: 10, marginTop: -40, justifyContent: 'center', alignItems: 'center' }}>
-        <View style={{ flexDirection: 'row', width: SCREEN_WIDTH * 0.9, justifyContent: 'space-between', alignContent: 'center', marginBottom: 10 }}>
+        <View style={{ flexDirection: 'row', width: SCREEN_WIDTH * 0.95, justifyContent: 'space-evenly', alignItems: 'center' }}>
           {renderButton('Deposite', require('../assets/wallet/deposit.png'))}
           {renderButton('Withdraw', require('../assets/wallet/withdraw.png'))}
           {renderButton('WithdrawHistory', require('../assets/wallet/withdrawHistory.png'))}

@@ -160,28 +160,28 @@ const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType,
                   style={{ height: 25, width: 40, backgroundColor: selectedAmount == 1 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 1 }}
                   onPress={() => amountMultiplier(1, 1)}
                 >
-                  <Text style={{ color: selectedAmount == 1 ? "white" : "black", }}>₹1</Text>
+                  <Text style={{ color: selectedAmount == 1 ? "white" : "black", fontWeight: 'bold' }}>₹1</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   style={{ height: 25, width: 40, backgroundColor: selectedAmount == 2 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 1 }}
                   onPress={() => amountMultiplier(10, 2)}
                 >
-                  <Text style={{ color: selectedAmount == 2 ? "white" : "black", }}>₹10</Text>
+                  <Text style={{ color: selectedAmount == 2 ? "white" : "black", fontWeight: 'bold' }}>₹10</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   style={{ height: 25, width: 40, backgroundColor: selectedAmount == 3 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 1 }}
                   onPress={() => amountMultiplier(100, 3)}
                 >
-                  <Text style={{ color: selectedAmount == 3 ? "white" : "black", }}>₹100</Text>
+                  <Text style={{ color: selectedAmount == 3 ? "white" : "black", fontWeight: 'bold' }}>₹100</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   style={{ height: 25, width: 50, backgroundColor: selectedAmount == 4 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 1 }}
                   onPress={() => amountMultiplier(1000, 4)}
                 >
-                  <Text style={{ color: selectedAmount == 4 ? "white" : "black", }}>₹1000</Text>
+                  <Text style={{ color: selectedAmount == 4 ? "white" : "black", fontWeight: 'bold' }}>₹1000</Text>
                 </TouchableOpacity>
               </View >
             </View>
@@ -194,9 +194,9 @@ const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType,
               <View style={{ flexDirection: 'row' }}>
 
                 <TouchableOpacity
-                  onPress={handlePlus}
+                  onPress={handleMinus}
                   style={{ height: 30, width: 30, justifyContent: 'center', alignItems: 'center', backgroundColor: backgroundColor, marginHorizontal: 5 }}>
-                  <Text style={{ color: 'white', fontSize: 16 }}>+</Text>
+                  <Text style={{ color: 'white', fontSize: 24, fontWeight: 'bold' }}>-</Text>
                 </TouchableOpacity>
 
                 <TextInput
@@ -206,10 +206,11 @@ const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType,
                   value={times}
                   onChangeText={(text) => setTimes(text)}
                 />
+
                 <TouchableOpacity
-                  onPress={handleMinus}
+                  onPress={handlePlus}
                   style={{ height: 30, width: 30, justifyContent: 'center', alignItems: 'center', backgroundColor: backgroundColor, marginHorizontal: 5 }}>
-                  <Text style={{ color: 'white', fontSize: 24 }}>-</Text>
+                  <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>+</Text>
                 </TouchableOpacity>
 
               </View></View>
@@ -222,40 +223,40 @@ const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType,
                   style={{ height: 25, width: 30, backgroundColor: selectedTimes == 1 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
                   onPress={() => handleMultiplierClick(1, 1)}
                 >
-                  <Text style={{ color: selectedTimes == 1 ? "white" : "black", }}>X1</Text>
+                  <Text style={{ color: selectedTimes == 1 ? "white" : "black", fontWeight: 'bold' }}>X1</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   style={{ height: 25, width: 30, backgroundColor: selectedTimes == 2 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
                   onPress={() => handleMultiplierClick(5, 2)}
                 >
-                  <Text style={{ color: selectedTimes == 2 ? "white" : "black", }}>X5</Text>
+                  <Text style={{ color: selectedTimes == 2 ? "white" : "black", fontWeight: 'bold' }}>X5</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   style={{ height: 25, width: 30, backgroundColor: selectedTimes == 3 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
                   onPress={() => handleMultiplierClick(10, 3)}
                 >
-                  <Text style={{ color: selectedTimes == 3 ? "white" : "black", }}>X10</Text>
+                  <Text style={{ color: selectedTimes == 3 ? "white" : "black", fontWeight: 'bold' }}>X10</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   style={{ height: 25, width: 35, backgroundColor: selectedTimes == 4 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
                   onPress={() => handleMultiplierClick(20, 4)}
                 >
-                  <Text style={{ color: selectedTimes == 4 ? "white" : "black", }}>X20</Text>
+                  <Text style={{ color: selectedTimes == 4 ? "white" : "black", fontWeight: 'bold' }}>X20</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{ height: 25, width: 35, backgroundColor: selectedTimes == 5 ? "green" : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
                   onPress={() => handleMultiplierClick(50, 5)}
                 >
-                  <Text style={{ color: selectedTimes == 5 ? "white" : "black", }}>X50</Text>
+                  <Text style={{ color: selectedTimes == 5 ? "white" : "black", fontWeight: 'bold' }}>X50</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{ height: 25, width: 35, backgroundColor: selectedTimes == 6 ? "green" : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
                   onPress={() => handleMultiplierClick(100, 6)}
                 >
-                  <Text style={{ color: selectedTimes == 6 ? "white" : "black", }}>X100</Text>
+                  <Text style={{ color: selectedTimes == 6 ? "white" : "black", fontWeight: 'bold' }}>X100</Text>
                 </TouchableOpacity>
               </View >
 

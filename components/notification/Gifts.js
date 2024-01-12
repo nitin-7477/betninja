@@ -10,55 +10,55 @@ const Gifts = () => {
   const navigation = useNavigation();
   const [giftCode, setGiftCode] = useState('')
 
-  const handleGiftCode = async () => {
-    try {
-      const token = await AsyncStorage.getItem('token');
+  // const handleGiftCode = async () => {
+  //   try {
+  //     const token = await AsyncStorage.getItem('token');
 
-      if (!token) {
-        navigation.navigate('Login')
-        return;
-      }
-      alert('Hi I will send gift code')
-      // const response = await axios.post(
-      //   `${process.env.SERVERURL}/api/gift/redeem-gift`,
-      //   {},
-      //   {
-      //     headers: {
-      //       Authorization: JSON.parse(token),
-      //     },
-      //   }
-      // );
+  //     if (!token) {
+  //       navigation.navigate('Login')
+  //       return;
+  //     }
+  //     alert('Hi I will send gift code')
+  //     // const response = await axios.post(
+  //     //   `${process.env.SERVERURL}/api/gift/redeem-gift`,
+  //     //   {},
+  //     //   {
+  //     //     headers: {
+  //     //       Authorization: JSON.parse(token),
+  //     //     },
+  //     //   }
+  //     // );
 
-      // Alert.alert(response.data.message)
-    } catch (e) {
-      console.log("HI Errors for Betting Rebate", e.response.status);
-    }
-  };
+  //     // Alert.alert(response.data.message)
+  //   } catch (e) {
+  //     console.log("HI Errors for Betting Rebate", e.response.status);
+  //   }
+  // };
 
-  const handleGiftHistory = async () => {
-    try {
-      const token = await AsyncStorage.getItem('token');
+  // const handleGiftHistory = async () => {
+  //   try {
+  //     const token = await AsyncStorage.getItem('token');
 
-      if (!token) {
-        navigation.navigate('Login')
-        return;
-      }
-      alert('Hi I will send gift code')
-      // const response = await axios.post(
-      //   `${process.env.SERVERURL}/withdraw-history-gift-card`,
-      //   {},
-      //   {
-      //     headers: {
-      //       Authorization: JSON.parse(token),
-      //     },
-      //   }
-      // );
+  //     if (!token) {
+  //       navigation.navigate('Login')
+  //       return;
+  //     }
+  //     alert('Hi I will send gift code')
+  //     // const response = await axios.post(
+  //     //   `${process.env.SERVERURL}/withdraw-history-gift-card`,
+  //     //   {},
+  //     //   {
+  //     //     headers: {
+  //     //       Authorization: JSON.parse(token),
+  //     //     },
+  //     //   }
+  //     // );
 
-      // Alert.alert(response.data.message)
-    } catch (e) {
-      console.log("HI Errors for Betting Rebate", e.response.status);
-    }
-  };
+  //     // Alert.alert(response.data.message)
+  //   } catch (e) {
+  //     console.log("HI Errors for Betting Rebate", e.response.status);
+  //   }
+  // };
 
   return (
     <ScrollView style={styles.container}>
@@ -76,7 +76,7 @@ const Gifts = () => {
         <Text style={styles.placeholderLine}>Please Enter your gift code below</Text>
         <AppTextInput value={giftCode} onChangeText={(text) => setGiftCode(text)} placeholder='Please Enter Gift Code' />
         <TouchableOpacity
-          onPress={handleGiftCode}
+          // onPress={handleGiftCode}
           style={styles.signIn}>
           <Text style={{ color: 'white', textAlign: "center", fontSize: 18, fontWeight: 'bold' }} >
             Receive

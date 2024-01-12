@@ -53,8 +53,7 @@ const HomeScreen = ({ navigation, index }) => {
   const [select, setSelect] = useState(null)
   const [buttonBackgroundColor, setButtonBackgroundColor] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
-  const [showLoseEmoji, setShowLoseEmoji] = useState(false)
-  const [showWinEmoji, setShowWinEmoji] = useState(false)
+
   const socketRef = useRef(null);
   const itemsPerPage = 10;
   const [timerFinished, setTimerFinished] = useState(false);
@@ -112,6 +111,7 @@ const HomeScreen = ({ navigation, index }) => {
     yellow: require('../assets/yellowdot.png'),
     red: require('../assets/reddot.png'),
     green: require('../assets/greendot.png'),
+    0: require('../assets/0.png'),
     1: require('../assets/1.png'),
     2: require('../assets/2.png'),
     3: require('../assets/3.png'),
@@ -152,12 +152,12 @@ const HomeScreen = ({ navigation, index }) => {
         }}>
         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
           <View style={{ marginRight: 20 }}>
-            <Image source={imageMapping[item.select]} style={{ height: 30, width: 30 }} />
+            <Image source={imageMapping[item.select]} style={{ height: 30, width: 30, borderRadius: 5 }} />
           </View>
           <View>
             <Text style={{ color: 'black' }}>{item.LN}</Text>
             <Text style={{ color: 'black' }}>
-              {item.updatedAt}
+              {new Date(item.updatedAt).toLocaleString()}
               {item.time}
             </Text>
           </View>
@@ -177,52 +177,54 @@ const HomeScreen = ({ navigation, index }) => {
             <Text style={{ color: item.status == 'failed' ? 'red' : item.status == 'pending' ? 'orange' : 'green' }}>{item.status}</Text>
           </View>
           <Text style={{ color: item.win_loss > 0 ? 'green' : item.win_loss < 0 ? 'red' : 'black' }}>
-            {item.win_loss > 0 ? '+' : ''}{item.win_loss}
+            {item.win_loss > 0 ? '+' : ''} ₹{item.win_loss}
           </Text>
+
+
         </View>
       </Pressable>
       {expandedIndex === index ? (
         <View style={{ marginTop: 5 }}>
           <View style={styles.listItem}>
-            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Order No.</Text>
+            <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'black' }}>Order No.</Text>
             <Text style={{ color: 'black' }}>{item.orderNumber}</Text>
           </View>
           {/* Add more details as needed */}
           <View style={styles.listItem}>
-            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Lottery No.</Text>
+            <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'black' }}>Lottery No.</Text>
             <Text style={{ color: 'black' }}>{item.LN}</Text>
           </View>
           <View style={styles.listItem}>
-            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Purchase Amount</Text>
-            <Text style={{ color: 'black' }}>{item.phrchaseAmount.toFixed(2)}</Text>
+            <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'black' }}>Purchase Amount</Text>
+            <Text style={{ color: 'black' }}>₹{item.phrchaseAmount.toFixed(2)}</Text>
           </View>
           <View style={styles.listItem}>
-            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Amount after tax</Text>
-            <Text style={{ color: 'black' }}>{item.amountAfterTax.toFixed(2)}</Text>
+            <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'black' }}>Amount after tax</Text>
+            <Text style={{ color: 'black' }}>₹{item.amountAfterTax.toFixed(2)}</Text>
           </View>
           <View style={styles.listItem}>
-            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Tax</Text>
-            <Text style={{ color: 'black' }}>{item.tax}</Text>
+            <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'black' }}>Tax</Text>
+            <Text style={{ color: 'black' }}>₹{item.tax.toFixed(2)}</Text>
           </View>
           <View style={styles.listItem}>
-            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Result</Text>
-            <Text style={{ color: 'black' }}>{item.tax}</Text>
+            <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'black' }}>Result</Text>
+            <Text style={{ color: 'black' }}>{item.result.number} {item.result.color} {item.result.size} </Text>
           </View>
           <View style={styles.listItem}>
-            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Select</Text>
+            <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'black' }}>Select</Text>
             <Text style={{ color: 'black' }}>{item.select}</Text>
           </View>
           <View style={styles.listItem}>
-            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Select Type</Text>
+            <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'black' }}>Select Type</Text>
             <Text style={{ color: 'black' }}>{item.selectType}</Text>
           </View>
           <View style={styles.listItem}>
-            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Status</Text>
+            <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'black' }}>Status</Text>
             <Text style={{ color: 'black' }}>{item.status}</Text>
           </View>
           <View style={styles.listItem}>
-            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Win/Loss</Text>
-            <Text style={{ color: 'black' }}>{item.win_loss}</Text>
+            <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'black' }}>Win/Loss</Text>
+            <Text style={{ color: 'black' }}>₹{item.win_loss}</Text>
           </View>
         </View>
       ) : null}
@@ -259,15 +261,6 @@ const HomeScreen = ({ navigation, index }) => {
   };
 
 
-  // useEffect(() => {
-
-  //   const hideActivityIndicator = () => {
-  //     setLoading(false);
-  //   };
-
-  //   const timerId = setTimeout(hideActivityIndicator, 3000);
-  //   return () => clearTimeout(timerId);
-  // }, []);
 
 
 
@@ -724,7 +717,7 @@ const HomeScreen = ({ navigation, index }) => {
 
 
   return (
-    <ScrollView style={styles.mainContainer} refreshControl={
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.mainContainer} refreshControl={
       <RefreshControl
         refreshing={refreshing}
         onRefresh={onRefresh}
@@ -742,12 +735,12 @@ const HomeScreen = ({ navigation, index }) => {
         <Image source={require('../image/1.jpg')} style={styles.logo} />
       </View>
 
-      <View>
+      <View >
         <View style={styles.balanceView}>
 
           <View style={styles.balanceContainer}>
 
-            <Text style={{ fontWeight: 'bold' }}>Balance: {userInformation?.wallet?.toFixed(2)}</Text>
+            <Text style={{ fontWeight: 'bold', color: 'black', fontSize: 16 }}>Balance: ₹ {userInformation?.wallet?.toFixed(2)}</Text>
             <TouchableOpacity onPress={fetchUserData}>
 
               <AntDesign name="reload1" size={20} color="blue" style={styles.refreshIcon} />
@@ -774,7 +767,7 @@ const HomeScreen = ({ navigation, index }) => {
         <View style={{
           marginTop: 15,
           flexDirection: 'row',
-          backgroundColor: 'white',
+          backgroundColor: 'white', width: SCREEN_WIDTH * 0.92, justifyContent: 'space-evenly',
           shadowColor: 'black',
           elevation: 5,
           borderRadius: 10, alignSelf: 'center'
@@ -833,7 +826,7 @@ const HomeScreen = ({ navigation, index }) => {
           </View>
         </View>
 
-        <View style={{ height: SCREEN_HEIGHT * 0.14, width: SCREEN_WIDTH * 0.9, backgroundColor: 'purple', marginVertical: 10, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ height: SCREEN_HEIGHT * 0.16, width: SCREEN_WIDTH * 0.95, backgroundColor: 'purple', marginVertical: 10, borderRadius: 10, justifyContent: 'center', alignItems: 'center', alignSelf: 'center' }}>
           <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold', letterSpacing: 1 }}>Time Remaining ...</Text>
           <Text style={{ fontSize: 32, fontWeight: 'bold', color: 'white', textAlign: 'center', marginVertical: 20 }}>
             {`${countdowns[selectedCountdown]?.minutes || 0} : ${countdowns[selectedCountdown]?.seconds || 0} `}
@@ -931,7 +924,7 @@ const HomeScreen = ({ navigation, index }) => {
 
 
 
-      <View style={{ height: 55, width: '90%', alignSelf: 'center', backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', borderRadius: 10, elevation: 1 }}>
+      <View style={{ height: SCREEN_HEIGHT * 0.07, width: SCREEN_WIDTH * 0.95, alignSelf: 'center', backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', borderRadius: 10, elevation: 5, marginVertical: 5 }}>
 
         <Text style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'center', color: "black" }}>Upcoming : <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 20, }}>
           {
@@ -965,16 +958,9 @@ const HomeScreen = ({ navigation, index }) => {
         />
       </View>
 
-      <View style={styles.buttonRow}>
-
-
-
-        {/* *********************** This is the bet modal ********************/}
-
-
-
-        {/* *********************** This is the bet modal ********************/}
-
+      <View style={{
+        height: 'auto', width: SCREEN_WIDTH * 0.97, alignSelf: 'center', paddingVertical: 5
+      }}>
 
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <View style={{ flexDirection: 'row' }}>
@@ -995,35 +981,39 @@ const HomeScreen = ({ navigation, index }) => {
 
           <View style={{ marginVertical: 10 }}></View>
 
-          <View style={{ height: SCREEN_HEIGHT * 0.15, width: SCREEN_WIDTH * 0.94, justifyContent: 'center', backgroundColor: 'white', elevation: 2, borderRadius: 5 }}>
-            <View style={styles.buttonRow}>
-              {[0, 1, 2, 3, 4].map((number) => (
-                <TouchableOpacity
-                  key={number}
-                  onPress={() => openBigModal('#89CFF0', 'number', `${number}`)}
-                  style={[styles.numberBtn, { backgroundColor: 'blue' }]}
-                >
-                  <Text style={{ fontWeight: 'bold', color: 'white' }}>{number}</Text>
-                </TouchableOpacity>
-              ))}
+          <View style={{ height: SCREEN_HEIGHT * 0.16, width: SCREEN_WIDTH * 0.95, backgroundColor: 'white', elevation: 2, borderRadius: 5, justifyContent: 'center', alignItems: 'center', alignSelf: 'center' }}>
+            <View style={{ height: '50%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', width: '100%' }}>
+                {[0, 1, 2, 3, 4].map((number) => (
+                  <TouchableOpacity
+                    key={number}
+                    onPress={() => openBigModal('#89CFF0', 'number', `${number}`)}
+                    style={{ width: SCREEN_WIDTH * 0.1, height: SCREEN_HEIGHT * 0.05, backgroundColor: 'blue', borderRadius: 50, justifyContent: 'center', alignItems: 'center', elevation: 5 }}
+                  >
+                    <Text style={{ fontWeight: 'bold', color: 'white' }}>{number}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
             </View>
 
-            <View style={styles.buttonRow}>
-              {[5, 6, 7, 8, 9].map((number) => (
-                <TouchableOpacity
-                  key={number}
-                  onPress={() => openBigModal('#89CFF0', 'number', `${number}`)}
-                  style={[styles.numberBtn, { backgroundColor: 'blue' }]}
-                >
-                  <Text style={{ fontWeight: 'bold', color: 'white' }}>{number}</Text>
-                </TouchableOpacity>
-              ))}
+            <View style={{ height: '50%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', width: '100%' }}>
+                {[5, 6, 7, 8, 9].map((number) => (
+                  <TouchableOpacity
+                    key={number}
+                    onPress={() => openBigModal('#89CFF0', 'number', `${number}`)}
+                    style={{ width: SCREEN_WIDTH * 0.1, height: SCREEN_HEIGHT * 0.05, backgroundColor: 'blue', borderRadius: 50, justifyContent: 'center', alignItems: 'center', elevation: 5 }}
+                  >
+                    <Text style={{ fontWeight: 'bold', color: 'white' }}>{number}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
             </View>
           </View>
 
-          <View style={{ marginVertical: 20 }}></View>
+          <View style={{ marginVertical: 10 }}></View>
 
-          <View style={styles.buttonRow}>
+          <View style={{ height: SCREEN_HEIGHT * 0.1, width: SCREEN_WIDTH * 0.97, alignSelf: 'center', flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
             <TouchableOpacity
               style={styles.redBtn}
               onPress={() => openBigModal('red', 'color', 'red')}
@@ -1045,64 +1035,64 @@ const HomeScreen = ({ navigation, index }) => {
               <Text style={{ fontWeight: 'bold', color: 'white' }}>Green</Text>
             </TouchableOpacity>
 
-            <View style={styles.buttonSpacing} />
-            {showModal1 && selectedCountdown === 'thirtySec' && (
-              <View style={styles.view2}>
-                <View style={{ flexDirection: 'row', backgroundColor: 'transparent' }}>
-                  {[
-                    ...(String(Number(countdowns[selectedCountdown]?.seconds) || 0).padStart(2, '0')),
-                  ].map((char, index) =>
-                    <View key={index} style={{ backgroundColor: 'white', paddingVertical: 20, borderRadius: 5, margin: 5, paddingHorizontal: 30, justifyContent: 'center', alignItems: 'center' }}>
-                      <Text style={{ fontSize: 90, fontWeight: 'bold', color: 'red' }}>{char}</Text>
-                    </View>
-                  )}
-                </View>
-              </View>
-            )}
-            {showModal2 && selectedCountdown === 'oneMin' && (
-              <View style={styles.view2}>
-                <View style={{ flexDirection: 'row', backgroundColor: 'transparent' }}>
-                  {[
-                    ...(String(Number(countdowns[selectedCountdown]?.seconds) || 0).padStart(2, '0')),
-                  ].map((char, index) =>
-                    <View key={index} style={{ backgroundColor: 'white', paddingVertical: 20, borderRadius: 5, margin: 5, paddingHorizontal: 30, justifyContent: 'center', alignItems: 'center' }}>
-                      <Text style={{ fontSize: 90, fontWeight: 'bold', color: 'red' }}>{char}</Text>
-                    </View>
-                  )}
-                </View>
-              </View>
-            )}
-            {showModal3 && selectedCountdown === 'threeMin' && (
-              <View style={styles.view2}>
-                <View style={{ flexDirection: 'row', backgroundColor: 'transparent' }}>
-                  {[
-                    ...(String(Number(countdowns[selectedCountdown]?.seconds) || 0).padStart(2, '0')),
-                  ].map((char, index) =>
-                    <View key={index} style={{ backgroundColor: 'white', paddingVertical: 20, borderRadius: 5, margin: 5, paddingHorizontal: 30, justifyContent: 'center', alignItems: 'center' }}>
-                      <Text style={{ fontSize: 90, fontWeight: 'bold', color: 'red' }}>{char}</Text>
-                    </View>
-                  )}
-                </View>
-              </View>
-            )}
-            {showModal4 && selectedCountdown === 'fiveMin' && (
-              <View style={styles.view2}>
-                <View style={{ flexDirection: 'row', backgroundColor: 'transparent' }}>
-                  {[
-                    ...(String(Number(countdowns[selectedCountdown]?.seconds) || 0).padStart(2, '0')),
-                  ].map((char, index) =>
-                    <View key={index} style={{ backgroundColor: 'white', paddingVertical: 20, borderRadius: 5, margin: 5, paddingHorizontal: 30, justifyContent: 'center', alignItems: 'center' }}>
-                      <Text style={{ fontSize: 90, fontWeight: 'bold', color: 'red' }}>{char}</Text>
-                    </View>
-                  )}
-                </View>
-              </View>
-            )}
 
           </View>
         </View>
+        {showModal1 && selectedCountdown === 'thirtySec' && (
+          <View style={styles.view2}>
+            <View style={{ flexDirection: 'row', backgroundColor: 'transparent' }}>
+              {[
+                ...(String(Number(countdowns[selectedCountdown]?.seconds) || 0).padStart(2, '0')),
+              ].map((char, index) =>
+                <View key={index} style={{ backgroundColor: 'white', paddingVertical: 20, borderRadius: 5, margin: 5, paddingHorizontal: 30, justifyContent: 'center', alignItems: 'center' }}>
+                  <Text style={{ fontSize: 90, fontWeight: 'bold', color: 'red' }}>{char}</Text>
+                </View>
+              )}
+            </View>
+          </View>
+        )}
+        {showModal2 && selectedCountdown === 'oneMin' && (
+          <View style={styles.view2}>
+            <View style={{ flexDirection: 'row', backgroundColor: 'transparent' }}>
+              {[
+                ...(String(Number(countdowns[selectedCountdown]?.seconds) || 0).padStart(2, '0')),
+              ].map((char, index) =>
+                <View key={index} style={{ backgroundColor: 'white', paddingVertical: 20, borderRadius: 5, margin: 5, paddingHorizontal: 30, justifyContent: 'center', alignItems: 'center' }}>
+                  <Text style={{ fontSize: 90, fontWeight: 'bold', color: 'red' }}>{char}</Text>
+                </View>
+              )}
+            </View>
+          </View>
+        )}
+        {showModal3 && selectedCountdown === 'threeMin' && (
+          <View style={styles.view2}>
+            <View style={{ flexDirection: 'row', backgroundColor: 'transparent' }}>
+              {[
+                ...(String(Number(countdowns[selectedCountdown]?.seconds) || 0).padStart(2, '0')),
+              ].map((char, index) =>
+                <View key={index} style={{ backgroundColor: 'white', paddingVertical: 20, borderRadius: 5, margin: 5, paddingHorizontal: 30, justifyContent: 'center', alignItems: 'center' }}>
+                  <Text style={{ fontSize: 90, fontWeight: 'bold', color: 'red' }}>{char}</Text>
+                </View>
+              )}
+            </View>
+          </View>
+        )}
+        {showModal4 && selectedCountdown === 'fiveMin' && (
+          <View style={styles.view2}>
+            <View style={{ flexDirection: 'row', backgroundColor: 'transparent' }}>
+              {[
+                ...(String(Number(countdowns[selectedCountdown]?.seconds) || 0).padStart(2, '0')),
+              ].map((char, index) =>
+                <View key={index} style={{ backgroundColor: 'white', paddingVertical: 20, borderRadius: 5, margin: 5, paddingHorizontal: 30, justifyContent: 'center', alignItems: 'center' }}>
+                  <Text style={{ fontSize: 90, fontWeight: 'bold', color: 'red' }}>{char}</Text>
+                </View>
+              )}
+            </View>
+          </View>
+        )}
       </View>
-      <View style={{ marginVertical: 20 }}></View>
+
+      <View style={{ marginVertical: 10 }}></View>
       <View style={styles.horizontalButtonContainer}>
 
         <Button
@@ -1110,10 +1100,7 @@ const HomeScreen = ({ navigation, index }) => {
           onPress={handleGameHistory}
         />
 
-        <View style={styles.buttonSpacing} />
-        <Button title="Chart"
 
-        />
         <View style={styles.buttonSpacing} />
         <Button
           title="My History"
@@ -1137,13 +1124,14 @@ const HomeScreen = ({ navigation, index }) => {
             // data={displayData.slice(startIndex, startIndex + itemsPerPage)}
             data={selectedCountdown == 'thirtySec' ? gameHistoryThirtySec.slice(startIndex, startIndex + itemsPerPage) : selectedCountdown == 'oneMin' ? gameHistoryOneMin.slice(startIndex, startIndex + itemsPerPage) : selectedCountdown == 'threeMin' ? gameHistoryThreeMin.slice(startIndex, startIndex + itemsPerPage) : selectedCountdown == 'fiveMin' ? gameHistoryFiveMin.slice(startIndex, startIndex + itemsPerPage) : []}
             renderItem={({ item }) => {
-              return <View style={{ display: 'flex', flexDirection: 'row', width: SCREEN_WIDTH * 0.9, marginTop: 2, height: 63, paddingVertical: 10, borderBottomWidth: 0.5, borderBottomColor: 'grey', paddingHorizontal: 5, alignItems: 'center' }}>
+              return <View style={{ flex: 1, flexDirection: 'row', width: SCREEN_WIDTH * 0.9, marginTop: 2, height: SCREEN_HEIGHT * 0.09, paddingVertical: 1, borderBottomWidth: 0.5, borderBottomColor: 'grey', paddingHorizontal: 5, alignItems: 'center', alignSelf: 'center' }}>
                 <View style={{ width: SCREEN_WIDTH * 0.25, }}><Text style={{ fontSize: 16, color: 'black' }}>{item.LN}</Text></View>
-                <View style={{ width: SCREEN_WIDTH * 0.17, alignItems: 'center', }}>
-                  <View style={[styles.numberBtn, { backgroundColor: 'green' }]}>
+                <View style={{ width: SCREEN_WIDTH * 0.17, alignItems: 'center', justifyContent: 'center' }}>
+                  <View style={{ width: SCREEN_WIDTH * 0.1, height: SCREEN_HEIGHT * 0.05, backgroundColor: 'green', borderRadius: 50, justifyContent: 'center', alignItems: 'center', elevation: 5 }}>
                     <Text style={{ fontSize: 16, color: 'white' }}>
                       {item.number}</Text>
                   </View>
+                  {/* <Image source={imageMapping[item.number]} style={{ height: 40, width: 40, borderRadius: 5 }} /> */}
                 </View>
                 <View style={{ width: SCREEN_WIDTH * 0.3, alignItems: 'center' }}><Text style={{ fontSize: 16, color: 'black' }}>{item.size}</Text></View>
                 <View style={{ flexDirection: 'row' }}>
@@ -1190,12 +1178,12 @@ const HomeScreen = ({ navigation, index }) => {
 
 const styles = StyleSheet.create({
   mainContainer: {
-    flex: 1, alignSelf: 'center', width: SCREEN_WIDTH * 1
+    flex: 1, alignSelf: 'center', width: SCREEN_WIDTH * 1, paddingHorizontal: 2, backgroundColor: 'white',
   },
 
   container: {
     alignItems: 'center',
-    paddingVertical: 20,
+    paddingVertical: 5, justifyContent: 'center'
   },
   myHistoryContainer: {
     flex: 1,
@@ -1237,11 +1225,11 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   balanceView: {
-    width: SCREEN_WIDTH * 0.9,
+    width: SCREEN_WIDTH * 0.95,
     height: SCREEN_HEIGHT * 0.15,
-    backgroundColor: '#F3CFC6', display: 'flex',
+    backgroundColor: '#F3CFC6',
     justifyContent: 'center', alignItems: 'center',
-    marginTop: 4, borderRadius: 10
+    marginTop: 4, borderRadius: 10, alignSelf: 'center'
   },
   balanceContainer: {
     marginTop: 20,
@@ -1282,9 +1270,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: SCREEN_WIDTH * 0.25,
     paddingVertical: 10,
-    marginTop: 10,
-    marginLeft: 35,
-    marginHorizontal: 3,
     borderBottomStartRadius: 10,
     borderTopEndRadius: 10
 
@@ -1294,28 +1279,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: SCREEN_WIDTH * 0.25,
     paddingVertical: 10,
-    borderRadius: 10, marginTop: 10,
+    borderRadius: 10,
   },
   greenBtn: {
     backgroundColor: 'green',
     alignItems: 'center',
     width: SCREEN_WIDTH * 0.25,
     paddingVertical: 10,
-    marginTop: 10,
-    marginHorizontal: 3,
     borderTopStartRadius: 10,
     borderBottomEndRadius: 10
 
   },
 
   buttonSpacing: {
-    width: 30,
+    width: 10,
   },
   bigButton: {
     backgroundColor: '#FFAA33',
     alignItems: 'center',
-    width: SCREEN_WIDTH * 0.4,
-    paddingVertical: 10,
+    width: SCREEN_WIDTH * 0.45,
+    paddingVertical: 15,
     borderTopStartRadius: 10, borderBottomStartRadius: 10, marginTop: 10,
     borderRightColor: 'grey', borderRightWidth: 1
 
@@ -1323,20 +1306,18 @@ const styles = StyleSheet.create({
   smallBtn: {
     backgroundColor: '#89CFF0',
     alignItems: 'center',
-    width: SCREEN_WIDTH * 0.4,
-    paddingVertical: 10,
+    width: SCREEN_WIDTH * 0.45,
+    paddingVertical: 15,
     borderTopEndRadius: 10, borderBottomEndRadius: 10, marginTop: 10,
   },
   numberBtn: {
 
     alignItems: 'center',
     width: SCREEN_WIDTH * 0.1,
-    paddingVertical: 8,
-    borderRadius: 50, marginTop: 10,
-    marginLeft: 10,
-    marginHorizontal: 3,
+    paddingVertical: 9,
+    borderRadius: 50,
     elevation: 5,
-    shadowColor: 'red'
+    justifyContent: 'center'
   },
   gameContainer: {
     marginTop: 40,
@@ -1355,14 +1336,13 @@ const styles = StyleSheet.create({
   },
   horizontalButtonContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center', justifyContent: 'space-between', width: SCREEN_WIDTH * 0.9
   },
   buttonRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 10,
+    justifyContent: 'space-evenly',
     alignItems: 'center',
-
+    width: SCREEN_WIDTH * 0.9, alignSelf: 'center',
   },
   buttonMargin: {
     marginHorizontal: 5,
@@ -1401,16 +1381,16 @@ const styles = StyleSheet.create({
 
   },
   view2: {
-    backgroundColor: 'rgba(128, 128, 128, 0.3)', // Use rgba to set opacity
+    backgroundColor: 'rgba(128, 128, 128, 0.4)', // Use rgba to set opacity
     position: 'absolute',
-    top: -230,
+    top: 0,
     left: 0,
     right: 0,
     bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 2,
-    borderRadius: 10
+    borderRadius: 10, alignSelf: 'center'
   },
 
 });

@@ -15,8 +15,8 @@ const QrScanner = () => {
         <Text style={{ textAlign: 'center', fontSize: 14, color: Colors.fontGray, fontWeight: '600', marginTop: 10 }}>You are tranferring ₹1 to Bet Ninja</Text>
         <Image source={require('../assets/qrcode.png')} style={{ height: 320, width: 260, alignSelf: 'center', marginTop: 20 }} />
         <View style={{ alignSelf: 'center' }}>
-          <Text >Do not use the same QR code to pay multiple times</Text>
-          <Text style={{ textAlign: 'left', width: 300, fontWeight: 'bold' }}>If you successfully pay using QR code, there is no need to fill in UTR submission</Text>
+          <Text style={{ color: 'black' }}>Do not use the same QR code to pay multiple times</Text>
+          <Text style={{ textAlign: 'left', width: 300, fontWeight: 'bold', color: 'black' }}>If you successfully pay using QR code, there is no need to fill in UTR submission</Text>
 
         </View>
 
@@ -32,15 +32,15 @@ const QrScanner = () => {
         <View style={{ width: '100%', height: 110, backgroundColor: 'rgba(255, 255, 255, 0.6)', borderRadius: 6, padding: 5 }}>
           <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold', letterSpacing: 0.4 }}>UPI Payment</Text>
           <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', marginTop: 5 }}>
-            <Text style={{ width: '50%', fontWeight: '500' }}>Amount:</Text>
+            <Text style={{ width: '50%', fontWeight: '500', color: 'black' }}>Amount:</Text>
             <Text style={{ width: '50%', textAlign: 'right', color: 'red', fontSize: 16, fontWeight: 'bold' }}>100.00</Text>
           </View>
           <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', marginTop: 5 }}>
-            <Text style={{ width: '50%', fontWeight: '500' }}>Order No:</Text>
-            <Text style={{ width: '50%', textAlign: 'right' }}>1234456556789</Text>
+            <Text style={{ width: '50%', fontWeight: '500', color: 'black' }}>Order No:</Text>
+            <Text style={{ width: '50%', textAlign: 'right', color: 'grey' }}>1234456556789</Text>
           </View>
           <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', marginTop: 5 }}>
-            <Text style={{ width: '50%', fontWeight: '500' }}>Beneficiery UPI:</Text>
+            <Text style={{ width: '50%', fontWeight: '500', color: 'black' }}>Beneficiery UPI:</Text>
             <Text style={{ width: '50%', textAlign: 'right', color: 'red', fontSize: 16, fontWeight: '500' }}>6265100070@okbizaxis</Text>
           </View>
 

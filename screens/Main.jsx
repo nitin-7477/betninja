@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, FlatList, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 import MainSlider from '../components/sliders/MainSlider';
@@ -10,56 +10,49 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Main() {
+  const flatListRef = useRef(null);
   const navigation = useNavigation();
   const [recentWinners, setRecentWinners] = useState([]);
   const [userInformation, setUserInformation] = useState([]);
-
+  const [flatListIndex, setFlatListIndex] = useState(0);
 
   useEffect(() => {
+    const fetchToken = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+
+        if (!token) {
+          alert('Token Expired');
+          navigation.navigate('Login');
+          return;
+        }
+
+        const response = await axios.get(`${process.env.SERVERURL}/api/auth/user`, {
+          headers: {
+            "Authorization": JSON.parse(token),
+          },
+        });
+        setUserInformation(response.data);
+      } catch (error) {
+        console.error('Error fetching user data in Account Screen:', error);
+      }
+    };
+
     fetchToken();
   }, []);
-
-  const fetchToken = async () => {
-    try {
-
-      const token = await AsyncStorage.getItem('token');
-
-      if (!token) {
-        alert('Token Expired')
-        navigation.navigate('Login')
-        return;
-      }
-
-      const response = await axios.get(`${process.env.SERVERURL}/api/auth/user`, {
-        headers: {
-          "Authorization": JSON.parse(token),
-        },
-      });
-      setUserInformation(response.data);
-    }
-
-    catch (error) {
-      console.error('Error fetching user data in Account Screen:', error);
-    }
-
-  };
-
 
 
   useEffect(() => {
     const fetchRecentWinners = async () => {
       try {
         const response = await axios.get(`${process.env.SERVERURL}/api/bet/recentWinner`);
-        console.log(response.data);
-        setRecentWinners(response.data)
-
+        setRecentWinners(response.data);
       } catch (error) {
         console.error('Error fetching recent winners:', error);
       }
     };
 
     fetchRecentWinners();
-
   }, []);
 
 
@@ -105,6 +98,25 @@ export default function Main() {
     { rank: 10, name: 'Queen', earnings: '₹9500', image: require('../assets/casino-player.png') },
     // Add more top 10 lists data
   ];
+
+  const scrollFlatList = () => {
+    if (flatListRef.current) {
+      flatListRef.current.scrollToIndex({
+        animated: true,
+        index: (flatListIndex + 1) % recentWinnersData.length,
+      });
+      setFlatListIndex((prevIndex) => (prevIndex + 1) % recentWinnersData.length);
+    }
+  };
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      scrollFlatList();
+    }, 3000);
+
+    return () => clearInterval(intervalId);
+  }, [flatListIndex]);
+
 
   // Sample data for game icons
   const gameIconsData = [
@@ -182,6 +194,7 @@ export default function Main() {
       <View style={styles.section}>
         <Text style={{ color: 'black', textAlign: 'center', marginVertical: 10, fontWeight: 'bold', fontSize: 18 }}>Recent Winners</Text>
         <FlatList
+          ref={flatListRef}
           horizontal
           data={recentWinnersData}
           keyExtractor={(item, index) => index.toString()}
@@ -194,6 +207,12 @@ export default function Main() {
               <Text style={{ color: Colors.fontGray, fontWeight: '500' }}>{item.game}</Text>
             </View>
           )}
+          onMomentumScrollEnd={(event) => {
+            // Update the current index when scrolling ends
+            const index = Math.round(event.nativeEvent.contentOffset.x / event.nativeEvent.layoutMeasurement.width);
+            setFlatListIndex(index);
+          }}
+          scrollEnabled={false}
         />
       </View>
 
@@ -201,6 +220,7 @@ export default function Main() {
       <View style={styles.section2}>
         <Text style={{ color: 'black', textAlign: 'center', marginVertical: 10, fontWeight: 'bold', fontSize: 18 }}>Top 10 Lists</Text>
         <FlatList
+
           data={top10ListsData}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
@@ -218,6 +238,7 @@ export default function Main() {
             </View>
 
           )}
+
         />
       </View>
     </ScrollView>
@@ -348,6 +369,7 @@ const styles = StyleSheet.create({
   },
   top10:
   {
+    flex: 1,
     alignItems: 'center',
     marginHorizontal: 1,
     backgroundColor: '#FAFAFA',

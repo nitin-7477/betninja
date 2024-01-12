@@ -15,6 +15,7 @@ const Account = () => {
   const [userInformation, setUserInformation] = useState([]);
   const [userToken, setUserToken] = useState({});
   const [loading, setLoading] = useState(false)
+  const [selectedButton, setSelectedButton] = useState('Deposite');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,6 +58,37 @@ const Account = () => {
     }
   };
 
+
+  const handleButtonPress = (buttonName) => {
+    setSelectedButton(buttonName);
+  };
+
+  const renderButton = (buttonName, iconSource) => {
+    const isSelected = selectedButton === buttonName;
+    const buttonStyle = {
+      height: '100%',
+      width: '24%',
+      backgroundColor: isSelected ? '#d9ad82' : '#D3D3D3',
+      borderRadius: 10,
+      justifyContent: 'center',
+      alignItems: 'center',
+    };
+
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          handleButtonPress(buttonName);
+          navigation.navigate(`${buttonName}Screen`);
+        }}
+        style={buttonStyle}
+      >
+        <Image source={iconSource} style={{ height: 50, width: 50 }} />
+        <Text style={{ color: isSelected ? 'white' : 'black', fontSize: 10 }}>{buttonName}</Text>
+      </TouchableOpacity>
+    );
+  };
+
+
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
 
@@ -87,36 +119,13 @@ const Account = () => {
       </View>
 
       {/* *********Navigating to different screens********************** */}
-
-      <View style={{ flexDirection: 'row', width: SCREEN_WIDTH * 0.9, justifyContent: 'space-between', alignContent: 'center', marginBottom: 10 }}>
-
-        <TouchableOpacity
-          onPress={() => navigation.navigate("Wallet")}
-          style={{ height: 80, width: 80, backgroundColor: '#d9ad82', borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
-          <Image source={require('../assets/wallet/deposit.png')} style={{ height: 50, width: 50 }} />
-          <Text style={{ color: 'white', fontSize: 10 }}>Wallet</Text>
-        </TouchableOpacity>
-
-
-        <TouchableOpacity
-          onPress={() => navigation.navigate("DepositeScreen")}
-          style={{ height: 80, width: 80, backgroundColor: '#D3D3D3', borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
-          <Image source={require('../assets/wallet/withdraw.png')} style={{ height: 40, width: 40 }} />
-          <Text style={{ fontSize: 12, marginVertical: 3 }} >Deposite</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => navigation.navigate("WithdrawScreen")}
-          style={{ height: 80, width: 80, backgroundColor: '#D3D3D3', borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
-          <Image source={require('../assets/wallet/withdrawHistory.png')} style={{ height: 40, width: 40 }} />
-          <Text style={{ fontSize: 12, marginVertical: 3, textAlign: 'center' }} >Withdraw</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("DepositHistoryScreen")}
-          style={{ height: 80, width: 80, backgroundColor: '#D3D3D3', borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
-          <Image source={require('../assets/wallet/depositeHistory.png')} style={{ height: 40, width: 40 }} />
-          <Text style={{ fontSize: 12, marginVertical: 3, textAlign: 'center' }}>Deposite History</Text>
-        </TouchableOpacity>
+      <View style={{ height: SCREEN_HEIGHT * 0.15, width: SCREEN_WIDTH * 0.95, alignSelf: 'center', backgroundColor: 'white', elevation: 2, borderRadius: 10, marginTop: -40, justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
+        <View style={{ flexDirection: 'row', width: SCREEN_WIDTH * 0.95, justifyContent: 'space-evenly', alignItems: 'center' }}>
+          {renderButton('Deposite', require('../assets/wallet/deposit.png'))}
+          {renderButton('Withdraw', require('../assets/wallet/withdraw.png'))}
+          {renderButton('WithdrawHistory', require('../assets/wallet/withdrawHistory.png'))}
+          {renderButton('DepositHistory', require('../assets/wallet/depositeHistory.png'))}
+        </View>
       </View>
 
       <View style={styles.section}>
@@ -125,16 +134,24 @@ const Account = () => {
         <View style={styles.sectionItems}>
           <TouchableOpacity
             onPress={() => navigation.navigate("Notification")}
-            style={styles.sectionItem}>
+            style={{
+              justifyContent: 'space-between', flexDirection: 'row', width: '100%', alignItems: 'center', height: '25%', borderBottomWidth: 0.2,
+              borderColor: Colors.fontGray,
+            }}
+          >
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Ionicons name="notifications" size={24} color="black" />
-              <Text style={{ marginLeft: 10, fontSize: 15, color: 'black' }}>Notifications</Text>
+              <Text style={{ color: 'black' }}>Notifications</Text>
             </View>
             <AntDesign name="right" size={16} color="grey" />
 
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate("Gifts")}
-            style={styles.sectionItem}>
+            style={{
+              justifyContent: 'space-between', flexDirection: 'row', width: '100%', alignItems: 'center', height: '25%', borderBottomWidth: 0.2,
+              borderColor: Colors.fontGray,
+            }}
+          >
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Ionicons name="gift" size={24} color="black" />
               <Text style={{ marginLeft: 10, fontSize: 15, color: 'black' }}>Gifts</Text>
@@ -144,7 +161,11 @@ const Account = () => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => navigation.navigate("GameStats")} style={styles.sectionItem}>
+            onPress={() => navigation.navigate("GameStats")} style={{
+              justifyContent: 'space-between', flexDirection: 'row', width: '100%', alignItems: 'center', height: '25%', borderBottomWidth: 0.2,
+              borderColor: Colors.fontGray,
+            }}
+          >
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Ionicons name="stats-chart" size={24} color="black" />
               <Text style={{ marginLeft: 10, fontSize: 15, color: 'black' }}>Game Chart</Text>
@@ -154,7 +175,11 @@ const Account = () => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => navigation.navigate("Language")}
-            style={styles.sectionItem}>
+            style={{
+              justifyContent: 'space-between', flexDirection: 'row', width: '100%', alignItems: 'center', height: '25%', borderBottomWidth: 0.2,
+              borderColor: Colors.fontGray,
+            }}
+          >
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Ionicons name="language" size={24} color="black" />
               <Text style={{ marginLeft: 10, fontSize: 15, color: 'black' }}>Languages</Text>
@@ -230,8 +255,8 @@ const Account = () => {
 const styles = {
   container: {
     flex: 1,
-    padding: 20,
-    alignSelf: 'center', backgroundColor: 'white'
+    alignSelf: 'center',
+     backgroundColor: 'white'
 
   },
   header: {
@@ -297,10 +322,10 @@ const styles = {
     color: 'black'
   },
   sectionItems: {
-    height: SCREEN_HEIGHT * 0.3, width: SCREEN_WIDTH * 0.9, backgroundColor: Colors.lightGray, padding: 10, borderRadius: 7
+    flex: 1, height: SCREEN_HEIGHT * 0.3, width: SCREEN_WIDTH * 0.9, backgroundColor: Colors.lightGray, padding: 10, borderRadius: 7, alignSelf: 'center', justifyContent: 'center'
   },
   serviceItems: {
-    height: SCREEN_HEIGHT * 0.3, width: SCREEN_WIDTH * 0.9, backgroundColor: Colors.lightGray, padding: 10, borderRadius: 7
+    height: 'auto', width: SCREEN_WIDTH * 0.9, backgroundColor: Colors.lightGray, padding: 10, borderRadius: 7, alignSelf: 'center'
   },
   serviceIcons: {
     alignItems: 'center',
@@ -316,7 +341,7 @@ const styles = {
     borderBottomWidth: 0.2,
     borderColor: Colors.fontGray,
     paddingBottom: 15,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   logoutButton: {
     backgroundColor: "red",

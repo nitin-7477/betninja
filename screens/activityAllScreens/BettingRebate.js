@@ -106,24 +106,28 @@ const BettingRebate = () => {
         <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 18 }}>All-Total Betting Rebate</Text>
         <View style={{ flexDirection: 'row', marginTop: 10, width: 130, height: 25, borderColor: 'purple', borderWidth: 0.2, justifyContent: 'space-around', alignItems: 'center' }}>
           <Ionicons name="shield-checkmark" size={20} color={'purple'} />
-          <Text>Real-Time Count</Text>
+          <Text style={{ color: 'black' }}>Real-Time Count</Text>
         </View>
-        <Text style={{ fontWeight: 'bold', fontSize: 18, marginTop: 10 }}>
-          ₹ {userInformation}
+        <Text style={{ fontWeight: 'bold', fontSize: 18, marginTop: 10, color: 'black' }}>
+          ₹ {typeof userInformation === 'number' ? userInformation.toFixed(2) : userInformation}
         </Text>
         <View style={{ height: 25, width: '95%', backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', borderRadius: 5 }}>
-          <Text>Upgrade VIP lavel to increase the rebate rebate</Text></View>
+          <Text style={{ color: 'black' }}>Upgrade VIP lavel to increase the rebate rebate</Text></View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={{ height: 45, width: '45%', backgroundColor: 'white', justifyContent: 'center', borderRadius: 2, marginVertical: 10, paddingHorizontal: 10 }}>
-            <Text>Today Rebate</Text>
+            <Text style={{ color: 'black' }}>Today Rebate</Text>
             <Text style={{ color: 'red' }}>{userInformation}</Text>
           </View>
           <View style={{ height: 45, width: '45%', backgroundColor: 'white', justifyContent: 'center', borderRadius: 2, marginVertical: 10, paddingHorizontal: 10 }}>
             <Text>Total Rebate</Text>
-            <Text style={{ color: 'red' }}>{rebateInfo?.totalAmount}</Text>
+            <Text style={{ color: 'red' }}>
+              {rebateInfo?.totalAmount !== undefined && rebateInfo?.totalAmount !== null
+                ? rebateInfo?.totalAmount.toFixed(2)
+                : '0.00'}
+            </Text>
           </View>
         </View>
-        <Text>Automatic code washing at 1:00:00 every morning</Text>
+        <Text style={{ color: 'black' }}>Automatic code washing at 1:00:00 every morning</Text>
         <TouchableOpacity
           onPress={() => handleOneClickRebate()}
           style={{ width: SCREEN_WIDTH * 0.8, height: SCREEN_HEIGHT * 0.05, backgroundColor: 'red', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', marginTop: 30, borderRadius: 10 }}>
@@ -131,7 +135,7 @@ const BettingRebate = () => {
         </TouchableOpacity>
       </View>
 
-      <Text style={{ marginLeft: 20, fontSize: 20, fontWeight: 'bold', marginTop: 10 }}>Rebate History</Text>
+      <Text style={{ marginLeft: 20, fontSize: 20, fontWeight: 'bold', marginTop: 10, color: 'black' }}>Rebate History</Text>
 
       <FlatList
         data={rebateInfo.data}
@@ -144,7 +148,7 @@ const BettingRebate = () => {
                 <TouchableOpacity style={styles.button}>
                   <Text style={styles.buttonText}>{item.type}</Text>
                 </TouchableOpacity>
-                <Text>{new Date(item.updatedAt).toLocaleString()}</Text>
+                <Text style={{ color: 'black' }}>{new Date(item.updatedAt).toLocaleString()}</Text>
                 <Text style={styles.statusCompleted}>{item.status}</Text>
               </View>
 
@@ -237,8 +241,9 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   historyText: {
-    fontSize: 16,
+    fontSize: 15,
     color: 'black',
+    fontWeight: 'bold'
   },
   historyAmount: {
     color: 'black',
