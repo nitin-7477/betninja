@@ -8,6 +8,7 @@ import { Colors } from '../Constants/Colors'
 import { useNavigation } from "@react-navigation/native";
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { responsiveWidth, responsiveFontSize, responsiveHeight } from 'react-native-responsive-dimensions';
 
 const WithdrawScreen = () => {
   const navigation = useNavigation();
@@ -39,7 +40,6 @@ const WithdrawScreen = () => {
     fetchData();
   }, []);
 
-  // console.log("This is user information for Withdraw Screen", userInformation);
 
   const handleDepositWithdraw = async () => {
     try {
@@ -66,7 +66,7 @@ const WithdrawScreen = () => {
 
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       <View style={styles.depositSection}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}><TouchableOpacity
           onPress={() => navigation.goBack()}
@@ -75,11 +75,11 @@ const WithdrawScreen = () => {
         </TouchableOpacity>
           <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.purple, marginLeft: 30 }}>Withdraw Screen</Text></View>
         {/* *********************balance card******************* */}
-        <View style={{ height: SCREEN_HEIGHT * 0.15, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: '#d9ad82', marginVertical: 10, borderRadius: 10, padding: 10 }}>
+        <View style={{ height: SCREEN_HEIGHT * 0.15, width: responsiveWidth(97), alignSelf: 'center', backgroundColor: '#d9ad82', marginVertical: 10, borderRadius: 10, padding: 10 }}>
 
-          <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold' }}>Balance</Text>
+          <Text style={{ color: 'white', fontSize: responsiveFontSize(2.5), fontWeight: 'bold' }}>Balance</Text>
           <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ color: 'white', fontSize: 26, fontWeight: 'bold', marginTop: 5 }}>{userInformation?.wallet?.toFixed(2)}</Text>
+            <Text style={{ color: 'white', fontSize: 26, fontWeight: 'bold', marginTop: 5 }}>₹ {userInformation?.wallet?.toFixed(2)}</Text>
             <Image source={require('../../assets/wallet/arrow.png')} style={{ height: 15, width: 15, marginHorizontal: 5 }} /></View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <Image source={require('../../assets/wallet/chip.png')} style={{ height: 20, width: 30, marginTop: 10 }} />
@@ -90,10 +90,10 @@ const WithdrawScreen = () => {
         {/* *********************balance card******************* */}
 
         {/* *********************Select the Bank******************* */}
-        <View style={{ flexDirection: 'row', width: SCREEN_WIDTH * 0.9, alignContent: 'center', marginBottom: 10 }}>
-          <View style={{ height: 100, width: 100, backgroundColor: '#d9ad82', borderRadius: 10, justifyContent: 'center', alignItems: 'center', }}>
-            <Image source={require('../../assets/wallet/payment1.png')} style={{ height: 40, width: 40 }} />
-            <Text style={{ color: 'black' }}>Bank Transfer</Text>
+        <View style={{ flexDirection: 'row', width: responsiveWidth(97), alignContent: 'center', marginBottom: 10 }}>
+          <View style={{ height: responsiveHeight(13), width: responsiveWidth(29), backgroundColor: '#d9ad82', borderRadius: 10, justifyContent: 'center', alignItems: 'center', }}>
+            <Image source={require('../../assets/wallet/payment1.png')} style={{ height: responsiveHeight(6), width: responsiveWidth(12) }} />
+            <Text style={{ color: 'black', fontWeight: 'bold' }}>Bank Transfer</Text>
           </View>
           {/* <View style={{ height: 100, width: 100, backgroundColor: '#D3D3D3', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginHorizontal: 10 }}>
             <Image source={require('../../assets/wallet/payment5.png')} style={{ height: 40, width: 40 }} />
@@ -104,14 +104,14 @@ const WithdrawScreen = () => {
 
         <TouchableOpacity
           onPress={() => navigation.navigate('AddBank')}
-          style={{ height: SCREEN_HEIGHT * 0.1, marginBottom: 10, width: SCREEN_WIDTH * 0.95, alignSelf: 'center', backgroundColor: Colors.lightGray, justifyContent: 'center', alignItems: 'center' }}>
+          style={{ height: responsiveHeight(11), marginBottom: 10, width: responsiveWidth(97), alignSelf: 'center', backgroundColor: Colors.lightGray, justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
           <Image source={require('../../assets/plus.png')} style={{ height: 40, width: 40 }} />
           <Text>Add your bank</Text>
         </TouchableOpacity>
 
 
 
-        <TouchableOpacity style={{ height: SCREEN_HEIGHT * 0.1, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: '#D3D3D3', marginBottom: 10, borderRadius: 10, padding: 10, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
+        <TouchableOpacity style={{ height: responsiveHeight(11), marginBottom: 10, width: responsiveWidth(97), alignSelf: 'center', backgroundColor: '#D3D3D3', marginBottom: 10, borderRadius: 10, padding: 10, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
           <View style={{ marginBottom: 10, alignItems: 'center', width: '30%', }}>
             <Image source={require('../../assets/wallet/bank-logo.png')} style={{ height: 40, width: 40 }} />
 
@@ -124,10 +124,10 @@ const WithdrawScreen = () => {
         </TouchableOpacity>
         {/* *********************Select the Channel******************* */}
         {/* *********************Withdraw Amount******************* */}
-        <View style={{ height: SCREEN_HEIGHT * 0.5, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: '#D3D3D3', marginBottom: 10, borderRadius: 10, padding: 10, }}>
+        <View style={{ height: responsiveHeight(50), marginBottom: 10, width: responsiveWidth(97), alignSelf: 'center', backgroundColor: '#D3D3D3', marginBottom: 10, borderRadius: 10, padding: 10, }}>
 
           <View style={styles.amountInputContainer}>
-            <Text style={{ fontSize: 26, color: '#d9ad82', paddingLeft: 10 }}>₹</Text>
+            <Text style={{ fontSize: responsiveFontSize(3), color: '#d9ad82', paddingLeft: 10 }}>₹</Text>
             <Text style={{ fontSize: 26, color: 'grey', paddingLeft: 10 }}>|</Text>
 
             <TextInput
@@ -180,7 +180,7 @@ export default WithdrawScreen
 const styles = {
   container: {
     flex: 1,
-    padding: 20,
+    padding: 1,
     backgroundColor: '#f5f5f5',
     alignSelf: 'center'
 
@@ -225,7 +225,8 @@ const styles = {
     paddingHorizontal: 20,
   },
   depositSection: {
-    marginBottom: 30,
+    marginTop: 10,
+    marginBottom: 10,
   },
   sectionTitle: {
     color: 'black',
@@ -238,7 +239,7 @@ const styles = {
     borderWidth: 1,
     borderRadius: 25,
     marginBottom: 10,
-    width: SCREEN_WIDTH * 0.8,
+    width: responsiveWidth(90),
     alignSelf: 'center',
     backgroundColor: 'white',
     flexDirection: 'row', alignItems: 'center', marginTop: 10
@@ -259,7 +260,9 @@ const styles = {
     paddingVertical: 12,
     borderRadius: 25,
     alignItems: 'center',
-    marginVertical: 10
+    marginVertical: 10,
+    width: responsiveWidth(95),
+    alignSelf: 'center'
   },
   depositButtonText: {
     fontSize: 16,

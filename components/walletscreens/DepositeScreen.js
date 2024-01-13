@@ -8,7 +8,7 @@ import { Colors } from '../Constants/Colors'
 import { useNavigation } from "@react-navigation/native";
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-
+import { responsiveWidth, responsiveHeight, responsiveFontSize } from 'react-native-responsive-dimensions'
 
 
 const DepositeScreen = () => {
@@ -18,7 +18,11 @@ const DepositeScreen = () => {
   const [userInformation, setUserInformation] = useState('')
   const [selectedBtn, setSelectedBtn] = useState(0)
   const [loading, setLoading] = useState(false)
-
+  const [selectedBank, setSelectedBank] = useState(1)
+  const isButtonDisabled = parseInt(amount) >= 100;
+  // const handleAmountChange = (value) => {
+  //   setAmount(value);
+  // };
 
   useEffect(() => {
     fetchUserData()
@@ -51,19 +55,28 @@ const DepositeScreen = () => {
 
   const handleDeposite = async () => {
     try {
-      const token = await AsyncStorage.getItem('token');
-      if (!token) {
-        navigation.navigate('Login')
-        return;
-      }
-      var body = { amount: amount }
-      const response = await axios.post(`${process.env.SERVERURL}/api/deposit/deposits`, body, {
-        headers: {
-          "Authorization": JSON.parse(token),
-        },
-      });
+      if (selectedBank == 3) {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          navigation.navigate('Login')
+          return;
+        }
+        var body = { amount: amount }
+        const response = await axios.post(`${process.env.SERVERURL}/api/deposit/deposits`, body, {
+          headers: {
+            "Authorization": JSON.parse(token),
+          },
+        });
 
-      console.log("This is response of hitting deposite api", response);
+        console.log("This is response of hitting deposite api", response);
+      }
+      else if (selectedBank == 2) {
+        
+      }
+      else if (selectedBank == 1) {
+        navigation.navigate('QrScanner', { amount })
+      }
+
     }
     catch (error) {
       console.log(error);
@@ -83,7 +96,7 @@ const DepositeScreen = () => {
 
     if (isNaN(enteredAmount) || enteredAmount < 100) {
 
-      setAmount('100');
+      setAmount(text);
       // Alert.alert('Minimum 100 is required')
     } else {
 
@@ -108,9 +121,9 @@ const DepositeScreen = () => {
         </TouchableOpacity>
           <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.purple, marginLeft: 30 }}>Deposit Screen</Text></View>
         {/* *********************balance card******************* */}
-        <View style={{ height: SCREEN_HEIGHT * 0.15, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: '#d9ad82', marginVertical: 10, borderRadius: 10, padding: 10 }}>
+        <View style={{ height: SCREEN_HEIGHT * 0.15, width: responsiveWidth(97), alignSelf: 'center', backgroundColor: '#d9ad82', marginVertical: 10, borderRadius: 10, padding: 10 }}>
 
-          <Text style={{ color: 'white', fontSize: 16 }}>Balance</Text>
+          <Text style={{ color: 'white', fontSize: responsiveFontSize(2.5), fontWeight: 'bold' }}>Balance</Text>
           <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ color: 'white', fontSize: 26, fontWeight: 'bold', marginTop: 5 }}>₹{userInformation?.wallet?.toFixed(2)}</Text>
             <Image source={require('../../assets/wallet/arrow.png')} style={{ height: 15, width: 15, marginHorizontal: 5 }} /></View>
@@ -127,22 +140,25 @@ const DepositeScreen = () => {
         {/* *********************balance card******************* */}
 
         {/* *********************Select the Bank******************* */}
-        <View style={{ flexDirection: 'row', width: SCREEN_WIDTH * 0.88, justifyContent: 'space-between', alignContent: 'center', marginBottom: 10 }}>
-          <View style={{ height: 100, width: 100, backgroundColor: '#d9ad82', borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
-            <Image source={require('../../assets/wallet/payment1.png')} style={{ height: 40, width: 40 }} />
-            <Text style={{ color: 'white' }}>Bank Transfer</Text>
-          </View>
-
+        <View style={{ flexDirection: 'row', width: responsiveWidth(97), justifyContent: 'space-between', alignContent: 'center', marginBottom: 10, }}>
           <TouchableOpacity
-            onPress={PaymentGateWay}
-            style={{ height: 100, width: 100, backgroundColor: '#D3D3D3', borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
+            onPress={() => setSelectedBank(1)}
+            style={{ height: responsiveHeight(14), width: responsiveWidth(32), backgroundColor: selectedBank == 1 ? '#d9ad82' : '#D3D3D3', borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
+            <Image source={require('../../assets/wallet/payment3.png')} style={{ height: 50, width: 50 }} />
+            <Text >UPI-QR</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => setSelectedBank(2)} style={{ height: responsiveHeight(14), width: responsiveWidth(32), backgroundColor: selectedBank == 2 ? '#d9ad82' : '#D3D3D3', borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
+            <Image source={require('../../assets/wallet/payment1.png')} style={{ height: 40, width: 40 }} />
+            <Text style={{ color: 'black' }}>Bank Transfer</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setSelectedBank(3)}
+            style={{ height: responsiveHeight(14), width: responsiveWidth(32), backgroundColor: selectedBank == 3 ? '#d9ad82' : '#D3D3D3', borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
             <Image source={require('../../assets/wallet/payment2.png')} style={{ height: 40, width: 50 }} />
             <Text >UPI-APP</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('QrScanner')} style={{ height: 100, width: 100, backgroundColor: '#D3D3D3', borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
-            <Image source={require('../../assets/wallet/payment3.png')} style={{ height: 40, width: 50 }} />
-            <Text >UPI-QR</Text>
-          </TouchableOpacity>
+
 
         </View>
         <View style={{ flexDirection: 'row', width: SCREEN_WIDTH * 0.9, justifyContent: 'space-between', alignContent: 'center', marginBottom: 10 }}>
@@ -152,7 +168,7 @@ const DepositeScreen = () => {
 
 
 
-        <View style={{ height: SCREEN_HEIGHT * 0.3, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: '#D3D3D3', marginBottom: 10, borderRadius: 10, padding: 10, }}>
+        <View style={{ height: SCREEN_HEIGHT * 0.3, width: responsiveWidth(97), alignSelf: 'center', backgroundColor: '#D3D3D3', marginBottom: 10, borderRadius: 10, padding: 10, }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
             <Image source={require('../../assets/wallet/payment1.png')} style={{ height: 20, width: 20 }} />
 
@@ -202,7 +218,7 @@ const DepositeScreen = () => {
 
 
         <TouchableOpacity
-          style={styles.depositButton}
+          style={[styles.depositButton, { backgroundColor: isButtonDisabled ? '#d9ad82' : 'grey' }]}
           onPress={handleDeposite}
         >
           <Text style={styles.depositButtonText}>Deposit</Text>
@@ -237,7 +253,7 @@ const DepositeScreen = () => {
 
 
       </View>
-    </ScrollView>
+    </ScrollView >
   )
 }
 
@@ -247,7 +263,7 @@ export default DepositeScreen
 const styles = {
   container: {
     flex: 1,
-    padding: 20,
+    padding: 1,
     backgroundColor: '#f5f5f5',
     alignSelf: 'center'
 
@@ -305,7 +321,7 @@ const styles = {
     borderWidth: 1,
     borderRadius: 25,
     marginBottom: 10,
-    width: SCREEN_WIDTH * 0.8,
+    width: responsiveWidth(96),
     alignSelf: 'center',
     backgroundColor: 'white',
     flexDirection: 'row', alignItems: 'center', marginTop: 10

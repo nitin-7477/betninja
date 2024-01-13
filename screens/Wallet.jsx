@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, TouchableOpacity, Image, ImageBackground, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Image, ImageBackground, ActivityIndicator, Modal } from 'react-native';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
 import { useNavigation } from "@react-navigation/native";
 import DepositeScreen from '../components/walletscreens/DepositeScreen';
@@ -9,6 +9,9 @@ import Icons from "react-native-vector-icons/Ionicons"
 import axios from "axios";
 import Clipboard from '@react-native-clipboard/clipboard';
 import Feather from "react-native-vector-icons/Feather";
+import { responsiveWidth, responsiveFontSize, responsiveHeight } from 'react-native-responsive-dimensions';
+import Entypo from "react-native-vector-icons/Entypo"
+
 
 const Wallet = () => {
   const navigation = useNavigation();
@@ -19,9 +22,24 @@ const Wallet = () => {
   const [commission, setCommission] = useState([])
   const [loading, setLoading] = useState(false);
   const [referalCode, setReferalCode] = useState('')
+  const [copyUID, setCopyUID] = useState('')
+  const [showCopyModal, setShowCopyModal] = useState(false)
+
+  const copyToClipboardUID = () => {
+    Clipboard.setString(copyUID);
+    setShowCopyModal(true)
+    setTimeout(() => {
+      setShowCopyModal(false);
+    }, 2000);
+
+  };
 
   const copyToClipboard = () => {
     Clipboard.setString(referalCode);
+    setShowCopyModal(true)
+    setTimeout(() => {
+      setShowCopyModal(false);
+    }, 2000);
 
   };
 
@@ -44,7 +62,7 @@ const Wallet = () => {
           "Authorization": JSON.parse(token),
         },
       })
-      console.log(result.data.data);
+      console.log("xxxxxxxxxxxxxxxx", result.data.data);
       setCommission(result.data.data)
       setReferalCode(result.data.data.referalCode)
 
@@ -84,6 +102,7 @@ const Wallet = () => {
           },
         });
         setUserInformation(response.data);
+        setCopyUID(response.data.uid)
       } catch (error) {
         console.error('Error fetching user data in Wallet Screenxxxxxxxxxxx:', error);
       }
@@ -121,13 +140,18 @@ const Wallet = () => {
         style={buttonStyle}
       >
         <Image source={iconSource} style={{ height: 50, width: 50 }} />
-        <Text style={{ color: isSelected ? 'white' : 'black', fontSize: 10 }}>{buttonName}</Text>
+        <Text style={{ color: isSelected ? 'white' : 'black', fontSize: 11, textAlign: 'center' }}>
+          {buttonName === 'WithdrawHistory' ? 'Withdraw\nHistory' :
+            buttonName === 'DepositHistory' ? 'Deposit\n History' :
+              buttonName === 'Deposite' ? 'Deposite' :
+                buttonName === 'Withdraw' ? 'Withdraw' : ''}
+        </Text>
       </TouchableOpacity>
     );
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>My Wallet</Text>
         <Image source={require('../assets/wallet/wallet.png')} style={{ height: 40, width: 40 }} />
@@ -161,9 +185,14 @@ const Wallet = () => {
         </View>
         <View style={{ borderBottomWidth: 0.5, borderColor: Colors.fontGray, marginVertical: 10 }}></View>
         <View style={styles.cardSubTitle}>
-          <Text style={{ fontWeight: 'bold', color: Colors.black, fontSize: 16 }}>UId</Text>
-          <Text style={{ fontWeight: '400', color: 'black', fontSize: 16 }}>{userInformation?.uid}</Text>
+          <Text style={{ fontWeight: 'bold', color: Colors.black, fontSize: 16 }}>UID</Text>
+          <View style={{ flexDirection: 'row' }}>
+            <TouchableOpacity style={{ marginRight: 10 }} onPress={copyToClipboardUID}>
+              <Feather name='copy' size={20} color={Colors.fontGray} />
+            </TouchableOpacity>
+            <Text style={{ fontWeight: '400', color: 'black', fontSize: 16, }}>{userInformation?.uid}</Text>
 
+          </View>
         </View>
         <View style={styles.cardSubTitle}>
           <Text style={{ fontWeight: 'bold', color: Colors.black, fontSize: 16 }}>Email Id</Text>
@@ -171,7 +200,7 @@ const Wallet = () => {
         </View>
         <View style={styles.cardSubTitle}>
           <Text style={{ fontWeight: 'bold', color: Colors.black, fontSize: 16 }}>Contact</Text>
-          <Text style={{ fontWeight: '400', color: 'black', fontSize: 16 }}>{userInformation?.phone}</Text>
+          <Text style={{ fontWeight: '400', color: 'black', fontSize: 16 }}>+91-{userInformation?.phone}</Text>
 
         </View>
         <View style={styles.cardSubTitle}>
@@ -182,10 +211,11 @@ const Wallet = () => {
         <View style={styles.cardSubTitle}>
           <Text style={{ fontWeight: 'bold', color: Colors.black, fontSize: 16 }}>Invite Code</Text>
           <View style={{ flexDirection: 'row' }}>
-            <Text style={{ fontWeight: '400', color: 'black', fontSize: 16, marginRight: 10 }}>{userInformation?.inviteCode}</Text>
-            <TouchableOpacity onPress={copyToClipboard}>
+            <TouchableOpacity style={{ marginRight: 10 }} onPress={copyToClipboard}>
               <Feather name='copy' size={20} color={Colors.fontGray} />
             </TouchableOpacity>
+            <Text style={{ fontWeight: '400', color: 'black', fontSize: 16, marginRight: 10 }}>{userInformation?.inviteCode}</Text>
+
           </View>
         </View>
         <View style={styles.cardSubTitle}>
@@ -194,30 +224,30 @@ const Wallet = () => {
         </View>
 
       </ImageBackground>
-      <View style={{ height: 220, width: 320, alignSelf: 'center', marginTop: 10, borderRadius: 5, elevation: 3, backgroundColor: '#FBF7F3', padding: 6 }}>
-        <View style={{ height: 30, width: 320, paddingHorizontal: 10, paddingVertical: 3 }}>
+      <View style={{ height: responsiveHeight(35), width: responsiveWidth(95), alignSelf: 'center', marginTop: responsiveHeight(2), borderRadius: 5, elevation: 3, backgroundColor: 'white', padding: 6, marginBottom: responsiveHeight(5) }}>
+        <View style={{ height: responsiveHeight(5), width: responsiveWidth(92), paddingHorizontal: 10, paddingVertical: 3 }}>
           <Text style={{ fontWeight: '700', fontSize: 16, color: 'black' }}>Promotion Data</Text>
         </View>
         <View style={{ flexDirection: 'row', marginVertical: 10 }}>
-          <View style={{ width: '50%', padding: 5, height: 55, justifyContent: 'center', borderRightColor: 'grey', borderRightWidth: 1 }}>
+          <View style={{ width: responsiveWidth(46), height: responsiveHeight(10), justifyContent: 'center', borderRightColor: 'grey', borderRightWidth: 1 }}>
             <Text style={{ textAlign: 'center', color: 'green' }}>0</Text>
-            <Text style={{ textAlign: 'center', color: 'grey' }}>This Week</Text>
+            <Text style={{ textAlign: 'center', color: 'grey', fontSize: responsiveFontSize(2) }}>This Week</Text>
 
           </View>
-          <View style={{ width: '50%', padding: 5, height: 55, justifyContent: 'center', }}>
-            <Text style={{ textAlign: 'center', color: 'green' }}>{commission?.total_commission}</Text>
-            <Text style={{ textAlign: 'center', color: 'grey' }}>Total Commission</Text>
+          <View style={{ width: responsiveWidth(46), height: responsiveHeight(10), justifyContent: 'center' }}>
+            <Text style={{ textAlign: 'center', color: 'green' }}>{commission?.total_commission?.toFixed(2)}</Text>
+            <Text style={{ textAlign: 'center', color: 'grey', fontSize: responsiveFontSize(2) }}>Total Commission</Text>
           </View>
         </View>
 
         <View style={{ flexDirection: 'row', marginVertical: 10 }}>
-          <View style={{ width: '50%', padding: 5, height: 55, justifyContent: 'center', }}>
+          <View style={{ width: responsiveWidth(46), height: responsiveHeight(12), justifyContent: 'center', }}>
             <Text style={{ textAlign: 'center', color: 'green' }}> {commission?.direct?.number_of_register}</Text>
-            <Text style={{ textAlign: 'center', color: 'grey' }}>Direct Subordinate</Text>
+            <Text style={{ textAlign: 'center', color: 'grey', fontSize: responsiveFontSize(2) }}>Direct Subordinate</Text>
           </View>
-          <View style={{ width: '50%', padding: 5, height: 55, justifyContent: 'center', borderLeftWidth: 1, borderLeftColor: 'grey', }}>
+          <View style={{ width: responsiveWidth(46), height: responsiveHeight(12), justifyContent: 'center', borderLeftWidth: 1, borderLeftColor: 'grey' }}>
             <Text style={{ textAlign: 'center', color: 'green' }}>{totalRegisterCount}</Text>
-            <Text style={{ textAlign: 'center', color: 'grey' }}>Total number of Subordinate in the team</Text>
+            <Text style={{ textAlign: 'center', color: 'grey', fontSize: responsiveFontSize(2) }}>Total number of Subordinate in the team</Text>
           </View>
 
         </View>
@@ -226,7 +256,26 @@ const Wallet = () => {
       <View style={{ height: SCREEN_HEIGHT * 0.5, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: Colors.lightGray, marginVertical: 30, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
         <Image source={require('../assets/dollar.png')} style={{ height: 200, width: 200 }} />
       </View>
-
+      <Modal visible={showCopyModal} transparent={true}>
+        <View style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+          <View style={{
+            width: 150, // Set your desired width
+            height: 150, // Set your desired height
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            padding: 10,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 10,
+          }}>
+            <Entypo name="check" size={30} color={'white'} />
+            <Text style={{ color: 'white' }}>Copy Succesfull</Text>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 };
@@ -267,7 +316,8 @@ const styles = {
     bottom: 0,
     left: 0,
     right: 0,
-  },
+  }, tile1: { height: responsiveHeight(7), width: responsiveWidth(95), alignSelf: 'center', marginTop: responsiveHeight(2), borderRadius: 5, elevation: 3, backgroundColor: 'white' },
+  tile2: { height: responsiveHeight(7), width: responsiveWidth(95), justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: responsiveWidth(1), flexDirection: 'row', },
 };
 
 export default Wallet;

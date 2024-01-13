@@ -3,7 +3,10 @@ import React from 'react'
 import { Colors } from '../components/Constants/Colors'
 import { SCREEN_WIDTH } from '../components/Constants/Screen'
 
-const QrScanner = () => {
+const QrScanner = ({ route }) => {
+
+  const { amount } = route.params;
+
   return (
     <ImageBackground source={require('../assets/gradiant3.jpg')} style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false} style={{ marginTop: 15, }}>
@@ -12,7 +15,7 @@ const QrScanner = () => {
         <View style={{ borderBottomWidth: 0.6, borderBottomColor: 'pink', marginTop: 20, marginBottom: 30 }}>
         </View>
         <Text style={{ textAlign: 'center', fontSize: 24, color: Colors.black, fontWeight: '600' }}>Scan & Pay with any UPI</Text>
-        <Text style={{ textAlign: 'center', fontSize: 14, color: Colors.fontGray, fontWeight: '600', marginTop: 10 }}>You are tranferring ₹1 to Bet Ninja</Text>
+        <Text style={{ textAlign: 'center', fontSize: 14, color: Colors.fontGray, fontWeight: '600', marginTop: 10 }}>You are tranferring ₹{amount} to Bet Ninja</Text>
         <Image source={require('../assets/qrcode.png')} style={{ height: 320, width: 260, alignSelf: 'center', marginTop: 20 }} />
         <View style={{ alignSelf: 'center' }}>
           <Text style={{ color: 'black' }}>Do not use the same QR code to pay multiple times</Text>

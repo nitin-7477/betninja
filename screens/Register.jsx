@@ -181,11 +181,6 @@ const Register = () => {
             onChangeText={(text) => setConfirmPassword(text)}
             errorMessage={confirmPassword === '' ? 'Confirm Password is required' : ''}
           />
-          <AppTextInput
-            placeholder='Enter Otp'
-            value={otp}
-            onChangeText={(text) => setOtp(text)}
-          />
           <View style={{ flexDirection: 'row' }}>
             <TouchableOpacity style={[styles.otpBtn, isSendButtonEnabled ? styles.enabledSendButton : styles.disabledSendButton]} onPress={handleSendOTP} disabled={!isSendButtonEnabled}>
               <Text style={{ color: 'white', textAlign: 'center', fontSize: 16 }}>{isResendEnabled ? 'Send otp' : 'Resend'}</Text>
@@ -194,6 +189,12 @@ const Register = () => {
               <Text style={{ color: 'black', fontSize: 16, marginLeft: 200 }}>{`(${timer}s)`}</Text>
             )}
           </View>
+          <AppTextInput
+            placeholder='Enter Otp'
+            value={otp}
+            onChangeText={(text) => setOtp(text)}
+          />
+
           <AppTextInput placeholder="Invite Code" value={invitationCode} onChangeText={(text) => setInvitationCode(text.toUpperCase())} />
           {!isResetButtonEnabled ? <Text style={{ color: 'red' }}> * Please fill all Details</Text> : <></>}
         </View>

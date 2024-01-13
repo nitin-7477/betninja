@@ -6,6 +6,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen';
+import { Colors } from '../Constants/Colors';
 
 const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType, select, ln, selectedCountdown, fetchUserData, countdowns }) => {
 
@@ -19,8 +20,13 @@ const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType,
   const [selectedAmount, setSelectedAmount] = useState(1)
   const [selectedTimes, setSelectedTimes] = useState(1)
   const [loading, setLoading] = useState(false)
+  const [isDisabled, setIsDisabled] = useState(false)
 
+  const [isChecked, setChecked] = useState(true);
 
+  const handleToggle = () => {
+    setChecked(!isChecked);
+  };
 
   const handleBigData = async () => {
     try {
@@ -115,7 +121,15 @@ const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType,
     }
 
   }
+  const handleTimesChange = (text) => {
+    // Validate that the input is greater than 0 and has only four digits
+    const isValidInput = /^\d{0,4}$/.test(text);
 
+    if (isValidInput) {
+      setTimes(text);
+    }
+
+  };
 
   useEffect(() => {
 
@@ -204,7 +218,7 @@ const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType,
                   placeholder={`${times}`}
                   keyboardType="numeric"
                   value={times}
-                  onChangeText={(text) => setTimes(text)}
+                  onChangeText={(text) => handleTimesChange(text)}
                 />
 
                 <TouchableOpacity
@@ -247,13 +261,13 @@ const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType,
                   <Text style={{ color: selectedTimes == 4 ? "white" : "black", fontWeight: 'bold' }}>X20</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={{ height: 25, width: 35, backgroundColor: selectedTimes == 5 ? "green" : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
+                  style={{ height: 25, width: 35, backgroundColor: selectedTimes == 5 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
                   onPress={() => handleMultiplierClick(50, 5)}
                 >
                   <Text style={{ color: selectedTimes == 5 ? "white" : "black", fontWeight: 'bold' }}>X50</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={{ height: 25, width: 35, backgroundColor: selectedTimes == 6 ? "green" : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
+                  style={{ height: 25, width: 35, backgroundColor: selectedTimes == 6 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
                   onPress={() => handleMultiplierClick(100, 6)}
                 >
                   <Text style={{ color: selectedTimes == 6 ? "white" : "black", fontWeight: 'bold' }}>X100</Text>
@@ -261,28 +275,37 @@ const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType,
               </View >
 
             </View>
+
+            <TouchableOpacity style={{ width: '100%', flexDirection: 'row', alignItems: 'center' }} onPress={handleToggle} activeOpacity={0.8}>
+              <View style={[styles.checkbox, isChecked && styles.checked]}>
+                {isChecked && <Text style={{ color: 'white' }}>✓</Text>}
+              </View>
+              <Text style={{ marginLeft: 10 }}>I agree(terms and condition)</Text>
+            </TouchableOpacity>
             <View style={{ flexDirection: 'row', flex: 1, alignItems: 'flex-end', justifyContent: 'space-between', width: '90%' }}>
               <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
                 <Text style={styles.closeButtonText}>Cancel</Text>
               </TouchableOpacity>
+
               <TouchableOpacity
-                onPress={loading ? null : handleBigData}  // Disable the button during loading
+                onPress={isChecked ? (loading ? null : handleBigData) : null}
+                disabled={!isChecked && isDisabled}
                 style={{
                   width: '55%',
                   marginBottom: 5,
                   backgroundColor: 'purple',
-                  paddingVertical: 15,
-                  paddingHorizontal: 20,
+                  paddingVertical: 12,
+                  paddingHorizontal: 10,
                   borderRadius: 5,
                   justifyContent: 'center',
                   alignItems: 'center',
-                  opacity: loading ? 0.5 : 1,  // Optionally reduce opacity during loading
+                  opacity: isChecked ? (loading ? 0.5 : 1) : 0.5,    // Optionally reduce opacity during loading
                 }}
               >
                 {loading ? (
                   <ActivityIndicator size={20} color="red" />
                 ) : (
-                  <Text style={{ color: 'white', fontWeight: 'bold' }}>
+                  <Text style={{ color: 'white', fontWeight: 'bold', width: 'auto' }}>
                     Total Amount :₹{totalAmount}
                   </Text>
                 )}
@@ -308,7 +331,7 @@ const styles = StyleSheet.create({
   closeButton: {
     backgroundColor: 'blue',
     paddingHorizontal: 25,
-    paddingVertical: 15,
+    paddingVertical: 7,
     borderRadius: 5,
     marginBottom: 5
   },
@@ -335,6 +358,18 @@ const styles = StyleSheet.create({
     right: 0,
     zIndex: 1
 
+  }, checkbox: {
+    width: 20,
+    height: 20,
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: 'green',
+    justifyContent: 'center',
+    alignItems: 'center', marginLeft: 10
+  },
+  checked: {
+    backgroundColor: 'green', // Change this color as needed
+    borderColor: 'green',
   },
 });
 

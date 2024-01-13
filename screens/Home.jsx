@@ -38,7 +38,7 @@ const Home = () => {
       height: SCREEN_HEIGHT * 0.1,
       backgroundColor: '#FFF',
       borderRadius: 20,
-      width: SCREEN_WIDTH * 0.96,
+      width: SCREEN_WIDTH * 1,
       alignSelf: 'center'
 
     }

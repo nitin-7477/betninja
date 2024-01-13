@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, StatusBar, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { View, Text, ScrollView, StatusBar, TouchableOpacity, ActivityIndicator, Modal } from 'react-native'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../components/Constants/Colors';
@@ -7,6 +7,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Clipboard from '@react-native-clipboard/clipboard';
+import { responsiveWidth, responsiveFontSize, responsiveHeight } from 'react-native-responsive-dimensions';
+import Entypo from "react-native-vector-icons/Entypo"
 
 import React from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
@@ -16,12 +18,16 @@ const Promotion = () => {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false)
   const [commission, setCommission] = useState([])
-
+  const [showCopyModal, setShowCopyModal] = useState(false)
   const [referalCode, setReferalCode] = useState('')
 
   const copyToClipboard = () => {
     Clipboard.setString(referalCode);
-    alert('Copied Successfully!');
+    setShowCopyModal(true)
+    setTimeout(() => {
+      setShowCopyModal(false);
+    }, 2000);
+
   };
 
 
@@ -95,7 +101,7 @@ const Promotion = () => {
 
   // #d9ad82 Main theme color
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
         <StatusBar style='dark' />
         {/* <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, padding: 7 }}><TouchableOpacity
@@ -105,17 +111,17 @@ const Promotion = () => {
         </TouchableOpacity>
           <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.purple, marginLeft: 30 }}>Promotion</Text></View> */}
 
-        <View style={{ height: SCREEN_HEIGHT * 0.38, width: SCREEN_WIDTH, backgroundColor: '#d9ad82', }}>
+        <View style={{ height: responsiveHeight(37), width: responsiveWidth(100), backgroundColor: '#d9ad82', }}>
           <View >
-            <Text style={{ textAlign: 'center', color: 'white', fontWeight: '500', fontSize: 22, marginVertical: 10, }}>
-              {commission?.total_commission}
+            <Text style={{ textAlign: 'center', color: 'white', fontWeight: '500', fontSize: responsiveFontSize(3), marginVertical: 10 }}>
+              {commission?.total_commission > 0 ? commission?.total_commission.toFixed(2) : '0'}
             </Text>
-            <Text style={{ textAlign: 'center', color: 'white', fontWeight: '500', fontSize: 16, marginVertical: 10 }}>Yesterday's Total Commission</Text>
-            <Text style={{ textAlign: 'center', color: 'white', fontWeight: '500', fontSize: 14, marginVertical: 5 }}>Upgrade the level to increase the Commission income</Text>
+            <Text style={{ textAlign: 'center', color: 'white', fontWeight: '500', fontSize: responsiveFontSize(3), marginVertical: responsiveHeight(2) }}>Yesterday's Total Commission</Text>
+            <Text style={{ textAlign: 'center', color: 'white', fontWeight: '500', fontSize: responsiveFontSize(2), marginVertical: 5 }}>Upgrade the level to increase the Commission income</Text>
           </View>
 
 
-          <View style={{ backgroundColor: '#D3D3D3', height: 270, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', marginTop: 20, borderRadius: 10 }}>
+          <View style={{ backgroundColor: '#D3D3D3', height: responsiveHeight(36), width: responsiveWidth(95), alignSelf: 'center', marginTop: responsiveHeight(1.7), borderRadius: 10 }}>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: '50%', padding: 5, height: 35, backgroundColor: 'white', justifyContent: 'center', borderTopLeftRadius: 10, flexDirection: 'row', alignItems: 'center' }}>
                 <Ionicons name='person' size={20} color={'#770737'} />
@@ -205,19 +211,19 @@ const Promotion = () => {
         </View>
         {/* **********************Invitation Link Button*********************** */}
 
-        <View style={{ marginTop: 140, height: 50, width: 320, backgroundColor: '#d9ad82', alignSelf: 'center', alignItems: 'center', justifyContent: 'center', borderRadius: 20, marginBottom: 20 }}>
-          <Text style={{ textAlign: 'center', color: '#770737', fontWeight: 600, fontSize: 20 }}>Invite Your Friends</Text>
+        <View style={{ marginTop: responsiveHeight(20), height: responsiveHeight(7), width: responsiveWidth(95), backgroundColor: '#d9ad82', alignSelf: 'center', alignItems: 'center', justifyContent: 'center', borderRadius: 20, marginBottom: 20 }}>
+          <Text style={{ textAlign: 'center', color: '#770737', fontWeight: 600, fontSize: responsiveFontSize(2.5) }}>Invite Your Friends</Text>
         </View>
         {/* **********************Invitation Link Button*********************** */}
 
 
 
-        <TouchableOpacity onPress={copyToClipboard} style={{ height: 50, width: 320, alignSelf: 'center', marginTop: 10, borderRadius: 5, elevation: 3, backgroundColor: 'white' }}>
-          <View style={{ height: 50, width: 320, justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, flexDirection: 'row' }}>
-            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <TouchableOpacity onPress={copyToClipboard} style={{ height: responsiveHeight(7), width: responsiveWidth(95), alignSelf: 'center', marginTop: responsiveHeight(2), borderRadius: 5, elevation: 3, backgroundColor: 'white' }}>
+          <View style={{ height: responsiveHeight(7), width: responsiveWidth(96), justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, flexDirection: 'row', }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Ionicons name='person' size={22} color={'black'} />
               <Text style={{ marginLeft: 4, fontWeight: 500, color: 'black' }}>Copy Invitation Code</Text>
-            </TouchableOpacity>
+            </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
               <Text style={{ fontWeight: 300, marginHorizontal: 10 }}>
                 {commission?.referalCode}
@@ -226,7 +232,26 @@ const Promotion = () => {
           </View>
 
         </TouchableOpacity>
-
+        <Modal visible={showCopyModal} transparent={true}>
+          <View style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+            <View style={{
+              width: 150, // Set your desired width
+              height: 150, // Set your desired height
+              backgroundColor: 'rgba(0, 0, 0, 0.7)',
+              padding: 10,
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: 10,
+            }}>
+              <Entypo name="check" size={30} color={'white'} />
+              <Text style={{ color: 'white' }}>Copy Succesfull</Text>
+            </View>
+          </View>
+        </Modal>
         <View style={styles.tile1}>
           <TouchableOpacity
             onPress={() => navigation.navigate('SubOrdinate')}
@@ -278,30 +303,33 @@ const Promotion = () => {
         </View>
 
 
-        <View style={{ height: 220, width: 320, alignSelf: 'center', marginTop: 10, borderRadius: 5, elevation: 3, backgroundColor: 'white', padding: 6 }}>
-          <View style={{ height: 30, width: 320, paddingHorizontal: 10, paddingVertical: 3 }}>
+        <View style={{ height: responsiveHeight(35), width: responsiveWidth(95), alignSelf: 'center', marginTop: responsiveHeight(2), borderRadius: 5, elevation: 3, backgroundColor: 'white', padding: 6, marginBottom: responsiveHeight(5) }}>
+          <View style={{ height: responsiveHeight(5), width: responsiveWidth(92), paddingHorizontal: 10, paddingVertical: 3 }}>
             <Text style={{ fontWeight: '700', fontSize: 16, color: 'black' }}>Promotion Data</Text>
           </View>
           <View style={{ flexDirection: 'row', marginVertical: 10 }}>
-            <View style={{ width: '50%', padding: 5, height: 55, justifyContent: 'center', borderRightColor: 'grey', borderRightWidth: 1 }}>
+            <View style={{ width: responsiveWidth(46), height: responsiveHeight(10), justifyContent: 'center', borderRightColor: 'grey', borderRightWidth: 1 }}>
               <Text style={{ textAlign: 'center', color: 'green' }}>0</Text>
-              <Text style={{ textAlign: 'center', color: 'grey' }}>This Week</Text>
+              <Text style={{ textAlign: 'center', color: 'grey', fontSize: responsiveFontSize(2) }}>This Week</Text>
 
             </View>
-            <View style={{ width: '50%', padding: 5, height: 55, justifyContent: 'center', }}>
-              <Text style={{ textAlign: 'center', color: 'green' }}>{commission?.total_commission}</Text>
-              <Text style={{ textAlign: 'center', color: 'grey' }}>Total Commission</Text>
+            <View style={{ width: responsiveWidth(46), height: responsiveHeight(10), justifyContent: 'center' }}>
+              <Text style={{ textAlign: 'center', color: 'green' }}>
+                {commission?.total_commission > 0 ? commission?.total_commission.toFixed(2) : '0'}
+              </Text>
+
+              <Text style={{ textAlign: 'center', color: 'grey', fontSize: responsiveFontSize(2) }}>Total Commission</Text>
             </View>
           </View>
 
           <View style={{ flexDirection: 'row', marginVertical: 10 }}>
-            <View style={{ width: '50%', padding: 5, height: 55, justifyContent: 'center', }}>
+            <View style={{ width: responsiveWidth(46), height: responsiveHeight(12), justifyContent: 'center', }}>
               <Text style={{ textAlign: 'center', color: 'green' }}> {commission?.direct?.number_of_register}</Text>
-              <Text style={{ textAlign: 'center', color: 'grey' }}>Direct Subordinate</Text>
+              <Text style={{ textAlign: 'center', color: 'grey', fontSize: responsiveFontSize(2) }}>Direct Subordinate</Text>
             </View>
-            <View style={{ width: '50%', padding: 5, height: 55, justifyContent: 'center', borderLeftWidth: 1, borderLeftColor: 'grey', }}>
+            <View style={{ width: responsiveWidth(46), height: responsiveHeight(12), justifyContent: 'center', borderLeftWidth: 1, borderLeftColor: 'grey' }}>
               <Text style={{ textAlign: 'center', color: 'green' }}>{totalRegisterCount}</Text>
-              <Text style={{ textAlign: 'center', color: 'grey' }}>Total number of Subordinate in the team</Text>
+              <Text style={{ textAlign: 'center', color: 'grey', fontSize: responsiveFontSize(2) }}>Total number of Subordinate in the team</Text>
             </View>
 
           </View>
@@ -320,8 +348,6 @@ const styles = {
   container: {
     flex: 1,
     alignSelf: 'center',
-    // marginBottom: 80
-    // padding: 20,
   },
   heading: {
     heading: 50,
@@ -333,8 +359,8 @@ const styles = {
     //  fontSize: '16', 
     fontWeight: '700'
   }
-  , tile1: { height: 50, width: 320, alignSelf: 'center', marginTop: 10, borderRadius: 5, elevation: 3, backgroundColor: 'white' },
-  tile2: { height: 50, width: 320, justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, flexDirection: 'row', },
+  , tile1: { height: responsiveHeight(7), width: responsiveWidth(95), alignSelf: 'center', marginTop: responsiveHeight(1), borderRadius: 5, elevation: 3, backgroundColor: 'white' },
+  tile2: { height: responsiveHeight(7), width: responsiveWidth(95), justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: responsiveWidth(1), flexDirection: 'row', },
   activityIndicatorContainer: {
     flex: 1,
     backgroundColor: 'rgba(255, 255, 255, 0.7)',

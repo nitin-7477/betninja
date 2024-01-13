@@ -116,7 +116,7 @@ const BettingRebate = () => {
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={{ height: 45, width: '45%', backgroundColor: 'white', justifyContent: 'center', borderRadius: 2, marginVertical: 10, paddingHorizontal: 10 }}>
             <Text style={{ color: 'black' }}>Today Rebate</Text>
-            <Text style={{ color: 'red' }}>{userInformation}</Text>
+            <Text style={{ color: 'red' }}>{userInformation.toFixed(2)}</Text>
           </View>
           <View style={{ height: 45, width: '45%', backgroundColor: 'white', justifyContent: 'center', borderRadius: 2, marginVertical: 10, paddingHorizontal: 10 }}>
             <Text>Total Rebate</Text>

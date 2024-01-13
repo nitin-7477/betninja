@@ -41,7 +41,6 @@ export default function Main() {
     fetchToken();
   }, []);
 
-
   useEffect(() => {
     const fetchRecentWinners = async () => {
       try {
@@ -52,11 +51,17 @@ export default function Main() {
       }
     };
 
+
     fetchRecentWinners();
+
+    const intervalId = setInterval(() => {
+      fetchRecentWinners();
+    }, 5000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
-
-
+  console.log(recentWinners);
 
   const recentWinnersData = [
     {

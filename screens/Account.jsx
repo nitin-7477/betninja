@@ -9,6 +9,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Clipboard from "@react-native-clipboard/clipboard";
+import Feather from "react-native-vector-icons/Feather";
+
 
 const Account = () => {
   const navigation = useNavigation();
@@ -16,6 +18,12 @@ const Account = () => {
   const [userToken, setUserToken] = useState({});
   const [loading, setLoading] = useState(false)
   const [selectedButton, setSelectedButton] = useState('Deposite');
+  const [copyUID, setCopyUID] = useState('')
+
+  const copyToClipboard = () => {
+    Clipboard.setString(copyUID);
+
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,6 +42,7 @@ const Account = () => {
         });
 
         setUserInformation(response.data);
+        setCopyUID(response.data.uid)
       } catch (error) {
         console.error('Error fetching user data in Account Screen:', error);
       }
@@ -83,7 +92,13 @@ const Account = () => {
         style={buttonStyle}
       >
         <Image source={iconSource} style={{ height: 50, width: 50 }} />
-        <Text style={{ color: isSelected ? 'white' : 'black', fontSize: 10 }}>{buttonName}</Text>
+        <Text style={{ color: isSelected ? 'white' : 'black', fontSize: 11, textAlign: 'center' }}>
+          {buttonName === 'WithdrawHistory' ? 'Withdraw\nHistory' :
+            buttonName === 'DepositHistory' ? 'Deposit\n History' :
+              buttonName === 'Deposite' ? 'Deposite' :
+                buttonName === 'Withdraw' ? 'Withdraw' : ''}
+        </Text>
+
       </TouchableOpacity>
     );
   };
@@ -103,13 +118,19 @@ const Account = () => {
             <Image source={require('../assets/crown.png')} style={{ height: 30, width: 30, marginRight: 10 }} />
             <Text style={styles.userName}>{userInformation.username}</Text>
           </View>
-          <Text style={styles.userId}>User ID: {userInformation.uid}</Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
+            <TouchableOpacity style={{ marginRight: 7 }} onPress={copyToClipboard}>
+              <Feather name='copy' size={20} color={'grey'} />
+            </TouchableOpacity>
+            <Text style={styles.userId}>{userInformation.uid}</Text>
+          </View>
+
         </View>
       </View>
       {/* *********Total Balance Card********************** */}
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <View style={styles.balance}>
-          <Text style={{ color: 'black' }}>Total Balance:- Rs. {userInformation?.wallet?.toFixed(2)}</Text>
+          <Text style={{ color: 'black', width: 'auto' }}>Total Balance:- ₹ {userInformation?.wallet?.toFixed(2)}</Text>
         </View>
         <TouchableOpacity
           style={{ width: 80, height: 35, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center', borderRadius: 10, elevation: 10 }}
@@ -256,7 +277,7 @@ const styles = {
   container: {
     flex: 1,
     alignSelf: 'center',
-     backgroundColor: 'white'
+    backgroundColor: 'white'
 
   },
   header: {
@@ -296,7 +317,7 @@ const styles = {
     elevation: 5,
     backgroundColor: 'white',
     padding: 10,
-    width: 200,
+    width: 'auto',
     marginLeft: 5,
     borderRadius: 50
 

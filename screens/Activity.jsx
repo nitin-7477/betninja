@@ -4,33 +4,35 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen'
 import { Colors } from '../components/Constants/Colors'
 import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from 'react-native';
+import { responsiveWidth, responsiveFontSize, responsiveHeight } from 'react-native-responsive-dimensions';
 const Activity = () => {
   const navigation = useNavigation();
   return (
     <ScrollView style={styles.container}>
 
-      <View style={{ height: SCREEN_HEIGHT * 0.2, width: SCREEN_WIDTH * 1, backgroundColor: 'orange' }}>
-        <View style={{ height: 30, width: '100%', justifyContent: 'center', alignItems: 'center', marginTop: 15 }}>
+      <View style={{ height: responsiveHeight(20), width: SCREEN_WIDTH * 1, backgroundColor: 'orange' }}>
+        <View style={{ height: responsiveHeight(4), width: '100%', justifyContent: 'center', alignItems: 'center', marginTop: responsiveHeight(3) }}>
           <Image
             source={require("../image/1.jpg")}
             style={{ height: 50, width: 90 }}
           /></View>
-        <View style={{ marginVertical: 20, paddingHorizontal: 15 }}>
+        <View style={{ marginVertical: responsiveHeight(2), paddingHorizontal: responsiveWidth(5) }}>
           <Text style={{ color: 'white', fontSize: 22, marginVertical: 5, fontWeight: 'bold' }}>Activity</Text>
-          <Text style={{ color: 'white', fontSize: 16, fontWeight: '500' }}>Please remember to follow the event page</Text>
+          <Text style={{ color: 'white', fontSize: responsiveFontSize(2.3), fontWeight: '500' }}>Please remember to follow the event page</Text>
           <Text style={{ color: 'white', fontSize: 14, fontWeight: '500' }}>We will lauch user feedbacka activites from time to time</Text>
         </View>
       </View>
       {/* **********************Activity and Invitation************************* */}
       <View style={{
-        height: SCREEN_HEIGHT * 0.16, width: SCREEN_WIDTH * 0.96, alignSelf: 'center', padding: 10,
-        marginVertical: 10, flexDirection: 'row', justifyContent: 'space-between', elevation: 2,
+        height: responsiveHeight(17), width: responsiveWidth(97), alignSelf: 'center', padding: responsiveWidth(4),
+        marginVertical: responsiveHeight(2), flexDirection: 'row', justifyContent: 'space-between', elevation: 2,
+        backgroundColor: 'white'
       }}>
         <TouchableOpacity
           onPress={() => navigation.navigate('ActivityAward')}
           style={{
-            height: 100, width: '20%',
-            borderRadius: 10, justifyContent: 'center', alignItems: 'center'
+            height: responsiveHeight(13), width: responsiveWidth(20),
+            borderRadius: 10, justifyContent: 'center', alignItems: 'center',
           }}>
           <View style={{ height: 60, width: 60, backgroundColor: 'orange', justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
 
@@ -46,7 +48,7 @@ const Activity = () => {
         <TouchableOpacity
           onPress={() => navigation.navigate('BettingRebate')}
           style={{
-            height: 100, width: '20%',
+            height: responsiveHeight(13), width: responsiveWidth(20),
             borderRadius: 10, justifyContent: 'center', alignItems: 'center'
           }}>
           <View style={{ height: 60, width: 60, backgroundColor: 'green', justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
@@ -62,7 +64,7 @@ const Activity = () => {
         <TouchableOpacity
           onPress={() => navigation.navigate('Gifts')}
           style={{
-            height: 100, width: '20%',
+            height: responsiveHeight(13), width: responsiveWidth(20),
             borderRadius: 10, justifyContent: 'center', alignItems: 'center'
           }}>
           <View style={{ height: 60, width: 60, backgroundColor: 'blue', justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
@@ -78,7 +80,7 @@ const Activity = () => {
         <TouchableOpacity
           onPress={() => navigation.navigate('InvitationBonus')}
           style={{
-            height: 100, width: '20%',
+            height: responsiveHeight(13), width: responsiveWidth(20),
             borderRadius: 10, justifyContent: 'center', alignItems: 'center'
           }}>
           <View style={{ height: 60, width: 60, backgroundColor: 'orange', justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
@@ -92,19 +94,18 @@ const Activity = () => {
 
       </View>
       {/* ************************Gifts and bonus card*************** */}
-      <View style={{ flexDirection: 'row', height: SCREEN_HEIGHT * 0.3, width: SCREEN_WIDTH * 1, alignSelf: 'center', padding: 10, justifyContent: 'space-between' }}>
-        <View style={{ width: '53%', marginLeft: 5 }}>
-          <Image source={require('../assets/giftBanner.png')} style={{ height: 150, width: 150, borderRadius: 10 }} />
-          <Text style={{ color: 'black', fontSize: 18, fontWeight: '500' }}>Gifts</Text>
-          <Text style={{ fontWeight: '500', marginTop: 3 }}>Enter the redemption code to receive gift rewards</Text>
-        </View>
+      <View style={{ flexDirection: 'row', height: responsiveHeight(30), width: responsiveWidth(100), alignSelf: 'center', justifyContent: 'space-evenly', alignItems: 'center' }}>
+        <TouchableOpacity onPress={() => navigation.navigate('Gifts')} style={{ width: responsiveWidth(50), justifyContent: 'center', alignItems: 'center' }}>
+          <Image source={require('../assets/giftBanner.png')} style={{ height: responsiveHeight(21), width: responsiveWidth(45), borderRadius: 10 }} />
+          <Text style={{ color: 'black', fontSize: 18, fontWeight: '500', width: responsiveWidth(45) }}>Gifts</Text>
+          <Text style={{ fontWeight: '500', marginTop: 3, width: responsiveWidth(45) }}>Enter the redemption code to receive gift rewards</Text>
+        </TouchableOpacity>
 
 
-        <TouchableOpacity onPress={() => navigation.navigate('AttendanceBonus')} style={{ width: '47%' }}>
-          <Image source={require('../assets/attendanceBanner.png')} style={{ height: 150, width: 150, borderRadius: 10 }} />
-          <Text style={{ color: 'black', fontSize: 18, fontWeight: '500' }}>Attendance Bonus</Text>
-          <Text style={{ fontWeight: '500', marginTop: 3 }}>Enter the redemption code to receive gift rewards</Text>
-
+        <TouchableOpacity onPress={() => navigation.navigate('AttendanceBonus')} style={{ width: responsiveWidth(50), justifyContent: 'center', alignItems: 'center' }}>
+          <Image source={require('../assets/attendanceBanner.png')} style={{ height: responsiveHeight(21), width: responsiveWidth(45), borderRadius: 10 }} />
+          <Text style={{ color: 'black', fontSize: 18, fontWeight: '500', width: responsiveWidth(45) }}>Attendance Bonus</Text>
+          <Text style={{ fontWeight: '500', marginTop: 3, width: responsiveWidth(45) }}>Enter the redemption code to receive gift rewards</Text>
         </TouchableOpacity>
       </View>
 
