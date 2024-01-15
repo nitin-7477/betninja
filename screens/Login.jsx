@@ -156,6 +156,7 @@ const Login = () => {
               justifyContent: "space-between",
             }}
           >
+
             <TextInput
               placeholderTextColor={"white"}
               style={{
@@ -167,7 +168,7 @@ const Login = () => {
                 marginVertical: 5,
                 fontWeight: "500",
                 color: "white",
-                width: 150,
+                width: '90%',
               }}
               secureTextEntry={isPasswordVisible}
               value={password}

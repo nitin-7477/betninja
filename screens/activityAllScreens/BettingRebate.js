@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, FlatList, Alert, Image } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, FlatList, Alert, Image, Button } from 'react-native'
 import React from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../components/Constants/Screen'
 import Ionicons from "react-native-vector-icons/Ionicons"
@@ -8,24 +8,13 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
-const data = [
-  { id: '1', type: 'Lottery', date: '2023-12-06 1:00:10', status: 'Completed', rebate: '₹ 429', rebateRate: '0.1%', rebateAmount: '0.43' },
-  { id: '2', type: 'Lottery', date: '2023-12-06 1:00:10', status: 'Completed', rebate: '₹ 1237', rebateRate: '0.3%', rebateAmount: '0.43' },
-  { id: '3', type: 'Lottery', date: '2023-12-06 1:00:10', status: 'Completed', rebate: '₹ 4239', rebateRate: '0.19%', rebateAmount: '0.43' },
-  { id: '4', type: 'Lottery', date: '2023-12-06 1:00:10', status: 'Completed', rebate: '₹ 13327', rebateRate: '0.3%', rebateAmount: '0.43' },
-  { id: '5', type: 'Lottery', date: '2023-12-06 1:00:10', status: 'Completed', rebate: '₹ 4249', rebateRate: '0.15%', rebateAmount: '0.43' },
-  { id: '6', type: 'Lottery', date: '2023-12-06 1:00:10', status: 'Completed', rebate: '₹ 12337', rebateRate: '0.35%', rebateAmount: '0.43' },
-  { id: '7', type: 'Lottery', date: '2023-12-06 1:00:10', status: 'Completed', rebate: '₹ 429', rebateRate: '0.1%', rebateAmount: '0.43' },
-  { id: '8', type: 'Lottery', date: '2023-12-06 1:00:10', status: 'Completed', rebate: '₹ 127', rebateRate: '0.3%', rebateAmount: '0.43' },
-  { id: '9', type: 'Lottery', date: '2023-12-06 1:00:10', status: 'Completed', rebate: '₹ 429', rebateRate: '0.1%', rebateAmount: '0.43' },
-  { id: '10', type: 'Lottery', date: '2023-12-06 1:00:10', status: 'Completed', rebate: '₹ 127', rebateRate: '0.3%', rebateAmount: '0.43' },
 
-];
 const BettingRebate = () => {
   const [userInformation, setUserInformation] = useState([])
   const [checkToken, setCheckToken] = useState('')
   const [rebateInfo, setRebateInfo] = useState([])
-
+  const [startIndex, setStartIndex] = useState(0);
+  const itemsPerPage = 10;
 
   const navigation = useNavigation();
 
@@ -54,7 +43,7 @@ const BettingRebate = () => {
     };
 
     fetchData();
-    handleOneClickRebateGetRequest()
+
   }, []);
 
   const handleOneClickRebate = async () => {
@@ -69,21 +58,30 @@ const BettingRebate = () => {
           },
         }
       );
+      if (response) {
+        handleOneClickRebateGetRequest()
+      }
 
       Alert.alert(response.data.message)
     } catch (e) {
       console.log("HI Errors for Betting Rebate", e.response.status);
     }
   };
+  useEffect(() => {
+    handleOneClickRebateGetRequest()
+  }, [])
+
 
   const handleOneClickRebateGetRequest = async () => {
     try {
+      console.log("Hi Nitin");
+      const token = await AsyncStorage.getItem('token');
       const response = await axios.get(
         `${process.env.SERVERURL}/api/deposit/deposit_rebate`,
 
         {
           headers: {
-            Authorization: JSON.parse(checkToken),
+            Authorization: token ? JSON.parse(token) : null,
           },
         }
       );
@@ -95,6 +93,16 @@ const BettingRebate = () => {
     }
   };
 
+  const totalPages = Math.ceil(rebateInfo.length / itemsPerPage);
+
+  const onNextPress = () => {
+    setStartIndex((prevIndex) => Math.min(prevIndex + itemsPerPage, (totalPages - 1) * itemsPerPage));
+  };
+
+  const onPrevPress = () => {
+    setStartIndex((prevIndex) => Math.max(0, prevIndex - itemsPerPage));
+  };
+
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container1}>
@@ -104,7 +112,7 @@ const BettingRebate = () => {
         <Ionicons name='return-up-back' color={'white'} size={30} />
       </TouchableOpacity>
         <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: 'black', marginLeft: 70 }}>Betting Rebate</Text></View>
-      <View style={{ height: SCREEN_HEIGHT * 0.38, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: '#DCDCDC', marginTop: 10, borderRadius: 10, padding: 10 }}>
+      <View style={{ height: SCREEN_HEIGHT * 0.45, width: '95%', alignSelf: 'center', backgroundColor: '#DCDCDC', marginTop: 10, borderRadius: 10, padding: 10, }}>
         <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 18 }}>All-Total Betting Rebate</Text>
         <View style={{ flexDirection: 'row', marginTop: 10, width: 130, height: 25, borderColor: 'purple', borderWidth: 0.2, justifyContent: 'space-around', alignItems: 'center' }}>
           <Ionicons name="shield-checkmark" size={20} color={'purple'} />
@@ -113,17 +121,17 @@ const BettingRebate = () => {
         <Text style={{ fontWeight: 'bold', fontSize: 18, marginTop: 10, color: 'black' }}>
           ₹ {typeof userInformation === 'number' ? userInformation?.toFixed(2) : userInformation}
         </Text>
-        <View style={{ height: 25, width: '95%', backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', borderRadius: 5 }}>
+        <View style={{ height: '12%', width: '100%', backgroundColor: 'white', justifyContent: 'center', alignItems: 'left', borderRadius: 5, paddingHorizontal: 4 }}>
           <Text style={{ color: 'black' }}>Upgrade VIP lavel to increase the rebate rebate</Text></View>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <View style={{ height: 45, width: '45%', backgroundColor: 'white', justifyContent: 'center', borderRadius: 2, marginVertical: 10, paddingHorizontal: 10 }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: '20%', alignItems: 'center' }}>
+          <View style={{ height: '80%', width: '45%', backgroundColor: 'white', justifyContent: 'center', borderRadius: 2, marginVertical: 10, paddingHorizontal: 10 }}>
             <Text style={{ color: 'black' }}>Today Rebate</Text>
             <Text style={{ color: 'red' }}>
               {typeof userInformation === 'number' ? userInformation.toFixed(2) : 'N/A'}
             </Text>
 
           </View>
-          <View style={{ height: 45, width: '45%', backgroundColor: 'white', justifyContent: 'center', borderRadius: 2, marginVertical: 10, paddingHorizontal: 10 }}>
+          <View style={{ height: '80%', width: '45%', backgroundColor: 'white', justifyContent: 'center', borderRadius: 2, marginVertical: 10, paddingHorizontal: 10 }}>
             <Text>Total Rebate</Text>
             <Text style={{ color: 'red' }}>
               {rebateInfo?.totalAmount !== undefined && rebateInfo?.totalAmount !== null
@@ -132,15 +140,15 @@ const BettingRebate = () => {
             </Text>
           </View>
         </View>
-        <Text style={{ color: 'black' }}>Automatic code washing at 1:00:00 every morning</Text>
+        <Text style={{ color: 'black', width: '100%', height: '10%', justifyContent: 'center', alignItems: 'center' }}>Automatic code washing at 1:00:00 every morning</Text>
         <TouchableOpacity
           onPress={() => handleOneClickRebate()}
-          style={{ width: SCREEN_WIDTH * 0.8, height: SCREEN_HEIGHT * 0.05, backgroundColor: 'red', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', marginTop: 30, borderRadius: 10 }}>
+          style={{ width: '100%', height: '12%', backgroundColor: 'red', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', marginTop: 30, borderRadius: 10 }}>
           <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16 }}>One Click Rebate</Text>
         </TouchableOpacity>
       </View>
 
-      <Text style={{ marginLeft: 20, fontSize: 20, fontWeight: 'bold', marginTop: 10, color: 'black' }}>Rebate History</Text>
+      <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 20, color: 'black', width: '95%', alignSelf: 'center', height: 35 }}>Rebate History</Text>
 
       {rebateInfo.length !== 0 ? <FlatList
         data={rebateInfo.data}
@@ -171,7 +179,8 @@ const BettingRebate = () => {
 
                 <View style={styles.historyRow}>
                   <Text style={styles.historyText}>Rebate Amount</Text>
-                  <Text style={styles.historyAmount}>{item.amount}</Text>
+                  <Text style={styles.historyAmount}> ₹ {item.amount.toFixed(2)}</Text>
+
                 </View>
 
                 <View style={styles.historyRow}>
@@ -187,7 +196,14 @@ const BettingRebate = () => {
 
       </View>}
 
-
+      <View style={{
+        flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+        width: '90%', marginVertical: 20, alignSelf: 'center'
+      }}>
+        <Button title="Prev" onPress={onPrevPress} disabled={startIndex === 0} />
+        {/* <Text style={styles.pageIndicator}>{`Page ${Math.ceil((startIndex + 1) / itemsPerPage)} of ${totalPages}`}</Text> */}
+        <Button title="Next" onPress={onNextPress} disabled={startIndex + itemsPerPage >= rebateInfo.length} />
+      </View>
     </ScrollView>
   )
 }
@@ -198,7 +214,7 @@ const styles = StyleSheet.create({
   container1: {
     flex: 1,
     marginVertical: 10,
-    alignSelf: 'center'
+    alignSelf: 'center', width: '100%',
   },
   container: {
     height: SCREEN_HEIGHT * 0.24,

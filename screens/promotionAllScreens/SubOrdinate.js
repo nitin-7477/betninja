@@ -13,6 +13,8 @@ const SubOrdinate = () => {
 
   const navigation = useNavigation();
   const [downline, setDownline] = useState([])
+  const [currentPage, setCurrentPage] = useState(1);
+
 
   const fetchCommissionData = async () => {
     try {
@@ -41,8 +43,15 @@ const SubOrdinate = () => {
   }
 
   useEffect(() => {
-    fetchCommissionData()
-  }, []);
+    fetchCommissionData();
+  }, [currentPage]);
+
+  const itemsPerPage = 10;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const visibleData = downline.slice(startIndex, endIndex);
+
 
 
 
@@ -55,81 +64,46 @@ const SubOrdinate = () => {
         <Text style={{ marginLeft: 30, fontSize: 16, color: 'black', fontWeight: 'bold' }}>Subordinate Data</Text>
       </View>
 
-      <FlatList data={downline} renderItem={({ item }) => {
+      <FlatList data={visibleData} renderItem={({ item }) => {
         return <View style={{ width: responsiveWidth(97), height: 'auto', backgroundColor: 'white', marginVertical: 2, alignSelf: 'center', borderRadius: 5, paddingHorizontal: 6, elevation: 1, paddingVertical: 5 }}>
+
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 2 }}>
-            <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 14 }}>ID</Text>
-            <Text style={{ color: 'grey' }}>{item._id}</Text>
+            <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 14 }}>User Name</Text>
+            <Text style={{ color: 'black' }}>{item?.userId?.username}</Text>
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 2 }}>
+            <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 14 }}>Email ID</Text>
+            <Text style={{ color: 'black' }}>{item?.userId?.email}</Text>
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 2 }}>
             <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 14 }}>Join Date</Text>
-            <Text style={{ color: 'grey' }}>{new Date(item.joinDate).toLocaleString()}</Text>
+            <Text style={{ color: 'black' }}>{new Date(item.joinDate).toLocaleString()}</Text>
           </View>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 2 }}>
-            <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 14 }}>User ID</Text>
-            <Text style={{ color: 'grey' }}>0</Text>
-          </View>
+
 
 
         </View>
       }} />
 
-      {/* <View style={{ height: SCREEN_HEIGHT * 0.3, width: SCREEN_WIDTH * 0.9, backgroundColor: '#b1835a', marginTop: 50, borderRadius: 10, alignSelf: 'center', padding: 15 }}>
+      <View style={styles.paginationContainer} >
+        <TouchableOpacity
+          style={styles.paginationButton}
+          onPress={() => setCurrentPage((prevPage) => Math.max(prevPage - 1, 1))}
+          disabled={currentPage === 1}
+        >
+          <Text style={styles.paginationButtonText}>Prev</Text>
+        </TouchableOpacity>
 
-        <View style={{ flexDirection: 'row', marginVertical: 10 }}>
-          <View style={{ width: '50%', padding: 5, height: 35, justifyContent: 'center', }}>
-            <Text style={{ textAlign: 'center', color: 'white', fontSize: 22, fontWeight: 'bold' }}>
-              0
-            </Text>
-            <Text style={{ textAlign: 'center', color: 'white', fontSize: 13, fontWeight: 'bold' }}>Deposite Number</Text>
+        <Text style={styles.paginationText}>{currentPage}</Text>
 
-          </View>
-          <View style={{ width: '50%', padding: 5, height: 35, justifyContent: 'center', }}>
-            <Text style={{ textAlign: 'center', color: 'white', fontSize: 22, fontWeight: 'bold' }}>
-              0
-            </Text>
-            <Text style={{ textAlign: 'center', color: 'white', fontSize: 13, fontWeight: 'bold' }}>Deposite Amount</Text>
-
-          </View>
-
-        </View>
-        <View style={{ flexDirection: 'row', marginVertical: 10 }}>
-          <View style={{ width: '50%', padding: 5, height: 35, justifyContent: 'center', }}>
-            <Text style={{ textAlign: 'center', color: 'white', fontSize: 22, fontWeight: 'bold' }}>
-              0
-            </Text>
-            <Text style={{ textAlign: 'center', color: 'white', fontSize: 13, fontWeight: 'bold' }}>Number of betters</Text>
-
-          </View>
-          <View style={{ width: '50%', padding: 5, height: 35, justifyContent: 'center', }}>
-            <Text style={{ textAlign: 'center', color: 'white', fontSize: 22, fontWeight: 'bold' }}>
-              0
-            </Text>
-            <Text style={{ textAlign: 'center', color: 'white', fontSize: 13, fontWeight: 'bold' }}>Total bet</Text>
-          </View>
-
-        </View>
-        <View style={{ flexDirection: 'row', marginVertical: 10 }}>
-          <View style={{ width: '50%', padding: 5, height: 55, justifyContent: 'center', }}>
-            <Text style={{ textAlign: 'center', color: 'white', fontSize: 22, fontWeight: 'bold' }}>
-              0
-            </Text>
-            <Text style={{ textAlign: 'center', color: 'white', fontSize: 13, fontWeight: 'bold' }}>Number of people making  first deposite</Text>
-
-          </View>
-          <View style={{ width: '50%', padding: 5, height: 55, justifyContent: 'center', }}>
-            <Text style={{ textAlign: 'center', color: 'white', fontSize: 22, fontWeight: 'bold' }}>
-              0
-            </Text>
-            <Text style={{ textAlign: 'center', color: 'white', fontSize: 13, fontWeight: 'bold' }}>First Deposite Amount</Text>
-
-          </View>
-
-        </View>
-
-
-
-      </View> */}
+        <TouchableOpacity
+          style={styles.paginationButton}
+          onPress={() => setCurrentPage((prevPage) => prevPage + 1)}
+          disabled={endIndex >= downline.length}
+        >
+          <Text style={styles.paginationButtonText}>Next</Text>
+        </TouchableOpacity>
+      </View>
 
     </ScrollView>
   )
@@ -141,5 +115,31 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignSelf: 'center', width: responsiveWidth(100)
-  }
+  },
+  paginationContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+    marginBottom: 20,
+    // backgroundColor: 'red',
+    position: 'relative',
+    bottom: 0
+
+  },
+  paginationButton: {
+    padding: 10,
+    marginHorizontal: 10,
+    backgroundColor: 'lightgrey',
+    borderRadius: 5,
+  },
+  paginationButtonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  paginationText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginHorizontal: 10,
+  },
 })

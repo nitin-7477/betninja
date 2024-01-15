@@ -41,6 +41,7 @@ import CommissionDetails from "./screens/promotionAllScreens/CommissionDetails";
 import BankAccount from "./screens/BankAccount";
 import QrScanner from "./screens/QrScanner";
 import AttendanceBonus from "./screens/activityAllScreens/AttendanceBonus";
+import InvitationRules from "./screens/InvitationRules";
 
 // Navigation Configuration
 const Stack = createNativeStackNavigator();
@@ -70,9 +71,12 @@ export default function App() {
         {isFirstLaunch && (
           <Stack.Screen options={{ headerShown: false }} name="OnboardingScreen" component={OnboardingScreen} />
         )}
-        <Stack.Screen name="GameStats" options={{ headerShown: false }} component={GameStats} />
 
         <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
+        <Stack.Screen options={{ headerShown: false }} name="InvitationRules" component={InvitationRules} />
+        <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
+        <Stack.Screen name="GameStats" options={{ headerShown: false }} component={GameStats} />
+
         <Stack.Screen options={{ headerShown: false }} name="Gamescreen" component={Gamescreen} />
         <Stack.Screen options={{ headerShown: false }} name="SubOrdinate" component={SubOrdinate} />
         <Stack.Screen name="DepositHistoryScreen" options={{ headerShown: false }} component={DepositHistoryScreen} />
@@ -80,7 +84,6 @@ export default function App() {
         <Stack.Screen options={{ headerShown: false }} name="CommissionDetails" component={CommissionDetails} />
 
         <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
-        <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
         <Stack.Screen options={{ headerShown: false }} name="LevelScreen" component={LevelScreen} />
 
         <Stack.Screen options={{ headerShown: false }} name="AttendanceBonus" component={AttendanceBonus} />

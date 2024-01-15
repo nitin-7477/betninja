@@ -78,32 +78,28 @@ const CommissionDetails = () => {
 
   const renderHistoryItem = ({ item, i }) => {
     return (
-      <View style={{ width: '95%', height: responsiveHeight(21), backgroundColor: '#e9ffdb', marginVertical: 4, alignSelf: 'center', borderRadius: 5, padding: 5, elevation: 5 }}>
+      <View style={{ width: '95%', height: responsiveHeight(21), backgroundColor: '#e9ffdb', marginVertical: 4, alignSelf: 'center', borderRadius: 5, padding: 5, elevation: 5, }}>
 
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Image source={require('../../assets/historyIcon.png')} style={{ height: 20, width: 20 }} />
-          <Text style={{ color: 'black', fontWeight: 'bold', marginLeft: 10, marginVertical: 10, fontSize: 15 }}>My History </Text>
-        </View>
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
           <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>ID</Text>
-          <Text>{item._id}</Text>
+          <Text style={{ color: 'black' }}>{item._id}</Text>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
-          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>amount</Text>
-          <Text>{item.amount}</Text>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Amount</Text>
+          <Text style={{ color: 'black' }}>{item.amount}</Text>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
-          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>date</Text>
-          <Text>{new Date(item.date).toLocaleString()}</Text>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Date</Text>
+          <Text style={{ color: 'black' }}>{new Date(item.date).toLocaleString()}</Text>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
-          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>rate</Text>
-          <Text>{item.rate}</Text>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Rate</Text>
+          <Text style={{ color: 'black' }}>{item.rate}</Text>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
-          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>type</Text>
-          <Text>{item.type}</Text>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Type</Text>
+          <Text style={{ color: 'black' }}>{item.type}</Text>
         </View>
       </View>
     );
@@ -112,30 +108,26 @@ const CommissionDetails = () => {
     return (
       <View style={{ width: '95%', height: responsiveHeight(21), backgroundColor: '#e9ffdb', marginVertical: 4, alignSelf: 'center', borderRadius: 5, padding: 5, elevation: 5 }}>
 
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Image source={require('../../assets/historyIcon.png')} style={{ height: 20, width: 20 }} />
-          <Text style={{ color: 'black', fontWeight: 'bold', marginLeft: 10, marginVertical: 10, fontSize: 15 }}>Withdraw History </Text>
-        </View>
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
           <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Order Id</Text>
-          <Text>{item.orderId}</Text>
+          <Text style={{ color: 'black' }}>{item.orderId}</Text>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
           <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>amount</Text>
-          <Text>{item.amount}</Text>
+          <Text style={{ color: 'black' }}>{item.amount}</Text>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
           <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Transaction Id</Text>
-          <Text>{item.transactionId}</Text>
+          <Text style={{ color: 'black' }}>{item.transactionId}</Text>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
           <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Status</Text>
-          <Text>{item.status}</Text>
+          <Text style={{ color: 'black' }}>{item.status}</Text>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
           <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Success Time</Text>
-          <Text>{item.successTime}</Text>
+          <Text style={{ color: 'black' }}>{item.successTime}</Text>
         </View>
       </View>
     );
@@ -153,7 +145,7 @@ const CommissionDetails = () => {
       {/* This is the screen for buttons  */}
       <View style={styles.buttonSection}>
         <TouchableOpacity onPress={() => handleHistory(1)} style={{ width: responsiveWidth(45), height: '70%', justifyContent: 'center', alignItems: 'center', backgroundColor: 'green', borderRadius: 20 }}>
-          <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>History</Text>
+          <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>Result</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleHistory(2)} style={{ width: responsiveWidth(45), height: '70%', justifyContent: 'center', alignItems: 'center', backgroundColor: 'green', borderRadius: 20 }}>
           <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>Withdrawl History</Text>

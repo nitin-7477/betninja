@@ -6,27 +6,27 @@ import { useNavigation } from "@react-navigation/native";
 const OnboardingScreen = () => {
   const navigation = useNavigation();
 
- const DotComponent = ({selected}) =>{
-  return(
-    <View className={`w-4 h-4 flex items-center justify-center rounded-full ${selected ? "border border-red-400" : ""} p-2`}>
-      <View className={`w-2 h-2 flex items-center ${selected ? "bg-red-400" : "br-red-200"} rounded-full`}>
+  const DotComponent = ({ selected }) => {
+    return (
+      <View className={`w-4 h-4 flex items-center justify-center rounded-full ${selected ? "border border-red-400" : ""} p-2`}>
+        <View className={`w-2 h-2 flex items-center ${selected ? "bg-red-400" : "br-red-200"} rounded-full bg-red-500`}>
 
+        </View>
       </View>
-    </View>
-  )
- }
+    )
+  }
 
   return (
     <Onboarding
       onSkip={() => navigation.navigate("Home")}
       onDone={() => navigation.navigate("Home")}
-      // DoneButtonComponent={DotComponent}
+      DoneButtonComponent={DotComponent}
       pages={[
         {
           backgroundColor: "#fff",
           image: (
             <Image
-              className="w-full h-72 object-contain"
+              style={{ height: '50%', width: '100%', resizeMode: 'contain' }}
               source={require("../image/1.jpg")}
             />
           ),
@@ -38,7 +38,7 @@ const OnboardingScreen = () => {
           backgroundColor: "#fff",
           image: (
             <Image
-              className="w-full h-72 object-contain"
+              style={{ height: '50%', width: '100%', resizeMode: 'contain' }}
               source={require("../image/onboardWin.jpg")}
             />
           ),
@@ -50,7 +50,7 @@ const OnboardingScreen = () => {
           backgroundColor: "#fff",
           image: (
             <Image
-              className="w-full h-72 object-contain"
+              style={{ height: '50%', width: '100%', resizeMode: 'contain' }}
               source={require("../image/onboardSafty.jpg")}
             />
           ),

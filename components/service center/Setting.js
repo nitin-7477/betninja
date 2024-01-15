@@ -1,8 +1,9 @@
-import { FlatList, StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, ActivityIndicator } from 'react-native'
+import { FlatList, StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, ActivityIndicator, Modal } from 'react-native'
 import React from 'react'
 import { Colors } from '../Constants/Colors';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Feather from "react-native-vector-icons/Feather";
+import Entypo from "react-native-vector-icons/Entypo";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useState, useEffect } from 'react';
@@ -46,10 +47,15 @@ const Setting = () => {
   console.log("This is user information for wallet Screen", userInformation);
 
 
-  const copyToClipboard = () => {
+  const [showCopyModal, setShowCopyModal] = useState(false)
 
+  const copyToClipboard = () => {
     Clipboard.setString(copiedText);
-   
+    setShowCopyModal(true)
+    setTimeout(() => {
+      setShowCopyModal(false);
+    }, 2000);
+
   };
 
 
@@ -155,6 +161,26 @@ const Setting = () => {
           <ActivityIndicator size={100} color="gold" />
         </View>
       )}
+      <Modal visible={showCopyModal} transparent={true}>
+        <View style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+          <View style={{
+            width: 150, // Set your desired width
+            height: 150, // Set your desired height
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            padding: 10,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 10,
+          }}>
+            <Entypo name="check" size={30} color={'white'} />
+            <Text style={{ color: 'white' }}>Copy Succesfull</Text>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   )
 }

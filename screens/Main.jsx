@@ -41,27 +41,26 @@ export default function Main() {
     fetchToken();
   }, []);
 
-  // useEffect(() => {
-  //   const fetchRecentWinners = async () => {
-  //     try {
-  //       const response = await axios.get(`${process.env.SERVERURL}/api/bet/recentWinner`);
-  //       setRecentWinners(response.data);
-  //     } catch (error) {
-  //       console.error('Error fetching recent winners:', error);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchRecentWinners = async () => {
+      try {
+        const response = await axios.get(`${process.env.SERVERURL}/api/bet/recentWinner`);
+        setRecentWinners(response.data.data);
+      } catch (error) {
+        console.error('Error fetching recent winners:', error);
+      }
+    };
 
 
-  //   fetchRecentWinners();
+    fetchRecentWinners();
 
-  //   const intervalId = setInterval(() => {
-  //     fetchRecentWinners();
-  //   }, 5000);
+    const intervalId = setInterval(() => {
+      fetchRecentWinners();
+    }, 5000);
 
-  //   return () => clearInterval(intervalId);
-  // }, []);
+    return () => clearInterval(intervalId);
+  }, []);
 
-  // console.log(recentWinners);
 
   const recentWinnersData = [
     {
@@ -104,23 +103,23 @@ export default function Main() {
     // Add more top 10 lists data
   ];
 
-  const scrollFlatList = () => {
-    if (flatListRef.current) {
-      flatListRef.current.scrollToIndex({
-        animated: true,
-        index: (flatListIndex + 1) % recentWinnersData.length,
-      });
-      setFlatListIndex((prevIndex) => (prevIndex + 1) % recentWinnersData.length);
-    }
-  };
+  // const scrollFlatList = () => {
+  //   if (flatListRef.current) {
+  //     flatListRef.current.scrollToIndex({
+  //       animated: true,
+  //       index: (flatListIndex + 1) % recentWinners.length,
+  //     });
+  //     setFlatListIndex((prevIndex) => (prevIndex + 1) % recentWinners.length);
+  //   }
+  // };
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      scrollFlatList();
-    }, 3000);
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     scrollFlatList();
+  //   }, 3000);
 
-    return () => clearInterval(intervalId);
-  }, [flatListIndex]);
+  //   return () => clearInterval(intervalId);
+  // }, [flatListIndex]);
 
 
   // Sample data for game icons
@@ -150,7 +149,7 @@ export default function Main() {
   );
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       {/* Background Image */}
       <Image
         source={require('../image/b2.jpg')} // Replace with your gaming-themed background image
@@ -199,17 +198,19 @@ export default function Main() {
       <View style={styles.section}>
         <Text style={{ color: 'black', textAlign: 'center', marginVertical: 10, fontWeight: 'bold', fontSize: 18 }}>Recent Winners</Text>
         <FlatList
-          ref={flatListRef}
+          // ref={flatListRef}
           horizontal
-          data={recentWinnersData}
+          data={recentWinners}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
             <View style={styles.recentWinner}>
-              <Image source={item.image} style={{ height: 60, width: 60 }} />
-              <Text style={{ color: Colors.black, fontWeight: '500', marginVertical: 3 }}>{item.name}</Text>
+              <Image source={require('../assets/player.png')} style={{ height: 60, width: 60 }} />
+              <Text style={{ color: Colors.black, fontWeight: '500', marginVertical: 3 }}>
+                {item.username.length > 10 ? item.username.slice(0, 10) + '...' : item.username}
+              </Text>
               <View style={{ borderBottomWidth: 0.3, width: '100%', marginVertical: 10, borderColor: Colors.fontGray }}></View>
-              <Text style={{ color: 'red', fontWeight: 'bold' }}>{item.amount}</Text>
-              <Text style={{ color: Colors.fontGray, fontWeight: '500' }}>{item.game}</Text>
+              <Text style={{ color: 'red', fontWeight: 'bold' }}> ₹{item.win_loss}</Text>
+              <Text style={{ color: Colors.fontGray, fontWeight: '500' }}>win {item.dataType} win</Text>
             </View>
           )}
           onMomentumScrollEnd={(event) => {
@@ -391,11 +392,11 @@ const styles = StyleSheet.create({
   },
   recentWinner: {
     alignItems: 'center',
-    marginHorizontal: 5,
+    marginHorizontal: 4,
     backgroundColor: Colors.lightGray,
     paddingVertical: 5,
     paddingHorizontal: 10,
-    width: SCREEN_WIDTH * 0.35,
+    width: SCREEN_WIDTH * 0.3,
     borderRadius: 15,
     height: SCREEN_HEIGHT * 0.2
   },

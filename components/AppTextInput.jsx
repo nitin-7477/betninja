@@ -19,6 +19,7 @@ const AppTextInput = ({ ...otherProps }) => {
           marginVertical: 5,
           fontWeight: '500',
           color: 'white',
+          width: '100%'
         },
         focused && {
           borderWidth: 1,
