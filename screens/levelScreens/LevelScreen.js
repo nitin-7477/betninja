@@ -20,6 +20,7 @@ const LevelScreen = () => {
   const [currentLevel, setCurrentLevel] = useState('')
   const [info, setInfo] = useState([])
   const [tempData, setTempData] = useState({ levelup: 50, monthly: 25, exp: 3000 })
+  const [userLevel, setUserLevel] = useState('')
   const [fixedLevelData, setFixedLevelData] = useState([
     { levelup: 50, monthly: 25, exp: 3000 },
     { levelup: 150, monthly: 75, exp: 30000 },
@@ -46,6 +47,8 @@ const LevelScreen = () => {
             "Authorization": JSON.parse(token),
           },
         });
+        console.log(response.data);
+        setUserLevel(response.data.level)
         setUserInformation(response.data.user_level);
         setInfo(response.data)
         setCurrentLevel(response.data.user_level.levels["1"])
@@ -61,13 +64,13 @@ const LevelScreen = () => {
   }, []);
 
   // console.log(currentLevel.level_reward);
-  const isDisabled = currentLevel.level_reward
-  const progress1 = userInformation.exp;
-  const progress2 = tempData.exp;
-  const totalProgress = progress1 / progress2;
+  // const isDisabled = currentLevel.level_reward
+  // const progress1 = userInformation.exp;
+  // const progress2 = tempData.exp;
+  // const totalProgress = progress1 / progress2;
 
 
-  console.log(isDisabled);
+  // console.log(isDisabled);
 
   // console.log(userInformation);
 
@@ -120,7 +123,7 @@ const LevelScreen = () => {
         {/* *******************This is for Avatar and Level check*************** */}
         <View style={{ height: SCREEN_HEIGHT * 0.1, width: SCREEN_WIDTH * 0.97, alignSelf: 'center', flexDirection: 'row', alignItems: 'center' }}>
           <View style={{ width: 120 }}><Image source={require('../../assets/player.png')} /></View>
-          <View><Text style={{ fontWeight: 'bold', color: 'black' }}>LEVEL {userInformation?.level}</Text><Text style={{ fontSize: 18, fontWeight: '600', color: 'white' }}>{info.username}</Text></View>
+          <View><Text style={{ fontWeight: 'bold', color: 'black' }}>LEVEL {userLevel}</Text><Text style={{ fontSize: 18, fontWeight: '600', color: 'white' }}>{info.username}</Text></View>
         </View>
         <View style={{ height: 70, width: SCREEN_WIDTH * 1, justifyContent: 'space-around', alignItems: 'center', flexDirection: 'row', marginTop: 10 }}>
           <View style={{ height: 60, width: '45%', backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', borderRadius: 10, elevation: 2 }}>
@@ -164,7 +167,7 @@ const LevelScreen = () => {
               <View style={{ borderWidth: 1, padding: 2, width: 80, borderColor: 'white', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 10 }}>
                 <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>Bet ₹1=1EXP</Text>
               </View>
-              <Progress.Bar progress={totalProgress} width={320} color='green' />
+              {/* <Progress.Bar progress={totalProgress} width={320} color='green' /> */}
 
             </View>
 
@@ -207,7 +210,7 @@ const LevelScreen = () => {
               <View style={{ borderWidth: 1, padding: 2, width: 80, borderColor: 'white', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 10 }}>
                 <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>Bet ₹1=1EXP</Text>
               </View>
-              <Progress.Bar progress={totalProgress} width={320} color='green' />
+              {/* <Progress.Bar progress={totalProgress} width={320} color='green' /> */}
 
             </View>
             <View style={{ width: '35%', alignItems: 'center', height: '70%', }}>
@@ -247,7 +250,7 @@ const LevelScreen = () => {
               <View style={{ borderWidth: 1, padding: 2, width: 80, borderColor: 'white', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 10 }}>
                 <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>Bet ₹1=1EXP</Text>
               </View>
-              <Progress.Bar progress={totalProgress} width={320} color='green' />
+              {/* <Progress.Bar progress={totalProgress} width={320} color='green' /> */}
 
             </View>
             <View style={{ width: '35%', alignItems: 'center', height: '70%', }}>
@@ -288,7 +291,7 @@ const LevelScreen = () => {
               <View style={{ borderWidth: 1, padding: 2, width: 80, borderColor: 'white', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 10 }}>
                 <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>Bet ₹1=1EXP</Text>
               </View>
-              <Progress.Bar progress={totalProgress} width={320} color='green' />
+              {/* <Progress.Bar progress={totalProgress} width={320} color='green' /> */}
 
             </View>
             <View style={{ width: '35%', alignItems: 'center', height: '70%', }}>
@@ -328,7 +331,7 @@ const LevelScreen = () => {
               <View style={{ borderWidth: 1, padding: 2, width: 80, borderColor: 'white', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 15 }}>
                 <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>Bet ₹1=1EXP</Text>
               </View>
-              <Progress.Bar progress={totalProgress} width={320} color='green' />
+              {/* <Progress.Bar progress={totalProgress} width={320} color='green' /> */}
 
             </View>
             <View style={{ width: '35%', alignItems: 'center', height: '70%', }}>
@@ -368,7 +371,7 @@ const LevelScreen = () => {
               <View style={{ borderWidth: 1, padding: 2, width: 80, borderColor: 'white', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 10 }}>
                 <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>Bet ₹1=1EXP</Text>
               </View>
-              <Progress.Bar progress={totalProgress} width={320} color='green' />
+              {/* <Progress.Bar progress={totalProgress} width={320} color='green' /> */}
 
             </View>
             <View style={{ width: '35%', alignItems: 'center', height: '70%', }}>
@@ -408,7 +411,7 @@ const LevelScreen = () => {
               <View style={{ borderWidth: 1, padding: 2, width: 80, borderColor: 'white', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 10 }}>
                 <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>Bet ₹1=1EXP</Text>
               </View>
-              <Progress.Bar progress={totalProgress} width={320} color='green' />
+              {/* <Progress.Bar progress={totalProgress} width={320} color='green' /> */}
 
             </View>
             <View style={{ width: '35%', alignItems: 'center', height: '70%', }}>
@@ -449,7 +452,7 @@ const LevelScreen = () => {
               <View style={{ borderWidth: 1, padding: 2, width: 80, borderColor: 'white', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 10 }}>
                 <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>Bet ₹1=1EXP</Text>
               </View>
-              <Progress.Bar progress={totalProgress} width={320} color='green' />
+              {/* <Progress.Bar progress={totalProgress} width={320} color='green' /> */}
 
             </View>
             <View style={{ width: '35%', alignItems: 'center', height: '70%', }}>
@@ -489,7 +492,7 @@ const LevelScreen = () => {
               <View style={{ borderWidth: 1, padding: 2, width: 80, borderColor: 'white', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 10 }}>
                 <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>Bet ₹1=1EXP</Text>
               </View>
-              <Progress.Bar progress={totalProgress} width={320} color='green' />
+              {/* <Progress.Bar progress={totalProgress} width={320} color='green' /> */}
 
             </View>
             <View style={{ width: '35%', alignItems: 'center', height: '70%', }}>
@@ -529,7 +532,7 @@ const LevelScreen = () => {
               <View style={{ borderWidth: 1, padding: 2, width: 80, borderColor: 'white', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 10 }}>
                 <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>Bet ₹1=1EXP</Text>
               </View>
-              <Progress.Bar progress={totalProgress} width={320} color='green' />
+              {/* <Progress.Bar progress={totalProgress} width={320} color='green' /> */}
 
             </View>
             <View style={{ width: '35%', alignItems: 'center', height: '70%', }}>
@@ -566,7 +569,7 @@ const LevelScreen = () => {
 
           <View style={{ width: '20%' }}>
             <TouchableOpacity
-              disabled={!isDisabled}
+              // disabled={!isDisabled}
               onPress={handleLevelUp}
               style={{ flexDirection: 'row', height: '15', width: '100%', alignItems: 'center', borderColor: 'red', borderWidth: 0.5, padding: 2, justifyContent: 'center', borderRadius: 10, marginBottom: 5 }}>
               <Image source={require('../../assets/vipWallet.png')} style={{ height: 15, width: 15, marginRight: 5 }} />

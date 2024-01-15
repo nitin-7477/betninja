@@ -40,7 +40,7 @@ const Account = () => {
             "Authorization": JSON.parse(token),
           },
         });
-
+        console.log(response.data);
         setUserInformation(response.data);
         setCopyUID(response.data.uid)
       } catch (error) {

@@ -57,7 +57,7 @@ const Promotion = () => {
         navigation.navigate('Login')
         return;
       }
-      console.log("This is the main token", JSON.parse(token));
+
 
 
       var result = await axios.get(`${process.env.SERVERURL}/api/commission/commission`, {
@@ -66,7 +66,7 @@ const Promotion = () => {
           "Authorization": JSON.parse(token),
         },
       })
-      console.log(result.data.data);
+
       setCommission(result.data.data)
       setReferalCode(result.data.data.referalCode)
 
@@ -96,7 +96,7 @@ const Promotion = () => {
   const teamRegisterCount = commission?.team?.number_of_register || 0;
   const totalRegisterCount = directRegisterCount + teamRegisterCount;
 
-  // console.log("This is user information for Promotion Screen", userInformation);
+
 
 
   // #d9ad82 Main theme color
@@ -113,10 +113,10 @@ const Promotion = () => {
 
         <View style={{ height: responsiveHeight(37), width: responsiveWidth(100), backgroundColor: '#d9ad82', }}>
           <View >
-            <Text style={{ textAlign: 'center', color: 'white', fontWeight: '500', fontSize: responsiveFontSize(3), marginVertical: 10 }}>
+            <Text style={{ textAlign: 'center', color: 'white', fontWeight: '500', fontSize: 24, marginVertical: 10 }}>
               {commission?.total_commission > 0 ? commission?.total_commission.toFixed(2) : '0'}
             </Text>
-            <Text style={{ textAlign: 'center', color: 'white', fontWeight: '500', fontSize: responsiveFontSize(3), marginVertical: responsiveHeight(2) }}>Yesterday's Total Commission</Text>
+            <Text style={{ textAlign: 'center', color: 'white', fontWeight: '500', fontSize: 22, marginVertical: responsiveHeight(2) }}>Yesterday's Total Commission</Text>
             <Text style={{ textAlign: 'center', color: 'white', fontWeight: '500', fontSize: responsiveFontSize(2), marginVertical: 5 }}>Upgrade the level to increase the Commission income</Text>
           </View>
 
@@ -212,7 +212,7 @@ const Promotion = () => {
         {/* **********************Invitation Link Button*********************** */}
 
         <View style={{ marginTop: responsiveHeight(20), height: responsiveHeight(7), width: responsiveWidth(95), backgroundColor: '#d9ad82', alignSelf: 'center', alignItems: 'center', justifyContent: 'center', borderRadius: 20, marginBottom: 20 }}>
-          <Text style={{ textAlign: 'center', color: '#770737', fontWeight: 600, fontSize: responsiveFontSize(2.5) }}>Invite Your Friends</Text>
+          <Text style={{ textAlign: 'center', color: '#770737', fontWeight: 600, fontSize: 18 }}>Invite Your Friends</Text>
         </View>
         {/* **********************Invitation Link Button*********************** */}
 
@@ -310,7 +310,7 @@ const Promotion = () => {
           <View style={{ flexDirection: 'row', marginVertical: 10 }}>
             <View style={{ width: responsiveWidth(46), height: responsiveHeight(10), justifyContent: 'center', borderRightColor: 'grey', borderRightWidth: 1 }}>
               <Text style={{ textAlign: 'center', color: 'green' }}>0</Text>
-              <Text style={{ textAlign: 'center', color: 'grey', fontSize: responsiveFontSize(2) }}>This Week</Text>
+              <Text style={{ textAlign: 'center', color: 'grey', fontSize: 16 }}>This Week</Text>
 
             </View>
             <View style={{ width: responsiveWidth(46), height: responsiveHeight(10), justifyContent: 'center' }}>
@@ -318,18 +318,18 @@ const Promotion = () => {
                 {commission?.total_commission > 0 ? commission?.total_commission.toFixed(2) : '0'}
               </Text>
 
-              <Text style={{ textAlign: 'center', color: 'grey', fontSize: responsiveFontSize(2) }}>Total Commission</Text>
+              <Text style={{ textAlign: 'center', color: 'grey', fontSize: 16 }}>Total Commission</Text>
             </View>
           </View>
 
           <View style={{ flexDirection: 'row', marginVertical: 10 }}>
             <View style={{ width: responsiveWidth(46), height: responsiveHeight(12), justifyContent: 'center', }}>
               <Text style={{ textAlign: 'center', color: 'green' }}> {commission?.direct?.number_of_register}</Text>
-              <Text style={{ textAlign: 'center', color: 'grey', fontSize: responsiveFontSize(2) }}>Direct Subordinate</Text>
+              <Text style={{ textAlign: 'center', color: 'grey', fontSize: 16 }}>Direct Subordinate</Text>
             </View>
             <View style={{ width: responsiveWidth(46), height: responsiveHeight(12), justifyContent: 'center', borderLeftWidth: 1, borderLeftColor: 'grey' }}>
               <Text style={{ textAlign: 'center', color: 'green' }}>{totalRegisterCount}</Text>
-              <Text style={{ textAlign: 'center', color: 'grey', fontSize: responsiveFontSize(2) }}>Total number of Subordinate in the team</Text>
+              <Text style={{ textAlign: 'center', color: 'grey', fontSize: 16 }}>Total number of Subordinate in the team</Text>
             </View>
 
           </View>

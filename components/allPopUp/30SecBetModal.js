@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen';
 import { Colors } from '../Constants/Colors';
+import { responsiveHeight } from 'react-native-responsive-dimensions';
 
 const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType, select, ln, selectedCountdown, fetchUserData, countdowns }) => {
 
@@ -291,12 +292,13 @@ const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType,
                 onPress={isChecked ? (loading ? null : handleBigData) : null}
                 disabled={!isChecked && isDisabled}
                 style={{
-                  width: '55%',
+                  width: '60%',
                   marginBottom: 5,
                   backgroundColor: 'purple',
-                  paddingVertical: 12,
+                  // paddingVertical: 12,
                   paddingHorizontal: 10,
                   borderRadius: 5,
+                  height: responsiveHeight(5),
                   justifyContent: 'center',
                   alignItems: 'center',
                   opacity: isChecked ? (loading ? 0.5 : 1) : 0.5,    // Optionally reduce opacity during loading

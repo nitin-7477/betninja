@@ -231,23 +231,23 @@ const Wallet = () => {
         <View style={{ flexDirection: 'row', marginVertical: 10 }}>
           <View style={{ width: responsiveWidth(46), height: responsiveHeight(10), justifyContent: 'center', borderRightColor: 'grey', borderRightWidth: 1 }}>
             <Text style={{ textAlign: 'center', color: 'green' }}>0</Text>
-            <Text style={{ textAlign: 'center', color: 'grey', fontSize: responsiveFontSize(2) }}>This Week</Text>
+            <Text style={{ textAlign: 'center', color: 'grey', fontSize: 16 }}>This Week</Text>
 
           </View>
           <View style={{ width: responsiveWidth(46), height: responsiveHeight(10), justifyContent: 'center' }}>
             <Text style={{ textAlign: 'center', color: 'green' }}>{commission?.total_commission?.toFixed(2)}</Text>
-            <Text style={{ textAlign: 'center', color: 'grey', fontSize: responsiveFontSize(2) }}>Total Commission</Text>
+            <Text style={{ textAlign: 'center', color: 'grey', fontSize: 16 }}>Total Commission</Text>
           </View>
         </View>
 
         <View style={{ flexDirection: 'row', marginVertical: 10 }}>
           <View style={{ width: responsiveWidth(46), height: responsiveHeight(12), justifyContent: 'center', }}>
             <Text style={{ textAlign: 'center', color: 'green' }}> {commission?.direct?.number_of_register}</Text>
-            <Text style={{ textAlign: 'center', color: 'grey', fontSize: responsiveFontSize(2) }}>Direct Subordinate</Text>
+            <Text style={{ textAlign: 'center', color: 'grey', fontSize: 16 }}>Direct Subordinate</Text>
           </View>
           <View style={{ width: responsiveWidth(46), height: responsiveHeight(12), justifyContent: 'center', borderLeftWidth: 1, borderLeftColor: 'grey' }}>
             <Text style={{ textAlign: 'center', color: 'green' }}>{totalRegisterCount}</Text>
-            <Text style={{ textAlign: 'center', color: 'grey', fontSize: responsiveFontSize(2) }}>Total number of Subordinate in the team</Text>
+            <Text style={{ textAlign: 'center', color: 'grey', fontSize: 16 }}>Total number of Subordinate in the team</Text>
           </View>
 
         </View>

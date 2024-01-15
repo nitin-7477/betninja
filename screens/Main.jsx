@@ -41,27 +41,27 @@ export default function Main() {
     fetchToken();
   }, []);
 
-  useEffect(() => {
-    const fetchRecentWinners = async () => {
-      try {
-        const response = await axios.get(`${process.env.SERVERURL}/api/bet/recentWinner`);
-        setRecentWinners(response.data);
-      } catch (error) {
-        console.error('Error fetching recent winners:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchRecentWinners = async () => {
+  //     try {
+  //       const response = await axios.get(`${process.env.SERVERURL}/api/bet/recentWinner`);
+  //       setRecentWinners(response.data);
+  //     } catch (error) {
+  //       console.error('Error fetching recent winners:', error);
+  //     }
+  //   };
 
 
-    fetchRecentWinners();
+  //   fetchRecentWinners();
 
-    const intervalId = setInterval(() => {
-      fetchRecentWinners();
-    }, 5000);
+  //   const intervalId = setInterval(() => {
+  //     fetchRecentWinners();
+  //   }, 5000);
 
-    return () => clearInterval(intervalId);
-  }, []);
+  //   return () => clearInterval(intervalId);
+  // }, []);
 
-  console.log(recentWinners);
+  // console.log(recentWinners);
 
   const recentWinnersData = [
     {

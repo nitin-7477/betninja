@@ -70,18 +70,24 @@ export default function App() {
         {isFirstLaunch && (
           <Stack.Screen options={{ headerShown: false }} name="OnboardingScreen" component={OnboardingScreen} />
         )}
+        <Stack.Screen name="GameStats" options={{ headerShown: false }} component={GameStats} />
+
         <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
-        <Stack.Screen options={{ headerShown: false }} name="LevelScreen" component={LevelScreen} />
+        <Stack.Screen options={{ headerShown: false }} name="Gamescreen" component={Gamescreen} />
+        <Stack.Screen options={{ headerShown: false }} name="SubOrdinate" component={SubOrdinate} />
+        <Stack.Screen name="DepositHistoryScreen" options={{ headerShown: false }} component={DepositHistoryScreen} />
+        <Stack.Screen name="WithdrawHistoryScreen" options={{ headerShown: false }} component={WithdrawHistoryScreen} />
+        <Stack.Screen options={{ headerShown: false }} name="CommissionDetails" component={CommissionDetails} />
+
         <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
         <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
-        <Stack.Screen options={{ headerShown: false }} name="Gamescreen" component={Gamescreen} />
+        <Stack.Screen options={{ headerShown: false }} name="LevelScreen" component={LevelScreen} />
 
         <Stack.Screen options={{ headerShown: false }} name="AttendanceBonus" component={AttendanceBonus} />
         <Stack.Screen options={{ headerShown: false }} name="QrScanner" component={QrScanner} />
         <Stack.Screen options={{ headerShown: false }} name="BankAccount" component={BankAccount} />
-        <Stack.Screen options={{ headerShown: false }} name="SubOrdinate" component={SubOrdinate} />
         <Stack.Screen name="WithdrawScreen" options={{ headerShown: false }} component={WithdrawScreen} />
-        <Stack.Screen options={{ headerShown: false }} name="CommissionDetails" component={CommissionDetails} />
+
 
         <Stack.Screen options={{ headerShown: false }} name="AddBank" component={AddBank} />
 
@@ -109,15 +115,12 @@ export default function App() {
         <Stack.Screen name="Account" options={{ headerShown: false }} component={Account} />
         <Stack.Screen name="Setting" options={{ headerShown: false }} component={Setting} />
         <Stack.Screen name="Gifts" options={{ headerShown: false }} component={Gifts} />
-        <Stack.Screen name="GameStats" options={{ headerShown: false }} component={GameStats} />
         <Stack.Screen name="SettingLogin" options={{ headerShown: false }} component={SettingLogin} />
         <Stack.Screen name="BindMail" options={{ headerShown: false }} component={BindMail} />
 
 
         <Stack.Screen name="DepositeScreen" options={{ headerShown: false }} component={DepositeScreen} />
 
-        <Stack.Screen name="DepositHistoryScreen" options={{ headerShown: false }} component={DepositHistoryScreen} />
-        <Stack.Screen name="WithdrawHistoryScreen" options={{ headerShown: false }} component={WithdrawHistoryScreen} />
 
 
 

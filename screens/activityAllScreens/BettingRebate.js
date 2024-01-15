@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, FlatList, Alert } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, FlatList, Alert, Image } from 'react-native'
 import React from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../components/Constants/Screen'
 import Ionicons from "react-native-vector-icons/Ionicons"
@@ -7,6 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
 const data = [
   { id: '1', type: 'Lottery', date: '2023-12-06 1:00:10', status: 'Completed', rebate: '₹ 429', rebateRate: '0.1%', rebateAmount: '0.43' },
   { id: '2', type: 'Lottery', date: '2023-12-06 1:00:10', status: 'Completed', rebate: '₹ 1237', rebateRate: '0.3%', rebateAmount: '0.43' },
@@ -58,12 +59,13 @@ const BettingRebate = () => {
 
   const handleOneClickRebate = async () => {
     try {
+      const token = await AsyncStorage.getItem('token');
       const response = await axios.post(
         `${process.env.SERVERURL}/api/deposit/deposit_rebate`,
         {},
         {
           headers: {
-            Authorization: JSON.parse(checkToken),
+            Authorization: JSON.parse(token),
           },
         }
       );
@@ -86,7 +88,7 @@ const BettingRebate = () => {
         }
       );
 
-      console.log(response.data);
+      console.log("This is data of history of rebate", response.data);
       setRebateInfo(response.data)
     } catch (e) {
       console.log("HI Errors for Betting Rebate", e);
@@ -109,20 +111,23 @@ const BettingRebate = () => {
           <Text style={{ color: 'black' }}>Real-Time Count</Text>
         </View>
         <Text style={{ fontWeight: 'bold', fontSize: 18, marginTop: 10, color: 'black' }}>
-          ₹ {typeof userInformation === 'number' ? userInformation.toFixed(2) : userInformation}
+          ₹ {typeof userInformation === 'number' ? userInformation?.toFixed(2) : userInformation}
         </Text>
         <View style={{ height: 25, width: '95%', backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', borderRadius: 5 }}>
           <Text style={{ color: 'black' }}>Upgrade VIP lavel to increase the rebate rebate</Text></View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={{ height: 45, width: '45%', backgroundColor: 'white', justifyContent: 'center', borderRadius: 2, marginVertical: 10, paddingHorizontal: 10 }}>
             <Text style={{ color: 'black' }}>Today Rebate</Text>
-            <Text style={{ color: 'red' }}>{userInformation.toFixed(2)}</Text>
+            <Text style={{ color: 'red' }}>
+              {typeof userInformation === 'number' ? userInformation.toFixed(2) : 'N/A'}
+            </Text>
+
           </View>
           <View style={{ height: 45, width: '45%', backgroundColor: 'white', justifyContent: 'center', borderRadius: 2, marginVertical: 10, paddingHorizontal: 10 }}>
             <Text>Total Rebate</Text>
             <Text style={{ color: 'red' }}>
               {rebateInfo?.totalAmount !== undefined && rebateInfo?.totalAmount !== null
-                ? rebateInfo?.totalAmount.toFixed(2)
+                ? rebateInfo?.totalAmount?.toFixed(2)
                 : '0.00'}
             </Text>
           </View>
@@ -137,7 +142,7 @@ const BettingRebate = () => {
 
       <Text style={{ marginLeft: 20, fontSize: 20, fontWeight: 'bold', marginTop: 10, color: 'black' }}>Rebate History</Text>
 
-      <FlatList
+      {rebateInfo.length !== 0 ? <FlatList
         data={rebateInfo.data}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
@@ -177,7 +182,10 @@ const BettingRebate = () => {
             </View>
           </View>
         )}
-      />
+      /> : <View style={{ width: responsiveWidth(100), height: responsiveHeight(50), justifyContent: 'center', alignItems: 'center' }}>
+        <Image source={require('../../assets/noData.png')} style={{ height: 200, width: 200 }} />
+
+      </View>}
 
 
     </ScrollView>

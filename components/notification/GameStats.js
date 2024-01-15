@@ -4,22 +4,94 @@ import { Colors } from '../Constants/Colors'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
-
+import { responsiveWidth } from 'react-native-responsive-dimensions';
+import AntDesign from "react-native-vector-icons/AntDesign"
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useState, useEffect } from 'react';
 
 const GameStats = () => {
+
   const navigation = useNavigation();
+
+  const [today, setToday] = useState([])
+  const [Yesterday, setYesterday] = useState([])
+  const [thisWeek, setThisWeek] = useState([])
+  const [thisMonth, setThisMonth] = useState([])
+
+  const fetchToken = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+
+      if (!token) {
+        alert('Token Expired')
+        navigation.navigate('Login')
+        return;
+      }
+    }
+
+    catch (error) {
+      console.error('Error fetching user data in Account Screen:', error);
+    }
+
+  };
+
+  const fetchCommissionData = async () => {
+    try {
+
+      const token = await AsyncStorage.getItem('token');
+
+      if (!token) {
+        navigation.navigate('Login')
+        return;
+      }
+
+
+
+      var result = await axios.get(`${process.env.SERVERURL}/api/auth/user-bets`, {
+
+        headers: {
+          "Authorization": JSON.parse(token),
+        },
+      })
+
+
+      console.log(result.data.responseData);
+      setToday(result.data.responseData.today)
+      setYesterday(result.data.responseData.yesterday)
+      setThisWeek(result.data.responseData.thisWeek)
+      setThisMonth(result.data.responseData.thisMonth)
+
+    } catch (e) {
+      console.log("ERROR IN FETCHING COMMISSION", e);
+    }
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await fetchToken();
+        await fetchCommissionData();
+      } catch (error) {
+        console.error('Error in useEffect:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <ScrollView style={styles.container}>
       {/* header */}
 
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}><TouchableOpacity
-        onPress={() => navigation.navigate('Account')}
-        style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
-        <Ionicons name='return-up-back' color={'white'} size={30} />
-      </TouchableOpacity>
-        <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.purple, marginLeft: 30 }}>Game Charts</Text></View>
-      <View style={{ flexDirection: 'row' }}>
-        <TouchableOpacity style={styles.otpBtn}    >
+      <View style={{ width: SCREEN_WIDTH * 1, backgroundColor: 'white', height: '7%', alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10 }}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <AntDesign name='left' size={20} color={'black'} style={{ fontWeight: 'bold' }} />
+        </TouchableOpacity>
+        <Text style={{ marginLeft: 30, fontSize: 16, color: 'black', fontWeight: 'bold' }}>Game Chart</Text>
+      </View>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
+        <TouchableOpacity style={styles.otpBtn} >
           <Text style={{ color: 'white', textAlign: 'center', fontSize: 12, }} >
             Today
           </Text>
@@ -64,13 +136,12 @@ export default GameStats
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginVertical: 20,
-    padding: 20, alignSelf: 'center'
+    width: SCREEN_WIDTH * 1
   },
   header: {
     height: SCREEN_HEIGHT * 0.05,
     width: SCREEN_WIDTH * 0.9,
-    backgroundColor: Colors.lightGray, justifyContent: 'center',
+    backgroundColor: Colors?.lightGray, justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
     marginBottom: 20
@@ -78,7 +149,7 @@ const styles = StyleSheet.create({
   section: {
     height: SCREEN_HEIGHT * 0.2,
     width: SCREEN_WIDTH * 0.88,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors?.white,
     alignSelf: 'center',
     marginVertical: 7,
     paddingHorizontal: 15,
@@ -91,7 +162,7 @@ const styles = StyleSheet.create({
   history: {
     height: SCREEN_HEIGHT * 0.6,
     width: SCREEN_WIDTH * 0.88,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors?.white,
     alignSelf: 'center',
     marginVertical: 7,
     paddingHorizontal: 15,
@@ -116,27 +187,27 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 5
   }, normalText: {
-    color: Colors.fontGray,
+    color: Colors?.fontGray,
     fontSize: 16,
     fontWeight: '500',
     marginBottom: 5
   },
   placeholderLine: {
-    color: Colors.purple,
+    color: Colors?.purple,
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 5,
     marginTop: 15
   },
   otpBtn: {
-    backgroundColor: Colors.fontGray,
+    backgroundColor: Colors?.fontGray,
     borderRadius: 10,
-    width: 75,
+    width: '23%',
     elevation: 5,
     paddingVertical: 3,
     marginHorizontal: 2,
     paddingVertical: 5,
-    marginVertical: 10
+    marginVertical: 10, alignSelf: 'center'
   },
 
 })

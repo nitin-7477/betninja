@@ -1,131 +1,149 @@
-import { SafeAreaView, StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, TextInput } from 'react-native'
-import React from 'react'
+import { SafeAreaView, StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, TextInput, FlatList } from 'react-native'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { Colors } from '../Constants/Colors'
 import { useNavigation } from "@react-navigation/native";
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
+
 
 const DepositHistoryScreen = () => {
   const navigation = useNavigation();
+  const [history, setHistory] = useState([])
 
-  const [amount, setAmount] = useState('');
+  useEffect(() => {
+    handleDepositWithdraw();
+  }, []);
 
-  const handleDepositWithdraw = (tab) => {
-    setActiveTab(tab);
+  const handleDepositWithdraw = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        navigation.navigate('Login');
+        return;
+      }
+
+      const response = await axios.get(`${process.env.SERVERURL}/api/withdraw/withdraw`, {
+        headers: {
+          Authorization: JSON.parse(token),
+        },
+      });
+
+
+
+    } catch (error) {
+      console.error('Error fetching withdraw history:', error);
+
+    }
   };
+
+  const fetchToken = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+
+      if (!token) {
+        alert('Token Expired')
+        navigation.navigate('Login')
+        return;
+      }
+    }
+
+    catch (error) {
+      console.error('Error fetching user data in Account Screen:', error);
+    }
+
+  };
+
+  const fetchCommissionData = async () => {
+    try {
+
+      const token = await AsyncStorage.getItem('token');
+
+      if (!token) {
+        navigation.navigate('Login')
+        return;
+      }
+
+
+
+      var result = await axios.get(`${process.env.SERVERURL}/api/deposit/deposits`, {
+
+        headers: {
+          "Authorization": JSON.parse(token),
+        },
+      })
+
+      setHistory(result.data.data)
+
+    } catch (e) {
+      console.log("ERROR IN FETCHING COMMISSION", e);
+    }
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await fetchToken();
+        await fetchCommissionData();
+      } catch (error) {
+        console.error('Error in useEffect:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  console.log("Result of withdrow  History In History Screen", history);
+
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       <View style={styles.depositSection}>
 
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}><TouchableOpacity
-          onPress={() => navigation.navigate('Wallet')}
-          style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
-          <Ionicons name='return-up-back' color={'white'} size={30} />
-        </TouchableOpacity>
-          <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.purple, marginLeft: 30 }}>Deposit Screen</Text></View>
-        {/* *********************************Deposit History****************************** */}
-
-        <View style={{ height: SCREEN_HEIGHT * 0.28, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: '#e1edf0', marginBottom: 10, borderRadius: 10, padding: 10, }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10, justifyContent: 'space-between' }}>
-            <TouchableOpacity style={{
-              backgroundColor: '#50C878',
-              alignItems: 'center',
-              width: SCREEN_WIDTH * 0.25,
-              paddingVertical: 5,
-              borderRadius: 7
-
-            }}>
-              <Text style={{ fontWeight: 'bold', color: 'white', }}>₹ 10K</Text>
-            </TouchableOpacity>
-            <Text style={{ marginLeft: 10, fontSize: 16, color: 'black' }} >Failed</Text>
-          </View>
-          {/* *********************************Deposit History Card ****************************** */}
-
-          <View style={{ height: SCREEN_HEIGHT * 0.28, width: SCREEN_WIDTH * 0.85, borderTopWidth: 0.4, borderColor: 'grey', borderRadius: 10, padding: 10 }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-              <Text style={{ fontSize: 16, color: 'black' }}>Balance</Text><Text style={{ color: 'orange', fontSize: 18 }}>₹ 10000.00</Text>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-              <Text style={{ fontSize: 16, color: 'black' }}>Type</Text><Text style={{ color: "black" }}>TB- Bank</Text>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-              <Text style={{ fontSize: 16, color: 'black' }}>Time</Text><Text style={{ color: "black" }}>2023-12-15 16:23:00</Text>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-              <Text style={{ fontSize: 16, color: 'black' }}>Order No</Text><Text style={{ color: "black" }}>P2023102110360707708791</Text>
-            </View>
-
-          </View>
+        <View style={{ width: responsiveWidth(100), backgroundColor: 'white', height: responsiveHeight(6), alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10 }}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <AntDesign name='left' size={20} color={'black'} style={{ fontWeight: 'bold' }} />
+          </TouchableOpacity>
+          <Text style={{ marginLeft: 30, fontSize: 16, color: 'black', fontWeight: 'bold' }}>Deposit History Screen</Text>
         </View>
-        {/* *********************************Deposit History****************************** */}
-        <View style={{ height: SCREEN_HEIGHT * 0.28, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: '#e1edf0', marginBottom: 10, borderRadius: 10, padding: 10, }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10, justifyContent: 'space-between' }}>
-            <TouchableOpacity style={{
-              backgroundColor: '#50C878',
-              alignItems: 'center',
-              width: SCREEN_WIDTH * 0.25,
-              paddingVertical: 5,
-              borderRadius: 7
+        {/* *********************************Withdraw History****************************** */}
+        <FlatList data={history} renderItem={({ item }) => {
+          return <View style={{ height: 'auto', width: SCREEN_WIDTH * 0.95, alignSelf: 'center', backgroundColor: '#e1edf0', marginBottom: 10, borderRadius: 10, padding: 10, }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10, justifyContent: 'space-between' }}>
+              <TouchableOpacity style={{
+                backgroundColor: '#FF6633',
+                alignItems: 'center',
+                width: SCREEN_WIDTH * 0.25,
+                paddingVertical: 5,
+                borderRadius: 7
 
-            }}>
-              <Text style={{ fontWeight: 'bold', color: 'white', }}>₹ 10K</Text>
-            </TouchableOpacity>
-            <Text style={{ marginLeft: 10, fontSize: 16, color: 'black' }} >Failed</Text>
+              }}>
+
+                <Text style={{ fontWeight: 'bold', color: 'white', }}>Deposit</Text>
+              </TouchableOpacity>
+              <Text style={{ marginLeft: 10, fontSize: 16, color: 'green' }} >{item.status}</Text>
+            </View>
+            {/* *********************************Deposit History Card ****************************** */}
+
+            <View style={{ height: 'auto', width: SCREEN_WIDTH * 0.91, borderTopWidth: 0.4, borderColor: 'grey', borderRadius: 10, padding: 10 }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
+                <Text style={{ fontSize: 16, color: "black" }}>Balance</Text><Text style={{ color: 'orange', fontSize: 18 }}>{item.amount}</Text>
+              </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
+                <Text style={{ fontSize: 16, color: "black" }}>Type</Text><Text style={{ color: "black" }}>{item.type}</Text>
+              </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
+                <Text style={{ fontSize: 16, color: "black" }}>Time</Text><Text style={{ color: "black" }}>{item.updatedAt}</Text>
+              </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
+                <Text style={{ fontSize: 16, color: "black" }}>Transaction Id</Text><Text style={{ color: "black" }}>{item.transactionId}</Text>
+              </View>
+
+            </View>
           </View>
-          {/* *********************************Deposit History Card ****************************** */}
-
-          <View style={{ height: SCREEN_HEIGHT * 0.28, width: SCREEN_WIDTH * 0.85, borderTopWidth: 0.4, borderColor: 'grey', borderRadius: 10, padding: 10 }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-              <Text style={{ fontSize: 16, color: 'black' }}>Balance</Text><Text style={{ color: 'orange', fontSize: 18 }}>₹ 10000.00</Text>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-              <Text style={{ fontSize: 16, color: 'black' }}>Type</Text><Text style={{ color: "black" }}>TB- Bank</Text>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-              <Text style={{ fontSize: 16, color: 'black' }}>Time</Text><Text style={{ color: "black" }}>2023-12-15 16:23:00</Text>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-              <Text style={{ fontSize: 16, color: 'black' }}>Order No</Text><Text style={{ color: "black" }}>P2023102110360707708791</Text>
-            </View>
-
-          </View>
-        </View>
-        {/* *********************************Deposit History****************************** */}
-        <View style={{ height: SCREEN_HEIGHT * 0.28, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: '#e1edf0', marginBottom: 10, borderRadius: 10, padding: 10, }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10, justifyContent: 'space-between' }}>
-            <TouchableOpacity style={{
-              backgroundColor: '#50C878',
-              alignItems: 'center',
-              width: SCREEN_WIDTH * 0.25,
-              paddingVertical: 5,
-              borderRadius: 7
-
-            }}>
-              <Text style={{ fontWeight: 'bold', color: 'white', }}>₹ 10K</Text>
-            </TouchableOpacity>
-            <Text style={{ marginLeft: 10, fontSize: 16, color: 'black' }} >Failed</Text>
-          </View>
-          {/* *********************************Deposit History Card ****************************** */}
-
-          <View style={{ height: SCREEN_HEIGHT * 0.28, width: SCREEN_WIDTH * 0.85, borderTopWidth: 0.4, borderColor: 'grey', borderRadius: 10, padding: 10 }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-              <Text style={{ fontSize: 16, color: 'black' }}>Balance</Text><Text style={{ color: 'orange', fontSize: 18 }}>₹ 10000.00</Text>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-              <Text style={{ fontSize: 16, color: 'black' }}>Type</Text><Text style={{ color: "black" }}>TB- Bank</Text>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-              <Text style={{ fontSize: 16, color: 'black' }}>Time</Text><Text style={{ color: "black" }}>2023-12-15 16:23:00</Text>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-              <Text style={{ fontSize: 16, color: 'black' }}>Order No</Text><Text style={{ color: "black" }}>P2023102110360707708791</Text>
-            </View>
-
-          </View>
-        </View>
-        {/* *********************************Deposit History****************************** */}
-
+        }} />
 
       </View>
     </ScrollView>
@@ -138,9 +156,9 @@ export default DepositHistoryScreen
 const styles = {
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: '#f5f5f5',
-    marginTop: 30, alignSelf: 'center'
+    width: responsiveWidth(100),
+    backgroundColor: '#f5f5f5', alignSelf: 'center'
+
   },
   redBtn: {
     backgroundColor: '#D3D3D3',
