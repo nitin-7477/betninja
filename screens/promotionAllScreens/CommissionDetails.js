@@ -1,15 +1,19 @@
-import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image, ActivityIndicator, Modal } from 'react-native'
 import React from 'react'
 import { responsiveWidth, responsiveHeight } from 'react-native-responsive-dimensions'
 import AntDesign from "react-native-vector-icons/AntDesign"
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useNavigation } from "@react-navigation/native";
 
 const CommissionDetails = () => {
+  const navigation = useNavigation();
+
   const [selectedBtn, setSelectedBtn] = useState(1)
   const [commissionHistoy, setCommissionHistoy] = useState([])
   const [withDrawlHistory, setWithDrawlHistory] = useState([])
+  const [loading, setLoading] = useState(false)
 
   const handleHistory = (num) => {
     setSelectedBtn(num)
@@ -17,6 +21,7 @@ const CommissionDetails = () => {
 
   const fetchToken = async () => {
     try {
+
       const token = await AsyncStorage.getItem('token');
 
       if (!token) {
@@ -30,11 +35,12 @@ const CommissionDetails = () => {
       console.error('Error fetching user data in Account Screen:', error);
     }
 
+
   };
 
   const fetchCommissionData = async () => {
     try {
-
+      setLoading(true)
       const token = await AsyncStorage.getItem('token');
       console.log(token);
       if (!token) {
@@ -55,9 +61,11 @@ const CommissionDetails = () => {
       setWithDrawlHistory(result.data.data.withdraw_history)
 
 
-
     } catch (e) {
       console.log("ERROR IN FETCHING COMMISSION", e);
+    }
+    finally {
+      setLoading(false)
     }
   }
 
@@ -74,7 +82,11 @@ const CommissionDetails = () => {
     fetchData();
   }, []);
 
-  console.log(withDrawlHistory);
+  const renderLoadingIndicator = () => (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <ActivityIndicator size={100} color="gold" />
+    </View>
+  );
 
   const renderHistoryItem = ({ item, i }) => {
     return (
@@ -101,6 +113,7 @@ const CommissionDetails = () => {
           <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Type</Text>
           <Text style={{ color: 'black' }}>{item.type}</Text>
         </View>
+
       </View>
     );
   }
@@ -138,8 +151,10 @@ const CommissionDetails = () => {
   return (
     <View style={styles.container}>
       <View style={{ width: responsiveWidth(100), backgroundColor: 'white', height: responsiveHeight(6), alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black' }}>
-        <AntDesign name='left' size={20} color={'black'} style={{ fontWeight: 'bold' }} />
-        <Text style={{ marginLeft: 30, fontSize: 16, color: 'black', fontWeight: 'bold' }}>CommissionDetails</Text>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <AntDesign name='left' size={20} color={'black'} style={{ fontWeight: 'bold' }} />
+        </TouchableOpacity>
+        <Text style={{ marginLeft: 30, fontSize: 16, color: 'black', fontWeight: 'bold' }}>Commission</Text>
       </View>
 
       {/* This is the screen for buttons  */}
@@ -154,10 +169,16 @@ const CommissionDetails = () => {
       <View style={{ width: responsiveWidth(95) }}>
         <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 16, marginVertical: 10 }}>{selectedBtn === 1 ? "History" : "Withdrawl History"}</Text></View>
 
-      <View style={{ flex: 1, width: responsiveWidth(100), height: 'auto', }}>
-        {selectedBtn === 1 ? <FlatList data={commissionHistoy} renderItem={renderHistoryItem} /> : <FlatList data={withDrawlHistory} renderItem={renderWithdrawHistoryItem} />}
-
+      <View style={{ flex: 1, width: responsiveWidth(100), height: 'auto' }}>
+        {loading
+          ? renderLoadingIndicator()  // Show loading indicator while fetching data
+          : selectedBtn === 1
+            ? <FlatList data={commissionHistoy} renderItem={renderHistoryItem} />
+            : <FlatList data={withDrawlHistory} renderItem={renderWithdrawHistoryItem} />
+        }
       </View>
+
+
     </View >
   )
 }

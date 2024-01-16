@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -29,28 +29,35 @@ const Login = () => {
   const [passwordError, setPasswordError] = useState("");
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [isModalVisible, setModalVisible] = useState(false)
-
-
-
-  // const openModal = () => {
-  //   setModalVisible(true);
-
-  // };
-  // const closeModal = () => {
-  //   setModalVisible(false)
-  //   navigation.navigate('Home')
-  // }
+  const [userInformation, setUserInformation] = useState([])
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
 
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        console.log(token);
+        if (!token) {
+          navigation.navigate('Home')
+          return;
+        }
+      }
+      catch (error) {
+        console.error('Error fetching user data in Login  :', error);
+      }
+    };
+    fetchData();
+  }, []);
+
+
   const checkLogin = async () => {
     try {
       setLoading(true);
 
-      // Validation
       if (!emailAddress.trim()) {
         setEmailError("Email is required");
         return;
@@ -65,21 +72,16 @@ const Login = () => {
         setPasswordError("");
       }
 
-      var body = { email: emailAddress, password: password };
+      const body = { email: emailAddress, password: password };
 
-      const result = await axios.post(
-        `${process.env.SERVERURL}/api/auth/login`,
-        body
-      );
+      const result = await axios.post(`${process.env.SERVERURL}/api/auth/login`, body);
 
-
-      let response = result.data;
-      let token = response.token;
+      const response = result.data;
+      const token = response.token;
 
       if (token) {
         await AsyncStorage.setItem("token", JSON.stringify(token));
-        navigation.navigate('Home')
-        // openModal()
+        // navigate('Home')
       } else {
         console.log("Login failed:");
         Alert.alert("Login Failed");
@@ -100,6 +102,7 @@ const Login = () => {
     }
   };
 
+
   return (
     <SafeAreaView
     //  style={{ width: 500, alignSelf: 'center' }}
@@ -109,22 +112,22 @@ const Login = () => {
           <Text
             style={{
               fontSize: 30,
-              color: "purple",
+              color: "blue",
               fontWeight: "bold",
               marginVertical: 30,
             }}
           >
             Login here
           </Text>
-          <View
+          {/* <View
             style={{
               width: SCREEN_WIDTH * 0.8,
               alignSelf: "center",
               borderBottomWidth: 0.3,
-              marginBottom: 20,
+              marginBottom: 10,
               borderBottomColor: "gray",
             }}
-          ></View>
+          ></View> */}
           <Text
             style={{
               fontSize: 20,
@@ -140,34 +143,61 @@ const Login = () => {
           </Text>
         </View>
         <View style={{ marginVertical: 30 }}>
-          <AppTextInput
-            value={emailAddress}
-            onChangeText={(text) => setEmailAddress(text.toLowerCase())}
-            placeholder="Email"
-          />
-          {emailError ? <Text style={{ color: "red", marginLeft: 20 }}>{emailError}</Text> : null}
 
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
-              backgroundColor: "#1434A4",
+              backgroundColor: "#E5E4E2",
               borderRadius: 10,
               justifyContent: "space-between",
             }}
           >
 
             <TextInput
-              placeholderTextColor={"white"}
+              placeholderTextColor={"grey"}
               style={{
-                fontSize: 16,
+                fontSize: 14,
                 paddingHorizontal: 20,
                 paddingVertical: 5,
-                backgroundColor: "#1434A4",
+                backgroundColor: "#E5E4E2",
                 borderRadius: 10,
                 marginVertical: 5,
                 fontWeight: "500",
-                color: "white",
+                color: "grey",
+                width: '100%',
+              }}
+              value={emailAddress}
+              onChangeText={(text) => setEmailAddress(text)}
+              placeholder="Email Address"
+            />
+
+          </View>
+
+
+
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              backgroundColor: "#E5E4E2",
+              borderRadius: 10,
+              justifyContent: "space-between",
+              marginVertical: 10
+            }}
+          >
+
+            <TextInput
+              placeholderTextColor={"grey"}
+              style={{
+                fontSize: 14,
+                paddingHorizontal: 20,
+                paddingVertical: 5,
+                backgroundColor: "#E5E4E2",
+                borderRadius: 10,
+                marginVertical: 5,
+                fontWeight: "500",
+                color: "grey",
                 width: '90%',
               }}
               secureTextEntry={isPasswordVisible}
@@ -178,7 +208,7 @@ const Login = () => {
             <TouchableOpacity onPress={togglePasswordVisibility}>
               <Feather
                 name={isPasswordVisible ? "eye" : "eye-off"}
-                color="white"
+                color="black"
                 size={20}
                 style={{ marginRight: 10 }}
               />
@@ -193,8 +223,8 @@ const Login = () => {
           onPress={() => navigation.navigate("ForgotPassword")}
           style={{ flexDirection: "row", alignItems: "center", justifyContent: "flex-end" }}
         >
-          <Image source={require("../assets/lock.png")} style={{ height: 30, width: 30 }} />
-          <Text style={{ fontSize: 14, color: "blue" }}>
+          {/* <Image source={require("../assets/lock.png")} style={{ height: 30, width: 30 }} /> */}
+          <Text style={{ fontSize: 14, color: "blue", fontFamily: 'Kanit' }}>
             Forgot your password ?
           </Text>
         </TouchableOpacity>
@@ -253,21 +283,7 @@ const Login = () => {
           </View>
         </View>
       </Modal>
-      {/* 
-      <Modal transparent={true} isVisible={isModalVisible} onRequestClose={closeModal}>
-        <View style={Styles.modalContainerPopUp}>
-          <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10, color: 'black' }}>
-            Login Successfully
-          </Text>
-          <Text style={{ color: 'black', fontSize: 12, fontWeight: '500' }}>Welcome to Bet Ninja</Text>
-          <TouchableOpacity
-            style={Styles.closeButtonPopUp}
-            onPress={closeModal}
-          >
-            <Text style={{ color: "white" }}>OK</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal> */}
+
     </SafeAreaView>
   );
 };
@@ -275,8 +291,8 @@ const Login = () => {
 const Styles = StyleSheet.create({
   signIn: {
     paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: "purple",
+    paddingVertical: 13,
+    backgroundColor: "blue",
     marginVertical: 30,
     borderRadius: 10,
     shadowColor: "red",

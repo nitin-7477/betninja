@@ -1,13 +1,15 @@
 
 import React, { useState } from "react";
 import { jsx } from '@emotion/react';
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, ScrollView, Alert } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, ScrollView, Alert, TextInput } from "react-native";
 import AppTextInput from "../components/AppTextInput";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useNavigation } from "@react-navigation/native";
 import Modal from "react-native-modal";
 import axios from "axios";
 import { SCREEN_WIDTH, } from "../components/Constants/Screen";
+import Feather from "react-native-vector-icons/Feather";
+
 
 const Register = () => {
   const navigation = useNavigation();
@@ -24,9 +26,21 @@ const Register = () => {
 
   const [isResendEnabled, setResendEnabled] = useState(true);
   const [timer, setTimer] = useState(59);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(true);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(true);
+
 
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
+  const toggleConfirmPasswordVisibility = () => {
+    setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
+  };
 
   const handleSendOTP = async () => {
     try {
@@ -142,45 +156,158 @@ const Register = () => {
     <ScrollView>
       <View style={{ padding: 20 }}>
         <View style={{ alignItems: "center" }}>
-          <Text style={{ fontSize: 30, color: 'purple', fontWeight: 'bold', marginVertical: 3 }}>
+          <Text style={{ fontSize: 30, color: 'blue', fontWeight: 'bold', marginVertical: 3 }}>
             Create Account
           </Text>
-          <View style={{ width: SCREEN_WIDTH * 0.8, alignSelf: 'center', borderBottomWidth: 0.3, marginBottom: 3, borderBottomColor: 'gray' }}></View>
-          <View style={{ width: SCREEN_WIDTH * 0.8 }}>
+          {/* <View style={{ width: SCREEN_WIDTH * 0.8, alignSelf: 'center', borderBottomWidth: 0.3, marginBottom: 3, borderBottomColor: 'gray' }}></View> */}
+          <View style={{ width: SCREEN_WIDTH * 0.8, marginTop: 10 }}>
             <Text style={{ fontFamily: "", fontSize: 18, maxWidth: "100%", fontWeight: '700', textAlign: "center", lineHeight: 30, color: 'black' }}>
               Create an account so you can explore all the existing games
             </Text>
           </View>
         </View>
         <View style={{ marginVertical: 30 }}>
-          <AppTextInput
-            placeholder="Email"
-            value={emailAddress}
-            onChangeText={(text) => setEmailAddress(text.toLowerCase())}
-            errorMessage={emailAddress === '' ? 'Email is required' : ''}
-          />
-          <AppTextInput
-            maxLength={10}
-            keyboardType="numeric"
-            placeholder="Phone"
-            value={phone}
-            onChangeText={(text) => setPhone(text)}
-            errorMessage={phone === '' ? 'Phone is required' : ''}
-          />
-          <AppTextInput
-            placeholder='Password'
-            secureTextEntry
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-            errorMessage={password === '' ? 'Password is required' : ''}
-          />
-          <AppTextInput
-            placeholder='Confirm Password'
-            secureTextEntry
-            value={confirmPassword}
-            onChangeText={(text) => setConfirmPassword(text)}
-            errorMessage={confirmPassword === '' ? 'Confirm Password is required' : ''}
-          />
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              backgroundColor: "rgba(173,216,230,0.3)",
+
+              borderRadius: 10,
+              justifyContent: "space-between",
+            }}
+          >
+
+            <TextInput
+              placeholderTextColor={"black"}
+              style={{
+                fontSize: 14,
+                paddingHorizontal: 20,
+                paddingVertical: 5,
+
+                borderRadius: 10,
+                marginVertical: 5,
+                fontWeight: "500",
+                color: "black",
+                width: '100%',
+              }}
+              value={emailAddress}
+              onChangeText={(text) => setEmailAddress(text.toLowerCase())}
+              placeholder="Email Address"
+            />
+
+          </View>
+
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              backgroundColor: "rgba(173,216,230,0.3)",
+
+              borderRadius: 10,
+              justifyContent: "space-between", marginVertical: 10
+            }}
+          >
+
+            <TextInput
+              placeholderTextColor={"black"}
+              style={{
+                fontSize: 14,
+                paddingHorizontal: 20,
+                paddingVertical: 5,
+
+                borderRadius: 10,
+                marginVertical: 5,
+                fontWeight: "500",
+                color: "black",
+                width: '100%',
+              }}
+              value={phone}
+              onChangeText={(text) => setPhone(text)}
+              placeholder="Phone"
+              keyboardType="numeric"
+
+            />
+
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              backgroundColor: "rgba(173,216,230,0.3)",
+
+              borderRadius: 10,
+              justifyContent: "space-between",
+              marginVertical: 10
+            }}
+          >
+
+            <TextInput
+              placeholderTextColor={"black"}
+              style={{
+                fontSize: 14,
+                paddingHorizontal: 20,
+                paddingVertical: 5,
+
+                borderRadius: 10,
+                marginVertical: 5,
+                fontWeight: "500",
+                color: "black",
+                width: '90%',
+              }}
+              secureTextEntry={isPasswordVisible}
+              value={password}
+              onChangeText={(text) => setPassword(text)}
+              placeholder="Password"
+            />
+            <TouchableOpacity onPress={togglePasswordVisibility}>
+              <Feather
+                name={isPasswordVisible ? "eye" : "eye-off"}
+                color="black"
+                size={20}
+                style={{ marginRight: 10 }}
+              />
+            </TouchableOpacity>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              backgroundColor: "rgba(173,216,230,0.3)",
+
+              borderRadius: 10,
+              justifyContent: "space-between",
+              marginVertical: 10, alignItems: 'center'
+            }}
+          >
+
+            <TextInput
+              placeholderTextColor={"black"}
+              style={{
+                fontSize: 14,
+                paddingHorizontal: 20,
+                paddingVertical: 5,
+
+                borderRadius: 10,
+                marginVertical: 5,
+                fontWeight: "500",
+                color: "black",
+                width: '90%',
+              }}
+              secureTextEntry={isConfirmPasswordVisible}
+              value={confirmPassword}
+              onChangeText={(text) => setConfirmPassword(text)}
+              placeholder="Confirm Password"
+            />
+            <TouchableOpacity onPress={toggleConfirmPasswordVisibility}>
+              <Feather
+                name={isConfirmPasswordVisible ? "eye" : "eye-off"}
+                color="black"
+                size={20}
+                style={{ marginRight: 10 }}
+              />
+            </TouchableOpacity>
+          </View>
+
           <View style={{ flexDirection: 'row' }}>
             <TouchableOpacity style={[styles.otpBtn, isSendButtonEnabled ? styles.enabledSendButton : styles.disabledSendButton]} onPress={handleSendOTP} disabled={!isSendButtonEnabled}>
               <Text style={{ color: 'white', textAlign: 'center', fontSize: 16 }}>{isResendEnabled ? 'Send otp' : 'Resend'}</Text>
@@ -189,14 +316,69 @@ const Register = () => {
               <Text style={{ color: 'black', fontSize: 16, marginLeft: 200 }}>{`(${timer}s)`}</Text>
             )}
           </View>
-          <AppTextInput
-            placeholder='Enter Otp'
-            value={otp}
-            onChangeText={(text) => setOtp(text)}
-          />
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              backgroundColor: "rgba(173,216,230,0.3)",
+              borderRadius: 10,
+              justifyContent: "space-between",
+            }}
+          >
 
-          <AppTextInput placeholder="Invite Code" value={invitationCode} onChangeText={(text) => setInvitationCode(text.toUpperCase())} />
-          {!isResetButtonEnabled ? <Text style={{ color: 'red' }}> * Please fill all Details</Text> : <></>}
+            <TextInput
+              placeholderTextColor={"black"}
+              style={{
+                fontSize: 14,
+                paddingHorizontal: 20,
+                paddingVertical: 5,
+                borderRadius: 10,
+                marginVertical: 5,
+                fontWeight: "500",
+                color: "black",
+                width: '100%',
+              }}
+              value={otp}
+              onChangeText={(text) => setOtp(text)}
+              placeholder="Enter Otp"
+              keyboardType="numeric"
+            />
+
+          </View>
+
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              backgroundColor: "rgba(173,216,230,0.3)",
+
+              borderRadius: 10,
+              justifyContent: "space-between", marginVertical: 10
+            }}
+          >
+
+            <TextInput
+              placeholderTextColor={"black"}
+              style={{
+                fontSize: 14,
+                paddingHorizontal: 20,
+                paddingVertical: 5,
+
+                borderRadius: 10,
+                marginVertical: 5,
+                fontWeight: "500",
+                color: "black",
+                width: '100%',
+              }}
+              value={invitationCode}
+              onChangeText={(text) => setInvitationCode(text.toUpperCase())}
+              placeholder="Invitation Code"
+            />
+
+          </View>
+          {(!isResetButtonEnabled && (
+            <Text style={{ color: 'red' }}> * Please fill all Details</Text>
+          ))}
         </View>
         <View>
         </View>
@@ -300,10 +482,10 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   enabledButton: {
-    backgroundColor: 'purple',
+    backgroundColor: 'blue',
   },
   disabledButton: {
-    backgroundColor: 'lightgray',
+    backgroundColor: '#ADD8E6',
   },
   modalContainer: {
     backgroundColor: "white",

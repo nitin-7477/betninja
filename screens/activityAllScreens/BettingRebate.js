@@ -105,13 +105,15 @@ const BettingRebate = () => {
 
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={styles.container1}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10 }}><TouchableOpacity
-        onPress={() => navigation.navigate('Activity')}
-        style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
-        <Ionicons name='return-up-back' color={'white'} size={30} />
-      </TouchableOpacity>
-        <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: 'black', marginLeft: 70 }}>Betting Rebate</Text></View>
+    <View style={styles.container1}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10 }}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Activity')}
+          style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
+          <Ionicons name='return-up-back' color={'white'} size={30} />
+        </TouchableOpacity>
+        <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: 'black', marginLeft: 70 }}>Betting Rebate</Text>
+      </View>
       <View style={{ height: SCREEN_HEIGHT * 0.45, width: '95%', alignSelf: 'center', backgroundColor: '#DCDCDC', marginTop: 10, borderRadius: 10, padding: 10, }}>
         <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 18 }}>All-Total Betting Rebate</Text>
         <View style={{ flexDirection: 'row', marginTop: 10, width: 130, height: 25, borderColor: 'purple', borderWidth: 0.2, justifyContent: 'space-around', alignItems: 'center' }}>
@@ -122,17 +124,17 @@ const BettingRebate = () => {
           ₹ {typeof userInformation === 'number' ? userInformation?.toFixed(2) : userInformation}
         </Text>
         <View style={{ height: '12%', width: '100%', backgroundColor: 'white', justifyContent: 'center', alignItems: 'left', borderRadius: 5, paddingHorizontal: 4 }}>
-          <Text style={{ color: 'black' }}>Upgrade VIP lavel to increase the rebate rebate</Text></View>
+          <Text style={{ color: 'black' }}>Upgrade VIP level to increase the rebate rate</Text>
+        </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: '20%', alignItems: 'center' }}>
           <View style={{ height: '80%', width: '45%', backgroundColor: 'white', justifyContent: 'center', borderRadius: 2, marginVertical: 10, paddingHorizontal: 10 }}>
             <Text style={{ color: 'black' }}>Today Rebate</Text>
             <Text style={{ color: 'red' }}>
               {typeof userInformation === 'number' ? userInformation.toFixed(2) : 'N/A'}
             </Text>
-
           </View>
           <View style={{ height: '80%', width: '45%', backgroundColor: 'white', justifyContent: 'center', borderRadius: 2, marginVertical: 10, paddingHorizontal: 10 }}>
-            <Text>Total Rebate</Text>
+            <Text style={{ color: 'black' }}>Total Rebate</Text>
             <Text style={{ color: 'red' }}>
               {rebateInfo?.totalAmount !== undefined && rebateInfo?.totalAmount !== null
                 ? rebateInfo?.totalAmount?.toFixed(2)
@@ -150,61 +152,63 @@ const BettingRebate = () => {
 
       <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 20, color: 'black', width: '95%', alignSelf: 'center', height: 35 }}>Rebate History</Text>
 
-      {rebateInfo.length !== 0 ? <FlatList
-        data={rebateInfo.data}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
+      {rebateInfo.length !== 0 ? (
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={rebateInfo.data}
 
-          <View style={styles.container}>
-            <View style={styles.cardContainer}>
-              <View style={styles.header}>
-                <TouchableOpacity style={styles.button}>
-                  <Text style={styles.buttonText}>{item.type}</Text>
-                </TouchableOpacity>
-                <Text style={{ color: 'black' }}>{new Date(item.updatedAt).toLocaleString()}</Text>
-                <Text style={styles.statusCompleted}>{item.status}</Text>
-              </View>
-
-              {/* Deposit History Card */}
-              <View style={styles.depositHistoryCard}>
-                <View style={styles.historyRow}>
-                  <Text style={styles.historyText}>Order No.</Text>
-                  <Text style={styles.historyAmount}>{item.orderNumber}</Text>
+          renderItem={({ item }) => (
+            <View style={styles.container}>
+              <View style={styles.cardContainer}>
+                <View style={styles.header}>
+                  <TouchableOpacity style={styles.button}>
+                    <Text style={styles.buttonText}>{item.type}</Text>
+                  </TouchableOpacity>
+                  <Text style={{ color: 'black' }}>{new Date(item.updatedAt).toLocaleString()}</Text>
+                  <Text style={styles.statusCompleted}>{item.status}</Text>
                 </View>
 
-                <View style={styles.historyRow}>
-                  <Text style={styles.historyText}>Status</Text>
-                  <Text style={styles.historyAmount}>{item.status}</Text>
-                </View>
+                {/* Deposit History Card */}
+                <View style={styles.depositHistoryCard}>
+                  <View style={styles.historyRow}>
+                    <Text style={styles.historyText}>Order No.</Text>
+                    <Text style={styles.historyAmount}>{item.orderNumber}</Text>
+                  </View>
 
-                <View style={styles.historyRow}>
-                  <Text style={styles.historyText}>Rebate Amount</Text>
-                  <Text style={styles.historyAmount}> ₹ {item.amount.toFixed(2)}</Text>
+                  <View style={styles.historyRow}>
+                    <Text style={styles.historyText}>Status</Text>
+                    <Text style={styles.historyAmount}>{item.status}</Text>
+                  </View>
 
-                </View>
+                  <View style={styles.historyRow}>
+                    <Text style={styles.historyText}>Rebate Amount</Text>
+                    <Text style={styles.historyAmount}> ₹ {item.amount.toFixed(2)}</Text>
+                  </View>
 
-                <View style={styles.historyRow}>
-                  <Text style={styles.historyText}>Transaction id</Text>
-                  <Text style={styles.historyAmount}>{item.transactionId}</Text>
+                  <View style={styles.historyRow}>
+                    <Text style={styles.historyText}>Transaction id</Text>
+                    <Text style={styles.historyAmount}>{item.transactionId}</Text>
+                  </View>
                 </View>
               </View>
             </View>
-          </View>
-        )}
-      /> : <View style={{ width: responsiveWidth(100), height: responsiveHeight(50), justifyContent: 'center', alignItems: 'center' }}>
-        <Image source={require('../../assets/noData.png')} style={{ height: 200, width: 200 }} />
-
-      </View>}
+          )}
+        />
+      ) : (
+        <View style={{ width: responsiveWidth(100), height: responsiveHeight(50), justifyContent: 'center', alignItems: 'center' }}>
+          <Image source={require('../../assets/noData.png')} style={{ height: 200, width: 200 }} />
+        </View>
+      )}
 
       <View style={{
         flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
         width: '90%', marginVertical: 20, alignSelf: 'center'
       }}>
         <Button title="Prev" onPress={onPrevPress} disabled={startIndex === 0} />
-        {/* <Text style={styles.pageIndicator}>{`Page ${Math.ceil((startIndex + 1) / itemsPerPage)} of ${totalPages}`}</Text> */}
         <Button title="Next" onPress={onNextPress} disabled={startIndex + itemsPerPage >= rebateInfo.length} />
       </View>
-    </ScrollView>
+    </View>
+
   )
 }
 
@@ -218,7 +222,7 @@ const styles = StyleSheet.create({
   },
   container: {
     height: SCREEN_HEIGHT * 0.24,
-    width: SCREEN_WIDTH * 0.9,
+    width: SCREEN_WIDTH * 0.95,
     alignSelf: 'center',
     backgroundColor: '#e1edf0',
     marginBottom: 10,
@@ -252,7 +256,7 @@ const styles = StyleSheet.create({
   },
   depositHistoryCard: {
     height: SCREEN_HEIGHT * 0.28,
-    width: SCREEN_WIDTH * 0.85,
+    width: SCREEN_WIDTH * 0.94,
     borderTopWidth: 0.4,
     borderColor: 'grey',
     borderRadius: 10,

@@ -97,7 +97,7 @@ const DepositeScreen = () => {
     if (isNaN(enteredAmount) || enteredAmount < 100) {
 
       setAmount(text);
-      // Alert.alert('Minimum 100 is required')
+    
     } else {
 
       setAmount(enteredAmount.toString());

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, FlatList } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, FlatList, ActivityIndicator } from 'react-native'
 import React from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../components/Constants/Screen'
 import { Colors } from '../../components/Constants/Colors'
@@ -10,37 +10,33 @@ import { useNavigation } from "@react-navigation/native";
 import { responsiveWidth, responsiveHeight } from 'react-native-responsive-dimensions'
 
 const SubOrdinate = () => {
-
   const navigation = useNavigation();
-  const [downline, setDownline] = useState([])
+  const [downline, setDownline] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-
+  const [loading, setLoading] = useState(false); // Added loading state
 
   const fetchCommissionData = async () => {
     try {
-      // setLoading(true)
+      setLoading(true)
       const token = await AsyncStorage.getItem('token');
       if (!token) {
-        navigation.navigate('Login')
+        navigation.navigate('Login');
         return;
       }
 
-
       var result = await axios.get(`${process.env.SERVERURL}/api/commission/commission`, {
-
         headers: {
-          "Authorization": JSON.parse(token),
+          Authorization: JSON.parse(token),
         },
-      })
-      setDownline(result.data.data.downline)
+      });
 
-
-
+      setDownline(result.data.data.downline);
     } catch (e) {
-      console.log("ERROR IN FETCHING for subordinate", e);
+      console.log('ERROR IN FETCHING for subordinate', e);
+    } finally {
+      setLoading(false); // Set loading to false after data is fetched
     }
-
-  }
+  };
 
   useEffect(() => {
     fetchCommissionData();
@@ -52,40 +48,42 @@ const SubOrdinate = () => {
 
   const visibleData = downline.slice(startIndex, endIndex);
 
-
-
-
-  console.log("This is downline data", downline);
+  console.log('This is downline data', downline);
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-      <View style={{ width: responsiveWidth(100), backgroundColor: 'white', height: responsiveHeight(6), alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10 }}>
-        <AntDesign name='left' size={20} color={'black'} style={{ fontWeight: 'bold' }} />
-        <Text style={{ marginLeft: 30, fontSize: 16, color: 'black', fontWeight: 'bold' }}>Subordinate Data</Text>
+    <View style={styles.container}>
+      <View style={{ flex: 1 }}>
+        <View style={{ width: responsiveWidth(100), backgroundColor: 'white', height: responsiveHeight(6), alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10 }}>
+          <AntDesign name='left' size={20} color={'black'} style={{ fontWeight: 'bold' }} />
+          <Text style={{ marginLeft: 30, fontSize: 16, color: 'black', fontWeight: 'bold' }}>Subordinate Data</Text>
+        </View>
+
+        {loading ? (
+          <ActivityIndicator size={100} color="gold" style={{ alignSelf: 'center', marginTop: 50 }} />
+        ) : (
+          <FlatList
+            data={visibleData}
+            renderItem={({ item }) => (
+              <View style={{ width: responsiveWidth(97), height: 'auto', backgroundColor: 'white', marginVertical: 2, alignSelf: 'center', borderRadius: 5, paddingHorizontal: 6, elevation: 1, paddingVertical: 5 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 2 }}>
+                  <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 14 }}>User Name</Text>
+                  <Text style={{ color: 'black' }}>{item?.userId?.username}</Text>
+                </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 2 }}>
+                  <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 14 }}>Email ID</Text>
+                  <Text style={{ color: 'black' }}>{item?.userId?.email}</Text>
+                </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 2 }}>
+                  <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 14 }}>Join Date</Text>
+                  <Text style={{ color: 'black' }}>{new Date(item.joinDate).toLocaleString()}</Text>
+                </View>
+              </View>
+            )}
+          />
+        )}
       </View>
 
-      <FlatList data={visibleData} renderItem={({ item }) => {
-        return <View style={{ width: responsiveWidth(97), height: 'auto', backgroundColor: 'white', marginVertical: 2, alignSelf: 'center', borderRadius: 5, paddingHorizontal: 6, elevation: 1, paddingVertical: 5 }}>
-
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 2 }}>
-            <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 14 }}>User Name</Text>
-            <Text style={{ color: 'black' }}>{item?.userId?.username}</Text>
-          </View>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 2 }}>
-            <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 14 }}>Email ID</Text>
-            <Text style={{ color: 'black' }}>{item?.userId?.email}</Text>
-          </View>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 2 }}>
-            <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 14 }}>Join Date</Text>
-            <Text style={{ color: 'black' }}>{new Date(item.joinDate).toLocaleString()}</Text>
-          </View>
-
-
-
-        </View>
-      }} />
-
-      <View style={styles.paginationContainer} >
+      <View style={styles.paginationContainer}>
         <TouchableOpacity
           style={styles.paginationButton}
           onPress={() => setCurrentPage((prevPage) => Math.max(prevPage - 1, 1))}
@@ -93,9 +91,7 @@ const SubOrdinate = () => {
         >
           <Text style={styles.paginationButtonText}>Prev</Text>
         </TouchableOpacity>
-
         <Text style={styles.paginationText}>{currentPage}</Text>
-
         <TouchableOpacity
           style={styles.paginationButton}
           onPress={() => setCurrentPage((prevPage) => prevPage + 1)}
@@ -104,10 +100,9 @@ const SubOrdinate = () => {
           <Text style={styles.paginationButtonText}>Next</Text>
         </TouchableOpacity>
       </View>
-
-    </ScrollView>
-  )
-}
+    </View>
+  );
+};
 
 export default SubOrdinate
 
@@ -118,24 +113,22 @@ const styles = StyleSheet.create({
   },
   paginationContainer: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-    // backgroundColor: 'red',
-    position: 'relative',
-    bottom: 0
-
+    height: responsiveHeight(8), // Adjust the height as needed
+    backgroundColor: 'white',
+    elevation: 5,
   },
   paginationButton: {
     padding: 10,
     marginHorizontal: 10,
-    backgroundColor: 'lightgrey',
+    backgroundColor: 'green',
     borderRadius: 5,
   },
   paginationButtonText: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: 'white'
   },
   paginationText: {
     fontSize: 16,

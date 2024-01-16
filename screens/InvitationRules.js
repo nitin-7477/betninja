@@ -1,8 +1,12 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
+import AntDesign from "react-native-vector-icons/AntDesign"
+import { useNavigation } from "@react-navigation/native";
 
 const InvitationRules = () => {
+  const navigation = useNavigation();
+
   const tableData = [
     { lvl: 0, teamNumber: 0, teamBettingPer: 0 },
     { lvl: 1, teamNumber: 3, teamBettingPer: 0.07 },
@@ -21,8 +25,11 @@ const InvitationRules = () => {
   ];
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-      <View style={{ marginBottom: 20, backgroundColor: 'white', elevation: 5, width: '100%', height: '5%', justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ fontSize: 16, color: 'black', fontWeight: 'bold', }}>InvitationRules</Text>
+      <View style={{ width: responsiveWidth(100), backgroundColor: 'white', height: responsiveHeight(6), alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black' }}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <AntDesign name='left' size={20} color={'black'} style={{ fontWeight: 'bold' }} />
+        </TouchableOpacity>
+        <Text style={{ marginLeft: 30, fontSize: 16, color: 'black', fontWeight: 'bold' }}>Invitaion Rules</Text>
       </View>
       <View style={{ width: '95%', alignItems: 'center' }}>
         <Text style={{ fontSize: 14, fontWeight: 'bold', color: 'black' }}>01</Text>

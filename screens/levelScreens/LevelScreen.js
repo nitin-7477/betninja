@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, ImageBackground, Dimensions } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, ImageBackground, Dimensions, } from 'react-native'
 import React from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../components/Constants/Screen'
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -9,7 +9,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Progress from 'react-native-progress';
-
+import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
+import { FlatList } from 'react-native';
 const LevelScreen = () => {
   const navigation = useNavigation()
   const [selectedButton, setSelectedButton] = useState(1)
@@ -21,6 +22,10 @@ const LevelScreen = () => {
   const [info, setInfo] = useState([])
   const [tempData, setTempData] = useState({ levelup: 50, monthly: 25, exp: 3000 })
   const [userLevel, setUserLevel] = useState('')
+  const [progress1, setProgress1] = useState(0)
+  const [progress2, setProgress2] = useState(3000)
+  const [rebateInfo, setRebateInfo] = useState([])
+
   const [fixedLevelData, setFixedLevelData] = useState([
     { levelup: 50, monthly: 25, exp: 3000 },
     { levelup: 150, monthly: 75, exp: 30000 },
@@ -52,7 +57,7 @@ const LevelScreen = () => {
         setUserInformation(response.data.user_level);
         setInfo(response.data)
         setCurrentLevel(response.data.user_level.levels["1"])
-
+        setProgress1(response.data.user_level.exp)
 
 
       } catch (error) {
@@ -63,16 +68,7 @@ const LevelScreen = () => {
     fetchData();
   }, []);
 
-  // console.log(currentLevel.level_reward);
-  // const isDisabled = currentLevel.level_reward
-  // const progress1 = userInformation.exp;
-  // const progress2 = tempData.exp;
-  // const totalProgress = progress1 / progress2;
 
-
-  // console.log(isDisabled);
-
-  // console.log(userInformation);
 
 
   const handleHistory = () => {
@@ -94,17 +90,56 @@ const LevelScreen = () => {
       setCurrentPage(page);
       setCurrentLevel(userInformation.levels[`${page + 1}`])
       setTempData(fixedLevelData[page]);
+      setProgress2(fixedLevelData[page].exp)
+
 
     }
     setCurrentPage(page);
     setCurrentLevel(userInformation.levels[`${page + 1}`])
     setTempData(fixedLevelData[page])
+    setProgress2(fixedLevelData[page].exp)
+
   };
 
-  const handleLevelUp = () => {
+  useEffect(() => {
+    const handleOneClickRebateGetRequest = async () => {
+      try {
+        console.log("Hi Nitin");
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios.get(
+          `${process.env.SERVERURL}/api/deposit/deposit_rebate`,
 
-  }
+          {
+            headers: {
+              Authorization: token ? JSON.parse(token) : null,
+            },
+          }
+        );
 
+        console.log("This is data of history of rebate", response.data);
+        setRebateInfo(response.data)
+      } catch (e) {
+        console.log("HI Errors for Betting Rebate", e);
+      }
+    };
+    handleOneClickRebateGetRequest()
+  }, [])
+
+
+  // console.log(currentLevel.level_reward);
+  const isDisabled = currentLevel.level_reward && currentLevel.level_reward_actived
+  // console.log(currentLevel.level_reward && currentLevel.level_reward_actived);
+
+  // const progress1 = userInformation?.exp;
+  // const progress2 = tempData?.exp;
+
+
+  const totalProgress = progress1 / progress2;
+
+
+  // console.log(isDisabled);
+
+  // console.log(userInformation);
 
 
   return (
@@ -123,7 +158,7 @@ const LevelScreen = () => {
         {/* *******************This is for Avatar and Level check*************** */}
         <View style={{ height: SCREEN_HEIGHT * 0.1, width: SCREEN_WIDTH * 0.97, alignSelf: 'center', flexDirection: 'row', alignItems: 'center' }}>
           <View style={{ width: 120 }}><Image source={require('../../assets/player.png')} /></View>
-          <View><Text style={{ fontWeight: 'bold', color: 'black' }}>LEVEL {userLevel}</Text><Text style={{ fontSize: 18, fontWeight: '600', color: 'white' }}>{info.username}</Text></View>
+          <View><Text style={{ fontWeight: 'bold', color: 'black' }}>LEVEL {userInformation.level}</Text><Text style={{ fontSize: 18, fontWeight: '600', color: 'white' }}>{info.username}</Text></View>
         </View>
         <View style={{ height: 70, width: SCREEN_WIDTH * 1, justifyContent: 'space-around', alignItems: 'center', flexDirection: 'row', marginTop: 10 }}>
           <View style={{ height: 60, width: '45%', backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', borderRadius: 10, elevation: 2 }}>
@@ -167,7 +202,7 @@ const LevelScreen = () => {
               <View style={{ borderWidth: 1, padding: 2, width: 80, borderColor: 'white', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 10 }}>
                 <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>Bet ₹1=1EXP</Text>
               </View>
-              {/* <Progress.Bar progress={totalProgress} width={320} color='green' /> */}
+              <Progress.Bar progress={totalProgress} width={320} color='green' />
 
             </View>
 
@@ -210,7 +245,7 @@ const LevelScreen = () => {
               <View style={{ borderWidth: 1, padding: 2, width: 80, borderColor: 'white', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 10 }}>
                 <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>Bet ₹1=1EXP</Text>
               </View>
-              {/* <Progress.Bar progress={totalProgress} width={320} color='green' /> */}
+              <Progress.Bar progress={totalProgress} width={320} color='green' />
 
             </View>
             <View style={{ width: '35%', alignItems: 'center', height: '70%', }}>
@@ -250,7 +285,7 @@ const LevelScreen = () => {
               <View style={{ borderWidth: 1, padding: 2, width: 80, borderColor: 'white', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 10 }}>
                 <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>Bet ₹1=1EXP</Text>
               </View>
-              {/* <Progress.Bar progress={totalProgress} width={320} color='green' /> */}
+              <Progress.Bar progress={totalProgress} width={320} color='green' />
 
             </View>
             <View style={{ width: '35%', alignItems: 'center', height: '70%', }}>
@@ -291,7 +326,7 @@ const LevelScreen = () => {
               <View style={{ borderWidth: 1, padding: 2, width: 80, borderColor: 'white', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 10 }}>
                 <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>Bet ₹1=1EXP</Text>
               </View>
-              {/* <Progress.Bar progress={totalProgress} width={320} color='green' /> */}
+              <Progress.Bar progress={totalProgress} width={320} color='green' />
 
             </View>
             <View style={{ width: '35%', alignItems: 'center', height: '70%', }}>
@@ -331,7 +366,7 @@ const LevelScreen = () => {
               <View style={{ borderWidth: 1, padding: 2, width: 80, borderColor: 'white', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 15 }}>
                 <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>Bet ₹1=1EXP</Text>
               </View>
-              {/* <Progress.Bar progress={totalProgress} width={320} color='green' /> */}
+              <Progress.Bar progress={totalProgress} width={320} color='green' />
 
             </View>
             <View style={{ width: '35%', alignItems: 'center', height: '70%', }}>
@@ -371,7 +406,7 @@ const LevelScreen = () => {
               <View style={{ borderWidth: 1, padding: 2, width: 80, borderColor: 'white', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 10 }}>
                 <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>Bet ₹1=1EXP</Text>
               </View>
-              {/* <Progress.Bar progress={totalProgress} width={320} color='green' /> */}
+              <Progress.Bar progress={totalProgress} width={320} color='green' />
 
             </View>
             <View style={{ width: '35%', alignItems: 'center', height: '70%', }}>
@@ -411,7 +446,7 @@ const LevelScreen = () => {
               <View style={{ borderWidth: 1, padding: 2, width: 80, borderColor: 'white', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 10 }}>
                 <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>Bet ₹1=1EXP</Text>
               </View>
-              {/* <Progress.Bar progress={totalProgress} width={320} color='green' /> */}
+              <Progress.Bar progress={totalProgress} width={320} color='green' />
 
             </View>
             <View style={{ width: '35%', alignItems: 'center', height: '70%', }}>
@@ -452,7 +487,7 @@ const LevelScreen = () => {
               <View style={{ borderWidth: 1, padding: 2, width: 80, borderColor: 'white', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 10 }}>
                 <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>Bet ₹1=1EXP</Text>
               </View>
-              {/* <Progress.Bar progress={totalProgress} width={320} color='green' /> */}
+              <Progress.Bar progress={totalProgress} width={320} color='green' />
 
             </View>
             <View style={{ width: '35%', alignItems: 'center', height: '70%', }}>
@@ -492,7 +527,7 @@ const LevelScreen = () => {
               <View style={{ borderWidth: 1, padding: 2, width: 80, borderColor: 'white', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 10 }}>
                 <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>Bet ₹1=1EXP</Text>
               </View>
-              {/* <Progress.Bar progress={totalProgress} width={320} color='green' /> */}
+              <Progress.Bar progress={totalProgress} width={320} color='green' />
 
             </View>
             <View style={{ width: '35%', alignItems: 'center', height: '70%', }}>
@@ -532,7 +567,7 @@ const LevelScreen = () => {
               <View style={{ borderWidth: 1, padding: 2, width: 80, borderColor: 'white', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 10 }}>
                 <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>Bet ₹1=1EXP</Text>
               </View>
-              {/* <Progress.Bar progress={totalProgress} width={320} color='green' /> */}
+              <Progress.Bar progress={totalProgress} width={320} color='green' />
 
             </View>
             <View style={{ width: '35%', alignItems: 'center', height: '70%', }}>
@@ -569,8 +604,8 @@ const LevelScreen = () => {
 
           <View style={{ width: '20%' }}>
             <TouchableOpacity
-              // disabled={!isDisabled}
-              onPress={handleLevelUp}
+              disabled={isDisabled}
+              // onPress={handleLevelUp}
               style={{ flexDirection: 'row', height: '15', width: '100%', alignItems: 'center', borderColor: 'red', borderWidth: 0.5, padding: 2, justifyContent: 'center', borderRadius: 10, marginBottom: 5 }}>
               <Image source={require('../../assets/vipWallet.png')} style={{ height: 15, width: 15, marginRight: 5 }} />
               <Text>{tempData.levelup}</Text>
@@ -631,28 +666,85 @@ const LevelScreen = () => {
       {
         showHistory ? <>
           <View style={{ flex: 1, marginBottom: 20 }}>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 20, color: 'black', width: '95%', alignSelf: 'center', height: 35 }}>Rebate History</Text>
 
-            {/* <View style={styles.smallCard}>
-              <Text style={{ color: 'orange', fontWeight: '500', fontSize: 16, marginVertical: 5 }}>Level maintenance</Text>
-              <Text style={{ color: '#3a9fbf', marginBottom: 5 }}>Level maintenance status not complete [0% complete]</Text>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text>2023-12-05 06:40:05</Text>
-                <Text>-250000 EXP</Text>
+            {rebateInfo.length !== 0 ? <FlatList
+              data={rebateInfo.data}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
 
-              </View>
-            </View> */}
+                <View style={styles.container1}>
+                  <View style={styles.cardContainer}>
+                    <View style={styles.header}>
+                      <TouchableOpacity style={styles.button}>
+                        <Text style={styles.buttonText}>{item.type}</Text>
+                      </TouchableOpacity>
+                      <Text style={{ color: 'black' }}>{new Date(item.updatedAt).toLocaleString()}</Text>
+                      <Text style={styles.statusCompleted}>{item.status}</Text>
+                    </View>
+
+                    {/* Deposit History Card */}
+                    <View style={styles.depositHistoryCard}>
+                      <View style={styles.historyRow}>
+                        <Text style={styles.historyText}>Order No.</Text>
+                        <Text style={styles.historyAmount}>{item.orderNumber}</Text>
+                      </View>
+
+                      <View style={styles.historyRow}>
+                        <Text style={styles.historyText}>Status</Text>
+                        <Text style={styles.historyAmount}>{item.status}</Text>
+                      </View>
+
+                      <View style={styles.historyRow}>
+                        <Text style={styles.historyText}>Rebate Amount</Text>
+                        <Text style={styles.historyAmount}> ₹ {item.amount.toFixed(2)}</Text>
+
+                      </View>
+
+                      <View style={styles.historyRow}>
+                        <Text style={styles.historyText}>Transaction id</Text>
+                        <Text style={styles.historyAmount}>{item.transactionId}</Text>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              )}
+            /> : <View style={{ width: responsiveWidth(100), height: responsiveHeight(50), justifyContent: 'center', alignItems: 'center' }}>
+              <Image source={require('../../assets/noData.png')} style={{ height: 200, width: 200 }} />
+
+            </View>}
 
 
-            {/* <TouchableOpacity
-              onPress={() => alert('View ALl')}
-              style={{ height: 45, width: SCREEN_WIDTH * 0.95, backgroundColor: 'red', alignSelf: 'center', marginVertical: 20, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ fontSize: 18, fontWeight: '800', color: 'white' }}>View All</Text>
-            </TouchableOpacity> */}
           </View>
         </> : <>
-          <View style={{ height: SCREEN_HEIGHT * 1, marginBottom: 20 }}>
+          <View style={{ height: 'auto', marginBottom: 20, width: '100%', alignSelf: 'center' }}>
 
-            <Text>These are the rules</Text>
+            <Text style={{ textAlign: 'center', color: 'red', fontSize: 18, fontWeight: 'bold', marginVertical: 10 }}>Level Privileges</Text>
+            <Text style={{ textAlign: 'center', color: 'black', fontSize: 14, fontWeight: '500', marginVertical: 1 }}>VIP Rule Description</Text>
+            <View style={{ height: '100%', width: '95%', backgroundColor: 'white', alignSelf: 'center', borderRadius: 7, padding: 5 }}>
+              <Text style={{ color: 'red', fontSize: 14, fontWeight: 'bold', marginVertical: 5 }}>1. Upgrade Standard</Text>
+              <Text>The VIP member's experience points valid bet amount that meet the requirement for the corresponding rank will be promoted to the corresponding VIP Level, the Member's VIP Data static period  starts from 00:00:00 days VIP system launched. VIP level calculation is refreshed every 10 minutes! The corresponding experience level is calculated according to valid odds 1:1!</Text>
+              <Text style={{ color: 'red', fontSize: 14, fontWeight: 'bold', marginVertical: 5 }}>2. Upgrade order</Text>
+              <Text>The VIP level that meets the corresponding requirement can be promoted to one level everyday, but the VIP level can not be promoted by leapfrogging</Text>
+
+              <Text style={{ color: 'red', fontSize: 14, fontWeight: 'bold', marginVertical: 5 }}>3. Level Maintainance</Text>
+              <Text>VIP members need to complete the maintainance requirement of the corresponding level within 30 days   after the "VIP LEVEL CHANGE", if the promotion is completed during this period , the maintainance requirement will be calculated according to the current level </Text>
+
+              <Text style={{ color: 'red', fontSize: 14, fontWeight: 'bold', marginVertical: 5 }}>4. Downgrade Standard</Text>
+              <Text>If a VIP member fails to complete the corresponding level maintainance requirement  within 30 days , the system will automatically deduct the experience point corresponding to the level. If the experience points are sufficient. The level will be downgraded ,and the corresponding discounts will be adjusted to the downgraded level accordingly</Text>
+
+              <Text style={{ color: 'red', fontSize: 14, fontWeight: 'bold', marginVertical: 5 }}>5. Upgrade Bonus</Text>
+              <Text>The upgrage benefits can be claimed on the VIP pages after the member reaches the VIP membership level and each vip member can only get the upgrade reward of each level once   </Text>
+
+              <Text style={{ color: 'red', fontSize: 14, fontWeight: 'bold', marginVertical: 5 }}>6. Monthly Reward</Text>
+              <Text>VIP members can earn the highest level of VIP rewards once a month. Can only be recieved once a month. Prizes can not be accumulated. And any unclaimed rewards will be refreshed on the next settlement day. When reciving the highest level of monthly rewards earned in this month will be deducted e.g. when VIP 1 earns 500 and upgrade to VIP 2 to recieve monthly rewards 500 will be deducted.</Text>
+
+              <Text style={{ color: 'red', fontSize: 14, fontWeight: 'bold', marginVertical: 5 }}>7.Real Time Rebate</Text>
+              <Text>The higher the VIP level , the higher the return rate ,all the games are calculated in real time and can be self rewarded! </Text>
+
+              <Text style={{ color: 'red', fontSize: 14, fontWeight: 'bold', marginVertical: 5 }}>8. Safe</Text>
+              <Text>VIP member who have reached the corresponding level will get additional benefits on safe deposit based on the member's VIP level </Text>
+            </View>
           </View>
 
         </>
@@ -668,13 +760,69 @@ export default LevelScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 5,
+
     alignSelf: 'center'
 
   }, smallCard: { height: SCREEN_HEIGHT * 0.12, width: SCREEN_WIDTH * 0.95, alignSelf: 'center', backgroundColor: 'white', elevation: 1, justifyContent: 'center', padding: 10, marginBottom: 10 },
   vipCard: {
     borderRadius: 10,
-    height: 180, width: 340,
-    backgroundColor: 'blue', marginVertical: 10, padding: 5, alignSelf: 'center', marginHorizontal: 4
-  }
+    height: responsiveHeight(25), width: responsiveWidth(97),
+    marginVertical: 10, padding: 5, alignSelf: 'center',
+  }, container1: {
+    height: SCREEN_HEIGHT * 0.24,
+    width: SCREEN_WIDTH * 0.95,
+    alignSelf: 'center',
+    backgroundColor: '#e1edf0',
+    marginBottom: 10,
+    borderRadius: 10,
+    padding: 10,
+  },
+  cardContainer: {
+    flex: 1,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+    justifyContent: 'space-between',
+  },
+  button: {
+    backgroundColor: '#50C878',
+    alignItems: 'center',
+    width: SCREEN_WIDTH * 0.25,
+    paddingVertical: 5,
+    borderRadius: 7,
+  },
+  buttonText: {
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  statusCompleted: {
+    marginLeft: 10,
+    fontSize: 16,
+    color: 'green',
+  },
+  depositHistoryCard: {
+    height: SCREEN_HEIGHT * 0.28,
+    width: SCREEN_WIDTH * 0.94,
+    borderTopWidth: 0.4,
+    borderColor: 'grey',
+    borderRadius: 10,
+    padding: 10,
+  },
+  historyRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginVertical: 5,
+  },
+  historyText: {
+    fontSize: 15,
+    color: 'black',
+    fontWeight: 'bold'
+  },
+  historyAmount: {
+    color: 'black',
+    fontSize: 14,
+  },
 })

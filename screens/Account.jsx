@@ -149,7 +149,7 @@ const Account = () => {
         <TouchableOpacity
           style={{ width: 80, height: 35, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center', borderRadius: 10, elevation: 10 }}
           onPress={() => navigation.navigate('LevelScreen')}>
-          <Text style={styles.level}>Level: {userInformation?.level}</Text>
+          <Text style={styles.level}>Level: {userInformation?.user_level?.level}</Text>
         </TouchableOpacity>
       </View>
 
@@ -228,8 +228,9 @@ const Account = () => {
       </View>
 
 
+      <Text style={styles.sectionTitle}>Service Center</Text>
+
       <View style={styles.serviceItems}>
-        <Text style={styles.serviceTitle}>Service Center</Text>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10 }}>
           <TouchableOpacity
             onPress={() => navigation.navigate("Setting")}
@@ -370,7 +371,9 @@ const styles = {
   sectionTitle: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: 'black'
+    color: 'black',
+    marginLeft: 10,
+    marginVertical: 5
   },
   serviceTitle: {
     fontSize: 20,

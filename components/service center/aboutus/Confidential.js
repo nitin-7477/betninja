@@ -46,13 +46,13 @@ const Confidential = () => {
         </Text>
         <Text style={{ marginLeft: 10, color: 'grey', backgroundColor: '#fafafa', padding: 5, width: responsiveWidth(90), alignSelf: 'center', marginVertical: 5 }}>
           <Text style={{ color: 'grey', fontWeight: 'bold' }}>Company</Text> (referred to as either "the Company", "We", "Us" or "Our" in this Agreement) refers
-          to <Text style={{ color: 'blue', }}>BigMumbai.com.</Text>
+          to <Text style={{ color: 'blue', }}>Bet Ninja.com.</Text>
         </Text>
         <Text style={{ marginLeft: 10, color: 'grey', backgroundColor: '#fafafa', padding: 5, width: responsiveWidth(90), alignSelf: 'center', marginVertical: 5 }}>
           <Text style={{ color: 'black', fontWeight: 'bold' }}>Affiliate</Text> Affiliate means an entity that controls. is controlled by or is under common control with a party, where "control" means ownership of 50% or more of the shares, equity interest or other securities entitled to vote for election of directors or other managing authority.
         </Text>
         <Text style={{ marginLeft: 10, color: 'grey', backgroundColor: '#fafafa', padding: 5, width: responsiveWidth(90), alignSelf: 'center', marginVertical: 5 }}>
-          <Text style={{ color: 'black', fontWeight: 'bold' }}>Account</Text>  means a unique account created for You to access our Service or parts of our Service.Website refers to BigMumbai.com, accessible from BigMumbai.com
+          <Text style={{ color: 'black', fontWeight: 'bold' }}>Account</Text>  means a unique account created for You to access our Service or parts of our Service.Website refers to Bet Ninja.com, accessible from Bet Ninja.com
           Service refers to the Website.
         </Text>
         <Text style={{ marginLeft: 10, color: 'grey', backgroundColor: '#fafafa', padding: 5, width: responsiveWidth(90), alignSelf: 'center', marginVertical: 5 }}>
@@ -221,7 +221,7 @@ const Confidential = () => {
           can contact us:
 
         </Text>
-        <Text style={{ marginVertical: 10 }}> By visiting this page on our website:<Text style={{ color: 'blue' }}>BigMumbai.com</Text></Text>
+        <Text style={{ marginVertical: 10 }}> By visiting this page on our website:<Text style={{ color: 'blue' }}>Bet Ninja.com</Text></Text>
       </View>
     </ScrollView>
   )

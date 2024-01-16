@@ -71,10 +71,13 @@ export default function App() {
         {isFirstLaunch && (
           <Stack.Screen options={{ headerShown: false }} name="OnboardingScreen" component={OnboardingScreen} />
         )}
-
         <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
-        <Stack.Screen options={{ headerShown: false }} name="InvitationRules" component={InvitationRules} />
+        <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
         <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
+        <Stack.Screen options={{ headerShown: false }} name="LevelScreen" component={LevelScreen} />
+
+
+        <Stack.Screen options={{ headerShown: false }} name="InvitationRules" component={InvitationRules} />
         <Stack.Screen name="GameStats" options={{ headerShown: false }} component={GameStats} />
 
         <Stack.Screen options={{ headerShown: false }} name="Gamescreen" component={Gamescreen} />
@@ -83,8 +86,6 @@ export default function App() {
         <Stack.Screen name="WithdrawHistoryScreen" options={{ headerShown: false }} component={WithdrawHistoryScreen} />
         <Stack.Screen options={{ headerShown: false }} name="CommissionDetails" component={CommissionDetails} />
 
-        <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
-        <Stack.Screen options={{ headerShown: false }} name="LevelScreen" component={LevelScreen} />
 
         <Stack.Screen options={{ headerShown: false }} name="AttendanceBonus" component={AttendanceBonus} />
         <Stack.Screen options={{ headerShown: false }} name="QrScanner" component={QrScanner} />

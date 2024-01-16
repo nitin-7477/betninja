@@ -104,12 +104,7 @@ const Promotion = () => {
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
         <StatusBar style='dark' />
-        {/* <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, padding: 7 }}><TouchableOpacity
-          onPress={() => navigation.navigate('Home')}
-          style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
-          <Ionicons name='return-up-back' color={'white'} size={30} />
-        </TouchableOpacity>
-          <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.purple, marginLeft: 30 }}>Promotion</Text></View> */}
+
 
         <View style={{ height: responsiveHeight(37), width: responsiveWidth(100), backgroundColor: '#d9ad82', }}>
           <View >
@@ -279,7 +274,7 @@ const Promotion = () => {
         </View>
 
         <View style={styles.tile1}>
-          <TouchableOpacity style={styles.tile2}>
+          <TouchableOpacity onPress={() => navigation.navigate('InvitationRules')} style={styles.tile2}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Ionicons name='person' size={22} color={'black'} />
               <Text style={{ marginLeft: 4, fontWeight: 500, color: 'black' }}>Invitation Rules</Text>
@@ -310,7 +305,7 @@ const Promotion = () => {
           <View style={{ flexDirection: 'row', marginVertical: 10 }}>
             <View style={{ width: responsiveWidth(46), height: responsiveHeight(10), justifyContent: 'center', borderRightColor: 'grey', borderRightWidth: 1 }}>
               <Text style={{ textAlign: 'center', color: 'green' }}>0</Text>
-              <Text style={{ textAlign: 'center', color: 'grey', fontSize: 16 }}>This Week</Text>
+              <Text style={{ textAlign: 'center', color: 'grey', fontSize: 14 }}>This Week</Text>
 
             </View>
             <View style={{ width: responsiveWidth(46), height: responsiveHeight(10), justifyContent: 'center' }}>
@@ -318,18 +313,18 @@ const Promotion = () => {
                 {commission?.total_commission > 0 ? commission?.total_commission.toFixed(2) : '0'}
               </Text>
 
-              <Text style={{ textAlign: 'center', color: 'grey', fontSize: 16 }}>Total Commission</Text>
+              <Text style={{ textAlign: 'center', color: 'grey', fontSize: 14 }}>Total Commission</Text>
             </View>
           </View>
 
           <View style={{ flexDirection: 'row', marginVertical: 10 }}>
             <View style={{ width: responsiveWidth(46), height: responsiveHeight(12), justifyContent: 'center', }}>
               <Text style={{ textAlign: 'center', color: 'green' }}> {commission?.direct?.number_of_register}</Text>
-              <Text style={{ textAlign: 'center', color: 'grey', fontSize: 16 }}>Direct Subordinate</Text>
+              <Text style={{ textAlign: 'center', color: 'grey', fontSize: 14 }}>Direct Subordinate</Text>
             </View>
             <View style={{ width: responsiveWidth(46), height: responsiveHeight(12), justifyContent: 'center', borderLeftWidth: 1, borderLeftColor: 'grey' }}>
               <Text style={{ textAlign: 'center', color: 'green' }}>{totalRegisterCount}</Text>
-              <Text style={{ textAlign: 'center', color: 'grey', fontSize: 16 }}>Total number of Subordinate in the team</Text>
+              <Text style={{ textAlign: 'center', color: 'grey', fontSize: 14 }}>Total number of Subordinate in the team</Text>
             </View>
 
           </View>

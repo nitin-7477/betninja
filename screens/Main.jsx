@@ -67,27 +67,7 @@ export default function Main() {
       name: 'JackpotJester', amount: '₹500', game: 'rapid fire',
       image: require('../assets/player.png')
     },
-    {
-      name: 'Gambler', amount: '₹700', game: 'win 1 min',
-      image: require('../assets/player.png')
-    },
-    {
-      name: 'Adventurer', amount: '₹700', game: 'win 3 min',
-      image: require('../assets/player.png')
-    },
-    {
-      name: 'VelvetVegas', amount: '₹500', game: 'win 3 min',
-      image: require('../assets/player.png')
-    },
-    {
-      name: 'LuckChaser', amount: '₹1000', game: 'win 3 min',
-      image: require('../assets/player.png')
-    },
-    {
-      name: 'FortuneSeeker', amount: '₹3000', game: 'win 5 min',
-      image: require('../assets/player.png')
-    },
-    // Add more recent winners data
+
   ];
 
   const top10ListsData = [
@@ -140,6 +120,7 @@ export default function Main() {
 
 
   const renderGameIcon = ({ item, index }) => (
+
     <TouchableOpacity style={styles.gameIconContainer}
       onPress={() => handleJumpToGameScreen(index)}>
 
@@ -174,7 +155,7 @@ export default function Main() {
 
       {/* Information Section */}
       <View style={styles.informationSection}>
-        <View style={{ width: SCREEN_WIDTH * 0.75, }}>
+        <View style={{ width: SCREEN_WIDTH * 0.75 }}>
           <MessageComponent /></View>
         <TouchableOpacity
           onPress={() => navigation.navigate('NotificationFile')}
@@ -256,7 +237,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: 'center',
     width: SCREEN_WIDTH * 1,
-    // marginBottom: 80
+
   },
   backgroundImage: {
     width: Dimensions.get('window').width,
@@ -284,10 +265,12 @@ const styles = StyleSheet.create({
     marginVertical: 10
   },
   iconSection: {
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
     padding: 10,
     margin: 10,
     borderRadius: 10,
+    width: '100%',
+    alignSelf: 'center',
   },
   iconSectionTitle: {
     color: 'white',
@@ -297,10 +280,11 @@ const styles = StyleSheet.create({
   },
   gameIconContainer: {
     alignItems: 'center',
-    margin: 7,
+    justifyContent: 'center',
+    margin: 5,
     backgroundColor: Colors.white,
     padding: 5,
-    width: SCREEN_WIDTH * 0.26,
+    width: '30%',
     borderRadius: 15,
     height: SCREEN_HEIGHT * 0.14
   },
@@ -323,7 +307,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'space-between',
     flexDirection: 'row',
-    width: SCREEN_WIDTH * 0.92,
+    width: SCREEN_WIDTH * 0.97,
     alignSelf: 'center',
     alignItems: 'center'
   },
