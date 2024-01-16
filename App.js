@@ -71,9 +71,9 @@ export default function App() {
         {isFirstLaunch && (
           <Stack.Screen options={{ headerShown: false }} name="OnboardingScreen" component={OnboardingScreen} />
         )}
-        <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
-        <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
         <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
+        <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
+        <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
         <Stack.Screen options={{ headerShown: false }} name="LevelScreen" component={LevelScreen} />
 
 

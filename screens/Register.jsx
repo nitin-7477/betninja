@@ -23,13 +23,10 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [otp, setOtp] = useState('');
-
   const [isResendEnabled, setResendEnabled] = useState(true);
   const [timer, setTimer] = useState(59);
   const [isPasswordVisible, setIsPasswordVisible] = useState(true);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(true);
-
-
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -44,21 +41,32 @@ const Register = () => {
 
   const handleSendOTP = async () => {
     try {
+
       var body = { email: emailAddress }
       const result = await axios.post(`${process.env.SERVERURL}/api/auth/sendOtp`,
         body
       );
-      console.log(result.data);
 
+      console.log(result.data);
 
       setResendEnabled(false);
       startTimer();
 
 
-      // console.log("API Response:", response);
     } catch (error) {
-      // Handle errors during the API request
+
       console.error('Error sending OTP:', error);
+
+
+      if (error.response && error.response.data) {
+        const errorMessage = error.response.data.message;
+        setErrorMessage(errorMessage);
+        setErrorModalVisible(true);
+      } else {
+        setErrorMessage("An unexpected error occurred");
+        setErrorModalVisible(true);
+      }
+
     }
   };
 
@@ -74,6 +82,7 @@ const Register = () => {
       });
     }, 1000);
   };
+
 
 
 
@@ -98,7 +107,12 @@ const Register = () => {
     setInvitationCode('');
   }
 
-  const isSendButtonEnabled = emailAddress !== '' && password !== '' && confirmPassword !== '' && phone !== '';
+  const isSendButtonEnabled = (
+    emailAddress !== '' &&
+    phone !== '' &&
+    password !== '' &&
+    confirmPassword !== ''
+  );
 
 
   const handleSignUp = async () => {
@@ -106,6 +120,16 @@ const Register = () => {
       setLoading(true);
       if (password !== confirmPassword) {
         toggleModal1(); // Show the modal
+        return;
+      }
+      if (phone.length !== 10) {
+        Alert.alert('Invalid Phone', 'Please enter a valid 10-digit phone number.');
+        return;
+      }
+
+      // Validate password length
+      if (password.length < 6 || password.length > 12) {
+        Alert.alert('Invalid Password', 'Password must be between 6 and 12 characters.');
         return;
       }
 
@@ -226,6 +250,7 @@ const Register = () => {
               onChangeText={(text) => setPhone(text)}
               placeholder="Phone"
               keyboardType="numeric"
+              maxLength={10}
 
             />
 
@@ -255,10 +280,13 @@ const Register = () => {
                 color: "black",
                 width: '90%',
               }}
+
               secureTextEntry={isPasswordVisible}
               value={password}
               onChangeText={(text) => setPassword(text)}
               placeholder="Password"
+              maxLength={12}
+
             />
             <TouchableOpacity onPress={togglePasswordVisibility}>
               <Feather
@@ -308,21 +336,14 @@ const Register = () => {
             </TouchableOpacity>
           </View>
 
-          <View style={{ flexDirection: 'row' }}>
-            <TouchableOpacity style={[styles.otpBtn, isSendButtonEnabled ? styles.enabledSendButton : styles.disabledSendButton]} onPress={handleSendOTP} disabled={!isSendButtonEnabled}>
-              <Text style={{ color: 'white', textAlign: 'center', fontSize: 16 }}>{isResendEnabled ? 'Send otp' : 'Resend'}</Text>
-            </TouchableOpacity>
-            {!isResendEnabled && (
-              <Text style={{ color: 'black', fontSize: 16, marginLeft: 200 }}>{`(${timer}s)`}</Text>
-            )}
-          </View>
+
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
               backgroundColor: "rgba(173,216,230,0.3)",
               borderRadius: 10,
-              justifyContent: "space-between",
+              width: '100%',
             }}
           >
 
@@ -336,15 +357,33 @@ const Register = () => {
                 marginVertical: 5,
                 fontWeight: "500",
                 color: "black",
-                width: '100%',
+                width: '70%',
+
               }}
               value={otp}
               onChangeText={(text) => setOtp(text)}
               placeholder="Enter Otp"
               keyboardType="numeric"
             />
+            <View style={{ flexDirection: 'row' }}>
+              <TouchableOpacity
+                style={[
+                  styles.otpBtn,
+                  isSendButtonEnabled ? styles.enabledSendButton : styles.disabledSendButton
+                ]}
+                onPress={handleSendOTP}
+                disabled={!isSendButtonEnabled || !isResendEnabled}
+              >
+                <Text style={{ color: 'white', textAlign: 'center', fontSize: 16 }}>
+                  {isResendEnabled ? 'Send OTP' : `${timer} s`}
+                </Text>
+              </TouchableOpacity>
 
+            </View>
           </View>
+          {/* {!isResendEnabled && (
+            <Text style={{ color: 'black', fontSize: 16, marginLeft: 10 }}>{`(${timer}s)`}</Text>
+          )} */}
 
           <View
             style={{
@@ -504,16 +543,26 @@ const styles = StyleSheet.create({
   otpBtn: {
     backgroundColor: 'orange',
     borderRadius: 10,
-    width: 70,
+    width: 90,
     elevation: 5,
     paddingVertical: 3,
-    marginBottom: 10
+
   },
   enabledSendButton: {
     backgroundColor: 'orange',
+    backgroundColor: 'orange',
+    borderRadius: 10,
+    width: 90,
+    elevation: 5,
+    paddingVertical: 3,
   },
   disabledSendButton: {
     backgroundColor: 'lightgray',
+    backgroundColor: 'orange',
+    borderRadius: 10,
+    width: 90,
+    elevation: 5,
+    paddingVertical: 3,
   },
   modalContainer2: {
     flex: 1,

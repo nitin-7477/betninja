@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, StyleSheet, Text, TouchableOpacity, View, Picker } from 'react-native'
 import React from 'react'
 import AppTextInput from '../components/AppTextInput'
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../components/Constants/Screen'
@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useState } from 'react'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-
+import RNPickerSelect from 'react-native-picker-select';
 
 const AddBank = () => {
   const [name, setName] = useState('')
@@ -15,6 +15,13 @@ const AddBank = () => {
   const [IFSC, setIFSC] = useState('')
   const [phone, setPhone] = useState('')
   const [bankDetails, setBankDetails] = useState([])
+  const [selectedBank, setSelectedBank] = useState('');
+
+  const banks = [
+    { label: 'Bank A', value: 'Bank A' },
+    { label: 'Bank B', value: 'Bank B' },
+    { label: 'Bank C', value: 'Bank C' },
+  ];
 
 
   const handleSaveChanges = async () => {
@@ -68,6 +75,8 @@ const AddBank = () => {
         <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'white' }}>Please select a bank</Text>
         <EvilIcons name='chevron-right' size={35} color={'white'} />
       </TouchableOpacity>
+
+
       <View>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
           <Image source={require('../assets/person.png')} style={{ height: 25, width: 25 }} />

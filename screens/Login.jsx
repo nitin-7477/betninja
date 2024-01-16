@@ -40,8 +40,8 @@ const Login = () => {
     const fetchData = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
-        console.log(token);
-        if (!token) {
+
+        if (token) {
           navigation.navigate('Home')
           return;
         }
@@ -81,7 +81,7 @@ const Login = () => {
 
       if (token) {
         await AsyncStorage.setItem("token", JSON.stringify(token));
-        // navigate('Home')
+        navigation.navigate('Home')
       } else {
         console.log("Login failed:");
         Alert.alert("Login Failed");
@@ -168,7 +168,7 @@ const Login = () => {
                 width: '100%',
               }}
               value={emailAddress}
-              onChangeText={(text) => setEmailAddress(text)}
+              onChangeText={(text) => setEmailAddress(text.replace(/\s/g, '').toLowerCase())}
               placeholder="Email Address"
             />
 

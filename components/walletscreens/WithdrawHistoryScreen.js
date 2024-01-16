@@ -106,7 +106,7 @@ const WithdrawHistoryScreen = () => {
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <AntDesign name='left' size={20} color={'black'} style={{ fontWeight: 'bold' }} />
           </TouchableOpacity>
-          <Text style={{ marginLeft: 30, fontSize: 16, color: 'black', fontWeight: 'bold' }}>WithdrawHistory Screen</Text>
+          <Text style={{ marginLeft: 30, fontSize: 16, color: 'black', fontWeight: 'bold' }}>Withdraw History</Text>
         </View>
         {/* *********************************Withdraw History****************************** */}
         <FlatList data={history} renderItem={({ item }) => {
@@ -120,9 +120,9 @@ const WithdrawHistoryScreen = () => {
                 borderRadius: 7
 
               }}>
-                <Text style={{ fontWeight: 'bold', color: 'white', }}>WithDraw</Text>
+                <Text style={{ fontWeight: 'bold', color: 'white', }}>{item.status}</Text>
               </TouchableOpacity>
-              <Text style={{ marginLeft: 10, fontSize: 16, color: 'green' }} >{item.status}</Text>
+              {/* <Text style={{ marginLeft: 10, fontSize: 16, color: 'green' }} >{item.status}</Text> */}
             </View>
             {/* *********************************Deposit History Card ****************************** */}
 
@@ -134,7 +134,7 @@ const WithdrawHistoryScreen = () => {
                 <Text style={{ fontSize: 16, color: "black" }}>Type</Text><Text style={{ color: "black" }}>{item.type}</Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-                <Text style={{ fontSize: 16, color: "black" }}>Time</Text><Text style={{ color: "black" }}>{item.updatedAt}</Text>
+                <Text style={{ fontSize: 16, color: "black" }}>Time</Text><Text style={{ color: "black" }}>{new Date(item.updatedAt).toLocaleString()}</Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
                 <Text style={{ fontSize: 16, color: "black" }}>Transaction Id</Text><Text style={{ color: "black" }}>{item.transactionId}</Text>

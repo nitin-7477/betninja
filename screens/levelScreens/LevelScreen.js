@@ -52,7 +52,7 @@ const LevelScreen = () => {
             "Authorization": JSON.parse(token),
           },
         });
-        console.log(response.data);
+        // console.log(response.data);
         setUserLevel(response.data.level)
         setUserInformation(response.data.user_level);
         setInfo(response.data)
@@ -101,6 +101,27 @@ const LevelScreen = () => {
 
   };
 
+  const handleLevelUp = async (checkLevel) => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        navigation.navigate('Login')
+        return;
+      }
+      body = { rewardType: checkLevel, level: userInformation.level, amount: tempData.levelup }
+      console.log(body);
+      const response = await axios.post(`${process.env.SERVERURL}/api/deposit/deposit_rebate_bouns`, body, {
+        headers: {
+          "Authorization": JSON.parse(token),
+        },
+      });
+      console.log(response.data);
+    }
+    catch (e) {
+      console.log(e);
+    }
+  }
+
   useEffect(() => {
     const handleOneClickRebateGetRequest = async () => {
       try {
@@ -116,7 +137,7 @@ const LevelScreen = () => {
           }
         );
 
-        console.log("This is data of history of rebate", response.data);
+        // console.log("This is data of history of rebate", response.data);
         setRebateInfo(response.data)
       } catch (e) {
         console.log("HI Errors for Betting Rebate", e);
@@ -605,7 +626,7 @@ const LevelScreen = () => {
           <View style={{ width: '20%' }}>
             <TouchableOpacity
               disabled={isDisabled}
-              // onPress={handleLevelUp}
+              onPress={() => handleLevelUp('level')}
               style={{ flexDirection: 'row', height: '15', width: '100%', alignItems: 'center', borderColor: 'red', borderWidth: 0.5, padding: 2, justifyContent: 'center', borderRadius: 10, marginBottom: 5 }}>
               <Image source={require('../../assets/vipWallet.png')} style={{ height: 15, width: 15, marginRight: 5 }} />
               <Text>{tempData.levelup}</Text>
@@ -627,10 +648,12 @@ const LevelScreen = () => {
             <Text style={{ fontSize: 12, marginTop: 6, width: '90%' }}>Each account can receive only 1 time per month</Text>
           </View>
           <View style={{ width: '20%' }}>
-            <View style={{ flexDirection: 'row', height: '15', width: '100%', alignItems: 'center', borderColor: 'red', borderWidth: 0.5, padding: 2, justifyContent: 'center', borderRadius: 10, marginBottom: 5 }}>
+            <TouchableOpacity
+              onPress={() => handleLevelUp('month')}
+              style={{ flexDirection: 'row', height: '15', width: '100%', alignItems: 'center', borderColor: 'red', borderWidth: 0.5, padding: 2, justifyContent: 'center', borderRadius: 10, marginBottom: 5 }}>
               <Image source={require('../../assets/vipWallet.png')} style={{ height: 15, width: 15, marginRight: 5 }} />
               <Text>{tempData.monthly}</Text>
-            </View>
+            </TouchableOpacity>
             <View style={{ flexDirection: 'row', height: '15', width: '100%', alignItems: 'center', borderColor: 'red', borderWidth: 0.5, padding: 2, justifyContent: 'center', borderRadius: 10 }}>
               <Image source={require('../../assets/diamond.png')} style={{ height: 15, width: 15, marginRight: 5 }} />
               <Text>00</Text>
