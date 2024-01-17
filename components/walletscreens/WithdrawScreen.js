@@ -106,7 +106,7 @@ const WithdrawScreen = () => {
           onPress={() => navigation.navigate('AddBank')}
           style={{ height: responsiveHeight(11), marginBottom: 10, width: responsiveWidth(97), alignSelf: 'center', backgroundColor: Colors.lightGray, justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
           <Image source={require('../../assets/plus.png')} style={{ height: 40, width: 40 }} />
-          <Text>Add your bank</Text>
+          <Text style={{ color: 'black' }}>Add your bank</Text>
         </TouchableOpacity>
 
 

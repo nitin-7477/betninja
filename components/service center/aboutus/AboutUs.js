@@ -30,7 +30,7 @@ const AboutUs = () => {
         style={{ height: SCREEN_HEIGHT * 0.1, width: SCREEN_WIDTH * 1, backgroundColor: 'white', justifyContent: 'space-between', paddingHorizontal: 5, alignItems: 'center', flexDirection: 'row' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Image source={require('../../../assets/agreement1.png')} style={{ height: 40, width: 40, resizeMode: 'contain' }} />
-          <Text style={{ marginLeft: 15, fontSize: 18, fontWeight: '500' }}>Confidential Agreement</Text>
+          <Text style={{ marginLeft: 15, fontSize: 18, fontWeight: '500', color: 'black' }}>Confidential Agreement</Text>
         </View>
         <Feather name='chevron-right' size={20} color={Colors.fontGray} />
       </TouchableOpacity >
@@ -40,7 +40,7 @@ const AboutUs = () => {
         style={{ height: SCREEN_HEIGHT * 0.1, width: SCREEN_WIDTH * 1, backgroundColor: 'white', justifyContent: 'space-between', paddingHorizontal: 5, alignItems: 'center', flexDirection: 'row' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Image source={require('../../../assets/agreement2.png')} style={{ height: 40, width: 40, resizeMode: 'contain' }} />
-          <Text style={{ marginLeft: 15, fontSize: 18, fontWeight: '500' }}>Risk Disclosure Agreement</Text>
+          <Text style={{ marginLeft: 15, fontSize: 18, fontWeight: '500', color: 'black' }}>Risk Disclosure Agreement</Text>
         </View>
         <Feather name='chevron-right' size={20} color={Colors.fontGray} />
       </TouchableOpacity >

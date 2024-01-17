@@ -145,11 +145,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     padding: 8,
     borderWidth: 1,
+    color: 'black'
   },
   cell: {
     flex: 1,
     textAlign: 'center',
     padding: 8,
     borderWidth: 1,
+    color: 'black'
   },
 })

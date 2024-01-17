@@ -231,7 +231,7 @@ const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType,
               </View></View>
 
 
-            <View style={{ height: '15%', width: '97%', paddingVertical: 8, display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: 6 }}>
+            <View style={{ height: '15%', width: '97%', paddingVertical: 8, flexDirection: 'row', justifyContent: 'center', }}>
 
               <View style={{ flexDirection: 'row' }}>
                 <TouchableOpacity
@@ -277,11 +277,11 @@ const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType,
 
             </View>
 
-            <TouchableOpacity style={{ width: '100%', flexDirection: 'row', alignItems: 'center' }} onPress={handleToggle} activeOpacity={0.8}>
+            <TouchableOpacity style={{ width: '100%', height: '11%', flexDirection: 'row', alignItems: 'center', }} onPress={handleToggle} activeOpacity={0.8}>
               <View style={[styles.checkbox, isChecked && styles.checked]}>
                 {isChecked && <Text style={{ color: 'white' }}>✓</Text>}
               </View>
-              <Text style={{ marginLeft: 10 }}>I agree(terms and condition)</Text>
+              <Text style={{ marginLeft: 10, color: 'black' }}>I agree(terms and condition)</Text>
             </TouchableOpacity>
             <View style={{ flexDirection: 'row', flex: 1, alignItems: 'flex-end', justifyContent: 'space-between', width: '90%' }}>
               <TouchableOpacity onPress={closeModal} style={styles.closeButton}>

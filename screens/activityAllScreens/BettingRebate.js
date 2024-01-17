@@ -105,7 +105,7 @@ const BettingRebate = () => {
 
 
   return (
-    <View style={styles.container1}>
+    <ScrollView style={styles.container1}>
       <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10 }}>
         <TouchableOpacity
           onPress={() => navigation.navigate('Activity')}
@@ -207,7 +207,7 @@ const BettingRebate = () => {
         <Button title="Prev" onPress={onPrevPress} disabled={startIndex === 0} />
         <Button title="Next" onPress={onNextPress} disabled={startIndex + itemsPerPage >= rebateInfo.length} />
       </View>
-    </View>
+    </ScrollView>
 
   )
 }

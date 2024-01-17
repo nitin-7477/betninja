@@ -17,9 +17,15 @@ const Tab = createBottomTabNavigator();
 
 const Home = () => {
   const [isNotificationVisible, setNotificationVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(true);
   const [notificationMessage, setNotificationMessage] = useState(
-    "YWelcome to Bet Ninja"
+    "Welcome to Bet Ninja"
   );
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
 
   const hideNotification = () => {
     setNotificationVisible(false);
@@ -103,30 +109,45 @@ const Home = () => {
         }} />
 
       </Tab.Navigator>
-      {/* <Modal isVisible={false} transparent={true}>
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-          <Text>{notificationMessage}</Text>
-          <View style={{ height: SCREEN_HEIGHT * 0.8, width: SCREEN_WIDTH * 0.8, alignSelf: 'center', backgroundColor: 'green', justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
-            <View style={{ width: 230, height: 40, backgroundColor: Colors.purple, marginVertical: 10, justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
-              <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'white' }}>Highlights</Text>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          // Handle modal close (e.g., Android back button press)
+          setModalVisible(false);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+
+              <View style={{ height: SCREEN_HEIGHT * 0.7, width: SCREEN_WIDTH * 0.8, alignSelf: 'center', backgroundColor: 'green', justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
+                {/* <Text style={{ color: 'white' }}>{notificationMessage}</Text> */}
+                <View style={{ width: 230, height: 40, backgroundColor: Colors.purple, marginVertical: 10, justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
+                  <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'white' }}>{notificationMessage}</Text>
+                </View>
+                <Image source={require('../assets/cat2.jpg')} style={{ borderRadius: 10, height: 400, width: 250, resizeMode: 'contain' }} />
+                <TouchableOpacity
+                  style={styles.signIn}
+                  onPress={closeModal}
+                >
+                  <Text style={{
+                    color: 'white',
+                    textAlign: "center",
+                    fontSize: 20,
+                  }}
+                  >
+                    Confirm
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            <Image source={require('../assets/cat2.jpg')} style={{ borderRadius: 10, height: 400, width: 250, resizeMode: 'contain' }} />
-            <TouchableOpacity
-              style={styles.signIn}
-              onPress={hideNotification}
-            >
-              <Text style={{
-                color: 'white',
-                textAlign: "center",
-                fontSize: 20,
-              }}
-              >
-                Confirm
-              </Text>
-            </TouchableOpacity>
+
           </View>
         </View>
-      </Modal> */}
+      </Modal>
     </>
   );
 };
@@ -141,5 +162,17 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     borderRadius: 10,
     elevation: 5
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.1)', // Semi-transparent background
+  },
+  modalContent: {
+    // backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
   },
 })

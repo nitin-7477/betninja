@@ -42,6 +42,7 @@ import BankAccount from "./screens/BankAccount";
 import QrScanner from "./screens/QrScanner";
 import AttendanceBonus from "./screens/activityAllScreens/AttendanceBonus";
 import InvitationRules from "./screens/InvitationRules";
+import DD from "./screens/levelScreens/Dropdown";
 
 // Navigation Configuration
 const Stack = createNativeStackNavigator();
@@ -71,11 +72,14 @@ export default function App() {
         {isFirstLaunch && (
           <Stack.Screen options={{ headerShown: false }} name="OnboardingScreen" component={OnboardingScreen} />
         )}
-        <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
+
         <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
+        <Stack.Screen options={{ headerShown: false }} name="DD" component={DD} />
+        <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
+
         <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
         <Stack.Screen options={{ headerShown: false }} name="LevelScreen" component={LevelScreen} />
-
+        <Stack.Screen options={{ headerShown: false }} name="AddBank" component={AddBank} />
 
         <Stack.Screen options={{ headerShown: false }} name="InvitationRules" component={InvitationRules} />
         <Stack.Screen name="GameStats" options={{ headerShown: false }} component={GameStats} />
@@ -93,7 +97,6 @@ export default function App() {
         <Stack.Screen name="WithdrawScreen" options={{ headerShown: false }} component={WithdrawScreen} />
 
 
-        <Stack.Screen options={{ headerShown: false }} name="AddBank" component={AddBank} />
 
         <Stack.Screen options={{ headerShown: false }} name="ChangePasswordScreen" component={ChangePasswordScreen} />
         <Stack.Screen options={{ headerShown: false }} name="RiskDisclosure" component={RiskDisclosure} />

@@ -973,7 +973,7 @@ const HomeScreen = ({ navigation, index }) => {
 
             <TouchableOpacity
               style={styles.smallBtn}
-              onPress={() => openBigModal('skyblue', 'size', 'small')}
+              onPress={() => openBigModal('#0047AB', 'size', 'small')}
             >
               <Text style={{ fontWeight: 'bold', color: 'white' }}>Small</Text>
             </TouchableOpacity>
@@ -987,7 +987,7 @@ const HomeScreen = ({ navigation, index }) => {
                 {[0, 1, 2, 3, 4].map((number) => (
                   <TouchableOpacity
                     key={number}
-                    onPress={() => openBigModal('#89CFF0', 'number', `${number}`)}
+                    onPress={() => openBigModal('#0047AB', 'number', `${number}`)}
                     style={{ width: SCREEN_WIDTH * 0.1, height: SCREEN_HEIGHT * 0.05, backgroundColor: 'blue', borderRadius: 50, justifyContent: 'center', alignItems: 'center', elevation: 5 }}
                   >
                     <Text style={{ fontWeight: 'bold', color: 'white' }}>{number}</Text>
@@ -1001,7 +1001,7 @@ const HomeScreen = ({ navigation, index }) => {
                 {[5, 6, 7, 8, 9].map((number) => (
                   <TouchableOpacity
                     key={number}
-                    onPress={() => openBigModal('#89CFF0', 'number', `${number}`)}
+                    onPress={() => openBigModal('#0047AB', 'number', `${number}`)}
                     style={{ width: SCREEN_WIDTH * 0.1, height: SCREEN_HEIGHT * 0.05, backgroundColor: 'blue', borderRadius: 50, justifyContent: 'center', alignItems: 'center', elevation: 5 }}
                   >
                     <Text style={{ fontWeight: 'bold', color: 'white' }}>{number}</Text>

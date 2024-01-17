@@ -16,9 +16,11 @@ const QrScanner = ({ route }) => {
   const [UTR, setUTR] = useState('')
   const [countdown, setCountdown] = useState(300);
   const [bounceValue] = useState(new Animated.Value(0));
+  const BouncingText = Animated.createAnimatedComponent(Text);
 
   useEffect(() => {
     generateOrderNumber();
+    startBouncingAnimation();
     const timer = setInterval(() => {
       setCountdown((prevCountdown) => {
         if (prevCountdown === 0) {
@@ -38,7 +40,23 @@ const QrScanner = ({ route }) => {
   const generateOrderNumber = () => {
     const randomOrderNumber = Math.floor(100000000000 + Math.random() * 900000000000).toString();
     setOrderNumber(randomOrderNumber);
+
   };
+
+  // const generateOrderNumber = () => {
+  //   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  //   let randomString = '';
+  //   for (let i = 0; i < 4; i++) {
+  //     const randomIndex = Math.floor(Math.random() * characters.length);
+  //     randomString += characters.charAt(randomIndex);
+  //   }
+
+  //   const randomOrderNumber = Math.floor(100000000000 + Math.random() * 900000000000).toString();
+  //   const finalOrderNumber = randomOrderNumber + randomString;
+  //   setOrderNumber(finalOrderNumber);
+  // };
+
+
 
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -48,10 +66,11 @@ const QrScanner = ({ route }) => {
 
   const startBouncingAnimation = () => {
     Animated.sequence([
-      Animated.timing(bounceValue, { toValue: 1.5, duration: 1000, useNativeDriver: false }),
-      Animated.spring(bounceValue, { toValue: 0, friction: 1, useNativeDriver: false }),
+      Animated.timing(bounceValue, { toValue: 2.0, duration: 1000, useNativeDriver: false }),
+      Animated.spring(bounceValue, { toValue: 0, friction: 1, useNativeDriver: false }), // Adjust toValue for more bounce
     ]).start(() => startBouncingAnimation());
   };
+
 
 
   const handlePayment = async () => {
@@ -89,14 +108,11 @@ const QrScanner = ({ route }) => {
 
 
 
-        <View style={{ marginTop: 30, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+        <Animated.View style={{ transform: [{ translateY: bounceValue }], flexDirection: 'row', justifyContent: 'center', marginVertical: 10 }}>
           <AntDesign name="arrowdown" size={32} color={'red'} />
-
-          <Text style={{ textAlign: 'center', color: 'red', fontSize: 32, fontWeight: 'bold', marginHorizontal: 10 }}>Below</Text>
-
+          <BouncingText style={{ textAlign: 'center', color: 'red', fontSize: 32, fontWeight: 'bold', marginHorizontal: 10 }}>Below</BouncingText>
           <AntDesign name="arrowdown" size={32} color={'red'} />
-
-        </View>
+        </Animated.View>
         <Text style={{ textAlign: 'center', marginLeft: 7, color: 'black', fontSize: 14, fontWeight: 'bold' }}><Text style={{ color: 'red' }}>UTR Number</Text> is compulsory to verify</Text>
 
         <Image source={require('../assets/qrcode2.png')} style={{ height: 280, width: 260, alignSelf: 'center', resizeMode: 'contain', }} />

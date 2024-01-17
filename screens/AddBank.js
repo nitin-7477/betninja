@@ -9,39 +9,69 @@ import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import RNPickerSelect from 'react-native-picker-select';
 
+
+
 const AddBank = () => {
   const [name, setName] = useState('')
   const [account, setAccount] = useState('')
   const [IFSC, setIFSC] = useState('')
   const [phone, setPhone] = useState('')
   const [bankDetails, setBankDetails] = useState([])
-  const [selectedBank, setSelectedBank] = useState('');
+  const [selectedBank, setSelectedBank] = useState(null);
+
+  const placeholder = {
+    label: 'Please select a bank',
+    value: null,
+    color: '#9EA0A4',
+  };
 
   const banks = [
-    { label: 'Bank A', value: 'Bank A' },
-    { label: 'Bank B', value: 'Bank B' },
-    { label: 'Bank C', value: 'Bank C' },
-  ];
+    { label: 'State Bank of India (SBI)', value: 'State Bank of India (SBI)' },
+    { label: 'Punjab National Bank (PNB)', value: 'Punjab National Bank (PNB)' },
+    { label: 'ICICI Bank', value: 'ICICI Bank' },
+    { label: 'HDFC Bank', value: 'HDFC Bank' },
+    { label: 'Axis Bank', value: 'Axis Bank' },
+    { label: 'Bank of Baroda (BOB)', value: 'Bank of Baroda (BOB)' },
+    { label: 'Canara Bank', value: 'Canara Bank' },
+    { label: 'Union Bank of India', value: 'Union Bank of India' },
+    { label: 'IDBI Bank', value: 'IDBI Bank' },
+    { label: 'Bank of India', value: 'Bank of India' },
+    { label: 'Central Bank of India', value: 'Central Bank of India' },
+    { label: 'Indian Bank', value: 'Indian Bank ' },
+    { label: 'Yes Bank', value: 'Yes Bank' },
+    { label: 'Kotak Mahindra Bank', value: 'Kotak Mahindra Bank' },
+    { label: 'IndusInd Bank', value: 'IndusInd Bank' },
+    { label: 'Federal Bank', value: 'Federal Bank' },
+    { label: 'Punjab & Sind Bank', value: 'Punjab & Sind Bank' },
+    { label: 'Karur Vysya Bank', value: 'Karur Vysya Bank' },
+    { label: 'South Indian Bank', value: 'South Indian Bank' },
+    { label: 'Bandhan Bank', value: 'Bandhan Bank' },
 
+
+    // Add more banks as needed
+  ];
 
   const handleSaveChanges = async () => {
     try {
       const token = await AsyncStorage.getItem('token')
       var body = {
         "userId": "65969f7478b780c734302177",
-        "bankName": "SBI",
+        "bankName": selectedBank,
         "acountNumber": account,
         "ifscCode": IFSC,
         "phoneNumber": phone,
         "Name": name
       }
+      
+ 
       const result = await axios.post(`${process.env.SERVERURL}/api/bank/addBank`, body, {
         headers: {
           "Authorization": JSON.parse(token),
         },
       })
-
+      console.log(result.data.data);
       setBankDetails(result.data.data)
+      
       console.log("This is result to add bank", result.data.status);
 
 
@@ -54,8 +84,8 @@ const AddBank = () => {
     finally {
 
     }
-
   }
+
 
   const navigation = useNavigation();
   return (
@@ -71,13 +101,37 @@ const AddBank = () => {
         <Image source={require('../assets/bank.png')} style={{ height: 30, width: 30 }} />
         <Text style={{ marginLeft: 20, fontSize: 18, fontWeight: 'bold' }}>Add a account number</Text>
       </View>
-      <TouchableOpacity style={{ height: 40, width: SCREEN_WIDTH * 0.95, alignSelf: 'center', borderRadius: 10, backgroundColor: '#cfa67f', justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', paddingHorizontal: 10, marginBottom: 20 }}>
-        <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'white' }}>Please select a bank</Text>
-        <EvilIcons name='chevron-right' size={35} color={'white'} />
-      </TouchableOpacity>
 
 
-      <View>
+
+
+      <RNPickerSelect
+        placeholder={placeholder}
+        items={banks}
+        onValueChange={(value) => setSelectedBank(value)}
+        style={{
+          inputAndroid: {
+            fontSize: 16,
+            paddingHorizontal: 10,
+            paddingVertical: 5,
+            borderWidth: 1,
+            borderColor: 'gray',
+            borderRadius: 20,
+            color: 'black',
+            backgroundColor: '#cfa67f',
+          },
+          inputAndroidContainer: {
+            marginBottom: 20,
+          },
+          placeholder: {
+            color: 'black',
+          },
+        }}
+      />
+
+
+
+      <View style={{ marginTop: 20 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
           <Image source={require('../assets/person.png')} style={{ height: 25, width: 25 }} />
           <Text style={{ fontSize: 16, fontWeight: '500', marginLeft: 15 }}>Full recipient's name</Text>

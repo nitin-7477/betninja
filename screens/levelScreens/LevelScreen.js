@@ -184,17 +184,17 @@ const LevelScreen = () => {
         <View style={{ height: 70, width: SCREEN_WIDTH * 1, justifyContent: 'space-around', alignItems: 'center', flexDirection: 'row', marginTop: 10 }}>
           <View style={{ height: 60, width: '45%', backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', borderRadius: 10, elevation: 2 }}>
             <Text style={{ color: '#d6aa7f', fontWeight: 'bold' }}>{userInformation?.exp} EXP</Text>
-            <Text style={{ marginVertical: 5 }}>My Experience</Text>
+            <Text style={{ marginVertical: 5, color: 'black' }}>My Experience</Text>
 
           </View>
           <View style={{ height: 60, width: '45%', backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', borderRadius: 10, elevation: 2 }}>
-            <Text>  <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 18 }}> 30</Text> Days</Text>
-            <Text style={{ marginVertical: 5 }}>Payout Time</Text>
+            <Text style={{ color: 'black' }}>  <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 18 }}> 30</Text> Days</Text>
+            <Text style={{ marginVertical: 5, color: 'black' }}>Payout Time</Text>
 
           </View>
         </View>
       </View>
-      <View style={{ marginTop: 40, height: 25, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', borderWidth: 0.5, borderColor: 'grey', padding: 3, borderRadius: 5, justifyContent: 'center' }}><Text style={{ textAlign: 'center', fontSize: 12 }}>Level rewards are settled at 2:00 am on the 1st of every month</Text></View>
+      <View style={{ marginTop: 40, height: 25, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', borderWidth: 0.5, borderColor: 'grey', padding: 3, borderRadius: 5, justifyContent: 'center' }}><Text style={{ textAlign: 'center', fontSize: 12, color: 'black' }}>Level rewards are settled at 2:00 am on the 1st of every month</Text></View>
 
       <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, width: SCREEN_WIDTH * 0.971, alignSelf: 'center' }} onScroll={handleScroll}
         scrollEventThrottle={16}
@@ -619,7 +619,7 @@ const LevelScreen = () => {
           </View>
           <View style={{ width: '55%', marginLeft: 10 }}>
             <Text style={{ fontSize: 16, fontWeight: '500', color: 'black' }}>Level up Rewards</Text>
-            <Text style={{ fontSize: 12, marginTop: 6, width: '90%' }}>Each account can receive only 1 time</Text>
+            <Text style={{ fontSize: 12, marginTop: 6, width: '90%', color: 'black' }}>Each account can receive only 1 time</Text>
           </View>
           <Text style={{ color: 'black' }}>{currentLevel.level_reward}</Text>
 
@@ -629,11 +629,11 @@ const LevelScreen = () => {
               onPress={() => handleLevelUp('level')}
               style={{ flexDirection: 'row', height: '15', width: '100%', alignItems: 'center', borderColor: 'red', borderWidth: 0.5, padding: 2, justifyContent: 'center', borderRadius: 10, marginBottom: 5 }}>
               <Image source={require('../../assets/vipWallet.png')} style={{ height: 15, width: 15, marginRight: 5 }} />
-              <Text>{tempData.levelup}</Text>
+              <Text style={{ color: 'black' }}>{tempData.levelup}</Text>
             </TouchableOpacity>
             <View style={{ flexDirection: 'row', height: '15', width: '100%', alignItems: 'center', borderColor: 'red', borderWidth: 0.5, padding: 2, justifyContent: 'center', borderRadius: 10 }}>
               <Image source={require('../../assets/diamond.png')} style={{ height: 15, width: 15, marginRight: 5 }} />
-              <Text>00</Text>
+              <Text style={{ color: 'black' }}>00</Text>
             </View>
           </View>
 
@@ -645,18 +645,18 @@ const LevelScreen = () => {
           </View>
           <View style={{ width: '55%', marginLeft: 10 }}>
             <Text style={{ fontSize: 16, fontWeight: '500', color: 'black' }}>Monthly Rewards</Text>
-            <Text style={{ fontSize: 12, marginTop: 6, width: '90%' }}>Each account can receive only 1 time per month</Text>
+            <Text style={{ fontSize: 12, marginTop: 6, width: '90%', color: 'black' }}>Each account can receive only 1 time per month</Text>
           </View>
           <View style={{ width: '20%' }}>
             <TouchableOpacity
               onPress={() => handleLevelUp('month')}
               style={{ flexDirection: 'row', height: '15', width: '100%', alignItems: 'center', borderColor: 'red', borderWidth: 0.5, padding: 2, justifyContent: 'center', borderRadius: 10, marginBottom: 5 }}>
               <Image source={require('../../assets/vipWallet.png')} style={{ height: 15, width: 15, marginRight: 5 }} />
-              <Text>{tempData.monthly}</Text>
+              <Text style={{ color: 'black' }}>{tempData.monthly}</Text>
             </TouchableOpacity>
             <View style={{ flexDirection: 'row', height: '15', width: '100%', alignItems: 'center', borderColor: 'red', borderWidth: 0.5, padding: 2, justifyContent: 'center', borderRadius: 10 }}>
               <Image source={require('../../assets/diamond.png')} style={{ height: 15, width: 15, marginRight: 5 }} />
-              <Text>00</Text>
+              <Text style={{ color: 'black' }}>00</Text>
             </View>
           </View>
 
@@ -746,27 +746,27 @@ const LevelScreen = () => {
             <Text style={{ textAlign: 'center', color: 'black', fontSize: 14, fontWeight: '500', marginVertical: 1 }}>VIP Rule Description</Text>
             <View style={{ height: '100%', width: '95%', backgroundColor: 'white', alignSelf: 'center', borderRadius: 7, padding: 5 }}>
               <Text style={{ color: 'red', fontSize: 14, fontWeight: 'bold', marginVertical: 5 }}>1. Upgrade Standard</Text>
-              <Text>The VIP member's experience points valid bet amount that meet the requirement for the corresponding rank will be promoted to the corresponding VIP Level, the Member's VIP Data static period  starts from 00:00:00 days VIP system launched. VIP level calculation is refreshed every 10 minutes! The corresponding experience level is calculated according to valid odds 1:1!</Text>
+              <Text style={{ color: 'black' }}>The VIP member's experience points valid bet amount that meet the requirement for the corresponding rank will be promoted to the corresponding VIP Level, the Member's VIP Data static period  starts from 00:00:00 days VIP system launched. VIP level calculation is refreshed every 10 minutes! The corresponding experience level is calculated according to valid odds 1:1!</Text>
               <Text style={{ color: 'red', fontSize: 14, fontWeight: 'bold', marginVertical: 5 }}>2. Upgrade order</Text>
-              <Text>The VIP level that meets the corresponding requirement can be promoted to one level everyday, but the VIP level can not be promoted by leapfrogging</Text>
+              <Text style={{ color: 'black' }}>The VIP level that meets the corresponding requirement can be promoted to one level everyday, but the VIP level can not be promoted by leapfrogging</Text>
 
               <Text style={{ color: 'red', fontSize: 14, fontWeight: 'bold', marginVertical: 5 }}>3. Level Maintainance</Text>
-              <Text>VIP members need to complete the maintainance requirement of the corresponding level within 30 days   after the "VIP LEVEL CHANGE", if the promotion is completed during this period , the maintainance requirement will be calculated according to the current level </Text>
+              <Text style={{ color: 'black' }}>VIP members need to complete the maintainance requirement of the corresponding level within 30 days   after the "VIP LEVEL CHANGE", if the promotion is completed during this period , the maintainance requirement will be calculated according to the current level </Text>
 
               <Text style={{ color: 'red', fontSize: 14, fontWeight: 'bold', marginVertical: 5 }}>4. Downgrade Standard</Text>
-              <Text>If a VIP member fails to complete the corresponding level maintainance requirement  within 30 days , the system will automatically deduct the experience point corresponding to the level. If the experience points are sufficient. The level will be downgraded ,and the corresponding discounts will be adjusted to the downgraded level accordingly</Text>
+              <Text style={{ color: 'black' }}>If a VIP member fails to complete the corresponding level maintainance requirement  within 30 days , the system will automatically deduct the experience point corresponding to the level. If the experience points are sufficient. The level will be downgraded ,and the corresponding discounts will be adjusted to the downgraded level accordingly</Text>
 
               <Text style={{ color: 'red', fontSize: 14, fontWeight: 'bold', marginVertical: 5 }}>5. Upgrade Bonus</Text>
-              <Text>The upgrage benefits can be claimed on the VIP pages after the member reaches the VIP membership level and each vip member can only get the upgrade reward of each level once   </Text>
+              <Text style={{ color: 'black' }}>The upgrage benefits can be claimed on the VIP pages after the member reaches the VIP membership level and each vip member can only get the upgrade reward of each level once   </Text>
 
               <Text style={{ color: 'red', fontSize: 14, fontWeight: 'bold', marginVertical: 5 }}>6. Monthly Reward</Text>
-              <Text>VIP members can earn the highest level of VIP rewards once a month. Can only be recieved once a month. Prizes can not be accumulated. And any unclaimed rewards will be refreshed on the next settlement day. When reciving the highest level of monthly rewards earned in this month will be deducted e.g. when VIP 1 earns 500 and upgrade to VIP 2 to recieve monthly rewards 500 will be deducted.</Text>
+              <Text style={{ color: 'black' }}>VIP members can earn the highest level of VIP rewards once a month. Can only be recieved once a month. Prizes can not be accumulated. And any unclaimed rewards will be refreshed on the next settlement day. When reciving the highest level of monthly rewards earned in this month will be deducted e.g. when VIP 1 earns 500 and upgrade to VIP 2 to recieve monthly rewards 500 will be deducted.</Text>
 
               <Text style={{ color: 'red', fontSize: 14, fontWeight: 'bold', marginVertical: 5 }}>7.Real Time Rebate</Text>
-              <Text>The higher the VIP level , the higher the return rate ,all the games are calculated in real time and can be self rewarded! </Text>
+              <Text style={{ color: 'black' }}>The higher the VIP level , the higher the return rate ,all the games are calculated in real time and can be self rewarded! </Text>
 
               <Text style={{ color: 'red', fontSize: 14, fontWeight: 'bold', marginVertical: 5 }}>8. Safe</Text>
-              <Text>VIP member who have reached the corresponding level will get additional benefits on safe deposit based on the member's VIP level </Text>
+              <Text style={{ color: 'black' }}>VIP member who have reached the corresponding level will get additional benefits on safe deposit based on the member's VIP level </Text>
             </View>
           </View>
 

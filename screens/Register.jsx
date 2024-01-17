@@ -176,6 +176,12 @@ const Register = () => {
 
   const isResetButtonEnabled = emailAddress !== '' && password !== '' && confirmPassword !== '' && phone !== '';
 
+  const [isChecked, setChecked] = useState(true);
+
+  const handleToggle = () => {
+    setChecked(!isChecked);
+  };
+
   return (
     <ScrollView>
       <View style={{ padding: 20 }}>
@@ -190,7 +196,7 @@ const Register = () => {
             </Text>
           </View>
         </View>
-        <View style={{ marginVertical: 30 }}>
+        <View style={{ marginTop: 30, marginBottom: 10 }}>
           <View
             style={{
               flexDirection: "row",
@@ -416,11 +422,17 @@ const Register = () => {
 
           </View>
           {(!isResetButtonEnabled && (
-            <Text style={{ color: 'red' }}> * Please fill all Details</Text>
+            <Text style={{ color: 'red', }}> * Please fill all Details</Text>
           ))}
         </View>
         <View>
         </View>
+        <TouchableOpacity style={{ width: '100%', height: '4%', flexDirection: 'row', alignItems: 'center', marginVertical: 5 }} onPress={handleToggle} activeOpacity={0.8}>
+          <View style={[styles.checkbox, isChecked && styles.checked]}>
+            {isChecked && <Text style={{ color: 'white' }}>✓</Text>}
+          </View>
+          <Text style={{ marginLeft: 10, color: 'black' }}>I agree(terms and condition)</Text>
+        </TouchableOpacity>
         <TouchableOpacity
           onPress={handleSignUp}
           style={[styles.signIn, isResetButtonEnabled ? styles.enabledButton : styles.disabledButton]}
@@ -575,5 +587,17 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     width: SCREEN_WIDTH * 0.8,
+  }, checkbox: {
+    width: 20,
+    height: 20,
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: 'green',
+    justifyContent: 'center',
+    alignItems: 'center', marginLeft: 10
+  },
+  checked: {
+    backgroundColor: 'green', // Change this color as needed
+    borderColor: 'green',
   },
 });

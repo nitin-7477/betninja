@@ -129,13 +129,16 @@ const DepositHistoryScreen = () => {
 
             <View style={{ height: 'auto', width: SCREEN_WIDTH * 0.91, borderTopWidth: 0.4, borderColor: 'grey', borderRadius: 10, padding: 10 }}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-                <Text style={{ fontSize: 16, color: "black" }}>Balance</Text><Text style={{ color: 'orange', fontSize: 18 }}>{item.amount}</Text>
+                <Text style={{ fontSize: 16, color: "black" }}>Balance</Text>
+                <Text style={{ color: 'orange', fontSize: 18 }}>
+                  ₹{item.amount.toFixed(2)}
+                </Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
                 <Text style={{ fontSize: 16, color: "black" }}>Type</Text><Text style={{ color: "black" }}>{item.type}</Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-                <Text style={{ fontSize: 16, color: "black" }}>Time</Text><Text style={{ color: "black" }}>{item.updatedAt}</Text>
+                <Text style={{ fontSize: 16, color: "black" }}>Time</Text><Text style={{ color: "black" }}>{new Date(item.updatedAt).toLocaleString()}</Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
                 <Text style={{ fontSize: 16, color: "black" }}>Transaction Id</Text><Text style={{ color: "black" }}>{item.transactionId}</Text>
