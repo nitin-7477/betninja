@@ -11,23 +11,30 @@ const FeedbackForm = () => {
 
   const navigation = useNavigation();
   const [feedback, setFeedback] = useState('');
+  const [setRating, setSetRating] = useState(0);
+
+  const ratingCompleted = (rating) => {
+
+    setSetRating(rating);
+  };
 
   const handleSubmit = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
 
-      var body = { rating: 5, comment: feedback }
+      const body = { rating: setRating, comment: feedback };
       console.log(body);
-      var result = await axios.get(`${process.env.SERVERURL}/api/feedback/feedback`, {
+
+      const result = await axios.post(`${process.env.SERVERURL}/api/feedback/feedback`, body, {
         headers: {
-          "Authorization": JSON.parse(token),
+          Authorization: JSON.parse(token),
         },
-      })
+      });
+
       console.log(result);
       setFeedback('');
-    }
-    catch (e) {
-      console.log(e);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -57,7 +64,7 @@ const FeedbackForm = () => {
         ratingCount={5}
         imageSize={40}
         showRating
-        onFinishRating={this.ratingCompleted}
+        onFinishRating={ratingCompleted}
       />
       <Image source={require('../../assets/feedback.png')} style={{ height: 200, width: 300, marginVertical: 40 }} />
 

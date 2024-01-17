@@ -119,7 +119,7 @@ const DepositeScreen = () => {
           style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
           <Ionicons name='return-up-back' color={'white'} size={30} />
         </TouchableOpacity>
-          <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.purple, marginLeft: 30 }}>Deposit Screen</Text></View>
+          <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.purple, marginLeft: 30 }}>Deposit</Text></View>
         {/* *********************balance card******************* */}
         <View style={{ height: SCREEN_HEIGHT * 0.15, width: responsiveWidth(97), alignSelf: 'center', backgroundColor: '#d9ad82', marginVertical: 10, borderRadius: 10, padding: 10 }}>
 

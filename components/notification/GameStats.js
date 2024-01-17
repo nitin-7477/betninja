@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, View, TouchableOpacity, Image, ScrollView } from 'react-native'
+import { FlatList, StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, ActivityIndicator } from 'react-native'
 import React from 'react'
 import { Colors } from '../Constants/Colors'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
@@ -9,6 +9,7 @@ import AntDesign from "react-native-vector-icons/AntDesign"
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect } from 'react';
+import { responsiveHeight } from 'react-native-responsive-dimensions';
 
 const GameStats = () => {
 
@@ -18,6 +19,14 @@ const GameStats = () => {
   const [Yesterday, setYesterday] = useState([])
   const [thisWeek, setThisWeek] = useState([])
   const [thisMonth, setThisMonth] = useState([])
+  const [selectedBtn, setSelectedBtn] = useState(1)
+  const [loading, setLoading] = useState(false)
+
+
+
+  const handleClick = (btn) => {
+    setSelectedBtn(btn)
+  }
 
   const fetchToken = async () => {
     try {
@@ -38,7 +47,7 @@ const GameStats = () => {
 
   const fetchCommissionData = async () => {
     try {
-
+      setLoading(true)
       const token = await AsyncStorage.getItem('token');
 
       if (!token) {
@@ -56,7 +65,7 @@ const GameStats = () => {
       })
 
 
-      console.log(result.data.responseData);
+      console.log(result.data.responseData.thisMonth);
       setToday(result.data.responseData.today)
       setYesterday(result.data.responseData.yesterday)
       setThisWeek(result.data.responseData.thisWeek)
@@ -64,6 +73,9 @@ const GameStats = () => {
 
     } catch (e) {
       console.log("ERROR IN FETCHING COMMISSION", e);
+    }
+    finally {
+      setLoading(false)
     }
   }
 
@@ -80,33 +92,100 @@ const GameStats = () => {
     fetchData();
   }, []);
 
+  const renderThisMonth = ({ item, i }) => {
+    return (
+      <View style={{ width: '95%', height: responsiveHeight(25), backgroundColor: '#e9ffdb', marginVertical: 4, alignSelf: 'center', borderRadius: 5, padding: 5, elevation: 5, }}>
+
+
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Lottery No.</Text>
+          <Text style={{ color: 'black', fontWeight: 'bold' }}>{item.LN}</Text>
+        </View>
+
+
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Bet Amount</Text>
+          <Text style={{ color: 'black' }}>{item.phrchaseAmount}</Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Result</Text>
+          <Text style={{ color: 'black' }}>{item.result.size}  {item.result.number}  {item.result.color}</Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Select</Text>
+          <Text style={{ color: 'black' }}>{item.select}  </Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Select Type</Text>
+          <Text style={{ color: 'black' }}>{item.selectType}  </Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Status</Text>
+          <Text style={{ color: item.status === 'success' ? 'blue' : 'red', fontWeight: 'bold' }}>{item.status}</Text>
+        </View>
+
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Win/Loss</Text>
+          <Text style={{ color: 'black' }}>{item.win_loss}  </Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Date</Text>
+          <Text style={{ color: 'black' }}>{new Date(item.orderTime).toLocaleString()}</Text>
+        </View>
+      </View>
+    );
+  }
+  const renderToday = () => {
+
+  }
+  const renderYesterday = () => {
+
+  }
+  const renderThisWeek = () => {
+
+  }
+
+  const renderLoadingIndicator = () => (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <ActivityIndicator size={100} color="gold" />
+    </View>
+  );
+
   return (
     <ScrollView style={styles.container}>
       {/* header */}
 
-      <View style={{ width: SCREEN_WIDTH * 1, backgroundColor: 'white', height: '7%', alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10 }}>
+      <View style={{ width: SCREEN_WIDTH * 1, backgroundColor: 'white', height: 50, alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10 }}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <AntDesign name='left' size={20} color={'black'} style={{ fontWeight: 'bold' }} />
         </TouchableOpacity>
         <Text style={{ marginLeft: 30, fontSize: 16, color: 'black', fontWeight: 'bold' }}>Game Chart</Text>
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-        <TouchableOpacity style={styles.otpBtn} >
+        <TouchableOpacity
+          onPress={() => handleClick(1)}
+          style={[styles.otpBtn, { backgroundColor: selectedBtn == 1 ? 'red' : 'grey', }]}    >
           <Text style={{ color: 'white', textAlign: 'center', fontSize: 12, }} >
             Today
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.otpBtn}    >
+        <TouchableOpacity
+          onPress={() => handleClick(2)}
+          style={[styles.otpBtn, { backgroundColor: selectedBtn == 2 ? 'red' : 'grey', }]}    >
           <Text style={{ color: 'white', textAlign: 'center', fontSize: 12, }} >
             Yesterday
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.otpBtn}    >
-          <Text style={{ color: 'white', textAlign: 'center', fontSize: 12, }} >
+        <TouchableOpacity
+          onPress={() => handleClick(3)}
+          style={[styles.otpBtn, { backgroundColor: selectedBtn == 3 ? 'red' : 'grey', }]}    >
+          <Text style={{ color: selectedBtn == 3 ? 'white' : 'white', textAlign: 'center', fontSize: 12, }} >
             This Week
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.otpBtn}    >
+        <TouchableOpacity
+          onPress={() => handleClick(4)}
+          style={[styles.otpBtn, { backgroundColor: selectedBtn == 4 ? 'red' : 'grey', }]} >
           <Text style={{ color: 'white', textAlign: 'center', fontSize: 12, }} >
             This Month
           </Text>
@@ -121,12 +200,37 @@ const GameStats = () => {
         </Text>
 
       </View>
-      <View style={styles.history}>
+
+      <View style={{ flex: 1, width: responsiveWidth(100), height: 'auto' }}>
+        {loading
+          ? renderLoadingIndicator()
+          : (
+            <FlatList
+              data={
+                selectedBtn === 1 ? today :
+                  selectedBtn === 2 ? Yesterday :
+                    selectedBtn === 3 ? thisWeek :
+                      selectedBtn === 4 ? thisMonth :
+                        [] // Default to an empty array if none of the conditions match
+              }
+              renderItem={
+                selectedBtn === 1 ? renderToday :
+                  selectedBtn === 2 ? renderYesterday :
+                    selectedBtn === 3 ? renderThisWeek :
+                      selectedBtn === 4 ? renderThisMonth :
+                        null // Set renderItem to null or another default value if none of the conditions match
+              }
+            />
+          )}
+      </View>
+
+
+      {/* <View style={styles.history}>
 
         <Image source={require('../../assets/noData.png')} style={{ height: 200, width: 200 }} />
         <Text style={{ fontSize: 16, fontWeight: '600' }}>No Data</Text>
 
-      </View>
+      </View> */}
     </ScrollView>
   )
 }

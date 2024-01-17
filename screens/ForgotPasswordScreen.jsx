@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, SafeAreaView, TextInput } from 'react-native';
 import AppTextInput from '../components/AppTextInput';
 import { Colors } from '../components/Constants/Colors';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Feather from "react-native-vector-icons/Feather";
 
 const ForgotPasswordComponent = () => {
 
@@ -14,24 +17,73 @@ const ForgotPasswordComponent = () => {
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
   const [generatedOTP, setGeneratedOTP] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [refresh, setRefresh] = useState(false);
+  const [otp, setOtp] = useState('');
+  const [isResendEnabled, setResendEnabled] = useState(true);
+  const [timer, setTimer] = useState(59);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(true);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(true);
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
+  const toggleConfirmPasswordVisibility = () => {
+    setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
+  };
   const generateOTP = () => {
     const otp = Math.floor(1000 + Math.random() * 9000).toString();
     setGeneratedOTP(otp);
     return otp;
   };
 
-  // const handleVerifyCode = () => {
-  //   const enteredOTP = verificationCode.trim();
+  const handleSendOTP = async () => {
+    try {
 
-  //   if (enteredOTP === generatedOTP) {
-  //     alert('Verification Successful', 'Code verified successfully.');
-  //   } else {
-  //     alert('Verification Failed', 'Invalid verification code. Please try again.');
-  //   }
-  // };
+      var body = { email: email }
+      const result = await axios.post(`${process.env.SERVERURL}/api/auth/forgot-password`,
+        body
+      );
+
+      console.log(result.data);
+
+      setResendEnabled(false);
+      startTimer();
 
 
+    } catch (error) {
+
+      console.error('Error sending OTP:', error);
+
+
+      if (error.response && error.response.data) {
+        const errorMessage = error.response.data.message;
+        // setErrorMessage(errorMessage);
+        // setErrorModalVisible(true);
+      } else {
+        // setErrorMessage("An unexpected error occurred");
+        console.log(error);
+        // setErrorModalVisible(true);
+      }
+
+    }
+  };
+
+  const startTimer = () => {
+    const interval = setInterval(() => {
+      setTimer((prevTimer) => {
+        if (prevTimer === 0) {
+          clearInterval(interval);
+          setResendEnabled(true);
+          return 59;
+        }
+        return prevTimer - 1;
+      });
+    }, 1000);
+  };
 
   const handleResetPassword = () => {
     const enteredOTP = verificationCode.trim();
@@ -44,12 +96,6 @@ const ForgotPasswordComponent = () => {
     }
   };
 
-  const handleSendOTP = () => {
-    const otp = generateOTP();
-    // For demonstration purposes, you can log the generated OTP to the console
-    console.log('Generated OTP:', otp);
-    alert('OTP Sent', 'OTP sent successfully.');
-  };
 
   const isResetButtonEnabled =
     email !== '' &&
@@ -77,20 +123,163 @@ const ForgotPasswordComponent = () => {
         <Image source={require('../assets/forgotPassword.png')} style={{ height: 90, width: 90 }} />
       </View>
       <View style={styles.formContainer}>
-        <Text style={{ fontSize: 16, color: Colors.fontGray }}>Your Email Address</Text>
-        <AppTextInput placeholder='Enter Email' value={email} onChangeText={(text) => setEmail(text)} />
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            backgroundColor: "rgba(173,216,230,0.3)",
 
-        <Text style={{ fontSize: 16, color: Colors.fontGray }}>Set New password</Text>
-        <AppTextInput placeholder='Enter New Password' value={newPassword} secureTextEntry onChangeText={(text) => setNewPassword(text)} />
+            borderRadius: 10,
+            justifyContent: "space-between",
+          }}
+        >
 
-        <Text style={{ fontSize: 16, color: Colors.fontGray }}>Confirm New Password</Text>
-        <AppTextInput placeholder='Confirm New Password' value={confirmNewPassword} secureTextEntry onChangeText={(text) => setConfirmNewPassword(text)} />
-        <TouchableOpacity style={[styles.otpBtn, isSendButtonEnabled ? styles.enabledSendButton : styles.disabledSendButton]} onPress={handleSendOTP} disabled={!isSendButtonEnabled}>
-          <Text style={{ color: 'white', textAlign: 'center', fontSize: 16 }}>Send</Text>
-        </TouchableOpacity>
-        <Text style={{ fontSize: 16, color: Colors.fontGray }}>Verify Otp Code</Text>
-        <AppTextInput placeholder='Enter Verification code' value={verificationCode} onChangeText={(text) => setVerificationCode(text)} />
+          <TextInput
+            placeholderTextColor={"black"}
+            style={{
+              fontSize: 14,
+              paddingHorizontal: 20,
+              paddingVertical: 5,
 
+              borderRadius: 10,
+              marginVertical: 5,
+              fontWeight: "500",
+              color: "black",
+              width: '100%',
+            }}
+            value={email}
+            onChangeText={(text) => setEmail(text.toLowerCase())}
+            placeholder="Email Address"
+          />
+
+        </View>
+
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            backgroundColor: "rgba(173,216,230,0.3)",
+
+            borderRadius: 10,
+            justifyContent: "space-between",
+            marginVertical: 10
+          }}
+        >
+
+          <TextInput
+            placeholderTextColor={"black"}
+            style={{
+              fontSize: 14,
+              paddingHorizontal: 20,
+              paddingVertical: 5,
+
+              borderRadius: 10,
+              marginVertical: 5,
+              fontWeight: "500",
+              color: "black",
+              width: '90%',
+            }}
+
+            secureTextEntry={isPasswordVisible}
+            value={newPassword}
+            onChangeText={(text) => setNewPassword(text)}
+            placeholder="Password"
+            maxLength={12}
+
+          />
+          <TouchableOpacity onPress={togglePasswordVisibility}>
+            <Feather
+              name={isPasswordVisible ? "eye" : "eye-off"}
+              color="black"
+              size={20}
+              style={{ marginRight: 10 }}
+            />
+          </TouchableOpacity>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            backgroundColor: "rgba(173,216,230,0.3)",
+
+            borderRadius: 10,
+            justifyContent: "space-between",
+            marginVertical: 10, alignItems: 'center'
+          }}
+        >
+
+          <TextInput
+            placeholderTextColor={"black"}
+            style={{
+              fontSize: 14,
+              paddingHorizontal: 20,
+              paddingVertical: 5,
+
+              borderRadius: 10,
+              marginVertical: 5,
+              fontWeight: "500",
+              color: "black",
+              width: '90%',
+            }}
+            secureTextEntry={isConfirmPasswordVisible}
+            value={confirmNewPassword}
+            onChangeText={(text) => setConfirmNewPassword(text)}
+            placeholder="Confirm Password"
+          />
+          <TouchableOpacity onPress={toggleConfirmPasswordVisibility}>
+            <Feather
+              name={isConfirmPasswordVisible ? "eye" : "eye-off"}
+              color="black"
+              size={20}
+              style={{ marginRight: 10 }}
+            />
+          </TouchableOpacity>
+        </View>
+
+
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            backgroundColor: "rgba(173,216,230,0.3)",
+            borderRadius: 10,
+            width: '100%',
+          }}
+        >
+
+          <TextInput
+            placeholderTextColor={"black"}
+            style={{
+              fontSize: 14,
+              paddingHorizontal: 20,
+              paddingVertical: 5,
+              borderRadius: 10,
+              marginVertical: 5,
+              fontWeight: "500",
+              color: "black",
+              width: '70%',
+
+            }}
+            value={otp}
+            onChangeText={(text) => setOtp(text)}
+            placeholder="Enter Otp"
+            keyboardType="numeric"
+          />
+          <View style={{ flexDirection: 'row' }}>
+            <TouchableOpacity
+              style={[
+                styles.otpBtn,
+                isSendButtonEnabled ? styles.enabledSendButton : styles.disabledSendButton
+              ]}
+              onPress={handleSendOTP}
+              disabled={!isSendButtonEnabled || !isResendEnabled}
+            >
+              <Text style={{ color: 'white', textAlign: 'center', fontSize: 16 }}>
+                {isResendEnabled ? 'Send OTP' : `${timer} s`}
+              </Text>
+            </TouchableOpacity>
+
+          </View>
+        </View>
 
         <TouchableOpacity style={[styles.signIn, isResetButtonEnabled ? styles.enabledButton : styles.disabledButton]} onPress={handleResetPassword} disabled={!isResetButtonEnabled}>
           <Text style={{ color: 'white', textAlign: 'center', fontSize: 20 }}>Reset Password</Text>
@@ -134,9 +323,19 @@ const styles = StyleSheet.create({
   },
   enabledSendButton: {
     backgroundColor: 'orange',
+    backgroundColor: 'orange',
+    borderRadius: 10,
+    width: 90,
+    elevation: 5,
+    paddingVertical: 3,
   },
   disabledSendButton: {
     backgroundColor: 'lightgray',
+    backgroundColor: 'orange',
+    borderRadius: 10,
+    width: 90,
+    elevation: 5,
+    paddingVertical: 3,
   },
 });
 
