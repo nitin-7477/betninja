@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Image, Text, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { Colors } from '../Constants/Colors';
 import { SCREEN_WIDTH } from '../Constants/Screen';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from "@react-navigation/native";
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,19 +11,24 @@ const FeedbackForm = () => {
 
   const navigation = useNavigation();
   const [feedback, setFeedback] = useState('');
-  const [setRating, setSetRating] = useState(0);
+  const [rating, setRating] = useState(0);
 
   const ratingCompleted = (rating) => {
 
-    setSetRating(rating);
+    setRating(rating)
   };
 
   const handleSubmit = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
 
-      const body = { rating: setRating, comment: feedback };
-      console.log(body);
+      let body = { comment: feedback, rating: rating };
+
+      // if (rating > 0) {
+      //   // Include rating in the body only if the user has provided a rating
+      //   body = { ...body, rating: rating };
+      // }
+      console.log(token);
 
       const result = await axios.post(`${process.env.SERVERURL}/api/feedback/feedback`, body, {
         headers: {
@@ -33,19 +38,21 @@ const FeedbackForm = () => {
 
       console.log(result);
       setFeedback('');
+      setRating(1); //  
     } catch (error) {
       console.error(error);
     }
   };
 
+
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}><TouchableOpacity
-        onPress={() => navigation.navigate('Account')}
-        style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
-        <Ionicons name='return-up-back' color={'white'} size={30} />
-      </TouchableOpacity>
-        <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.purple, marginLeft: 30 }}>Feedback</Text></View>
+      <View style={{ width: '100%', backgroundColor: 'white', height: 50, alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10, borderBottomEndRadius: 15, borderBottomStartRadius: 15 }}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <AntDesign name='left' size={20} color={'black'} style={{ fontWeight: 'bold' }} />
+        </TouchableOpacity>
+        <Text style={{ marginLeft: 30, fontSize: 16, color: 'black', fontWeight: 'bold' }}>Feedback</Text>
+      </View>
       <TextInput
         style={styles.feedbackInput}
         multiline
@@ -56,11 +63,10 @@ const FeedbackForm = () => {
         value={feedback}
         onChangeText={(text) => setFeedback(text)}
       />
-      <View>
-        <Text style={{ textAlign: 'center' }}>Plz Rate the app</Text>
-      </View>
+
       <Rating
-        type='heart'
+        type='star'
+        ratingBackgroundColor='red'
         ratingCount={5}
         imageSize={40}
         showRating
@@ -79,7 +85,7 @@ const FeedbackForm = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 20,
+
     alignSelf: 'center', width: SCREEN_WIDTH * 1
   },
   title: {
@@ -88,7 +94,7 @@ const styles = StyleSheet.create({
     color: 'black'
   },
   feedbackInput: {
-    width: '100%',
+    width: '95%',
     height: 250, // Adjust the height as needed
     borderColor: 'gray',
     borderWidth: 1,

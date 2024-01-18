@@ -2,6 +2,8 @@ import { StyleSheet, Text, View, TouchableOpacity, ScrollView, FlatList, Alert, 
 import React from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../components/Constants/Screen'
 import Ionicons from "react-native-vector-icons/Ionicons"
+import AntDesign from "react-native-vector-icons/AntDesign"
+
 import { Colors } from '../../components/Constants/Colors'
 import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect } from 'react'
@@ -106,13 +108,11 @@ const BettingRebate = () => {
 
   return (
     <ScrollView style={styles.container1}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10 }}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Activity')}
-          style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
-          <Ionicons name='return-up-back' color={'white'} size={30} />
+      <View style={{ width: '100%', backgroundColor: 'white', height: 50, alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10 }}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <AntDesign name='left' size={20} color={'black'} style={{ fontWeight: 'bold' }} />
         </TouchableOpacity>
-        <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: 'black', marginLeft: 70 }}>Betting Rebate</Text>
+        <Text style={{ marginLeft: 30, fontSize: 16, color: 'black', fontWeight: 'bold' }}>Betting Rebate</Text>
       </View>
       <View style={{ height: SCREEN_HEIGHT * 0.45, width: '95%', alignSelf: 'center', backgroundColor: '#DCDCDC', marginTop: 10, borderRadius: 10, padding: 10, }}>
         <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 18 }}>All-Total Betting Rebate</Text>
@@ -217,7 +217,7 @@ export default BettingRebate
 const styles = StyleSheet.create({
   container1: {
     flex: 1,
-    marginVertical: 10,
+
     alignSelf: 'center', width: '100%',
   },
   container: {

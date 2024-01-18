@@ -3,7 +3,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
 import Entypo from 'react-native-vector-icons/Entypo'
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { Colors } from '../Constants/Colors'
 import { useNavigation } from "@react-navigation/native";
 import axios from 'axios'
@@ -16,6 +16,7 @@ const WithdrawScreen = () => {
   const [amount, setAmount] = useState('');
   const [userInformation, setUserInformation] = useState([]);
   const [bankDetails, setBankDetails] = useState([])
+  const [isBankAvailable, setIsBankAvailable] = useState([])
   const isButtonDisabled = parseInt(amount) >= 200;
 
   const handleAmountChange = (value) => {
@@ -50,8 +51,10 @@ const WithdrawScreen = () => {
           },
         });
 
-        setBankDetails(response.data);
-        
+        setBankDetails(response.data.data[(response.data.data).length - 1]);
+        setIsBankAvailable(response.data.data[0])
+
+
       } catch (error) {
         console.error('Error fetching user data in Wallet Screen:', error);
       }
@@ -60,7 +63,7 @@ const WithdrawScreen = () => {
     fetchBankData();
   }, []);
 
-  console.log("This is bank details in Withdrow screen", bankDetails);
+  console.log(userInformation);
 
   const handleDepositWithdraw = async () => {
     try {
@@ -86,15 +89,17 @@ const WithdrawScreen = () => {
   };
 
 
+
+
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       <View style={styles.depositSection}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}><TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
-          <Ionicons name='return-up-back' color={'white'} size={30} />
-        </TouchableOpacity>
-          <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.purple, marginLeft: 30 }}>Withdraw</Text></View>
+        <View style={{ width: '100%', backgroundColor: 'white', height: 50, alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10, borderBottomEndRadius: 15, borderBottomStartRadius: 15 }}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <AntDesign name='left' size={20} color={'black'} style={{ fontWeight: 'bold' }} />
+          </TouchableOpacity>
+          <Text style={{ marginLeft: 30, fontSize: 16, color: 'black', fontWeight: 'bold' }}>Withdraw</Text>
+        </View>
         {/* *********************balance card******************* */}
         <View style={{ height: SCREEN_HEIGHT * 0.15, width: responsiveWidth(97), alignSelf: 'center', backgroundColor: '#d9ad82', marginVertical: 10, borderRadius: 10, padding: 10 }}>
 
@@ -123,7 +128,7 @@ const WithdrawScreen = () => {
 
         </View>
 
-        <TouchableOpacity
+        {bankDetails.length === 0 ? <TouchableOpacity
           onPress={() => navigation.navigate('AddBank')}
           style={{ height: responsiveHeight(11), marginBottom: 10, width: responsiveWidth(97), alignSelf: 'center', backgroundColor: Colors.lightGray, justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
           <Image source={require('../../assets/plus.png')} style={{ height: 40, width: 40 }} />
@@ -132,17 +137,21 @@ const WithdrawScreen = () => {
 
 
 
-        <TouchableOpacity style={{ height: responsiveHeight(11), marginBottom: 10, width: responsiveWidth(97), alignSelf: 'center', backgroundColor: '#D3D3D3', marginBottom: 10, borderRadius: 10, padding: 10, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
-          <View style={{ marginBottom: 10, alignItems: 'center', width: '30%', }}>
-            <Image source={require('../../assets/wallet/bank-logo.png')} style={{ height: 40, width: 40 }} />
+          : <TouchableOpacity
+            onPress={() => navigation.navigate('BankAccount')}
+            style={{ height: responsiveHeight(11), marginBottom: 10, width: responsiveWidth(97), alignSelf: 'center', backgroundColor: '#D3D3D3', marginBottom: 10, borderRadius: 10, padding: 10, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ marginBottom: 10, alignItems: 'center', width: '30%', }}>
+              <Image source={require('../../assets/wallet/bank-logo.png')} style={{ height: 40, width: 40 }} />
 
-            <Text style={{ fontSize: 14, color: 'black' }} >Jupiter Federal</Text>
-          </View>
-          <View style={{ borderLeftWidth: 0.4, flexDirection: 'row', justifyContent: 'space-between', width: '65%' }}>
-            <Text style={{ color: 'grey', marginLeft: 10 }}>7477*****45</Text>
-            <Entypo name='chevron-small-right' size={25} />
-          </View>
-        </TouchableOpacity>
+              <Text style={{ fontSize: 14, color: 'black' }} >{bankDetails.bankName}</Text>
+            </View>
+            <View style={{ borderLeftWidth: 0.4, flexDirection: 'row', justifyContent: 'space-between', width: '65%', alignItems: 'center' }}>
+              <Text style={{ color: 'grey', marginLeft: 10 }}>
+                {bankDetails.acountNumber}
+              </Text>
+              <Entypo name='chevron-small-right' size={25} />
+            </View>
+          </TouchableOpacity>}
         {/* *********************Select the Channel******************* */}
         {/* *********************Withdraw Amount******************* */}
         <View style={{ height: responsiveHeight(50), marginBottom: 10, width: responsiveWidth(97), alignSelf: 'center', backgroundColor: '#D3D3D3', marginBottom: 10, borderRadius: 10, padding: 10, }}>
@@ -160,7 +169,7 @@ const WithdrawScreen = () => {
             />
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 5 }}>
-            <View><Text style={{ color: 'black' }}>Withdrown Balance <Text style={{ color: 'red' }}>0.00</Text></Text></View>
+            <View><Text style={{ color: 'black' }}>Withdrown Balance <Text style={{ color: 'red' }}>  ₹ {Number(userInformation.rangeToWithdraw).toFixed(2)}</Text></Text></View>
             <TouchableOpacity style={{ backgroundColor: '#d9ad82', height: 20, width: 80, borderWidth: 0.3, alignItems: 'center', borderRadius: 10 }}><Text style={{ color: 'white' }}>Add</Text></TouchableOpacity>
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 5 }}>
@@ -201,7 +210,7 @@ export default WithdrawScreen
 const styles = {
   container: {
     flex: 1,
-    padding: 1,
+
     backgroundColor: '#f5f5f5',
     alignSelf: 'center'
 
@@ -246,8 +255,8 @@ const styles = {
     paddingHorizontal: 20,
   },
   depositSection: {
-    marginTop: 10,
-    marginBottom: 10,
+
+    marginBottom: 5,
   },
   sectionTitle: {
     color: 'black',

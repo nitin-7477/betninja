@@ -11,12 +11,12 @@ const NotificationFile = () => {
   const navigation = useNavigation();
   return (
     <ScrollView style={styles.container}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}><TouchableOpacity
-        onPress={() => navigation.navigate('Account')}
-        style={{ height: 35, width: 35, justifyContent: 'center', alignItems: 'center', borderRadius: 20, backgroundColor: Colors.gray }}>
-        <Ionicons name='return-up-back' color={'black'} size={24} />
-      </TouchableOpacity>
-        <Text style={{ fontWeight: '900', marginBottom: 1, fontSize: 20, color: Colors.purple, marginLeft: 30 }}>Announcements</Text></View>
+     <View style={{ width: '100%', backgroundColor: 'white', height: 50, alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10 }}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <AntDesign name='left' size={20} color={'black'} style={{ fontWeight: 'bold' }} />
+          </TouchableOpacity>
+          <Text style={{ marginLeft: 30, fontSize: 16, color: 'black', fontWeight: 'bold' }}>Notification</Text>
+        </View>
 
       <View style={styles.notification}>
         <View style={{ height: '100%', width: '12%', }}>
@@ -64,10 +64,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignSelf: 'center',
-    padding: 10
+  
   },
   notification: {
-    width: SCREEN_WIDTH * 0.9,
+    width: SCREEN_WIDTH * 0.95,
     alignSelf: 'center',
     height: 'auto',
     backgroundColor: '#E0E0E0',

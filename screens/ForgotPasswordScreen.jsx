@@ -18,7 +18,7 @@ const ForgotPasswordComponent = () => {
   const [verificationCode, setVerificationCode] = useState('');
   const [generatedOTP, setGeneratedOTP] = useState('');
   const [loading, setLoading] = useState(false);
-  const [refresh, setRefresh] = useState(false);
+
   const [otp, setOtp] = useState('');
   const [isResendEnabled, setResendEnabled] = useState(true);
   const [timer, setTimer] = useState(59);
@@ -85,15 +85,35 @@ const ForgotPasswordComponent = () => {
     }, 1000);
   };
 
-  const handleResetPassword = () => {
-    const enteredOTP = verificationCode.trim();
+  const handleResetPassword = async () => {
 
-    if (enteredOTP === generatedOTP) {
-      // Passwords match, proceed with the password reset logic
-      alert('Password Reset', 'Password reset successfully.');
-    } else {
-      alert('Verification Failed', 'Invalid verification code. Please try again.');
+    try {
+
+      var body = { email: email, otp: otp, newPassword: newPassword }
+      const result = await axios.post(`${process.env.SERVERURL}/api/auth/reset-password`,
+        body
+      );
+
+      console.log(result.data);
+      alert(result.data.message)
+
+    } catch (error) {
+
+      console.error('Error sending OTP:', error);
+
+
+      if (error.response && error.response.data) {
+        const errorMessage = error.response.data.message;
+        // setErrorMessage(errorMessage);
+        // setErrorModalVisible(true);
+      } else {
+        // setErrorMessage("An unexpected error occurred");
+        console.log(error);
+        // setErrorModalVisible(true);
+      }
+
     }
+
   };
 
 
@@ -101,7 +121,7 @@ const ForgotPasswordComponent = () => {
     email !== '' &&
     newPassword !== '' &&
     confirmNewPassword !== '' &&
-    verificationCode !== '';
+    otp !== '';
 
   const isSendButtonEnabled =
     email !== '' &&
@@ -110,14 +130,14 @@ const ForgotPasswordComponent = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ height: SCREEN_HEIGHT * 0.115, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: Colors.lightGray, padding: 10, borderRadius: 10, elevation: 2 }}>
+      <View style={{ height: SCREEN_HEIGHT * 0.13, width: SCREEN_WIDTH * 0.97, alignSelf: 'center', backgroundColor: Colors.lightGray, padding: 10, borderRadius: 10, elevation: 2 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}><TouchableOpacity
           onPress={() => navigation.navigate('Login')}
           style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
           <Ionicons name='return-up-back' color={'white'} size={30} />
         </TouchableOpacity>
           <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.purple, marginLeft: 30 }}>Forgot password</Text></View>
-        <Text style={{ color: 'black' }}>Enter Your Email and verificationCode to set a new Password</Text>
+        <Text style={{ color: 'black', marginTop: 10 }}>Enter Your Email and verificationCode to set a new Password</Text>
       </View>
       <View style={{ marginVertical: 15 }}>
         <Image source={require('../assets/forgotPassword.png')} style={{ height: 90, width: 90 }} />
@@ -292,9 +312,9 @@ const ForgotPasswordComponent = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 30,
+    // marginTop: 30,
     alignItems: 'center',
-    padding: 16,
+    padding: 5,
   },
   formContainer: {
     width: '100%',

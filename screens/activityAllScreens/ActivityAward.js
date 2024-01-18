@@ -2,11 +2,12 @@ import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, FlatList }
 import React from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../components/Constants/Screen'
 import { Colors } from '../../components/Constants/Colors'
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from "@react-navigation/native";
 import { Dimensions } from 'react-native';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 
 
 const ActivityAward = () => {
@@ -27,13 +28,11 @@ const ActivityAward = () => {
 
   const renderHeader = () => (
     <View style={{ height: SCREEN_HEIGHT * 0.25, width: SCREEN_WIDTH * 1, backgroundColor: "chocolate" }}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5, paddingHorizontal: 10 }}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Activity')}
-          style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
-          <Ionicons name='return-up-back' color={'white'} size={30} />
+      <View style={{ width: responsiveWidth(100), backgroundColor: 'chocolate', height: responsiveHeight(6), alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10, borderBottomEndRadius: 15, borderBottomStartRadius: 15  }}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <AntDesign name='left' size={20} color={'white'} style={{ fontWeight: 'bold' }} />
         </TouchableOpacity>
-        <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.white, marginLeft: 70 }}>Activity Award</Text>
+        <Text style={{ marginLeft: 30, fontSize: 16, color: 'white', fontWeight: 'bold' }}>Activity Award</Text>
       </View>
       <View style={{ flexDirection: 'row', marginTop: 20, padding: 10 }}>
         <Image source={require('../../assets/activityAward.png')} style={{ height: 100, width: 100 }} />

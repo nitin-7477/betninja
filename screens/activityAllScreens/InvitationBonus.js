@@ -2,8 +2,9 @@ import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, FlatList }
 import React from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../components/Constants/Screen'
 import { Colors } from '../../components/Constants/Colors'
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from "@react-navigation/native";
+import { responsiveWidth, responsiveHeight } from 'react-native-responsive-dimensions';
 
 
 
@@ -113,13 +114,11 @@ const InvitationBonus = () => {
         {/* Your header content goes here */}
         <View style={{ height: SCREEN_HEIGHT * 0.32, width: SCREEN_WIDTH * 1, backgroundColor: "chocolate" }}>
           {/* **********navigation********** */}
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5, paddingHorizontal: 10 }}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('Activity')}
-              style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
-              <Ionicons name='return-up-back' color={'white'} size={30} />
+          <View style={{ width: responsiveWidth(100), backgroundColor: 'chocolate', height: responsiveHeight(6), alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10, borderBottomEndRadius: 15, borderBottomStartRadius: 15  }}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <AntDesign name='left' size={20} color={'white'} style={{ fontWeight: 'bold' }} />
             </TouchableOpacity>
-            <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.white, marginLeft: 70 }}>Invitation Bonus</Text>
+            <Text style={{ marginLeft: 30, fontSize: 16, color: 'white', fontWeight: 'bold' }}>Invitaion Bonus</Text>
           </View>
           <View style={{ flexDirection: 'row', marginTop: 20, padding: 10 }}>
             <Image source={require('../../assets/activityAward.png')} style={{ height: 100, width: 100 }} />
@@ -230,7 +229,7 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT * 0.4,
     width: SCREEN_WIDTH * 0.95,
     marginVertical: 10,
-    backgroundColor: Colors.lightGray,
+    backgroundColor: Colors?.lightGray,
     alignSelf: 'center',
     borderRadius: 10,
     elevation: 2,
@@ -241,7 +240,7 @@ const styles = StyleSheet.create({
   header: {
     height: SCREEN_HEIGHT * 0.07,
     width: SCREEN_WIDTH * 0.95,
-    backgroundColor: Colors.lightblue,
+    backgroundColor: Colors?.lightblue,
     alignSelf: 'center',
     borderRadius: 10,
     justifyContent: 'space-between',
@@ -284,7 +283,7 @@ const styles = StyleSheet.create({
   },
   separator: {
     borderBottomWidth: 0.2,
-    borderColor: Colors.fontGray,
+    borderColor: Colors?.fontGray,
     marginVertical: 20,
   },
   statusContainer: {

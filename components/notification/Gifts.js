@@ -8,6 +8,8 @@ import AppTextInput from '../AppTextInput';
 import { useState } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { responsiveWidth, responsiveHeight } from 'react-native-responsive-dimensions';
+import AntDesign from "react-native-vector-icons/AntDesign"
 
 const Gifts = () => {
   const navigation = useNavigation();
@@ -70,12 +72,12 @@ const Gifts = () => {
     <ScrollView style={styles.container}>
       {/* header */}
 
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}><TouchableOpacity
-        onPress={() => navigation.goBack()}
-        style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
-        <Ionicons name='return-up-back' color={'white'} size={30} />
-      </TouchableOpacity>
-        <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.purple, marginLeft: 30 }}>Gifts</Text></View>
+      <View style={{ width: responsiveWidth(100), backgroundColor: 'white', height: responsiveHeight(6), alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10 , borderBottomEndRadius: 15, borderBottomStartRadius: 15 }}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <AntDesign name='left' size={20} color={'black'} style={{ fontWeight: 'bold' }} />
+        </TouchableOpacity>
+        <Text style={{ marginLeft: 30, fontSize: 16, color: 'black', fontWeight: 'bold' }}>Gifts</Text>
+      </View>
       <View style={styles.section}>
         <Text style={styles.normalText}>Hi Player</Text>
         <Text style={styles.normalText}>Our Team has a gift for you</Text>
@@ -103,21 +105,21 @@ export default Gifts
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
+
     alignSelf: 'center'
   },
   header: {
     height: SCREEN_HEIGHT * 0.05,
-    width: SCREEN_WIDTH * 0.9,
-    backgroundColor: Colors.lightGray, justifyContent: 'center',
+    width: SCREEN_WIDTH * 0.95,
+    backgroundColor: Colors?.lightGray, justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
     marginBottom: 20
   },
   section: {
     height: SCREEN_HEIGHT * 0.4,
-    width: SCREEN_WIDTH * 0.88,
-    backgroundColor: Colors.white,
+    width: SCREEN_WIDTH * 0.97,
+    backgroundColor: Colors?.white,
     alignSelf: 'center',
     marginVertical: 7,
     paddingHorizontal: 15,
@@ -127,8 +129,8 @@ const styles = StyleSheet.create({
   },
   history: {
     height: SCREEN_HEIGHT * 0.6,
-    width: SCREEN_WIDTH * 0.88,
-    backgroundColor: Colors.white,
+    width: SCREEN_WIDTH * 0.97,
+    backgroundColor: Colors?.white,
     alignSelf: 'center',
     marginVertical: 7,
     paddingHorizontal: 15,
@@ -153,13 +155,13 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 5
   }, normalText: {
-    color: Colors.fontGray,
+    color: Colors?.fontGray,
     fontSize: 16,
     fontWeight: '500',
     marginBottom: 5
   },
   placeholderLine: {
-    color: Colors.purple,
+    color: Colors?.purple,
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 5,

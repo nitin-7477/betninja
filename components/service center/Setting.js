@@ -5,12 +5,13 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Feather from "react-native-vector-icons/Feather";
 import Entypo from "react-native-vector-icons/Entypo";
 import { useNavigation } from "@react-navigation/native";
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen';
+import { responsiveWidth } from 'react-native-responsive-dimensions';
 
 const Setting = () => {
   const navigation = useNavigation();
@@ -63,12 +64,13 @@ const Setting = () => {
   return (
     <ScrollView style={styles.container}>
       {/* header */}
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20, alignSelf: 'center', width: SCREEN_WIDTH * 0.95, marginTop: 5, marginLeft: 20 }}><TouchableOpacity
-        onPress={() => navigation.navigate('Account')}
-        style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
-        <Ionicons name='return-up-back' color={'white'} size={25} />
-      </TouchableOpacity>
-        <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.purple, marginLeft: 30 }}>Setting</Text></View>
+
+      <View style={{ width: '100%', backgroundColor: 'white', height: 50, alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10, borderBottomEndRadius: 15, borderBottomStartRadius: 15  }}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <AntDesign name='left' size={20} color={'black'} style={{ fontWeight: 'bold' }} />
+        </TouchableOpacity>
+        <Text style={{ marginLeft: 30, fontSize: 16, color: 'black', fontWeight: 'bold' }}>Setting</Text>
+      </View>
       <View style={styles.section}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15 }}>
           <View style={{ height: 60, width: 60, backgroundColor: 'orange', justifyContent: 'center', alignItems: 'center', borderRadius: 50, borderColor: Colors.fontGray, borderWidth: 1 }}>
@@ -190,12 +192,12 @@ export default Setting
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 5
+    width: responsiveWidth(100)
 
   },
   header: {
     height: SCREEN_HEIGHT * 0.05,
-    width: SCREEN_WIDTH * 0.9,
+    width: SCREEN_WIDTH * 0.97,
     backgroundColor: Colors.lightGray, justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
@@ -203,7 +205,7 @@ const styles = StyleSheet.create({
   },
   section: {
     height: SCREEN_HEIGHT * 0.33,
-    width: SCREEN_WIDTH * 0.88,
+    width: SCREEN_WIDTH * 0.97,
     backgroundColor: Colors.white,
     alignSelf: 'center',
     marginVertical: 7,
@@ -214,7 +216,7 @@ const styles = StyleSheet.create({
   },
   history: {
     height: SCREEN_HEIGHT * 0.1,
-    width: SCREEN_WIDTH * 0.88,
+    width: SCREEN_WIDTH * 0.97,
     backgroundColor: Colors.white,
     alignSelf: 'center',
     marginVertical: 7,

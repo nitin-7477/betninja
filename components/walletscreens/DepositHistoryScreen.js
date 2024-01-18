@@ -106,7 +106,7 @@ const DepositHistoryScreen = () => {
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <AntDesign name='left' size={20} color={'black'} style={{ fontWeight: 'bold' }} />
           </TouchableOpacity>
-          <Text style={{ marginLeft: 30, fontSize: 16, color: 'black', fontWeight: 'bold' }}>Deposit History Screen</Text>
+          <Text style={{ marginLeft: 30, fontSize: 16, color: 'black', fontWeight: 'bold' }}>Deposit History</Text>
         </View>
         {/* *********************************Withdraw History****************************** */}
         <FlatList data={history} renderItem={({ item }) => {

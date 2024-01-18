@@ -6,6 +6,7 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import Entypo from "react-native-vector-icons/Entypo";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
+import { responsiveWidth } from 'react-native-responsive-dimensions';
 
 const notificationData = [
   {
@@ -24,12 +25,12 @@ const Notifications = () => {
     <View style={styles.container}>
       {/* header */}
 
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}><TouchableOpacity
-        onPress={() => navigation.navigate('Account')}
-        style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
-        <Ionicons name='return-up-back' color={'white'} size={30} />
-      </TouchableOpacity>
-        <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.purple, marginLeft: 30 }}>Notifications</Text></View>
+      <View style={{ width: '100%', backgroundColor: 'white', height: 50, alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10, borderBottomEndRadius: 15, borderBottomStartRadius: 15  }}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <AntDesign name='left' size={20} color={'black'} style={{ fontWeight: 'bold' }} />
+        </TouchableOpacity>
+        <Text style={{ marginLeft: 30, fontSize: 16, color: 'black', fontWeight: 'bold' }}>Notification</Text>
+      </View>
 
       <FlatList data={notificationData}
         keyExtractor={(item, index) => index.toString()}
@@ -60,11 +61,11 @@ export default Notifications
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20, alignSelf: 'center'
+    alignSelf: 'center', width: responsiveWidth(100)
   },
   header: {
     height: SCREEN_HEIGHT * 0.06,
-    width: SCREEN_WIDTH * 0.9,
+    width: SCREEN_WIDTH * 0.95,
     backgroundColor: Colors.lightGray,
     alignSelf: 'center',
     justifyContent: 'center',
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
   },
   section: {
     height: SCREEN_HEIGHT * 0.13,
-    width: SCREEN_WIDTH * 0.88,
+    width: SCREEN_WIDTH * 0.95,
     backgroundColor: Colors.white,
     alignSelf: 'center',
     marginVertical: 7,

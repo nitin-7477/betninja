@@ -3,7 +3,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
 import Entypo from 'react-native-vector-icons/Entypo'
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { Colors } from '../Constants/Colors'
 import { useNavigation } from "@react-navigation/native";
 import axios from 'axios'
@@ -71,7 +71,7 @@ const DepositeScreen = () => {
         console.log("This is response of hitting deposite api", response);
       }
       else if (selectedBank == 2) {
-        
+
       }
       else if (selectedBank == 1) {
         navigation.navigate('QrScanner', { amount })
@@ -97,7 +97,7 @@ const DepositeScreen = () => {
     if (isNaN(enteredAmount) || enteredAmount < 100) {
 
       setAmount(text);
-    
+
     } else {
 
       setAmount(enteredAmount.toString());
@@ -114,12 +114,12 @@ const DepositeScreen = () => {
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       <View style={styles.depositSection}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}><TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={{ height: 40, width: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
-          <Ionicons name='return-up-back' color={'white'} size={30} />
-        </TouchableOpacity>
-          <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.purple, marginLeft: 30 }}>Deposit</Text></View>
+        <View style={{ width: '100%', backgroundColor: 'white', height: 50, alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10, borderBottomEndRadius: 15, borderBottomStartRadius: 15  }}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <AntDesign name='left' size={20} color={'black'} style={{ fontWeight: 'bold' }} />
+          </TouchableOpacity>
+          <Text style={{ marginLeft: 30, fontSize: 16, color: 'black', fontWeight: 'bold' }}>Deposit</Text>
+        </View>
         {/* *********************balance card******************* */}
         <View style={{ height: SCREEN_HEIGHT * 0.15, width: responsiveWidth(97), alignSelf: 'center', backgroundColor: '#d9ad82', marginVertical: 10, borderRadius: 10, padding: 10 }}>
 

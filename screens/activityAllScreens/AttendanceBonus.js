@@ -17,9 +17,9 @@ const AttendanceBonus = () => {
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       <View style={{ flex: 1, height: SCREEN_HEIGHT * 0.3, width: SCREEN_WIDTH * 1, backgroundColor: '#d9ad82' }}>
-        <View style={{ width: '100%', flexDirection: 'row', paddingHorizontal: 5, paddingVertical: 10 }}>
+        <View style={{ width: '100%', flexDirection: 'row', paddingHorizontal: 5, paddingVertical: 10, height: 50, backgroundColor: '#d9ad82', elevation: 5, alignItems: 'center', borderBottomEndRadius: 15, borderBottomStartRadius: 15  }}>
 
-          <TouchableOpacity onPress={() => navigation.navigate('Activity')} style={{ width: '40%' }}>
+          <TouchableOpacity onPress={() => navigation.navigate('Activity')} style={{ width: '20%' }}>
             <AntDesign name='left' color={'white'} size={20} />
           </TouchableOpacity>
           <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>Attendance</Text>

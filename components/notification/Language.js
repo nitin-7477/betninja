@@ -3,8 +3,9 @@ import React from 'react'
 import { Colors } from '../Constants/Colors'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
 import { useState } from 'react';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from "@react-navigation/native";
+import { responsiveWidth } from 'react-native-responsive-dimensions';
 const Language = () => {
   const navigation = useNavigation();
 
@@ -16,15 +17,15 @@ const Language = () => {
 
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       {/* header */}
 
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}><TouchableOpacity
-        onPress={() => navigation.navigate('Account')}
-        style={{ height: 30, width: 30, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
-        <Ionicons name='return-up-back' color={'white'} size={25} />
-      </TouchableOpacity>
-        <Text style={{ fontWeight: '900', marginBottom: 10, fontSize: 20, color: Colors.purple, marginLeft: 30 }}>Language</Text></View>
+      <View style={{ width: '100%', backgroundColor: 'white', height: 50, alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10, borderBottomEndRadius: 15, borderBottomStartRadius: 15  }}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <AntDesign name='left' size={20} color={'black'} style={{ fontWeight: 'bold' }} />
+        </TouchableOpacity>
+        <Text style={{ marginLeft: 30, fontSize: 16, color: 'black', fontWeight: 'bold' }}>Deposit</Text>
+      </View>
 
       <View style={styles.top10}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -48,8 +49,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginVertical: 1,
-    padding: 10,
-    alignSelf: 'center', backgroundColor: 'white'
+    alignSelf: 'center', backgroundColor: 'white', width: responsiveWidth(100)
   },
   header: {
     height: SCREEN_HEIGHT * 0.05,
@@ -66,13 +66,13 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     paddingVertical: 5,
     paddingHorizontal: 10,
-    width: SCREEN_WIDTH * 0.88,
+    width: SCREEN_WIDTH * 0.95,
     borderRadius: 15,
     height: SCREEN_HEIGHT * 0.07,
     marginVertical: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    elevation: 2
+    elevation: 2, alignSelf: 'center'
 
   },
   checkbox: {
