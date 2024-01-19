@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, StatusBar, TouchableOpacity, ActivityIndicator, Modal } from 'react-native'
+import { View, Text, ScrollView, StatusBar, TouchableOpacity, ActivityIndicator, Modal, Alert } from 'react-native'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../components/Constants/Colors';
@@ -12,7 +12,7 @@ import Entypo from "react-native-vector-icons/Entypo"
 
 import React from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
-
+import { BackHandler } from "react-native";
 
 const Promotion = () => {
   const navigation = useNavigation();
@@ -30,6 +30,45 @@ const Promotion = () => {
 
   };
 
+  const handleBackButtonClick = () => {
+    if (navigation.canGoBack()) {
+      // If there is a screen to go back to, go back
+      navigation.goBack();
+    } else {
+      // If no screen to go back, show exit confirmation alert
+      Alert.alert(
+        'Exit App',
+        'Do you really want to exit?',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: () => exitApp(),
+          },
+        ],
+        { cancelable: false }
+      );
+    }
+    return true; // Return true to prevent default back button behavior
+  };
+
+  const exitApp = () => {
+    // You can use a method to exit the app here
+    // Note: This approach might not work on all platforms
+    // You may need to use specific methods for different platforms
+    BackHandler.exitApp();
+  };
+
+  useEffect(() => {
+    BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
+    return () => {
+      BackHandler.removeEventListener("hardwareBackPress", handleBackButtonClick);
+    };
+  }, []);
 
 
   const fetchToken = async () => {
@@ -84,6 +123,7 @@ const Promotion = () => {
       try {
         await fetchToken();
         await fetchCommissionData();
+        // navigation.replace('Main');
       } catch (error) {
         console.error('Error in useEffect:', error);
       }

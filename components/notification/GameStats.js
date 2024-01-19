@@ -21,11 +21,34 @@ const GameStats = () => {
   const [thisMonth, setThisMonth] = useState([])
   const [selectedBtn, setSelectedBtn] = useState(1)
   const [loading, setLoading] = useState(false)
+  const [totalWinLoss, setTotalWinLoss] = useState(0)
 
 
 
-  const handleClick = (btn) => {
-    setSelectedBtn(btn)
+  const handleClick = async (btn) => {
+    setSelectedBtn(btn);
+
+    switch (btn) {
+      case 1:
+        calculateTotalWinLoss(today);
+        break;
+      case 2:
+        calculateTotalWinLoss(Yesterday);
+        break;
+      case 3:
+        calculateTotalWinLoss(thisWeek);
+        break;
+      case 4:
+        calculateTotalWinLoss(thisMonth);
+        break;
+      default:
+        setTotalWinLoss(0);
+    }
+  }
+
+  const calculateTotalWinLoss = (data) => {
+    const total = data.reduce((acc, item) => acc + parseFloat(item.win_loss || 0), 0);
+    setTotalWinLoss(total);
   }
 
   const fetchToken = async () => {
@@ -45,7 +68,7 @@ const GameStats = () => {
 
   };
 
-  const fetchCommissionData = async () => {
+  const fetchBetData = async () => {
     try {
       setLoading(true)
       const token = await AsyncStorage.getItem('token');
@@ -71,6 +94,11 @@ const GameStats = () => {
       setThisWeek(result.data.responseData.thisWeek)
       setThisMonth(result.data.responseData.thisMonth)
 
+      const totalToday = result.data.responseData.today.reduce((acc, item) => acc + item.win_loss, 0);
+      const totalYesterday = result.data.responseData.yesterday.reduce((acc, item) => acc + item.win_loss, 0);
+      const totalThisWeek = result.data.responseData.thisWeek.reduce((acc, item) => acc + item.win_loss, 0);
+      const totalThisMonth = result.data.responseData.thisMonth.reduce((acc, item) => acc + item.win_loss, 0);
+
     } catch (e) {
       console.log("ERROR IN FETCHING COMMISSION", e);
     }
@@ -83,7 +111,7 @@ const GameStats = () => {
     const fetchData = async () => {
       try {
         await fetchToken();
-        await fetchCommissionData();
+        await fetchBetData();
       } catch (error) {
         console.error('Error in useEffect:', error);
       }
@@ -92,9 +120,14 @@ const GameStats = () => {
     fetchData();
   }, []);
 
+  console.log("This is for today", today);
+  // console.log(thisWeek);
+  // console.log(Yesterday);
+  // console.log(thisMonth);
+
   const renderThisMonth = ({ item, i }) => {
     return (
-      <View style={{ width: '95%', height: responsiveHeight(25), backgroundColor: '#e9ffdb', marginVertical: 4, alignSelf: 'center', borderRadius: 5, padding: 5, elevation: 5, }}>
+      <View style={{ flex: 1, width: '95%', height: responsiveHeight(27), backgroundColor: '#e9ffdb', marginVertical: 4, alignSelf: 'center', borderRadius: 5, padding: 5, elevation: 5, }}>
 
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
@@ -105,7 +138,9 @@ const GameStats = () => {
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
           <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Bet Amount</Text>
-          <Text style={{ color: 'black' }}>{item.phrchaseAmount}</Text>
+          <Text style={{ color: 'black' }}>
+            ₹ {item.phrchaseAmount ? item.phrchaseAmount.toFixed(2) : '0.00'}
+          </Text>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
           <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Result</Text>
@@ -126,7 +161,11 @@ const GameStats = () => {
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
           <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Win/Loss</Text>
-          <Text style={{ color: 'black' }}>{item.win_loss}  </Text>
+          <Text style={{
+            color: item.win_loss >= 0 ? 'green' : 'red',
+          }}>
+            ₹{(parseFloat(item.win_loss) || 0).toFixed(2)}
+          </Text>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
           <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Date</Text>
@@ -135,16 +174,156 @@ const GameStats = () => {
       </View>
     );
   }
-  const renderToday = () => {
+  const renderToday = ({ item, i }) => {
+    return (
+      <View style={{ flex: 1, width: '95%', height: responsiveHeight(27), backgroundColor: '#e9ffdb', marginVertical: 4, alignSelf: 'center', borderRadius: 5, padding: 5, elevation: 5, }}>
+
+
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Lottery No.</Text>
+          <Text style={{ color: 'black', fontWeight: 'bold' }}>{item.LN}</Text>
+        </View>
+
+
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Bet Amount</Text>
+          <Text style={{ color: 'black' }}>
+            ₹ {item.phrchaseAmount ? item.phrchaseAmount.toFixed(2) : '0.00'}
+          </Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Result</Text>
+          <Text style={{ color: 'black' }}>{item.result.size}  {item.result.number}  {item.result.color}</Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Select</Text>
+          <Text style={{ color: 'black' }}>{item.select}  </Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Select Type</Text>
+          <Text style={{ color: 'black' }}>{item.selectType}  </Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Status</Text>
+          <Text style={{ color: item.status === 'success' ? 'blue' : 'red', fontWeight: 'bold' }}>{item.status}</Text>
+        </View>
+
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Win/Loss</Text>
+          <Text style={{
+            color: item.win_loss >= 0 ? 'green' : 'red',
+          }}>
+            ₹{(parseFloat(item.win_loss) || 0).toFixed(2)}
+          </Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Date</Text>
+          <Text style={{ color: 'black' }}>{new Date(item.orderTime).toLocaleString()}</Text>
+        </View>
+      </View>
+    );
 
   }
-  const renderYesterday = () => {
+  const renderYesterday = ({ item, i }) => {
+    return (
+      <View style={{ flex: 1, width: '95%', height: responsiveHeight(27), backgroundColor: '#e9ffdb', marginVertical: 4, alignSelf: 'center', borderRadius: 5, padding: 5, elevation: 5, }}>
 
+
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Lottery No.</Text>
+          <Text style={{ color: 'black', fontWeight: 'bold' }}>{item.LN}</Text>
+        </View>
+
+
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Bet Amount</Text>
+          <Text style={{ color: 'black' }}>
+            ₹ {item.phrchaseAmount ? item.phrchaseAmount.toFixed(2) : '0.00'}
+          </Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Result</Text>
+          <Text style={{ color: 'black' }}>{item.result.size}  {item.result.number}  {item.result.color}</Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Select</Text>
+          <Text style={{ color: 'black' }}>{item.select}  </Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Select Type</Text>
+          <Text style={{ color: 'black' }}>{item.selectType}  </Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Status</Text>
+          <Text style={{ color: item.status === 'success' ? 'blue' : 'red', fontWeight: 'bold' }}>{item.status}</Text>
+        </View>
+
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Win/Loss</Text>
+          <Text style={{
+            color: item.win_loss >= 0 ? 'green' : 'red',
+          }}>
+            ₹{(parseFloat(item.win_loss) || 0).toFixed(2)}
+          </Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Date</Text>
+          <Text style={{ color: 'black' }}>{new Date(item.orderTime).toLocaleString()}</Text>
+        </View>
+      </View>
+    );
   }
-  const renderThisWeek = () => {
+  const renderThisWeek = ({ item, i }) => {
+    return (
+      <View style={{ flex: 1, width: '95%', height: responsiveHeight(27), backgroundColor: '#e9ffdb', marginVertical: 4, alignSelf: 'center', borderRadius: 5, padding: 5, elevation: 5, }}>
 
+
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Lottery No.</Text>
+          <Text style={{ color: 'black', fontWeight: 'bold' }}>{item.LN}</Text>
+        </View>
+
+
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Bet Amount</Text>
+          <Text style={{ color: 'black' }}>
+            ₹ {item.phrchaseAmount ? item.phrchaseAmount.toFixed(2) : '0.00'}
+          </Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Result</Text>
+          <Text style={{ color: 'black' }}>{item.result.size}  {item.result.number}  {item.result.color}</Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Select</Text>
+          <Text style={{ color: 'black' }}>{item.select}  </Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Select Type</Text>
+          <Text style={{ color: 'black' }}>{item.selectType}  </Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Status</Text>
+          <Text style={{ color: item.status === 'success' ? 'blue' : 'red', fontWeight: 'bold' }}>{item.status}</Text>
+        </View>
+
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Win/Loss</Text>
+          <Text style={{
+            color: item.win_loss >= 0 ? 'green' : 'red',
+          }}>
+            ₹{(parseFloat(item.win_loss) || 0).toFixed(2)}
+          </Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
+          <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Date</Text>
+          <Text style={{ color: 'black' }}>{new Date(item.orderTime).toLocaleString()}</Text>
+        </View>
+      </View>
+    );
   }
 
+  
   const renderLoadingIndicator = () => (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <ActivityIndicator size={100} color="gold" />
@@ -192,8 +371,13 @@ const GameStats = () => {
         </TouchableOpacity>
       </View>
       <View style={styles.section}>
-        <Text style={{ fontSize: 20, fontWeight: 'bold', marginVertical: 10 }}>
-          ₹ 0.00
+        <Text style={{
+          fontSize: 20,
+          fontWeight: 'bold',
+          marginVertical: 10,
+          color: totalWinLoss >= 0 ? 'green' : 'red',
+        }}>
+          {totalWinLoss.toFixed(2)}
         </Text>
         <Text>
           Total Bet
