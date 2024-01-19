@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View, ImageBackground, ScrollView, TextInput, TouchableOpacity, Alert, Animated } from 'react-native'
+import { Image, StyleSheet, Text, View, ImageBackground, ScrollView, TextInput, TouchableOpacity, Alert, Animated, Modal } from 'react-native'
 import React from 'react'
 import { Colors } from '../components/Constants/Colors'
 import { SCREEN_WIDTH } from '../components/Constants/Screen'
@@ -7,6 +7,8 @@ import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useNavigation } from '@react-navigation/native'
 import AntDesign from "react-native-vector-icons/AntDesign"
+import Entypo from "react-native-vector-icons/Entypo"
+
 
 const QrScanner = ({ route }) => {
   const navigation = useNavigation()
@@ -17,6 +19,9 @@ const QrScanner = ({ route }) => {
   const [countdown, setCountdown] = useState(300);
   const [bounceValue] = useState(new Animated.Value(0));
   const BouncingText = Animated.createAnimatedComponent(Text);
+  const [message, setMessage] = useState('')
+  const [showCopyModal, setShowCopyModal] = useState(false)
+
 
   useEffect(() => {
     generateOrderNumber();
@@ -37,24 +42,24 @@ const QrScanner = ({ route }) => {
   }, []);
 
 
-  const generateOrderNumber = () => {
-    const randomOrderNumber = Math.floor(100000000000 + Math.random() * 900000000000).toString();
-    setOrderNumber(randomOrderNumber);
-
-  };
-
   // const generateOrderNumber = () => {
-  //   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  //   let randomString = '';
-  //   for (let i = 0; i < 4; i++) {
-  //     const randomIndex = Math.floor(Math.random() * characters.length);
-  //     randomString += characters.charAt(randomIndex);
-  //   }
-
   //   const randomOrderNumber = Math.floor(100000000000 + Math.random() * 900000000000).toString();
-  //   const finalOrderNumber = randomOrderNumber + randomString;
-  //   setOrderNumber(finalOrderNumber);
+  //   setOrderNumber(randomOrderNumber);
+
   // };
+
+  const generateOrderNumber = () => {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let randomString = '';
+    for (let i = 0; i < 4; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      randomString += characters.charAt(randomIndex);
+    }
+
+    const randomOrderNumber = Math.floor(100000000000 + Math.random() * 900000000000).toString();
+    const finalOrderNumber = randomOrderNumber + randomString;
+    setOrderNumber(finalOrderNumber);
+  };
 
 
 
@@ -88,7 +93,14 @@ const QrScanner = ({ route }) => {
         },
       })
       console.log(result.data);
-      alert(result.data.message)
+      if (result.data) {
+        setMessage(result.data.message)
+        setShowCopyModal(true)
+    
+        setTimeout(() => {
+          setShowCopyModal(false);
+        }, 2000);
+      }
     }
     catch (e) {
       console.log(e);
@@ -98,9 +110,17 @@ const QrScanner = ({ route }) => {
 
   return (
     <ImageBackground source={require('../assets/gradiant3.jpg')} style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false} style={{ marginTop: 15, }}>
+      <ScrollView showsVerticalScrollIndicator={false}  >
         {/* <Text style={{ textAlign: 'center', fontSize: 36, fontWeight: 'bold', color: 'red' }}>Bet Ninja</Text> */}
+        <View style={{ width: '100%', backgroundColor: 'white', height: 50, alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10, borderBottomEndRadius: 15, borderBottomStartRadius: 15 }}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <AntDesign name='left' size={20} color={'black'} style={{ fontWeight: 'bold' }} />
+          </TouchableOpacity>
+          <Text style={{ marginLeft: 30, fontSize: 16, color: 'black', fontWeight: 'bold' }}>Pay Here</Text>
+        </View>
+
         <Image source={require('../image/1.jpg')} style={{ height: 50, width: 150, alignSelf: 'center', borderRadius: 10 }} />
+
         <View style={{ borderBottomWidth: 0.6, borderBottomColor: 'pink', marginTop: 20, marginBottom: 30 }}>
         </View>
         <Text style={{ textAlign: 'center', fontSize: 24, color: Colors.black, fontWeight: '600' }}>Scan & Pay with any UPI</Text>
@@ -165,6 +185,26 @@ const QrScanner = ({ route }) => {
           style={{ height: 45, width: '100%', justifyContent: 'center', alignItems: 'center', backgroundColor: 'red', padding: 10, alignSelf: 'center', marginVertical: 10, marginBottom: 30, borderRadius: 10 }}>
           <Text style={{ color: "white", fontWeight: 'bold', fontSize: 16 }}>Submit Ref No.</Text>
         </TouchableOpacity>
+        <Modal visible={showCopyModal} transparent={true}>
+          <View style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+            <View style={{
+              width: '70%', // Set your desired width
+              height: 150, // Set your desired height
+              backgroundColor: 'rgba(0, 0, 0, 0.7)',
+              padding: 10,
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: 10,
+            }}>
+              <Entypo name="check" size={30} color={'white'} />
+              <Text style={{ color: 'white' }}>{message}</Text>
+            </View>
+          </View>
+        </Modal>
       </ScrollView>
 
     </ImageBackground >
@@ -175,6 +215,6 @@ export default QrScanner
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, padding: 10, backgroundColor: 'white',
+    flex: 1, paddingHorizontal: 1, backgroundColor: 'white',
   }
 })

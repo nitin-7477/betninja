@@ -10,7 +10,7 @@ const Activity = () => {
   return (
     <ScrollView style={styles.container}>
 
-      <View style={{ height: responsiveHeight(20), width: SCREEN_WIDTH * 1, backgroundColor: 'orange' }}>
+      <View style={{ height: responsiveHeight(22), width: SCREEN_WIDTH * 1, backgroundColor: 'orange' }}>
         <View style={{ height: responsiveHeight(4), width: '100%', justifyContent: 'center', alignItems: 'center', marginTop: responsiveHeight(3) }}>
           <Image
             source={require("../image/1.jpg")}
@@ -98,14 +98,14 @@ const Activity = () => {
         <TouchableOpacity onPress={() => navigation.navigate('Gifts')} style={{ width: responsiveWidth(50), justifyContent: 'center', alignItems: 'center' }}>
           <Image source={require('../assets/giftBanner.png')} style={{ height: responsiveHeight(21), width: responsiveWidth(45), borderRadius: 10 }} />
           <Text style={{ color: 'black', fontSize: 18, fontWeight: '500', width: responsiveWidth(45) }}>Gifts</Text>
-          <Text style={{ fontWeight: '500', marginTop: 3, width: responsiveWidth(45) }}>Enter the redemption code to receive gift rewards</Text>
+          <Text style={{ fontWeight: '500', marginTop: 3, width: responsiveWidth(45), color: 'grey' }}>Enter the redemption code to receive gift rewards</Text>
         </TouchableOpacity>
 
 
         <TouchableOpacity onPress={() => navigation.navigate('AttendanceBonus')} style={{ width: responsiveWidth(50), justifyContent: 'center', alignItems: 'center' }}>
           <Image source={require('../assets/attendanceBanner.png')} style={{ height: responsiveHeight(21), width: responsiveWidth(45), borderRadius: 10 }} />
           <Text style={{ color: 'black', fontSize: 18, fontWeight: '500', width: responsiveWidth(45) }}>Attendance Bonus</Text>
-          <Text style={{ fontWeight: '500', marginTop: 3, width: responsiveWidth(45) }}>Enter the redemption code to receive gift rewards</Text>
+          <Text style={{ fontWeight: '500', marginTop: 3, width: responsiveWidth(45), color: 'grey' }}>Enter the redemption code to receive gift rewards</Text>
         </TouchableOpacity>
       </View>
 

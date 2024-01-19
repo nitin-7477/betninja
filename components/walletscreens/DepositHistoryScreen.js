@@ -26,13 +26,18 @@ const DepositHistoryScreen = () => {
         return;
       }
 
-      const response = await axios.get(`${process.env.SERVERURL}/api/withdraw/withdraw`, {
+      const response = await axios.get(`${process.env.SERVERURL}/api/deposit/deposits`, {
         headers: {
           Authorization: JSON.parse(token),
         },
       });
+      const sortedHistory = response.data.data.sort((a, b) => {
+        return new Date(b.orderTime) - new Date(a.orderTime);
+      });
 
+      setHistory(sortedHistory);
 
+      console.log(response.data.data[0].createdAt);
 
     } catch (error) {
       console.error('Error fetching withdraw history:', error);
@@ -57,37 +62,12 @@ const DepositHistoryScreen = () => {
 
   };
 
-  const fetchCommissionData = async () => {
-    try {
-
-      const token = await AsyncStorage.getItem('token');
-
-      if (!token) {
-        navigation.navigate('Login')
-        return;
-      }
-
-
-
-      var result = await axios.get(`${process.env.SERVERURL}/api/deposit/deposits`, {
-
-        headers: {
-          "Authorization": JSON.parse(token),
-        },
-      })
-
-      setHistory(result.data.data)
-
-    } catch (e) {
-      console.log("ERROR IN FETCHING COMMISSION", e);
-    }
-  }
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         await fetchToken();
-        await fetchCommissionData();
+
       } catch (error) {
         console.error('Error in useEffect:', error);
       }
@@ -134,11 +114,12 @@ const DepositHistoryScreen = () => {
                   ₹{item.amount.toFixed(2)}
                 </Text>
               </View>
+
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
                 <Text style={{ fontSize: 16, color: "black" }}>Type</Text><Text style={{ color: "black" }}>{item.type}</Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-                <Text style={{ fontSize: 16, color: "black" }}>Time</Text><Text style={{ color: "black" }}>{new Date(item.updatedAt).toLocaleString()}</Text>
+                <Text style={{ fontSize: 16, color: "black" }}>Time</Text><Text style={{ color: "black" }}>{new Date(item.orderTime).toLocaleString()}</Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
                 <Text style={{ fontSize: 16, color: "black" }}>Transaction Id</Text><Text style={{ color: "black" }}>{item.transactionId}</Text>

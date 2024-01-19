@@ -1,4 +1,4 @@
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, Modal, ActivityIndicator } from 'react-native'
 import React from 'react'
 import AppTextInput from '../AppTextInput'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
@@ -8,16 +8,23 @@ import { useState } from 'react'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { responsiveWidth } from 'react-native-responsive-dimensions'
+import Entypo from "react-native-vector-icons/Entypo"
 
 const ChangePasswordScreen = () => {
+  const navigation = useNavigation();
   const [password, setPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [showCopyModal, setShowCopyModal] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState('')
+
 
 
   const handleSaveChanges = async () => {
 
     try {
+      setLoading(true)
       const token = await AsyncStorage.getItem('token');
       if (!token) {
         navigation.navigate('Login')
@@ -33,18 +40,31 @@ const ChangePasswordScreen = () => {
       })
 
       console.log(result.data);
+      if (result.data) {
+        setMessage(result.data.message)
+        setShowCopyModal(true)
+        await AsyncStorage.removeItem('token');
+        setTimeout(() => {
+          setShowCopyModal(false);
+
+          navigation.navigate('Login')
+        }, 2000);
+      }
 
 
     }
     catch (e) {
       console.log(e);
     }
+    finally {
+      setLoading(false)
+    }
   }
 
-  const navigation = useNavigation();
+
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-      <View style={{ marginBottom: 90, alignItems: 'center', flexDirection: 'row', height: 50, elevation: 5, backgroundColor: 'white', width: '100%' }}>
+      <View style={{ marginBottom: 20, alignItems: 'center', flexDirection: 'row', height: 50, elevation: 5, backgroundColor: 'white', width: '100%' }}>
         <TouchableOpacity onPress={() => navigation.navigate('Setting')}>
           <EvilIcons name='chevron-left' size={35} color={'black'} />
         </TouchableOpacity>
@@ -72,14 +92,42 @@ const ChangePasswordScreen = () => {
           </View>
           <AppTextInput value={confirmPassword} onChangeText={(text) => setConfirmPassword(text)} placeholder='Please Enter Confirm New Password' />
         </View>
-        <View style={{ marginVertical: 30 }}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('CustomerServices')}
+          style={{ marginVertical: 30 }}>
           <Text style={{ textAlign: 'right' }}>Contact Customer Service  </Text>
-        </View>
+        </TouchableOpacity>
       </View>
       <TouchableOpacity
         onPress={handleSaveChanges} style={{ height: SCREEN_HEIGHT * 0.06, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: 'red', marginTop: 50, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
         <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>Save Changes</Text>
       </TouchableOpacity>
+      <Modal visible={showCopyModal} transparent={true}>
+        <View style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+          <View style={{
+            width: '70%', // Set your desired width
+            height: 150, // Set your desired height
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            padding: 10,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 10,
+          }}>
+            <Entypo name="check" size={30} color={'white'} />
+            <Text style={{ color: 'white' }}>{message}</Text>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal visible={loading} backdropOpacity={0.1} animationIn="fadeIn" animationOut="fadeOut">
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <ActivityIndicator size={100} color="gold" />
+        </View>
+      </Modal>
     </ScrollView>
   )
 }

@@ -73,9 +73,9 @@ export default function App() {
           <Stack.Screen options={{ headerShown: false }} name="OnboardingScreen" component={OnboardingScreen} />
         )}
 
+        <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
         <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
         <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
-        <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
         <Stack.Screen name="GameStats" options={{ headerShown: false }} component={GameStats} />
         <Stack.Screen options={{ headerShown: false }} name="DD" component={DD} />
         <Stack.Screen options={{ headerShown: false }} name="LevelScreen" component={LevelScreen} />
@@ -87,6 +87,7 @@ export default function App() {
         <Stack.Screen options={{ headerShown: false }} name="Gamescreen" component={Gamescreen} />
         <Stack.Screen options={{ headerShown: false }} name="SubOrdinate" component={SubOrdinate} />
         <Stack.Screen name="DepositHistoryScreen" options={{ headerShown: false }} component={DepositHistoryScreen} />
+
 
         <Stack.Screen name="WithdrawHistoryScreen" options={{ headerShown: false }} component={WithdrawHistoryScreen} />
         <Stack.Screen options={{ headerShown: false }} name="CommissionDetails" component={CommissionDetails} />

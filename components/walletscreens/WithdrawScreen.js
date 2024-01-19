@@ -63,7 +63,7 @@ const WithdrawScreen = () => {
     fetchBankData();
   }, []);
 
-  console.log(userInformation);
+
 
   const handleDepositWithdraw = async () => {
     try {
@@ -128,7 +128,7 @@ const WithdrawScreen = () => {
 
         </View>
 
-        {bankDetails.length === 0 ? <TouchableOpacity
+        {bankDetails?.length === 0 ? <TouchableOpacity
           onPress={() => navigation.navigate('AddBank')}
           style={{ height: responsiveHeight(11), marginBottom: 10, width: responsiveWidth(97), alignSelf: 'center', backgroundColor: Colors.lightGray, justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
           <Image source={require('../../assets/plus.png')} style={{ height: 40, width: 40 }} />
@@ -143,11 +143,11 @@ const WithdrawScreen = () => {
             <View style={{ marginBottom: 10, alignItems: 'center', width: '30%', }}>
               <Image source={require('../../assets/wallet/bank-logo.png')} style={{ height: 40, width: 40 }} />
 
-              <Text style={{ fontSize: 14, color: 'black' }} >{bankDetails.bankName}</Text>
+              <Text style={{ fontSize: 14, color: 'black' }} >{bankDetails?.bankName}</Text>
             </View>
             <View style={{ borderLeftWidth: 0.4, flexDirection: 'row', justifyContent: 'space-between', width: '65%', alignItems: 'center' }}>
               <Text style={{ color: 'grey', marginLeft: 10 }}>
-                {bankDetails.acountNumber}
+                {bankDetails?.acountNumber}
               </Text>
               <Entypo name='chevron-small-right' size={25} />
             </View>
@@ -169,7 +169,7 @@ const WithdrawScreen = () => {
             />
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 5 }}>
-            <View><Text style={{ color: 'black' }}>Withdrown Balance <Text style={{ color: 'red' }}>  ₹ {Number(userInformation.rangeToWithdraw).toFixed(2)}</Text></Text></View>
+            <View><Text style={{ color: 'black' }}>Withdrown Balance <Text style={{ color: 'red' }}>  ₹ {Number(userInformation?.rangeToWithdraw).toFixed(2)}</Text></Text></View>
             <TouchableOpacity style={{ backgroundColor: '#d9ad82', height: 20, width: 80, borderWidth: 0.3, alignItems: 'center', borderRadius: 10 }}><Text style={{ color: 'white' }}>Add</Text></TouchableOpacity>
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 5 }}>

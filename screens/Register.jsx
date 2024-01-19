@@ -9,6 +9,7 @@ import Modal from "react-native-modal";
 import axios from "axios";
 import { SCREEN_WIDTH, } from "../components/Constants/Screen";
 import Feather from "react-native-vector-icons/Feather";
+import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
 
 
 const Register = () => {
@@ -29,6 +30,7 @@ const Register = () => {
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(true);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [showTC, setShowTC] = useState(false)
 
 
 
@@ -431,7 +433,9 @@ const Register = () => {
           <View style={[styles.checkbox, isChecked && styles.checked]}>
             {isChecked && <Text style={{ color: 'white' }}>✓</Text>}
           </View>
-          <Text style={{ marginLeft: 10, color: 'black' }}>I agree(terms and condition)</Text>
+          <TouchableOpacity onPress={() => setShowTC(true)}>
+            <Text style={{ marginLeft: 10, color: 'black' }}>I agree(terms and condition)</Text>
+          </TouchableOpacity>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={handleSignUp}
@@ -516,6 +520,11 @@ const Register = () => {
               <Text style={{ color: "blue", marginTop: 20 }}>Cancel</Text>
             </TouchableOpacity>
           </View>
+        </View>
+      </Modal>
+      <Modal visible={false} transparent={true} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+        <View style={{ backgroundColor: 'white', height: responsiveHeight(70), width: responsiveWidth(90), padding: 10, borderRadius: 10 }}>
+          <Text style={{ textAlign: 'center' }}>Terms and Condition</Text>
         </View>
       </Modal>
     </ScrollView>

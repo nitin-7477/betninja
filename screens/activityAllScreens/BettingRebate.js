@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, FlatList, Alert, Image, Button } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, FlatList, Alert, Image, Button, Modal } from 'react-native'
 import React from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../components/Constants/Screen'
 import Ionicons from "react-native-vector-icons/Ionicons"
@@ -10,12 +10,16 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
+import Entypo from "react-native-vector-icons/Entypo"
 
 const BettingRebate = () => {
   const [userInformation, setUserInformation] = useState([])
   const [checkToken, setCheckToken] = useState('')
   const [rebateInfo, setRebateInfo] = useState([])
   const [startIndex, setStartIndex] = useState(0);
+  const [message, setMessage] = useState('')
+  const [showCopyModal, setShowCopyModal] = useState(false)
+
   const itemsPerPage = 10;
 
   const navigation = useNavigation();
@@ -30,7 +34,7 @@ const BettingRebate = () => {
           navigation.navigate('Login')
           return;
         }
-        setCheckToken(token)
+
         const response = await axios.get(`${process.env.SERVERURL}/api/auth/user`, {
           headers: {
             "Authorization": JSON.parse(token),
@@ -50,25 +54,37 @@ const BettingRebate = () => {
 
   const handleOneClickRebate = async () => {
     try {
+      console.log("hi");
       const token = await AsyncStorage.getItem('token');
+      console.log(token);
       const response = await axios.post(
         `${process.env.SERVERURL}/api/deposit/deposit_rebate`,
         {},
         {
           headers: {
-            Authorization: JSON.parse(token),
+            Authorization: token ? JSON.parse(token) : null,
           },
         }
       );
-      if (response) {
-        handleOneClickRebateGetRequest()
+
+      if (response.data) {
+        const result = response.data; // Assuming the result is part of the response
+
+        setMessage(result.message);
+        setShowCopyModal(true);
+
+        setTimeout(() => {
+          setShowCopyModal(false);
+        }, 2000);
       }
 
-      Alert.alert(response.data.message)
-    } catch (e) {
-      console.log("HI Errors for Betting Rebate", e.response.status);
+      console.log(response);
+    } catch (error) {
+      console.error('Error in handleOneClickRebate:', error);
+      // Handle error appropriately
     }
   };
+
   useEffect(() => {
     handleOneClickRebateGetRequest()
   }, [])
@@ -76,7 +92,7 @@ const BettingRebate = () => {
 
   const handleOneClickRebateGetRequest = async () => {
     try {
-      console.log("Hi Nitin");
+
       const token = await AsyncStorage.getItem('token');
       const response = await axios.get(
         `${process.env.SERVERURL}/api/deposit/deposit_rebate`,
@@ -207,6 +223,26 @@ const BettingRebate = () => {
         <Button title="Prev" onPress={onPrevPress} disabled={startIndex === 0} />
         <Button title="Next" onPress={onNextPress} disabled={startIndex + itemsPerPage >= rebateInfo.length} />
       </View>
+      <Modal visible={showCopyModal} transparent={true}>
+        <View style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+          <View style={{
+            width: '70%', // Set your desired width
+            height: 150, // Set your desired height
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            padding: 10,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 10,
+          }}>
+            <Entypo name="check" size={30} color={'white'} />
+            <Text style={{ color: 'white' }}>{message}</Text>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
 
   )

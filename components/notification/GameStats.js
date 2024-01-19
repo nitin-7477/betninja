@@ -155,7 +155,7 @@ const GameStats = () => {
     <ScrollView style={styles.container}>
       {/* header */}
 
-      <View style={{ width: SCREEN_WIDTH * 1, backgroundColor: 'white', height: 50, alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10, borderBottomEndRadius: 15, borderBottomStartRadius: 15  }}>
+      <View style={{ width: SCREEN_WIDTH * 1, backgroundColor: 'white', height: 50, alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10, borderBottomEndRadius: 15, borderBottomStartRadius: 15 }}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <AntDesign name='left' size={20} color={'black'} style={{ fontWeight: 'bold' }} />
         </TouchableOpacity>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, SafeAreaView, TextInput } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, SafeAreaView, TextInput, Modal, ActivityIndicator } from 'react-native';
 import AppTextInput from '../components/AppTextInput';
 import { Colors } from '../components/Constants/Colors';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
@@ -8,6 +8,8 @@ import { useNavigation } from "@react-navigation/native";
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Feather from "react-native-vector-icons/Feather";
+import Entypo from "react-native-vector-icons/Entypo"
+
 
 const ForgotPasswordComponent = () => {
 
@@ -17,7 +19,8 @@ const ForgotPasswordComponent = () => {
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
   const [generatedOTP, setGeneratedOTP] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState('')
 
   const [otp, setOtp] = useState('');
   const [isResendEnabled, setResendEnabled] = useState(true);
@@ -26,6 +29,7 @@ const ForgotPasswordComponent = () => {
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(true);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [showCopyModal, setShowCopyModal] = useState(false)
 
 
   const togglePasswordVisibility = () => {
@@ -88,30 +92,44 @@ const ForgotPasswordComponent = () => {
   const handleResetPassword = async () => {
 
     try {
-
+      setLoading(true);
       var body = { email: email, otp: otp, newPassword: newPassword }
       const result = await axios.post(`${process.env.SERVERURL}/api/auth/reset-password`,
         body
       );
 
       console.log(result.data);
-      alert(result.data.message)
 
-    } catch (error) {
+      if (result.data) {
+        setMessage(result.data.message)
+        setShowCopyModal(true)
+        await AsyncStorage.removeItem('token');
+        setTimeout(() => {
+          setShowCopyModal(false);
+
+          navigation.navigate('Login')
+        }, 2000);
+      }
+    }
+
+    catch (error) {
 
       console.error('Error sending OTP:', error);
 
 
       if (error.response && error.response.data) {
         const errorMessage = error.response.data.message;
-        // setErrorMessage(errorMessage);
-        // setErrorModalVisible(true);
+        setErrorMessage(errorMessage);
+        setErrorModalVisible(true);
       } else {
-        // setErrorMessage("An unexpected error occurred");
+        setErrorMessage("An unexpected error occurred");
         console.log(error);
         // setErrorModalVisible(true);
       }
 
+    }
+    finally {
+      setLoading(false);
     }
 
   };
@@ -302,9 +320,35 @@ const ForgotPasswordComponent = () => {
         </View>
 
         <TouchableOpacity style={[styles.signIn, isResetButtonEnabled ? styles.enabledButton : styles.disabledButton]} onPress={handleResetPassword} disabled={!isResetButtonEnabled}>
-          <Text style={{ color: 'white', textAlign: 'center', fontSize: 20 }}>Reset Password</Text>
+          {loading ? (
+            <ActivityIndicator size="small" color="white" />
+          ) : (
+            <Text style={{ color: 'white', textAlign: 'center', fontSize: 20 }}>
+              Reset Password
+            </Text>
+          )}
         </TouchableOpacity>
       </View>
+      <Modal visible={showCopyModal} transparent={true}>
+        <View style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+          <View style={{
+            width: '70%', // Set your desired width
+            height: 150, // Set your desired height
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            padding: 10,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 10,
+          }}>
+            <Entypo name="check" size={30} color={'white'} />
+            <Text style={{ color: 'white' }}>{message}</Text>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };

@@ -11,8 +11,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { responsiveWidth, responsiveHeight, responsiveFontSize } from 'react-native-responsive-dimensions'
 
 
-const DepositeScreen = () => {
+const DepositeScreen = ({ route }) => {
   const navigation = useNavigation();
+  const depositAmount = route.params?.depositAmount;
 
   const [amount, setAmount] = useState('');
   const [userInformation, setUserInformation] = useState('')
@@ -28,7 +29,7 @@ const DepositeScreen = () => {
     fetchUserData()
   }, [])
 
-
+  // console.log(depositAmount);
   const fetchUserData = async () => {
     try {
       setLoading(true)
@@ -82,13 +83,20 @@ const DepositeScreen = () => {
       console.log(error);
 
     }
-
   }
+
 
   const handleDepositeMoney = (value, btn) => {
     setAmount(value.toString())
     setSelectedBtn(btn)
   }
+
+  useEffect(() => {
+    // Set the initial amount when the component mounts
+    if (depositAmount) {
+      setAmount(depositAmount.toString());
+    }
+  }, [depositAmount]);
 
   const handleAmountChange = (text) => {
 
@@ -114,7 +122,7 @@ const DepositeScreen = () => {
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       <View style={styles.depositSection}>
-        <View style={{ width: '100%', backgroundColor: 'white', height: 50, alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10, borderBottomEndRadius: 15, borderBottomStartRadius: 15  }}>
+        <View style={{ width: '100%', backgroundColor: 'white', height: 50, alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10, borderBottomEndRadius: 15, borderBottomStartRadius: 15 }}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <AntDesign name='left' size={20} color={'black'} style={{ fontWeight: 'bold' }} />
           </TouchableOpacity>
@@ -161,6 +169,7 @@ const DepositeScreen = () => {
 
 
         </View>
+
         <View style={{ flexDirection: 'row', width: SCREEN_WIDTH * 0.9, justifyContent: 'space-between', alignContent: 'center', marginBottom: 10 }}>
 
         </View>
@@ -199,7 +208,6 @@ const DepositeScreen = () => {
             </TouchableOpacity>
 
           </View>
-
           <View style={styles.amountInputContainer}>
             <Text style={{ fontSize: 26, color: '#d9ad82', paddingLeft: 10 }}>₹</Text>
             <Text style={{ fontSize: 26, color: 'grey', paddingLeft: 10 }}>|</Text>
@@ -218,6 +226,7 @@ const DepositeScreen = () => {
 
 
         <TouchableOpacity
+          disabled={!isButtonDisabled}
           style={[styles.depositButton, { backgroundColor: isButtonDisabled ? '#d9ad82' : 'grey' }]}
           onPress={handleDeposite}
         >

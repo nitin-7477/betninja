@@ -90,7 +90,7 @@ const CommissionDetails = () => {
 
   const renderHistoryItem = ({ item, i }) => {
     return (
-      <View style={{ width: '95%', height: responsiveHeight(21), backgroundColor: '#e9ffdb', marginVertical: 4, alignSelf: 'center', borderRadius: 5, padding: 5, elevation: 5, }}>
+      <View style={{ width: '95%', height: responsiveHeight(20), backgroundColor: '#e9ffdb', marginVertical: 4, alignSelf: 'center', borderRadius: 5, padding: 5, elevation: 5, }}>
 
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
@@ -99,7 +99,8 @@ const CommissionDetails = () => {
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
           <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Amount</Text>
-          <Text style={{ color: 'black' }}>{item.amount}</Text>
+          <Text style={{ color: 'black' }}>₹{item.amount ? item.amount.toFixed(2) : '0.00'}</Text>
+
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
           <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Date</Text>
@@ -107,7 +108,7 @@ const CommissionDetails = () => {
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
           <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Rate</Text>
-          <Text style={{ color: 'black' }}>{item.rate}</Text>
+          <Text style={{ color: 'black' }}>{item.rate}%</Text>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
           <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Type</Text>
@@ -119,7 +120,7 @@ const CommissionDetails = () => {
   }
   const renderWithdrawHistoryItem = ({ item, i }) => {
     return (
-      <View style={{ width: '95%', height: responsiveHeight(21), backgroundColor: '#e9ffdb', marginVertical: 4, alignSelf: 'center', borderRadius: 5, padding: 5, elevation: 5 }}>
+      <View style={{ width: '95%', height: responsiveHeight(20), backgroundColor: '#e9ffdb', marginVertical: 4, alignSelf: 'center', borderRadius: 5, padding: 5, elevation: 5 }}>
 
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
@@ -128,7 +129,8 @@ const CommissionDetails = () => {
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
           <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>amount</Text>
-          <Text style={{ color: 'black' }}>{item.amount}</Text>
+          <Text style={{ color: 'black' }}>₹{item.amount ? item.amount.toFixed(2) : '0.00'}</Text>
+
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
           <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Transaction Id</Text>
@@ -140,7 +142,7 @@ const CommissionDetails = () => {
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
           <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Success Time</Text>
-          <Text style={{ color: 'black' }}>{item.successTime}</Text>
+          <Text style={{ color: 'black' }}>{new Date(item.successTime).toLocaleString()}</Text>
         </View>
       </View>
     );

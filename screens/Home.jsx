@@ -12,15 +12,25 @@ import Entypo from "react-native-vector-icons/Entypo"
 import Feather from "react-native-vector-icons/Feather"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import FontAwesome from "react-native-vector-icons/FontAwesome"
+import { responsiveHeight } from "react-native-responsive-dimensions";
+import { useNavigation } from "@react-navigation/native";
+
 
 const Tab = createBottomTabNavigator();
 
 const Home = () => {
+  const navigation = useNavigation();
+
   const [isNotificationVisible, setNotificationVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(true);
+  // const [amount, setAmount] = useState('')
   const [notificationMessage, setNotificationMessage] = useState(
     "Welcome to Bet Ninja"
   );
+
+  const handleDeposit = (amount) => {
+    navigation.navigate('DepositeScreen', { depositAmount: amount });
+  }
 
   const closeModal = () => {
     setModalVisible(false);
@@ -49,6 +59,7 @@ const Home = () => {
 
     }
   }
+
 
   return (
     <>
@@ -120,33 +131,107 @@ const Home = () => {
         }}
       >
         <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
 
-              <View style={{ height: SCREEN_HEIGHT * 0.7, width: SCREEN_WIDTH * 0.8, alignSelf: 'center', backgroundColor: 'green', justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
-                {/* <Text style={{ color: 'white' }}>{notificationMessage}</Text> */}
-                <View style={{ width: 230, height: 40, backgroundColor: Colors.purple, marginVertical: 10, justifyContent: 'center', alignItems: 'center', borderRadius: 20 }}>
-                  <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'white' }}>{notificationMessage}</Text>
+
+          <View style={{ height: 'auto', width: SCREEN_WIDTH * 0.8, alignSelf: 'center', backgroundColor: 'white', borderRadius: 10, borderRadius: 10, paddingBottom: 10 }}>
+            <View style={{ height: responsiveHeight(10), width: '100%', backgroundColor: '#f95959', borderTopStartRadius: 10, borderTopEndRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>Extra First Deposit Bonus</Text>
+              <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 14 }}>Each account can only receive rewards once</Text>
+            </View>
+            <View style={{ height: 'auto', width: '95%', backgroundColor: 'white', elevation: 5, alignSelf: 'center', marginTop: 5, borderRadius: 10 }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 3, padding: 5 }}>
+                <View style={{ flexDirection: 'row' }}>
+                  <Text style={{ color: 'black' }}>first deposit</Text>
+                  <Text style={{ color: 'red', marginLeft: 5, fontWeight: 'bold' }}>2000</Text>
                 </View>
-                <Image source={require('../assets/cat2.jpg')} style={{ borderRadius: 10, height: 400, width: 250, resizeMode: 'contain' }} />
+                <Text style={{ color: 'orange', fontWeight: 'bold' }}>+₹ 200.00</Text>
+              </View>
+              <Text style={{ color: 'black', padding: 5 }}>Deposit 2000 for the first time in your account and you can receive 200</Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, marginVertical: 5 }}>
+                <View style={{ width: '50%', backgroundColor: 'grey', justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
+                  <Text style={{ color: 'white' }}>0/2000</Text>
+                </View>
                 <TouchableOpacity
-                  style={styles.signIn}
-                  onPress={closeModal}
-                >
-                  <Text style={{
-                    color: 'white',
-                    textAlign: "center",
-                    fontSize: 20,
-                  }}
-                  >
-                    Confirm
-                  </Text>
-                </TouchableOpacity>
+                  onPress={() => handleDeposit(2000)}
+                  style={{ height: 30, width: 100, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center', borderRadius: 10, padding: 5 }}><Text style={{ color: 'white' }}     >Deposit</Text></TouchableOpacity>
               </View>
             </View>
 
+            <View style={{ height: 'auto', width: '95%', backgroundColor: 'white', elevation: 5, alignSelf: 'center', marginTop: 5, borderRadius: 10 }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 3, padding: 5 }}>
+                <View style={{ flexDirection: 'row' }}>
+                  <Text style={{ color: 'black' }}>second deposit</Text>
+                  <Text style={{ color: 'red', marginLeft: 5, fontWeight: 'bold' }}>1000</Text>
+                </View>
+                <Text style={{ color: 'orange', fontWeight: 'bold' }}>+₹ 118.00</Text>
+              </View>
+              <Text style={{ color: 'black', padding: 5 }}>Deposit 1000 for the first time in your account and you can receive 118</Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, marginVertical: 5 }}>
+                <View style={{ width: '50%', backgroundColor: 'grey', justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
+                  <Text style={{ color: 'white' }}>0/1000</Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => handleDeposit(1000)} style={{ height: 30, width: 100, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center', borderRadius: 10, padding: 5 }}><Text style={{ color: 'white' }}     >Deposit</Text></TouchableOpacity>
+              </View>
+            </View>
+
+            <View style={{ height: 'auto', width: '95%', backgroundColor: 'white', elevation: 5, alignSelf: 'center', marginTop: 5, borderRadius: 10 }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 3, padding: 5 }}>
+                <View style={{ flexDirection: 'row' }}>
+                  <Text style={{ color: 'black' }}>third deposit</Text>
+                  <Text style={{ color: 'red', marginLeft: 5, fontWeight: 'bold' }}>400</Text>
+                </View>
+                <Text style={{ color: 'orange', fontWeight: 'bold' }}>+₹ 50.00</Text>
+              </View>
+              <Text style={{ color: 'black', padding: 5 }}>Deposit 400 for the first time in your account and you can receive 50</Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, marginVertical: 5 }}>
+                <View style={{ width: '50%', backgroundColor: 'grey', justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
+                  <Text style={{ color: 'white' }}>0/400</Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => handleDeposit(400)}
+                  style={{ height: 30, width: 100, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center', borderRadius: 10, padding: 5 }}><Text style={{ color: 'white' }}     >Deposit</Text></TouchableOpacity>
+              </View>
+            </View>
+            <View style={{ height: 'auto', width: '95%', backgroundColor: 'white', elevation: 5, alignSelf: 'center', marginTop: 5, borderRadius: 10 }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 3, padding: 5 }}>
+                <View style={{ flexDirection: 'row' }}>
+                  <Text style={{ color: 'black' }}>fourth deposit</Text>
+                  <Text style={{ color: 'red', marginLeft: 5, fontWeight: 'bold' }}>200</Text>
+                </View>
+                <Text style={{ color: 'orange', fontWeight: 'bold' }}>+₹ 30.00</Text>
+              </View>
+              <Text style={{ color: 'black', padding: 5 }}>Deposit 200 for the first time in your account and you can receive 30</Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, marginVertical: 5 }}>
+                <View style={{ width: '50%', backgroundColor: 'grey', justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
+                  <Text style={{ color: 'white' }}>0/2000</Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => handleDeposit(200)}
+                  style={{ height: 30, width: 100, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center', borderRadius: 10, padding: 5 }}><Text style={{ color: 'white' }}     >Deposit</Text></TouchableOpacity>
+              </View>
+            </View>
+
+
+            {/* <TouchableOpacity
+              style={styles.signIn}
+              onPress={closeModal}
+            >
+              <Text style={{
+                color: 'white',
+                textAlign: "center",
+                fontSize: 20,
+              }}
+              >
+                Close
+              </Text>
+            </TouchableOpacity> */}
           </View>
+          <TouchableOpacity onPress={closeModal} style={{ height: 50, width: 50, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', elevation: 5, alignSelf: 'center', borderRadius: 50, marginVertical: 1 }}>
+            <Text style={{ textAlign: 'center', color: 'black' }}>X</Text>
+          </TouchableOpacity>
         </View>
+
       </Modal>
     </>
   );
@@ -167,12 +252,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.1)', // Semi-transparent background
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    borderRadius: 10
   },
-  modalContent: {
-    // backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
+  // modalContent: {
+  //   backgroundColor: 'white',
+  //   padding: 20,
+  //   borderRadius: 10,
+  //   alignItems: 'center',
+  // },
 })

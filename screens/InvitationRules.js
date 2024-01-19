@@ -8,20 +8,22 @@ const InvitationRules = () => {
   const navigation = useNavigation();
 
   const tableData = [
-    { lvl: 0, teamNumber: 0, teamBettingPer: 0 },
-    { lvl: 1, teamNumber: 3, teamBettingPer: 0.07 },
-    { lvl: 2, teamNumber: 5, teamBettingPer: 0.08 },
-    { lvl: 3, teamNumber: 10, teamBettingPer: 0.09 },
-    { lvl: 4, teamNumber: 15, teamBettingPer: 0.095 },
-    { lvl: 5, teamNumber: 20, teamBettingPer: 0.1 },
+    { lvl: 0, teamNumber: 0, teamBettingPer: 0, minDeposite: 100 },
+    { lvl: 1, teamNumber: 3, teamBettingPer: 0.07, minDeposite: 300 },
+    { lvl: 2, teamNumber: 5, teamBettingPer: 0.08, minDeposite: 500 },
+    { lvl: 3, teamNumber: 10, teamBettingPer: 0.09, minDeposite: 1000 },
+    { lvl: 4, teamNumber: 15, teamBettingPer: 0.095, minDeposite: 1500 },
+    { lvl: 5, teamNumber: 20, teamBettingPer: 0.1, minDeposite: 2000 },
   ];
   const tableData2 = [
+
     { lvl: 0, tier1: 0, tier2: 0, tier3: '0', tier4: '0' },
     { lvl: 1, tier1: '0.7%', tier2: '0.245%', tier3: '0.1054%', tier4: '0.03%' },
     { lvl: 2, tier1: '0.75%', tier2: '0.2812%', tier3: '0.128%', tier4: '0.0396%' },
     { lvl: 3, tier1: '0.8%', tier2: '0.32%', tier3: '0.1822%', tier4: '0.0512%' },
     { lvl: 4, tier1: '0.9%', tier2: '0.405%', tier3: '0.2144%', tier4: '0.082%' },
     { lvl: 5, tier1: '0.95%', tier2: '0.5%', tier3: '0.25%', tier4: '0.1018%' },
+
   ];
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
@@ -79,7 +81,7 @@ const InvitationRules = () => {
             <Text style={styles.cell}>LVL {rowData.lvl}</Text>
             <Text style={styles.cell}>{rowData.teamNumber}</Text>
             <Text style={styles.cell}>{rowData.teamBettingPer}</Text>
-            <Text style={styles.cell}>$50</Text>
+            <Text style={styles.cell}>₹ {rowData.minDeposite}</Text>
           </View>
         ))}
       </View>
@@ -150,8 +152,9 @@ const styles = StyleSheet.create({
   cell: {
     flex: 1,
     textAlign: 'center',
-    padding: 8,
+    // padding: 8,
+    paddingVertical: 8,
     borderWidth: 1,
-    color: 'black'
+    color: 'black', width: 'auto'
   },
 })
