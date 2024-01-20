@@ -152,6 +152,7 @@ const Register = () => {
       console.log("xxxxxxxxxxxxxxxxxxxx", result);
       console.log(registrationData);
 
+
       if (result) {
         openModal2()
         handleResetData();
@@ -160,7 +161,7 @@ const Register = () => {
       handleResetData();
 
     } catch (error) {
-      console.error("Error during Registration:", error);
+      console.error("Error during Registration:", error.response.data);
 
       if (error.response && error.response.data) {
         const errorMessage = error.response.data.message;

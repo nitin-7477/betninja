@@ -43,6 +43,7 @@ import QrScanner from "./screens/QrScanner";
 import AttendanceBonus from "./screens/activityAllScreens/AttendanceBonus";
 import InvitationRules from "./screens/InvitationRules";
 import DD from "./screens/levelScreens/Dropdown";
+import Whatsapp from "./components/service center/Whatsapp";
 
 // Navigation Configuration
 const Stack = createNativeStackNavigator();
@@ -53,30 +54,62 @@ const defaultScreenOptions = {
 // Main App Component
 export default function App() {
   const [isFirstLaunch, setIsFirstLaunch] = useState(false);
+  const [isToken, setIsToken] = useState(true)
 
-  useEffect(async () => {
-    const value = await AsyncStorage.getItem("alreadyLaunched");
-    if (value === null) {
-      AsyncStorage.setItem("alreadyLaunched", "true");
-      setIsFirstLaunch(true);
-    } else {
-      setIsFirstLaunch(false);
-    }
+  // useEffect(async () => {
+  //   const value = await AsyncStorage.getItem("alreadyLaunched");
+  //   if (value === null) {
+  //     AsyncStorage.setItem("alreadyLaunched", "true");
+  //     setIsFirstLaunch(true);
+  //   } else {
+  //     setIsFirstLaunch(false);
+  //   }
+  // }, []);
+
+  useEffect(() => {
+    const checkFirstLaunch = async () => {
+      try {
+        const value = await AsyncStorage.getItem("alreadyLaunched");
+        const token = await AsyncStorage.getItem('token')
+        if (token == null) {
+          setIsToken(false)
+        }
+        else if (token != null) {
+          setIsToken(true)
+        }
+        if (value === null) {
+          await AsyncStorage.setItem("alreadyLaunched", "true");
+          setIsFirstLaunch(true);
+        } else {
+          setIsFirstLaunch(false);
+        }
+      } catch (error) {
+        console.error('Error checking first launch:', error);
+      }
+    };
+
+    checkFirstLaunch();
   }, []);
+
 
   return (
 
     <NavigationContainer>
       <Stack.Navigator>
 
-        {isFirstLaunch && (
+        {/* {isFirstLaunch && (
           <Stack.Screen options={{ headerShown: false }} name="OnboardingScreen" component={OnboardingScreen} />
+        )} */}
+        {!isToken && (
+          <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
+
         )}
 
-        <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
         <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
-        <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
+        <Stack.Screen options={{ headerShown: false }} name="HomeScreen" component={Home} />
+
         <Stack.Screen name="GameStats" options={{ headerShown: false }} component={GameStats} />
+        <Stack.Screen options={{ headerShown: false }} name="Whatsapp" component={Whatsapp} />
         <Stack.Screen options={{ headerShown: false }} name="DD" component={DD} />
         <Stack.Screen options={{ headerShown: false }} name="LevelScreen" component={LevelScreen} />
         <Stack.Screen options={{ headerShown: false }} name="AddBank" component={AddBank} />
@@ -91,7 +124,6 @@ export default function App() {
 
         <Stack.Screen name="WithdrawHistoryScreen" options={{ headerShown: false }} component={WithdrawHistoryScreen} />
         <Stack.Screen options={{ headerShown: false }} name="CommissionDetails" component={CommissionDetails} />
-
 
         <Stack.Screen options={{ headerShown: false }} name="AttendanceBonus" component={AttendanceBonus} />
         <Stack.Screen options={{ headerShown: false }} name="QrScanner" component={QrScanner} />

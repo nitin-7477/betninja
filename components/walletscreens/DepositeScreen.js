@@ -14,7 +14,7 @@ import { responsiveWidth, responsiveHeight, responsiveFontSize } from 'react-nat
 const DepositeScreen = ({ route }) => {
   const navigation = useNavigation();
   const depositAmount = route.params?.depositAmount;
-
+  const extraAmount = route.params?.extraAmount;
   const [amount, setAmount] = useState('');
   const [userInformation, setUserInformation] = useState('')
   const [selectedBtn, setSelectedBtn] = useState(0)
@@ -219,8 +219,9 @@ const DepositeScreen = ({ route }) => {
               value={amount}
               onChangeText={handleAmountChange}
             />
+            
+            <View style={{ width: 'auto', backgroundColor: 'rgba(144, 238, 144,0.4)', padding: 4, borderRadius: 10 }}><Text style={{ color: 'green' }}>{extraAmount !== "" ? extraAmount : ""}</Text></View>
           </View>
-
         </View>
         {/* *********************Deposite Amount******************* */}
 
@@ -338,7 +339,7 @@ const styles = {
   amountInput: {
     paddingVertical: 10,
     paddingHorizontal: 16,
-    color: 'black'
+    color: 'black', width: '65%',
   },
   depositButton: {
     backgroundColor: '#d9ad82',

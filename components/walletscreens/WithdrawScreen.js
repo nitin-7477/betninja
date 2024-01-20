@@ -41,6 +41,7 @@ const WithdrawScreen = () => {
     fetchData();
   }, []);
 
+
   useEffect(() => {
     const fetchBankData = async () => {
       try {
@@ -52,7 +53,7 @@ const WithdrawScreen = () => {
         });
 
         setBankDetails(response.data.data[(response.data.data).length - 1]);
-        setIsBankAvailable(response.data.data[0])
+        setIsBankAvailable(response.data.data)
 
 
       } catch (error) {
@@ -88,7 +89,7 @@ const WithdrawScreen = () => {
     }
   };
 
-
+  // console.log("IS BANK AVAILABLE", isBankAvailable);
 
 
   return (
@@ -128,14 +129,12 @@ const WithdrawScreen = () => {
 
         </View>
 
-        {bankDetails?.length === 0 ? <TouchableOpacity
+        {isBankAvailable?.length === 0 ? <TouchableOpacity
           onPress={() => navigation.navigate('AddBank')}
           style={{ height: responsiveHeight(11), marginBottom: 10, width: responsiveWidth(97), alignSelf: 'center', backgroundColor: Colors.lightGray, justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
           <Image source={require('../../assets/plus.png')} style={{ height: 40, width: 40 }} />
           <Text style={{ color: 'black' }}>Add your bank</Text>
         </TouchableOpacity>
-
-
 
           : <TouchableOpacity
             onPress={() => navigation.navigate('BankAccount')}
@@ -166,7 +165,9 @@ const WithdrawScreen = () => {
               placeholder="Enter Amount"
               value={amount}
               onChangeText={handleAmountChange}
+
             />
+
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 5 }}>
             <View><Text style={{ color: 'black' }}>Withdrown Balance <Text style={{ color: 'red' }}>  ₹ {Number(userInformation?.rangeToWithdraw).toFixed(2)}</Text></Text></View>
@@ -277,7 +278,7 @@ const styles = {
   amountInput: {
     paddingVertical: 10,
     paddingHorizontal: 16,
-    color: 'black'
+    color: 'black',
   },
   depositButton: {
     backgroundColor: '#d9ad82',

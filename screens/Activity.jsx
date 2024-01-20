@@ -11,15 +11,15 @@ const Activity = () => {
     <ScrollView style={styles.container}>
 
       <View style={{ height: responsiveHeight(22), width: SCREEN_WIDTH * 1, backgroundColor: 'orange' }}>
-        <View style={{ height: responsiveHeight(4), width: '100%', justifyContent: 'center', alignItems: 'center', marginTop: responsiveHeight(3) }}>
+        <View style={{ height: responsiveHeight(4), width: '100%', justifyContent: 'center', alignItems: 'center', marginTop: responsiveHeight(2) }}>
           <Image
             source={require("../image/1.jpg")}
             style={{ height: 50, width: 90 }}
           /></View>
-        <View style={{ marginVertical: responsiveHeight(2), paddingHorizontal: responsiveWidth(5) }}>
+        <View style={{ paddingHorizontal: responsiveWidth(5) }}>
           <Text style={{ color: 'white', fontSize: 22, marginVertical: 5, fontWeight: 'bold' }}>Activity</Text>
           <Text style={{ color: 'white', fontSize: responsiveFontSize(2.3), fontWeight: '500' }}>Please remember to follow the event page</Text>
-          <Text style={{ color: 'white', fontSize: 14, fontWeight: '500' }}>We will lauch user feedbacka activites from time to time</Text>
+          <Text style={{ color: 'black', fontSize: 14, fontWeight: '500' }}>We will launch user feedback activites time to time</Text>
         </View>
       </View>
       {/* **********************Activity and Invitation************************* */}

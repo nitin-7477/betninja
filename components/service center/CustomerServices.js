@@ -39,11 +39,11 @@ const CustomerServices = () => {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => alert('Welcome to whatsapp')} style={{ height: 50, width: '95%', alignSelf: 'center', marginTop: 30, borderRadius: 5, elevation: 3, backgroundColor: 'white' }}>
+        <TouchableOpacity onPress={() => navigation.navigate('Whatsapp')} style={{ height: 50, width: '95%', alignSelf: 'center', marginTop: 30, borderRadius: 5, elevation: 3, backgroundColor: 'white' }}>
           <View style={{ height: 50, width: 320, justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, flexDirection: 'row' }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <FontAwesome name='whatsapp' size={32} color={'green'} />
-              <Text style={{ marginLeft: 18, fontWeight: 500, color: 'black' }}>Chat Here</Text>
+              <Text style={{ marginLeft: 18, fontWeight: 500, color: 'black' }}>WhatsApp Chat</Text>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
               {/* <Text style={{ fontWeight: 300, marginHorizontal: 10 }}>7477235745</Text> */}

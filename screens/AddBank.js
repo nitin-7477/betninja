@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View, Picker } from 'react-native'
+import { Image, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Modal } from 'react-native'
 import React from 'react'
 import AppTextInput from '../components/AppTextInput'
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../components/Constants/Screen'
@@ -8,6 +8,7 @@ import { useState } from 'react'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import RNPickerSelect from 'react-native-picker-select';
+import Entypo from "react-native-vector-icons/Entypo"
 
 
 
@@ -18,6 +19,9 @@ const AddBank = () => {
   const [phone, setPhone] = useState('')
   const [bankDetails, setBankDetails] = useState([])
   const [selectedBank, setSelectedBank] = useState(null);
+  const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState('')
+  const [showCopyModal, setShowCopyModal] = useState(false)
 
   const placeholder = {
     label: 'Please select a bank',
@@ -26,12 +30,12 @@ const AddBank = () => {
   };
 
   const banks = [
-    { label: 'State Bank of India (SBI)', value: 'State Bank of India (SBI)' },
-    { label: 'Punjab National Bank (PNB)', value: 'Punjab National Bank (PNB)' },
+    { label: 'State Bank of India', value: 'State Bank of India' },
+    { label: 'Punjab National Bank', value: 'Punjab National Bank' },
     { label: 'ICICI Bank', value: 'ICICI Bank' },
     { label: 'HDFC Bank', value: 'HDFC Bank' },
     { label: 'Axis Bank', value: 'Axis Bank' },
-    { label: 'Bank of Baroda (BOB)', value: 'Bank of Baroda (BOB)' },
+    { label: 'Bank of Baroda', value: 'Bank of Baroda' },
     { label: 'Canara Bank', value: 'Canara Bank' },
     { label: 'Union Bank of India', value: 'Union Bank of India' },
     { label: 'IDBI Bank', value: 'IDBI Bank' },
@@ -53,6 +57,7 @@ const AddBank = () => {
 
   const handleSaveChanges = async () => {
     try {
+      setLoading(true)
       const token = await AsyncStorage.getItem('token')
       var body = {
         "userId": "65969f7478b780c734302177",
@@ -62,8 +67,8 @@ const AddBank = () => {
         "phoneNumber": phone,
         "Name": name
       }
-      
- 
+
+
       const result = await axios.post(`${process.env.SERVERURL}/api/bank/addBank`, body, {
         headers: {
           "Authorization": JSON.parse(token),
@@ -71,10 +76,22 @@ const AddBank = () => {
       })
       console.log(result.data.data);
       setBankDetails(result.data.data)
-      
+
       console.log("This is result to add bank", result.data.status);
+      if (result.data) {
+        setMessage(result.data.message)
+        setShowCopyModal(true)
 
-
+        setTimeout(() => {
+          setShowCopyModal(false);
+        }, 2000);
+        setName('')
+        setAccount("")
+        setPhone('')
+        setIFSC('')
+        setSelectedBank('')
+        navigation.navigate('WithdrawScreen')
+      }
 
 
     }
@@ -82,7 +99,7 @@ const AddBank = () => {
       console.log(error);
     }
     finally {
-
+      setLoading(false)
     }
   }
 
@@ -174,8 +191,35 @@ const AddBank = () => {
 
       <TouchableOpacity
         onPress={handleSaveChanges} style={{ height: SCREEN_HEIGHT * 0.06, width: SCREEN_WIDTH * 0.9, alignSelf: 'center', backgroundColor: 'red', marginTop: 70, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>Save</Text>
+        {loading ? (
+          <ActivityIndicator size="small" color="white" />
+        ) : (
+          <Text style={{ color: 'white', textAlign: 'center', fontSize: 20 }}>
+            Save Changes
+          </Text>
+        )}
       </TouchableOpacity>
+
+      <Modal visible={showCopyModal} transparent={true}>
+        <View style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+          <View style={{
+            width: '70%', // Set your desired width
+            height: 150, // Set your desired height
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            padding: 10,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 10,
+          }}>
+            <Entypo name="check" size={30} color={'white'} />
+            <Text style={{ color: 'white' }}>{message}</Text>
+          </View>
+        </View>
+      </Modal>
     </View>
   )
 }

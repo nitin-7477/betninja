@@ -42,16 +42,17 @@ const Login = () => {
         const token = await AsyncStorage.getItem('token');
 
         if (token) {
-          navigation.navigate('Home')
+          navigation.navigate('HomeScreen')
           return;
         }
-      }
-      catch (error) {
-        console.error('Error fetching user data in Login  :', error);
+
+      } catch (error) {
+        console.error('Error fetching user data in Login:', error);
       }
     };
     fetchData();
   }, []);
+
 
 
   const checkLogin = async () => {
@@ -81,7 +82,7 @@ const Login = () => {
 
       if (token) {
         await AsyncStorage.setItem("token", JSON.stringify(token));
-        navigation.navigate('Home')
+        navigation.navigate('HomeScreen')
       } else {
         console.log("Login failed:");
         Alert.alert("Login Failed");

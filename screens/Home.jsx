@@ -28,8 +28,8 @@ const Home = () => {
     "Welcome to Bet Ninja"
   );
 
-  const handleDeposit = (amount) => {
-    navigation.navigate('DepositeScreen', { depositAmount: amount });
+  const handleDeposit = (amount, extraAmount) => {
+    navigation.navigate('DepositeScreen', { depositAmount: amount, extraAmount: extraAmount });
   }
 
   const closeModal = () => {
@@ -152,7 +152,7 @@ const Home = () => {
                   <Text style={{ color: 'white' }}>0/2000</Text>
                 </View>
                 <TouchableOpacity
-                  onPress={() => handleDeposit(2000)}
+                  onPress={() => handleDeposit(2000, "+₹ 200.00")}
                   style={{ height: 30, width: 100, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center', borderRadius: 10, padding: 5 }}><Text style={{ color: 'white' }}     >Deposit</Text></TouchableOpacity>
               </View>
             </View>
@@ -171,7 +171,7 @@ const Home = () => {
                   <Text style={{ color: 'white' }}>0/1000</Text>
                 </View>
                 <TouchableOpacity
-                  onPress={() => handleDeposit(1000)} style={{ height: 30, width: 100, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center', borderRadius: 10, padding: 5 }}><Text style={{ color: 'white' }}     >Deposit</Text></TouchableOpacity>
+                  onPress={() => handleDeposit(1000, "+₹ 118.00")} style={{ height: 30, width: 100, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center', borderRadius: 10, padding: 5 }}><Text style={{ color: 'white' }}     >Deposit</Text></TouchableOpacity>
               </View>
             </View>
 
@@ -189,7 +189,7 @@ const Home = () => {
                   <Text style={{ color: 'white' }}>0/400</Text>
                 </View>
                 <TouchableOpacity
-                  onPress={() => handleDeposit(400)}
+                  onPress={() => handleDeposit(400, "+₹ 50.00")}
                   style={{ height: 30, width: 100, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center', borderRadius: 10, padding: 5 }}><Text style={{ color: 'white' }}     >Deposit</Text></TouchableOpacity>
               </View>
             </View>
@@ -207,7 +207,7 @@ const Home = () => {
                   <Text style={{ color: 'white' }}>0/2000</Text>
                 </View>
                 <TouchableOpacity
-                  onPress={() => handleDeposit(200)}
+                  onPress={() => handleDeposit(200, "+₹ 30.00")}
                   style={{ height: 30, width: 100, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center', borderRadius: 10, padding: 5 }}><Text style={{ color: 'white' }}     >Deposit</Text></TouchableOpacity>
               </View>
             </View>
