@@ -66,17 +66,12 @@ export default function App() {
   //   }
   // }, []);
 
+
   useEffect(() => {
     const checkFirstLaunch = async () => {
       try {
         const value = await AsyncStorage.getItem("alreadyLaunched");
-        const token = await AsyncStorage.getItem('token')
-        if (token == null) {
-          setIsToken(false)
-        }
-        else if (token != null) {
-          setIsToken(true)
-        }
+
         if (value === null) {
           await AsyncStorage.setItem("alreadyLaunched", "true");
           setIsFirstLaunch(true);
@@ -100,10 +95,9 @@ export default function App() {
         {/* {isFirstLaunch && (
           <Stack.Screen options={{ headerShown: false }} name="OnboardingScreen" component={OnboardingScreen} />
         )} */}
-        {!isToken && (
-          <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
 
-        )}
+        <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
+
 
         <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
         <Stack.Screen options={{ headerShown: false }} name="HomeScreen" component={Home} />

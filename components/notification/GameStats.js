@@ -88,7 +88,6 @@ const GameStats = () => {
       })
 
 
-      console.log(result.data.responseData.thisMonth);
       setToday(result.data.responseData.today)
       setYesterday(result.data.responseData.yesterday)
       setThisWeek(result.data.responseData.thisWeek)
@@ -107,6 +106,7 @@ const GameStats = () => {
     }
   }
 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -120,10 +120,6 @@ const GameStats = () => {
     fetchData();
   }, []);
 
-  console.log("This is for today", today);
-  // console.log(thisWeek);
-  // console.log(Yesterday);
-  // console.log(thisMonth);
 
   const renderThisMonth = ({ item, i }) => {
     return (
@@ -323,7 +319,8 @@ const GameStats = () => {
     );
   }
 
-  
+ 
+
   const renderLoadingIndicator = () => (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <ActivityIndicator size={100} color="gold" />

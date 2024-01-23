@@ -64,6 +64,7 @@ const HomeScreen = ({ navigation, index }) => {
     fiveMin: 0,
   });
 
+
   const gameHistorylength = selectedCountdown === 'thirtySec' ? gameHistoryThirtySec.length : selectedCountdown === 'oneMin' ? gameHistoryOneMin.length : selectedCountdown === 'threeMin' ? gameHistoryThreeMin.length : selectedCountdown === 'fiveMin' ? gameHistoryFiveMin.length : 0
 
   const myHistorylength = selectedCountdown === 'thirtySec' ? myHistoryThirtySec.length : selectedCountdown === 'oneMin' ? myHistoryOneMin.length : selectedCountdown === 'threeMin' ? myHistoryThreeMin.length : selectedCountdown === 'fiveMin' ? myHistoryFiveMin.length : 0
@@ -152,7 +153,7 @@ const HomeScreen = ({ navigation, index }) => {
         }}>
         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
           <View style={{ marginRight: 20 }}>
-            <Image source={imageMapping[item.select]} style={{ height: 30, width: 30, borderRadius: 5 }} />
+            <Image source={imageMapping[item.select]} style={{ height: 40, width: 40, borderRadius: 5, resizeMode: 'contain' }} />
           </View>
           <View>
             <Text style={{ color: 'black' }}>{item.LN}</Text>
@@ -257,6 +258,11 @@ const HomeScreen = ({ navigation, index }) => {
   const onRefresh = () => {
     setRefreshing(true);
     fetchUserData()
+    thirtySecGameHistory()
+    oneMinGameHistory()
+    threeMinGameHistory()
+    fiveMinGameHistory()
+    
 
   };
 

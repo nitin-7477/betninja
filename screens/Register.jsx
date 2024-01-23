@@ -10,6 +10,8 @@ import axios from "axios";
 import { SCREEN_WIDTH, } from "../components/Constants/Screen";
 import Feather from "react-native-vector-icons/Feather";
 import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
+import { Colors } from "../components/Constants/Colors";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 
 const Register = () => {
@@ -31,6 +33,9 @@ const Register = () => {
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [showTC, setShowTC] = useState(false)
+  const [showPrivacy, setShowPrivacy] = useState(false)
+
+  const [isChecked, setChecked] = useState(true);
 
 
 
@@ -149,7 +154,7 @@ const Register = () => {
       console.log(registrationData);
       const result = await axios.post(`${process.env.SERVERURL}/api/auth/register`, registrationData);
 
-      console.log("xxxxxxxxxxxxxxxxxxxx", result);
+      console.log("xxxxxxxxxxxxxxxxxxxx", result.data);
       console.log(registrationData);
 
 
@@ -177,9 +182,8 @@ const Register = () => {
     }
   };
 
-  const isResetButtonEnabled = emailAddress !== '' && password !== '' && confirmPassword !== '' && phone !== '';
+  const isResetButtonEnabled = emailAddress !== '' && password !== '' && confirmPassword !== '' && phone !== '' && isChecked == true;
 
-  const [isChecked, setChecked] = useState(true);
 
   const handleToggle = () => {
     setChecked(!isChecked);
@@ -425,7 +429,7 @@ const Register = () => {
 
           </View>
           {(!isResetButtonEnabled && (
-            <Text style={{ color: 'red', }}> * Please fill all Details</Text>
+            <Text style={{ color: 'red' }}> * Please fill all Details and check the I agree button</Text>
           ))}
         </View>
         <View>
@@ -437,6 +441,10 @@ const Register = () => {
           <TouchableOpacity onPress={() => setShowTC(true)}>
             <Text style={{ marginLeft: 10, color: 'black' }}>I agree(terms and condition)</Text>
           </TouchableOpacity>
+
+        </TouchableOpacity>
+        <TouchableOpacity style={{ marginVertical: 5, width: '35%', height: 30, justifyContent: 'center', alignItems: 'center' }} onPress={() => setShowPrivacy(true)}>
+          <Text style={{ marginLeft: 10, color: 'blue' }}> * Privacy Policy</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={handleSignUp}
@@ -523,10 +531,67 @@ const Register = () => {
           </View>
         </View>
       </Modal>
-      <Modal visible={false} transparent={true} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
-        <View style={{ backgroundColor: 'white', height: responsiveHeight(70), width: responsiveWidth(90), padding: 10, borderRadius: 10 }}>
-          <Text style={{ textAlign: 'center' }}>Terms and Condition</Text>
+      <Modal visible={showTC} transparent={true} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+        <View style={{ backgroundColor: 'white', height: responsiveHeight(85), width: responsiveWidth(90), padding: 10, borderRadius: 10 }}>
+          <Text style={{ textAlign: 'center', color: 'black', fontWeight: 'bold', fontSize: 20, fontStyle: 'italic', textDecorationLine: 'underline' }}>Terms and Condition</Text>
+
+
+          <View style={{ flex: 1, width: responsiveWidth(85), alignSelf: 'center' }}>
+            <Text style={{ color: 'black', width: responsiveWidth(75), marginVertical: 10 }}>
+              User Agreement
+            </Text>
+            <Text style={{ color: 'black', width: responsiveWidth(85), marginVertical: 10 }}>
+              1. To avoid betting disputes, members must read the company's rules before entering the app. Once the player "I agree" By entering this company to bet, you will be considered to be in agreement with the company's User Agreement.
+            </Text>
+            <Text style={{ color: 'black', width: responsiveWidth(85), marginVertical: 10 }}>
+              2. It is the member's responsibility to ensure the confidentiality of their account and login information. Any online bets placed using your account number and member password will be considered valid. Please change your password from time to time. The company is not responsible for any compensation for bets made with a stolen account and password.
+            </Text>
+            <Text style={{ color: 'black', width: responsiveWidth(85), marginVertical: 10 }}>
+              3. The company reserves the right to change this agreement or the game rules or confidentiality rules from time to time. The modified terms will take effect on the date specified after the change occurs, and the right to make final decisions on all disputes is reserved by the company.
+            </Text>
+            <Text style={{ color: 'black', width: responsiveWidth(85), marginVertical: 10 }}>
+              4. Users must be of legal age according to the laws of the country of residence to use an online casino or application. Online bets that have not been successfully submitted will be considered void
+            </Text>
+            <Text style={{ color: 'black', width: responsiveWidth(85), marginVertical: 10 }}>
+              5. When a player is automatically or forcibly disconnected from the game before the game result is announced, it will not affect the game result
+            </Text>
+          </View>
+
+          <TouchableOpacity onPress={() => setShowTC(false)} style={{ height: 'auto', width: 120, backgroundColor: 'blue', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderRadius: 10, padding: 10 }}>
+            <Text style={{ color: 'white', fontWeight: 'bold' }}>I agree</Text>
+          </TouchableOpacity>
         </View>
+      </Modal>
+
+      <Modal visible={showPrivacy} transparent={true} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+        <ScrollView style={{ backgroundColor: 'white', height: responsiveHeight(100), width: responsiveWidth(90), padding: 10, borderRadius: 10 }}>
+          <Text style={{ textAlign: 'center', color: 'black', fontWeight: 'bold', fontSize: 20, fontStyle: 'italic', textDecorationLine: 'underline' }}>Privacy Policy</Text>
+
+
+          <View style={{ flex: 1, width: responsiveWidth(85), alignSelf: 'center' }}>
+            <Text style={{ color: 'black', width: responsiveWidth(75), marginVertical: 10 }}>
+              Read Carefully
+            </Text>
+            <Text style={{ color: 'black', fontSize: 15, fontWeight: 'bold' }}> 1.Retention of Your Personal Data</Text>
+            <Text style={{ color: 'black', width: responsiveWidth(85), marginVertical: 10 }}>
+              The company will retian your Personal data only for as long as is necessary for the purposes set out in the pirvacy policy. We will retian and use your Personal data to the extent necessary to comply with our legal obligations (for example, if we are required to retain your data to comply with applicable laws), resolve disputes, and enforce our legal agreements and policies. The company will also retain usage data for internal analysis purposes. Usage data is generally retained for a shorter period of time, except when this data is used to srengthen the security or to improve the functionally of our service, or we are legally obligated to retain this data for longer time periods.
+            </Text>
+            <Text style={{ color: 'black', fontSize: 15, fontWeight: 'bold' }}> 2.Childern's Policy</Text>
+            <Text style={{ color: 'black', width: responsiveWidth(85), marginVertical: 10 }}>
+              Our service does not address anyone under the age of 13. We dont knowingly collect personally identificable information from anyone under the age of 13. If you are a parent of guardian and you are aware that your child has provided us with personal data, please contact us. If we become aware that we have collected personal data from anyone under the age of 13 without verification of parental consent, we take steps to remove that information form our servers.
+            </Text>
+            <Text style={{ color: 'black', fontSize: 15, fontWeight: 'bold' }}> 3.Changes To Other Policies</Text>
+            <Text style={{ color: 'black', width: responsiveWidth(85), marginVertical: 10 }}>
+              3. We may update our privacy policy from time to time. We will notify you of any changes by posting the new privacy policy on this page. We will let you know via email and / or a porminent notice on our service, prior to the change becoming effective and update the "Last Update" data at the top of this privacy policy. Youou are advised to review this privacy policy periodically for any changes. changes to this this privacy policy are effective when the are posted on this page.
+            </Text>
+
+
+          </View>
+
+          <TouchableOpacity onPress={() => setShowPrivacy(false)} style={{ height: 'auto', width: 120, backgroundColor: 'blue', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderRadius: 10, padding: 10 }}>
+            <Text style={{ color: 'white', fontWeight: 'bold' }}>I agree</Text>
+          </TouchableOpacity>
+        </ScrollView>
       </Modal>
     </ScrollView>
   );

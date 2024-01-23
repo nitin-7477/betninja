@@ -72,7 +72,7 @@ const Gifts = () => {
     <ScrollView style={styles.container}>
       {/* header */}
 
-      <View style={{ width: responsiveWidth(100), backgroundColor: 'white', height: responsiveHeight(6), alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10 , borderBottomEndRadius: 15, borderBottomStartRadius: 15 }}>
+      <View style={{ width: responsiveWidth(100), backgroundColor: 'white', height: responsiveHeight(6), alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10, borderBottomEndRadius: 15, borderBottomStartRadius: 15 }}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <AntDesign name='left' size={20} color={'black'} style={{ fontWeight: 'bold' }} />
         </TouchableOpacity>

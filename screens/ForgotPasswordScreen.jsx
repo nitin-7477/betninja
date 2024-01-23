@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, SafeAreaView, TextInput, Modal, ActivityIndicator } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, SafeAreaView, TextInput, Modal, ActivityIndicator, Alert } from 'react-native';
 import AppTextInput from '../components/AppTextInput';
 import { Colors } from '../components/Constants/Colors';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../components/Constants/Screen';
@@ -93,6 +93,10 @@ const ForgotPasswordComponent = () => {
 
     try {
       setLoading(true);
+      if (newPassword.length < 6 || newPassword.length > 12) {
+        Alert.alert('Invalid Password', 'Password must be between 6 and 12 characters.');
+        return;
+      }
       var body = { email: email, otp: otp, newPassword: newPassword }
       const result = await axios.post(`${process.env.SERVERURL}/api/auth/reset-password`,
         body

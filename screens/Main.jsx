@@ -26,7 +26,7 @@ export default function Main() {
           navigation.navigate('Login');
           return;
         }
-
+        console.log(process.env.SERVERURL);
         const response = await axios.get(`${process.env.SERVERURL}/api/auth/user`, {
           headers: {
             "Authorization": JSON.parse(token),
@@ -34,7 +34,7 @@ export default function Main() {
         });
         setUserInformation(response.data);
       } catch (error) {
-        console.error('Error fetching user data in Account Screen:', error);
+        console.error('Error fetching user data in Main FIle:', error.response);
       }
     };
 

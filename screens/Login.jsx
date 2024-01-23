@@ -53,12 +53,12 @@ const Login = () => {
     fetchData();
   }, []);
 
-
+  console.log(process.env.SERVERURL);
 
   const checkLogin = async () => {
     try {
-      setLoading(true);
 
+      setLoading(true);
       if (!emailAddress.trim()) {
         setEmailError("Email is required");
         return;
@@ -66,6 +66,10 @@ const Login = () => {
         setEmailError("");
       }
 
+      if (password.length < 6 || password.length > 12) {
+        Alert.alert('Invalid Password', 'Password must be between 6 and 12 characters.');
+        return;
+      }
       if (!password.trim()) {
         setPasswordError("Password is required");
         return;
@@ -79,6 +83,7 @@ const Login = () => {
 
       const response = result.data;
       const token = response.token;
+      console.log(response);
 
       if (token) {
         await AsyncStorage.setItem("token", JSON.stringify(token));

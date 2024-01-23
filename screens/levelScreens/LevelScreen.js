@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, ImageBackground, Dimensions, } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, ImageBackground, Dimensions, Button } from 'react-native'
 import React from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../components/Constants/Screen'
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -11,6 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Progress from 'react-native-progress';
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { FlatList } from 'react-native';
+import Entypo from "react-native-vector-icons/Entypo"
 const LevelScreen = () => {
   const navigation = useNavigation()
   const [selectedButton, setSelectedButton] = useState(1)
@@ -25,7 +26,8 @@ const LevelScreen = () => {
   const [progress1, setProgress1] = useState(0)
   const [progress2, setProgress2] = useState(3000)
   const [rebateInfo, setRebateInfo] = useState([])
-
+  const [startIndex, setStartIndex] = useState(0);
+  const itemsPerPage = 10;
   const [fixedLevelData, setFixedLevelData] = useState([
     { levelup: 50, monthly: 25, exp: 3000 },
     { levelup: 150, monthly: 75, exp: 30000 },
@@ -140,7 +142,7 @@ const LevelScreen = () => {
         // console.log("This is data of history of rebate", response.data);
         setRebateInfo(response.data)
       } catch (e) {
-        console.log("HI Errors for Betting Rebate", e);
+        console.log("HI Errors for Betting Rebate", e.response);
       }
     };
     handleOneClickRebateGetRequest()
@@ -157,6 +159,17 @@ const LevelScreen = () => {
 
   const totalProgress = progress1 / progress2;
 
+  const rebateLength = rebateInfo?.data?.length
+
+  const totalPages = Math.ceil(rebateLength / itemsPerPage);
+
+  const onNextPress = () => {
+    setStartIndex((prevIndex) => Math.min(prevIndex + itemsPerPage, (totalPages - 1) * itemsPerPage));
+  };
+
+  const onPrevPress = () => {
+    setStartIndex((prevIndex) => Math.max(0, prevIndex - itemsPerPage));
+  };
 
   // console.log(isDisabled);
 
@@ -179,7 +192,10 @@ const LevelScreen = () => {
         {/* *******************This is for Avatar and Level check*************** */}
         <View style={{ height: SCREEN_HEIGHT * 0.1, width: SCREEN_WIDTH * 0.97, alignSelf: 'center', flexDirection: 'row', alignItems: 'center' }}>
           <View style={{ width: 120 }}><Image source={require('../../assets/player.png')} /></View>
-          <View><Text style={{ fontWeight: 'bold', color: 'black' }}>LEVEL {userInformation.level}</Text><Text style={{ fontSize: 18, fontWeight: '600', color: 'white' }}>{info.username}</Text></View>
+          <View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', height: 40, width: 'auto', backgroundColor: 'green', padding: 5, borderRadius: 10, paddingHorizontal: 10 }}>
+              <Entypo name='star-outlined' size={22} color={'white'} /><Text style={{ fontWeight: 'bold', color: 'white', marginLeft: 6, fontSize: 18 }}>LEVEL {userInformation.level}</Text></View>
+            <Text style={{ fontSize: 18, fontWeight: '600', color: 'white' }}>Name : {info.username}</Text></View>
         </View>
         <View style={{ height: 70, width: SCREEN_WIDTH * 1, justifyContent: 'space-around', alignItems: 'center', flexDirection: 'row', marginTop: 10 }}>
           <View style={{ height: 60, width: '45%', backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', borderRadius: 10, elevation: 2 }}>
@@ -625,7 +641,7 @@ const LevelScreen = () => {
 
           <View style={{ width: '20%' }}>
             <TouchableOpacity
-              disabled={isDisabled}
+              disabled={true}
               onPress={() => handleLevelUp('level')}
               style={{ flexDirection: 'row', height: '15', width: '100%', alignItems: 'center', borderColor: 'red', borderWidth: 0.5, padding: 2, justifyContent: 'center', borderRadius: 10, marginBottom: 5 }}>
               <Image source={require('../../assets/vipWallet.png')} style={{ height: 15, width: 15, marginRight: 5 }} />
@@ -649,6 +665,7 @@ const LevelScreen = () => {
           </View>
           <View style={{ width: '20%' }}>
             <TouchableOpacity
+              disabled={true}
               onPress={() => handleLevelUp('month')}
               style={{ flexDirection: 'row', height: '15', width: '100%', alignItems: 'center', borderColor: 'red', borderWidth: 0.5, padding: 2, justifyContent: 'center', borderRadius: 10, marginBottom: 5 }}>
               <Image source={require('../../assets/vipWallet.png')} style={{ height: 15, width: 15, marginRight: 5 }} />
@@ -689,13 +706,12 @@ const LevelScreen = () => {
       {
         showHistory ? <>
           <View style={{ flex: 1, marginBottom: 20 }}>
-            <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 20, color: 'black', width: '95%', alignSelf: 'center', height: 35 }}>Rebate History</Text>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 20, color: 'black', width: '95%', alignSelf: 'center', height: 35 }}>History</Text>
 
             {rebateInfo.length !== 0 ? <FlatList
-              data={rebateInfo.data}
+              data={rebateInfo.data.slice(startIndex, startIndex + itemsPerPage)}
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
-
                 <View style={styles.container1}>
                   <View style={styles.cardContainer}>
                     <View style={styles.header}>
@@ -737,14 +753,23 @@ const LevelScreen = () => {
 
             </View>}
 
+            <View style={{
+              flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+              width: '90%', marginVertical: 20, alignSelf: 'center'
+            }}>
 
+              <Button title="Prev" onPress={onPrevPress} disabled={startIndex === 0} />
+              <Text style={styles.pageIndicator}>{`Page ${Math.ceil((startIndex + 1) / itemsPerPage)} of ${totalPages}`}</Text>
+              <Button title="Next" onPress={onNextPress} disabled={startIndex + itemsPerPage >= rebateLength} />
+
+            </View>
           </View>
         </> : <>
           <View style={{ height: 'auto', marginBottom: 20, width: '100%', alignSelf: 'center' }}>
 
             <Text style={{ textAlign: 'center', color: 'red', fontSize: 18, fontWeight: 'bold', marginVertical: 10 }}>Level Privileges</Text>
             <Text style={{ textAlign: 'center', color: 'black', fontSize: 14, fontWeight: '500', marginVertical: 1 }}>VIP Rule Description</Text>
-            <View style={{ height: '100%', width: '95%', backgroundColor: 'white', alignSelf: 'center', borderRadius: 7, padding: 5 }}>
+            <View style={{ width: '95%', backgroundColor: 'white', alignSelf: 'center', borderRadius: 7, padding: 5 }}>
               <Text style={{ color: 'red', fontSize: 14, fontWeight: 'bold', marginVertical: 5 }}>1. Upgrade Standard</Text>
               <Text style={{ color: 'black' }}>The VIP member's experience points valid bet amount that meet the requirement for the corresponding rank will be promoted to the corresponding VIP Level, the Member's VIP Data static period  starts from 00:00:00 days VIP system launched. VIP level calculation is refreshed every 10 minutes! The corresponding experience level is calculated according to valid odds 1:1!</Text>
               <Text style={{ color: 'red', fontSize: 14, fontWeight: 'bold', marginVertical: 5 }}>2. Upgrade order</Text>
@@ -769,7 +794,6 @@ const LevelScreen = () => {
               <Text style={{ color: 'black' }}>VIP member who have reached the corresponding level will get additional benefits on safe deposit based on the member's VIP level </Text>
             </View>
           </View>
-
         </>
       }
 

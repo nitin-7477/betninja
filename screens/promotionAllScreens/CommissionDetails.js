@@ -32,7 +32,7 @@ const CommissionDetails = () => {
     }
 
     catch (error) {
-      console.error('Error fetching user data in Account Screen:', error);
+      console.error('Error fetching user data in Commission Detail:', error);
     }
 
 
@@ -62,12 +62,13 @@ const CommissionDetails = () => {
 
 
     } catch (e) {
-      console.log("ERROR IN FETCHING COMMISSION", e);
+      console.log("ERROR IN FETCHING COMMISSION in Commission details page", e);
     }
     finally {
       setLoading(false)
     }
   }
+  console.log(commissionHistoy);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -99,7 +100,7 @@ const CommissionDetails = () => {
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
           <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>Amount</Text>
-          <Text style={{ color: 'black' }}>₹{item.amount ? item.amount.toFixed(2) : '0.00'}</Text>
+          <Text style={{ color: 'black', fontWeight: 'bold' }}>₹{item.amount ? item.amount.toFixed(2) : '0.00'}</Text>
 
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
@@ -129,7 +130,7 @@ const CommissionDetails = () => {
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>
           <Text style={{ color: 'green', fontSize: 16, fontWeight: 'bold' }}>amount</Text>
-          <Text style={{ color: 'black' }}>₹{item.amount ? item.amount.toFixed(2) : '0.00'}</Text>
+          <Text style={{ color: 'black', fontWeight: 'bold'  }}>₹{item.amount ? item.amount.toFixed(2) : '0.00'}</Text>
 
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 1 }}>

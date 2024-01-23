@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View, ImageBackground, ScrollView, TextInput, TouchableOpacity, Alert, Animated, Modal } from 'react-native'
+import { Image, StyleSheet, Text, View, ImageBackground, ScrollView, TextInput, TouchableOpacity, Alert, Animated, Modal, ActivityIndicator } from 'react-native'
 import React from 'react'
 import { Colors } from '../components/Constants/Colors'
 import { SCREEN_WIDTH } from '../components/Constants/Screen'
@@ -21,7 +21,7 @@ const QrScanner = ({ route }) => {
   const BouncingText = Animated.createAnimatedComponent(Text);
   const [message, setMessage] = useState('')
   const [showCopyModal, setShowCopyModal] = useState(false)
-
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     generateOrderNumber();
@@ -80,6 +80,7 @@ const QrScanner = ({ route }) => {
 
   const handlePayment = async () => {
     try {
+      setLoading(true)
       const token = await AsyncStorage.getItem('token');
       if (!token) {
         navigation.navigate('Login')
@@ -96,14 +97,17 @@ const QrScanner = ({ route }) => {
       if (result.data) {
         setMessage(result.data.message)
         setShowCopyModal(true)
-    
+
         setTimeout(() => {
           setShowCopyModal(false);
         }, 2000);
       }
+      navigation.navigate('DepositeScreen')
     }
     catch (e) {
       console.log(e);
+    } finally {
+      setLoading(false); // Hide activity indicator regardless of success or error
     }
 
   }
@@ -158,7 +162,7 @@ const QrScanner = ({ route }) => {
           <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold', letterSpacing: 0.4 }}>UPI Payment</Text>
           <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', marginTop: 5 }}>
             <Text style={{ width: '50%', fontWeight: '500', color: 'black' }}>Amount:</Text>
-            <Text style={{ width: '50%', textAlign: 'right', color: 'red', fontSize: 16, fontWeight: 'bold' }}>{amount}</Text>
+            <Text style={{ width: '50%', textAlign: 'right', color: 'red', fontSize: 16, fontWeight: 'bold' }}>₹{amount}</Text>
           </View>
           <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', marginTop: 5 }}>
             <Text style={{ width: '50%', fontWeight: '500', color: 'black' }}>Order No:</Text>
@@ -182,9 +186,26 @@ const QrScanner = ({ route }) => {
         </View>
         <TouchableOpacity
           onPress={handlePayment}
-          style={{ height: 45, width: '100%', justifyContent: 'center', alignItems: 'center', backgroundColor: 'red', padding: 10, alignSelf: 'center', marginVertical: 10, marginBottom: 30, borderRadius: 10 }}>
-          <Text style={{ color: "white", fontWeight: 'bold', fontSize: 16 }}>Submit Ref No.</Text>
+          style={{
+            height: 45,
+            width: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'red',
+            padding: 10,
+            alignSelf: 'center',
+            marginVertical: 10,
+            marginBottom: 30,
+            borderRadius: 10,
+          }}
+        >
+          {loading ? (
+            <ActivityIndicator size="small" color="white" />
+          ) : (
+            <Text style={{ color: "white", fontWeight: 'bold', fontSize: 16 }}>Submit Ref No.</Text>
+          )}
         </TouchableOpacity>
+
         <Modal visible={showCopyModal} transparent={true}>
           <View style={{
             flex: 1,

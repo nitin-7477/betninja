@@ -13,7 +13,7 @@ const FeedbackForm = () => {
 
   const navigation = useNavigation();
   const [feedback, setFeedback] = useState('');
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState(1);
   const [showCopyModal, setShowCopyModal] = useState(false)
   const [feedbackMessage, setFeedbackMessage] = useState('')
 
@@ -31,7 +31,7 @@ const FeedbackForm = () => {
       if (rating >= 0) {
         body = { ...body, rating: rating };
       }
-      console.log(token);
+
 
       const result = await axios.post(`${process.env.SERVERURL}/api/feedback/feedbacks`, body, {
         headers: {

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Alert } from 'react-native'
 import React from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
 import { Colors } from '../Constants/Colors'
@@ -7,6 +7,9 @@ import Feather from "react-native-vector-icons/Feather";
 
 
 const BindMail = () => {
+  const handleBind = () => {
+    Alert.alert('This feature is availbale in New update')
+  }
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       {/* header */}
@@ -27,7 +30,9 @@ const BindMail = () => {
           Check
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.signIn}>
+      <TouchableOpacity
+        onPress={handleBind}
+        style={styles.signIn}>
         <Text style={{ color: 'white', textAlign: "center", fontSize: 18, fontWeight: 'bold' }} >
           Bind
         </Text>

@@ -150,6 +150,8 @@ const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType,
     closeModalOnTime();
   }, [countdowns, selectedCountdown, closeModal]);
 
+
+
   return (
     <View style={styles.container}>
       <Modal

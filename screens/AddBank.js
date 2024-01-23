@@ -163,6 +163,7 @@ const AddBank = () => {
         </View>
         <AppTextInput
           value={account}
+          maxLength={25}
           keyboardType='numeric'
           onChangeText={(text) => setAccount(text)}
           placeholder='Enter your bank account number' />
@@ -175,6 +176,7 @@ const AddBank = () => {
         <AppTextInput
           keyboardType='numeric'
           value={phone}
+          maxLength={10}
           onChangeText={(text) => setPhone(text)} placeholder='Please Enter Phone Number' />
       </View>
       <View>

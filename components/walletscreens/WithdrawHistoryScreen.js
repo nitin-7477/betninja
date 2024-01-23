@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, TextInput, FlatList } from 'react-native'
+import { Button, Text, View, ScrollView, Image, TouchableOpacity, RefreshControl, FlatList } from 'react-native'
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
@@ -13,32 +13,26 @@ import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimen
 const WithdrawHistoryScreen = () => {
   const navigation = useNavigation();
   const [history, setHistory] = useState([])
+  const [startIndex, setStartIndex] = useState(0);
+  const itemsPerPage = 10;
+  const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    handleDepositWithdraw();
-  }, []);
-
-  const handleDepositWithdraw = async () => {
+  const onRefresh = async () => {
     try {
-      const token = await AsyncStorage.getItem('token');
-      if (!token) {
-        navigation.navigate('Login');
-        return;
-      }
+      setRefreshing(true);
 
-      const response = await axios.get(`${process.env.SERVERURL}/api/withdraw/withdraw`, {
-        headers: {
-          Authorization: JSON.parse(token),
-        },
-      });
-
-
-
+      await fetchWithdrawData();
     } catch (error) {
-      console.error('Error fetching withdraw history:', error);
-
+      console.error('Error refreshing data:', error);
+    } finally {
+      setRefreshing(false);
     }
   };
+
+  useEffect(() => {
+    fetchWithdrawData()
+  }, []);
+
 
   const fetchToken = async () => {
     try {
@@ -57,7 +51,7 @@ const WithdrawHistoryScreen = () => {
 
   };
 
-  const fetchCommissionData = async () => {
+  const fetchWithdrawData = async () => {
     try {
 
       const token = await AsyncStorage.getItem('token');
@@ -66,8 +60,6 @@ const WithdrawHistoryScreen = () => {
         navigation.navigate('Login')
         return;
       }
-
-
 
       var result = await axios.get(`${process.env.SERVERURL}/api/withdraw/withdraw`, {
 
@@ -79,7 +71,7 @@ const WithdrawHistoryScreen = () => {
       setHistory(result.data.data)
 
     } catch (e) {
-      console.log("ERROR IN FETCHING COMMISSION", e);
+      console.log("ERROR IN FETCHING COMMISSION", e.response);
     }
   }
 
@@ -87,7 +79,6 @@ const WithdrawHistoryScreen = () => {
     const fetchData = async () => {
       try {
         await fetchToken();
-        await fetchCommissionData();
       } catch (error) {
         console.error('Error in useEffect:', error);
       }
@@ -96,6 +87,17 @@ const WithdrawHistoryScreen = () => {
     fetchData();
   }, []);
 
+  const depositeHistoryLength = history?.length
+
+  const totalPages = Math.ceil(depositeHistoryLength / itemsPerPage);
+
+  const onNextPress = () => {
+    setStartIndex((prevIndex) => Math.min(prevIndex + itemsPerPage, (totalPages - 1) * itemsPerPage));
+  };
+
+  const onPrevPress = () => {
+    setStartIndex((prevIndex) => Math.max(0, prevIndex - itemsPerPage));
+  };
   console.log("Result of withdrow  History In History Screen", history);
 
   return (
@@ -109,41 +111,55 @@ const WithdrawHistoryScreen = () => {
           <Text style={{ marginLeft: 30, fontSize: 16, color: 'black', fontWeight: 'bold' }}>Withdraw History</Text>
         </View>
         {/* *********************************Withdraw History****************************** */}
-        <FlatList data={history} renderItem={({ item }) => {
-          return <View style={{ height: 'auto', width: SCREEN_WIDTH * 0.95, alignSelf: 'center', backgroundColor: '#e1edf0', marginBottom: 10, borderRadius: 10, padding: 10, }}>
+        <FlatList refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={['#ff0000', '#00ff00', '#0000ff']} // Set the colors of the refresh indicator
+          />
+        } data={history.slice(startIndex, startIndex + itemsPerPage)} renderItem={({ item }) => {
+          return <View style={{ height: 'auto', width: SCREEN_WIDTH * 0.95, alignSelf: 'center', backgroundColor: '#f0f0f5', marginBottom: 10, borderRadius: 10, padding: 10, }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10, justifyContent: 'space-between' }}>
               <TouchableOpacity style={{
-                backgroundColor: '#FF6633',
+                backgroundColor: '#ff7374',
                 alignItems: 'center',
                 width: SCREEN_WIDTH * 0.25,
                 paddingVertical: 5,
                 borderRadius: 7
 
               }}>
-                <Text style={{ fontWeight: 'bold', color: 'white', }}>{item.status}</Text>
+                <Text style={{ fontWeight: 'bold', color: 'white', }}>Withdraw</Text>
               </TouchableOpacity>
-              {/* <Text style={{ marginLeft: 10, fontSize: 16, color: 'green' }} >{item.status}</Text> */}
+              <Text style={{ marginLeft: 10, fontSize: 16, color: 'green' }} >{item.status}</Text>
             </View>
             {/* *********************************Deposit History Card ****************************** */}
 
             <View style={{ height: 'auto', width: SCREEN_WIDTH * 0.91, borderTopWidth: 0.4, borderColor: 'grey', borderRadius: 10, padding: 10 }}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-                <Text style={{ fontSize: 16, color: "black" }}>Balance</Text><Text style={{ color: 'orange', fontSize: 18 }}>{item.amount}</Text>
+                <Text style={{ fontSize: 16, color: "grey", fontWeight: 'bold' }}>Balance</Text><Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold' }}>{item.amount}</Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-                <Text style={{ fontSize: 16, color: "black" }}>Type</Text><Text style={{ color: "black" }}>{item.type}</Text>
+                <Text style={{ fontSize: 16, color: "grey", fontWeight: 'bold' }}>Type</Text><Text style={{ color: "black" }}>{item.type}</Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-                <Text style={{ fontSize: 16, color: "black" }}>Time</Text><Text style={{ color: "black" }}>{new Date(item.updatedAt).toLocaleString()}</Text>
+                <Text style={{ fontSize: 16, color: "grey", fontWeight: 'bold' }}>Time</Text><Text style={{ color: "black" }}>{new Date(item.updatedAt).toLocaleString()}</Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-                <Text style={{ fontSize: 16, color: "black" }}>Transaction Id</Text><Text style={{ color: "black" }}>{item.transactionId}</Text>
+                <Text style={{ fontSize: 16, color: "grey", fontWeight: 'bold' }}>Transaction Id</Text><Text style={{ color: "black" }}>{item.transactionId}</Text>
               </View>
 
             </View>
           </View>
         }} />
 
+        <View style={{
+          flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+          width: '90%', marginVertical: 20, alignSelf: 'center'
+        }}>
+          <Button title="Prev" onPress={onPrevPress} disabled={startIndex === 0} />
+          <Text style={styles.pageIndicator}>{`Page ${Math.ceil((startIndex + 1) / itemsPerPage)} of ${totalPages}`}</Text>
+          <Button title="Next" onPress={onNextPress} disabled={startIndex + itemsPerPage >= depositeHistoryLength} />
+        </View>
 
 
 

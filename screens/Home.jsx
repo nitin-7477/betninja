@@ -29,12 +29,16 @@ const Home = () => {
   );
 
   const handleDeposit = (amount, extraAmount) => {
+    setModalVisible(false);
     navigation.navigate('DepositeScreen', { depositAmount: amount, extraAmount: extraAmount });
+
   }
+  console.log(process.env.SERVERURL);
 
   const closeModal = () => {
     setModalVisible(false);
   };
+
 
 
   const hideNotification = () => {

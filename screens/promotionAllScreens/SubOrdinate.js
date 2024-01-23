@@ -48,15 +48,15 @@ const SubOrdinate = () => {
 
   const visibleData = downline.slice(startIndex, endIndex);
 
-  console.log('This is downline data', downline);
+
 
   return (
     <View style={styles.container}>
       <View style={{ flex: 1 }}>
-        <View style={{ width: responsiveWidth(100), backgroundColor: 'white', height: responsiveHeight(6), alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10 }}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={{ width: responsiveWidth(100), backgroundColor: 'white', height: responsiveHeight(6), alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10 }}>
           <AntDesign name='left' size={20} color={'black'} style={{ fontWeight: 'bold' }} />
           <Text style={{ marginLeft: 30, fontSize: 16, color: 'black', fontWeight: 'bold' }}>Subordinate Data</Text>
-        </View>
+        </TouchableOpacity>
 
         {loading ? (
           <ActivityIndicator size={100} color="gold" style={{ alignSelf: 'center', marginTop: 50 }} />

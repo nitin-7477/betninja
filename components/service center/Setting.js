@@ -45,7 +45,7 @@ const Setting = () => {
     fetchData();
   }, []);
 
-  console.log("This is user information for wallet Screen", userInformation);
+  console.log("THis is setting js info", userInformation);
 
 
   const [showCopyModal, setShowCopyModal] = useState(false)
@@ -65,7 +65,7 @@ const Setting = () => {
     <ScrollView style={styles.container}>
       {/* header */}
 
-      <View style={{ width: '100%', backgroundColor: 'white', height: 50, alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10, borderBottomEndRadius: 15, borderBottomStartRadius: 15  }}>
+      <View style={{ width: '100%', backgroundColor: 'white', height: 50, alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10, borderBottomEndRadius: 15, borderBottomStartRadius: 15 }}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <AntDesign name='left' size={20} color={'black'} style={{ fontWeight: 'bold' }} />
         </TouchableOpacity>
@@ -154,7 +154,7 @@ const Setting = () => {
           <Text style={{ marginLeft: 10, fontSize: 16, color: Colors.fontGray, fontWeight: '500', marginRight: 10 }}>Updated Version</Text>
         </View>
         <View style={{ flexDirection: 'row' }}>
-          <Text style={{ fontSize: 16, color: Colors.fontGray, fontWeight: '500', marginRight: 10 }}>1.2.3</Text>
+          <Text style={{ fontSize: 16, color: Colors.fontGray, fontWeight: '500', marginRight: 10 }}>1.0.0</Text>
           <Feather name='chevron-right' size={20} color={Colors.fontGray} />
         </View>
       </TouchableOpacity>

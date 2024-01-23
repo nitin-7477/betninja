@@ -41,7 +41,7 @@ const BankAccount = () => {
         setSelectedBankIndex(response.data.data.length - 1);
 
       } catch (error) {
-        console.error('Error fetching user data in Wallet Screen:', error);
+        console.error('Error fetching user data in Wallet Screen:', error.response);
       }
     };
 

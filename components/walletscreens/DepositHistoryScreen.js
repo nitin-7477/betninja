@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, TextInput, FlatList } from 'react-native'
+import { SafeAreaView, StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, TextInput, FlatList, Button, RefreshControl } from 'react-native'
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
@@ -13,6 +13,22 @@ import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimen
 const DepositHistoryScreen = () => {
   const navigation = useNavigation();
   const [history, setHistory] = useState([])
+  const [startIndex, setStartIndex] = useState(0);
+  const itemsPerPage = 10;
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = async () => {
+    try {
+      setRefreshing(true);
+      // Call your data fetching function here (e.g., fetchCommissionData)
+      await handleDepositWithdraw();
+    } catch (error) {
+      console.error('Error refreshing data:', error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
 
   useEffect(() => {
     handleDepositWithdraw();
@@ -37,7 +53,7 @@ const DepositHistoryScreen = () => {
 
       setHistory(sortedHistory);
 
-      console.log(response.data.data[0].createdAt);
+
 
     } catch (error) {
       console.error('Error fetching withdraw history:', error);
@@ -76,7 +92,18 @@ const DepositHistoryScreen = () => {
     fetchData();
   }, []);
 
-  console.log("Result of withdrow  History In History Screen", history);
+  const depositeHistoryLength = history?.length
+
+  const totalPages = Math.ceil(depositeHistoryLength / itemsPerPage);
+
+  const onNextPress = () => {
+    setStartIndex((prevIndex) => Math.min(prevIndex + itemsPerPage, (totalPages - 1) * itemsPerPage));
+  };
+
+  const onPrevPress = () => {
+    setStartIndex((prevIndex) => Math.max(0, prevIndex - itemsPerPage));
+  };
+
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
@@ -89,45 +116,60 @@ const DepositHistoryScreen = () => {
           <Text style={{ marginLeft: 30, fontSize: 16, color: 'black', fontWeight: 'bold' }}>Deposit History</Text>
         </View>
         {/* *********************************Withdraw History****************************** */}
-        <FlatList data={history} renderItem={({ item }) => {
-          return <View style={{ height: 'auto', width: SCREEN_WIDTH * 0.95, alignSelf: 'center', backgroundColor: '#e1edf0', marginBottom: 10, borderRadius: 10, padding: 10, }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10, justifyContent: 'space-between' }}>
-              <TouchableOpacity style={{
-                backgroundColor: '#FF6633',
-                alignItems: 'center',
-                width: SCREEN_WIDTH * 0.25,
-                paddingVertical: 5,
-                borderRadius: 7
+        <FlatList refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={['#ff0000', '#00ff00', '#0000ff']}
+          />
+        }
+          data={history.slice(startIndex, startIndex + itemsPerPage)} renderItem={({ item }) => {
+            return <View style={{ height: 'auto', width: SCREEN_WIDTH * 0.95, alignSelf: 'center', backgroundColor: '#e1edf0', marginBottom: 10, borderRadius: 10, padding: 10, }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10, justifyContent: 'space-between' }}>
+                <TouchableOpacity style={{
+                  backgroundColor: '#ff7374',
+                  alignItems: 'center',
+                  width: SCREEN_WIDTH * 0.25,
+                  paddingVertical: 5,
+                  borderRadius: 7
 
-              }}>
+                }}>
 
-                <Text style={{ fontWeight: 'bold', color: 'white', }}>Deposit</Text>
-              </TouchableOpacity>
-              <Text style={{ marginLeft: 10, fontSize: 16, color: 'green' }} >{item.status}</Text>
+                  <Text style={{ fontWeight: 'bold', color: 'white', }}>Deposit</Text>
+                </TouchableOpacity>
+                <Text style={{ marginLeft: 10, fontSize: 16, color: 'green' }} >{item.status}</Text>
+              </View>
+              {/* *********************************Deposit History Card ****************************** */}
+
+              <View style={{ height: 'auto', width: SCREEN_WIDTH * 0.91, borderTopWidth: 0.4, borderColor: 'grey', borderRadius: 10, padding: 10 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
+                  <Text style={{ fontSize: 16, color: "grey", fontWeight: 'bold' }}>Balance</Text>
+                  <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold' }}>
+                    ₹{item.amount.toFixed(2)}
+                  </Text>
+                </View>
+
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
+                  <Text style={{ fontSize: 16, color: "grey", fontWeight: 'bold' }}>Type</Text><Text style={{ color: "black" }}>{item.type}</Text>
+                </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
+                  <Text style={{ fontSize: 16, color: "grey", fontWeight: 'bold' }}>Time</Text><Text style={{ color: "black" }}>{new Date(item.orderTime).toLocaleString()}</Text>
+                </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
+                  <Text style={{ fontSize: 16, color: "grey", fontWeight: 'bold' }}>Transaction Id</Text><Text style={{ color: "black" }}>{item.transactionId}</Text>
+                </View>
+
+              </View>
             </View>
-            {/* *********************************Deposit History Card ****************************** */}
-
-            <View style={{ height: 'auto', width: SCREEN_WIDTH * 0.91, borderTopWidth: 0.4, borderColor: 'grey', borderRadius: 10, padding: 10 }}>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-                <Text style={{ fontSize: 16, color: "black" }}>Balance</Text>
-                <Text style={{ color: 'orange', fontSize: 18 }}>
-                  ₹{item.amount.toFixed(2)}
-                </Text>
-              </View>
-
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-                <Text style={{ fontSize: 16, color: "black" }}>Type</Text><Text style={{ color: "black" }}>{item.type}</Text>
-              </View>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-                <Text style={{ fontSize: 16, color: "black" }}>Time</Text><Text style={{ color: "black" }}>{new Date(item.orderTime).toLocaleString()}</Text>
-              </View>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }}>
-                <Text style={{ fontSize: 16, color: "black" }}>Transaction Id</Text><Text style={{ color: "black" }}>{item.transactionId}</Text>
-              </View>
-
-            </View>
-          </View>
-        }} />
+          }} />
+        <View style={{
+          flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+          width: '90%', marginVertical: 20, alignSelf: 'center'
+        }}>
+          <Button title="Prev" onPress={onPrevPress} disabled={startIndex === 0} />
+          <Text style={styles.pageIndicator}>{`Page ${Math.ceil((startIndex + 1) / itemsPerPage)} of ${totalPages}`}</Text>
+          <Button title="Next" onPress={onNextPress} disabled={startIndex + itemsPerPage >= depositeHistoryLength} />
+        </View>
 
       </View>
     </ScrollView>

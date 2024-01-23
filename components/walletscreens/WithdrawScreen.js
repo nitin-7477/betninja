@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, TextInput, Alert } from 'react-native'
+import { RefreshControl, Text, View, ScrollView, Image, TouchableOpacity, TextInput, Alert, ActivityIndicator, Modal } from 'react-native'
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
@@ -18,56 +18,71 @@ const WithdrawScreen = () => {
   const [bankDetails, setBankDetails] = useState([])
   const [isBankAvailable, setIsBankAvailable] = useState([])
   const isButtonDisabled = parseInt(amount) >= 200;
+  const [isLoading, setLoading] = useState(false);
+  const [showCopyModal, setShowCopyModal] = useState(false)
+  const [message, setMessage] = useState(false)
+  const [refreshing, setRefreshing] = useState(false);
 
   const handleAmountChange = (value) => {
     setAmount(value);
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token')
-        const response = await axios.get(`${process.env.SERVERURL}/api/auth/user`, {
-          headers: {
-            "Authorization": JSON.parse(token),
-          },
-        });
-        setUserInformation(response.data);
-      } catch (error) {
-        console.error('Error fetching user data in Wallet Screen:', error);
-      }
-    };
-
+    fetchBankData();
     fetchData();
   }, []);
 
+  const onRefresh = async () => {
+    try {
+      setRefreshing(true);
+      // Call your data fetching function here (e.g., fetchCommissionData)
+      await fetchBankData();
+      await fetchData();
 
-  useEffect(() => {
-    const fetchBankData = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token')
-        const response = await axios.get(`${process.env.SERVERURL}/api/bank/userBank`, {
-          headers: {
-            "Authorization": JSON.parse(token),
-          },
-        });
+    } catch (error) {
+      console.error('Error refreshing data:', error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
 
-        setBankDetails(response.data.data[(response.data.data).length - 1]);
-        setIsBankAvailable(response.data.data)
+  const fetchData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token')
+      const response = await axios.get(`${process.env.SERVERURL}/api/auth/user`, {
+        headers: {
+          "Authorization": JSON.parse(token),
+        },
+      });
+      setUserInformation(response.data);
+    } catch (error) {
+      console.error('Error fetching user data in Wallet Screen:', error);
+    }
+  };
 
 
-      } catch (error) {
-        console.error('Error fetching user data in Wallet Screen:', error);
-      }
-    };
 
-    fetchBankData();
-  }, []);
+  const fetchBankData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token')
+      const response = await axios.get(`${process.env.SERVERURL}/api/bank/userBank`, {
+        headers: {
+          "Authorization": JSON.parse(token),
+        },
+      });
+
+      setBankDetails(response.data.data[(response.data.data).length - 1]);
+      setIsBankAvailable(response.data.data)
 
 
+    } catch (error) {
+      console.error('Error fetching user data in Wallet Screen:', error);
+    }
+  };
 
   const handleDepositWithdraw = async () => {
     try {
+      setLoading(true)
       const token = await AsyncStorage.getItem('token');
       if (!token) {
         navigation.navigate('Login')
@@ -79,13 +94,25 @@ const WithdrawScreen = () => {
           "Authorization": JSON.parse(token),
         },
       });
-      if (response.data) {
-        Alert.alert(response.data.message)
+      console.log(response.data.message);
+      if (response.status) {
+        setMessage(response.data.message)
+        setShowCopyModal(true)
+        fetchData()
+        fetchBankData()
+        setTimeout(() => {
+          setShowCopyModal(false);
+
+
+        }, 2000);
       }
 
     }
     catch (e) {
       console.log(e);
+    }
+    finally {
+      setLoading(false)
     }
   };
 
@@ -93,7 +120,13 @@ const WithdrawScreen = () => {
 
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+    <ScrollView showsVerticalScrollIndicator={false}  refreshControl={
+      <RefreshControl
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+        colors={['#ff0000', '#00ff00', '#0000ff']} // Set the colors of the refresh indicator
+      />
+    } style={styles.container}>
       <View style={styles.depositSection}>
         <View style={{ width: '100%', backgroundColor: 'white', height: 50, alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10, borderBottomEndRadius: 15, borderBottomStartRadius: 15 }}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -182,7 +215,11 @@ const WithdrawScreen = () => {
             disabled={!isButtonDisabled}
             onPress={handleDepositWithdraw}
           >
-            <Text style={styles.depositButtonText}>Withdraw</Text>
+            {isLoading ? (
+              <ActivityIndicator size="small" color="white" />
+            ) : (
+              <Text style={styles.depositButtonText}>Withdraw</Text>
+            )}
           </TouchableOpacity>
           <View style={{ flexDirection: 'row', marginVertical: 2 }}>
             <Entypo name='star' size={20} style={{ marginRight: 10, color: '#d9ad82' }} />
@@ -199,7 +236,26 @@ const WithdrawScreen = () => {
 
         </View>
         {/* *********************Deposite Amount******************* */}
-
+        <Modal visible={showCopyModal} transparent={true}>
+          <View style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+            <View style={{
+              width: '70%', // Set your desired width
+              height: 150, // Set your desired height
+              backgroundColor: 'rgba(0, 0, 0, 0.7)',
+              padding: 10,
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: 10,
+            }}>
+              <Entypo name="check" size={30} color={'white'} />
+              <Text style={{ color: 'white' }}>{message}</Text>
+            </View>
+          </View>
+        </Modal>
       </View>
     </ScrollView>
   )

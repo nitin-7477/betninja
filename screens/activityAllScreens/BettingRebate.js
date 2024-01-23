@@ -16,11 +16,12 @@ const BettingRebate = () => {
   const [userInformation, setUserInformation] = useState([])
   const [checkToken, setCheckToken] = useState('')
   const [rebateInfo, setRebateInfo] = useState([])
-  const [startIndex, setStartIndex] = useState(0);
   const [message, setMessage] = useState('')
   const [showCopyModal, setShowCopyModal] = useState(false)
-
+  const [startIndex, setStartIndex] = useState(0);
   const itemsPerPage = 10;
+
+
 
   const navigation = useNavigation();
 
@@ -43,7 +44,7 @@ const BettingRebate = () => {
 
         setUserInformation(response.data.user_level.rebate_amount);
       } catch (error) {
-        console.error('Error fetching user data in  betting Rebate:', error);
+        console.error('Error fetching user data in  betting Rebate:', error.response);
       }
 
     };
@@ -54,7 +55,7 @@ const BettingRebate = () => {
 
   const handleOneClickRebate = async () => {
     try {
-      console.log("hi");
+
       const token = await AsyncStorage.getItem('token');
       console.log(token);
       const response = await axios.post(
@@ -104,14 +105,14 @@ const BettingRebate = () => {
         }
       );
 
-      console.log("This is data of history of rebate", response.data);
+      console.log("This is data of history of rebate in Betting Rebate", response.data);
       setRebateInfo(response.data)
     } catch (e) {
       console.log("HI Errors for Betting Rebate", e);
     }
   };
-
-  const totalPages = Math.ceil(rebateInfo.length / itemsPerPage);
+  const rebateLength = rebateInfo?.data?.length
+  const totalPages = Math.ceil(rebateLength / itemsPerPage);
 
   const onNextPress = () => {
     setStartIndex((prevIndex) => Math.min(prevIndex + itemsPerPage, (totalPages - 1) * itemsPerPage));
@@ -120,7 +121,6 @@ const BettingRebate = () => {
   const onPrevPress = () => {
     setStartIndex((prevIndex) => Math.max(0, prevIndex - itemsPerPage));
   };
-
 
   return (
     <ScrollView style={styles.container1}>
@@ -168,10 +168,10 @@ const BettingRebate = () => {
 
       <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 20, color: 'black', width: '95%', alignSelf: 'center', height: 35 }}>Rebate History</Text>
 
-      {rebateInfo.length !== 0 ? (
+      {rebateInfo.data && rebateInfo.data.length > 0 ? (
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={rebateInfo.data}
+          data={rebateInfo.data.slice(startIndex, startIndex + itemsPerPage)}
 
           renderItem={({ item }) => (
             <View style={styles.container}>
@@ -220,8 +220,11 @@ const BettingRebate = () => {
         flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
         width: '90%', marginVertical: 20, alignSelf: 'center'
       }}>
+
         <Button title="Prev" onPress={onPrevPress} disabled={startIndex === 0} />
-        <Button title="Next" onPress={onNextPress} disabled={startIndex + itemsPerPage >= rebateInfo.length} />
+        <Text style={styles.pageIndicator}>{`Page ${Math.ceil((startIndex + 1) / itemsPerPage)} of ${totalPages}`}</Text>
+        <Button title="Next" onPress={onNextPress} disabled={startIndex + itemsPerPage >= rebateLength} />
+
       </View>
       <Modal visible={showCopyModal} transparent={true}>
         <View style={{

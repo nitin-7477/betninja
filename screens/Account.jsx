@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, ScrollView, ActivityIndicator, Modal } from "react-native";
+import { View, Text, Image, TouchableOpacity, ScrollView, ActivityIndicator, Modal, RefreshControl } from "react-native";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
@@ -22,6 +22,7 @@ const Account = () => {
 
 
 
+
   // const copyToClipboard = () => {
   //   Clipboard.setString(copyUID);
 
@@ -40,33 +41,34 @@ const Account = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true)
-        const token = await AsyncStorage.getItem('token');
-        if (!token) {
-          navigation.navigate('Login')
-          return;
-        }
-
-        const response = await axios.get(`${process.env.SERVERURL}/api/auth/user`, {
-          headers: {
-            "Authorization": JSON.parse(token),
-          },
-        });
-        console.log(response.data);
-        setUserInformation(response.data);
-        setCopyUID(response.data.uid)
-      } catch (error) {
-        console.error('Error fetching user data in Account Screen:', error);
-      }
-      finally {
-        setLoading(false)
-      }
-    };
 
     fetchData();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true)
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        navigation.navigate('Login')
+        return;
+      }
+
+      const response = await axios.get(`${process.env.SERVERURL}/api/auth/user`, {
+        headers: {
+          "Authorization": JSON.parse(token),
+        },
+      });
+      console.log(response.data);
+      setUserInformation(response.data);
+      setCopyUID(response.data.uid)
+    } catch (error) {
+      console.error('Error fetching user data in Account Screen:', error.response);
+    }
+    finally {
+      setLoading(false)
+    }
+  };
 
   console.log("This is user information for Account Screen", userInformation);
 
@@ -116,176 +118,210 @@ const Account = () => {
       </TouchableOpacity>
     );
   };
+  const [refreshing, setRefreshing] = useState(false);
 
+  const onRefresh = async () => {
+    try {
+      setRefreshing(true);
+      // Call your data fetching function here (e.g., fetchCommissionData)
+      await fetchData();
+    } catch (error) {
+      console.error('Error refreshing data:', error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-      <View>
-        <View style={styles.header}>
-          <Image
-            source={require("../image/1.jpg")}
-            style={styles.profileImage}
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{ position: 'relative' }}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={['#ff0000', '#00ff00', '#0000ff']} // Set the colors of the refresh indicator
           />
+        }
+      >
+        <View>
+          <View style={styles.header}>
+            <Image
+              source={require("../image/1.jpg")}
+              style={styles.profileImage}
+            />
 
-          <View style={styles.userInfo}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#F4C2C2', padding: 5, marginTop: 10, borderRadius: 10, borderWidth: 0.5 }}>
-              <Image source={require('../assets/crown.png')} style={{ height: 30, width: 30, marginRight: 10 }} />
-              <Text style={styles.userName}>{userInformation.username}</Text>
+            <View style={styles.userInfo}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#F4C2C2', padding: 5, marginTop: 10, borderRadius: 10, borderWidth: 0.5 }}>
+                <Image source={require('../assets/crown.png')} style={{ height: 30, width: 30, marginRight: 10 }} />
+                <Text style={styles.userName}>{userInformation.username}</Text>
+              </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
+                <TouchableOpacity style={{ marginRight: 7 }} onPress={copyToClipboard}>
+                  <Feather name='copy' size={20} color={'grey'} />
+                </TouchableOpacity>
+                <Text style={styles.userId}>{userInformation.uid}</Text>
+              </View>
+
             </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-              <TouchableOpacity style={{ marginRight: 7 }} onPress={copyToClipboard}>
-                <Feather name='copy' size={20} color={'grey'} />
+          </View>
+          {/* *********Total Balance Card********************** */}
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: "rgba(173,216,230,0.3)", width: '98%', height: 'auto', alignSelf: 'center', paddingHorizontal: 10, borderRadius: 10 }}>
+            <View style={styles.balance}>
+              <Text style={{ color: 'black', width: 'auto' }}>Total Balance:- ₹ {userInformation?.wallet?.toFixed(2)}</Text>
+            </View>
+            <TouchableOpacity
+              style={{
+
+                backgroundColor: 'orange',
+                borderRadius: 10,
+                width: 'auto', height: 'auto',
+                elevation: 15,
+                paddingVertical: 3,
+                flexDirection: 'row',
+                padding: 10,
+                // borderColor: 'red',
+                // borderWidth: 0.3
+              }}
+              onPress={() => navigation.navigate('LevelScreen')}>
+              <Entypo name='star-outlined' size={20} color={'white'} />
+              <Text style={styles.level}>Level: {userInformation?.user_level?.level}</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* *********Navigating to different screens********************** */}
+          <View style={{ height: SCREEN_HEIGHT * 0.15, width: SCREEN_WIDTH * 0.95, alignSelf: 'center', backgroundColor: 'white', elevation: 2, borderRadius: 10, marginTop: -40, justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
+            <View style={{ flexDirection: 'row', width: SCREEN_WIDTH * 0.95, justifyContent: 'space-evenly', alignItems: 'center' }}>
+              {renderButton('Deposite', require('../assets/wallet/deposit.png'))}
+              {renderButton('Withdraw', require('../assets/wallet/withdraw.png'))}
+              {renderButton('WithdrawHistory', require('../assets/wallet/withdrawHistory.png'))}
+              {renderButton('DepositHistory', require('../assets/wallet/depositeHistory.png'))}
+            </View>
+          </View>
+
+          <View style={styles.section}>
+
+            <Text style={styles.sectionTitle}>Account</Text>
+            <View style={styles.sectionItems}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("Notification")}
+                style={{
+                  justifyContent: 'space-between', flexDirection: 'row', width: '100%', alignItems: 'center', height: '25%', borderBottomWidth: 0.2,
+                  borderColor: Colors.fontGray,
+                }}
+              >
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Ionicons name="notifications" size={24} color="black" />
+                  <Text style={{ color: 'black', marginLeft: 10 }}>Notifications</Text>
+                </View>
+                <AntDesign name="right" size={16} color="grey" />
+
               </TouchableOpacity>
-              <Text style={styles.userId}>{userInformation.uid}</Text>
+              <TouchableOpacity onPress={() => navigation.navigate("Gifts")}
+                style={{
+                  justifyContent: 'space-between', flexDirection: 'row', width: '100%', alignItems: 'center', height: '25%', borderBottomWidth: 0.2,
+                  borderColor: Colors.fontGray,
+                }}
+              >
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Ionicons name="gift" size={24} color="black" />
+                  <Text style={{ marginLeft: 10, fontSize: 15, color: 'black' }}>Gifts</Text>
+                </View>
+                <AntDesign name="right" size={16} color="grey" />
+
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => navigation.navigate("GameStats")} style={{
+                  justifyContent: 'space-between', flexDirection: 'row', width: '100%', alignItems: 'center', height: '25%', borderBottomWidth: 0.2,
+                  borderColor: Colors.fontGray,
+                }}
+              >
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Ionicons name="stats-chart" size={24} color="black" />
+                  <Text style={{ marginLeft: 10, fontSize: 15, color: 'black' }}>Game Chart</Text>
+                </View>
+                <AntDesign name="right" size={16} color="grey" />
+
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("Language")}
+                style={{
+                  justifyContent: 'space-between', flexDirection: 'row', width: '100%', alignItems: 'center', height: '25%', borderBottomWidth: 0.2,
+                  borderColor: Colors.fontGray,
+                }}
+              >
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Ionicons name="language" size={24} color="black" />
+                  <Text style={{ marginLeft: 10, fontSize: 15, color: 'black' }}>Languages</Text>
+                </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Text style={{ marginRight: 10 }}>English</Text>
+                  <AntDesign name="right" size={16} color="grey" /></View>
+
+              </TouchableOpacity>
             </View>
-
           </View>
-        </View>
-        {/* *********Total Balance Card********************** */}
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-          <View style={styles.balance}>
-            <Text style={{ color: 'black', width: 'auto' }}>Total Balance:- ₹ {userInformation?.wallet?.toFixed(2)}</Text>
-          </View>
-          <TouchableOpacity
-            style={{ width: 100, height: 35, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center', borderRadius: 10, elevation: 10, shadowColor: 'red', shadowOffset: { width: 0, height: 2 }, flexDirection: 'row' }}
-            onPress={() => navigation.navigate('LevelScreen')}>
-            <Entypo name='star-outlined' size={20} color={'white'} />
-            <Text style={styles.level}>Level: {userInformation?.user_level?.level}</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* *********Navigating to different screens********************** */}
-        <View style={{ height: SCREEN_HEIGHT * 0.15, width: SCREEN_WIDTH * 0.95, alignSelf: 'center', backgroundColor: 'white', elevation: 2, borderRadius: 10, marginTop: -40, justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
-          <View style={{ flexDirection: 'row', width: SCREEN_WIDTH * 0.95, justifyContent: 'space-evenly', alignItems: 'center' }}>
-            {renderButton('Deposite', require('../assets/wallet/deposit.png'))}
-            {renderButton('Withdraw', require('../assets/wallet/withdraw.png'))}
-            {renderButton('WithdrawHistory', require('../assets/wallet/withdrawHistory.png'))}
-            {renderButton('DepositHistory', require('../assets/wallet/depositeHistory.png'))}
-          </View>
-        </View>
-
-        <View style={styles.section}>
-
-          <Text style={styles.sectionTitle}>Account</Text>
-          <View style={styles.sectionItems}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("Notification")}
-              style={{
-                justifyContent: 'space-between', flexDirection: 'row', width: '100%', alignItems: 'center', height: '25%', borderBottomWidth: 0.2,
-                borderColor: Colors.fontGray,
-              }}
-            >
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Ionicons name="notifications" size={24} color="black" />
-                <Text style={{ color: 'black' }}>Notifications</Text>
-              </View>
-              <AntDesign name="right" size={16} color="grey" />
-
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate("Gifts")}
-              style={{
-                justifyContent: 'space-between', flexDirection: 'row', width: '100%', alignItems: 'center', height: '25%', borderBottomWidth: 0.2,
-                borderColor: Colors.fontGray,
-              }}
-            >
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Ionicons name="gift" size={24} color="black" />
-                <Text style={{ marginLeft: 10, fontSize: 15, color: 'black' }}>Gifts</Text>
-              </View>
-              <AntDesign name="right" size={16} color="grey" />
-
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => navigation.navigate("GameStats")} style={{
-                justifyContent: 'space-between', flexDirection: 'row', width: '100%', alignItems: 'center', height: '25%', borderBottomWidth: 0.2,
-                borderColor: Colors.fontGray,
-              }}
-            >
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Ionicons name="stats-chart" size={24} color="black" />
-                <Text style={{ marginLeft: 10, fontSize: 15, color: 'black' }}>Game Chart</Text>
-              </View>
-              <AntDesign name="right" size={16} color="grey" />
-
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("Language")}
-              style={{
-                justifyContent: 'space-between', flexDirection: 'row', width: '100%', alignItems: 'center', height: '25%', borderBottomWidth: 0.2,
-                borderColor: Colors.fontGray,
-              }}
-            >
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Ionicons name="language" size={24} color="black" />
-                <Text style={{ marginLeft: 10, fontSize: 15, color: 'black' }}>Languages</Text>
-              </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={{ marginRight: 10 }}>English</Text>
-                <AntDesign name="right" size={16} color="grey" /></View>
-
-            </TouchableOpacity>
-          </View>
-        </View>
 
 
-        <Text style={styles.sectionTitle}>Service Center</Text>
+          <Text style={styles.sectionTitle}>Service Center</Text>
 
-        <View style={styles.serviceItems}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10 }}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("Setting")}
-              style={styles.serviceIcons}>
-              <Ionicons name="settings" size={24} color="black" />
-              <Text style={{ color: 'black' }}>Settings</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('FeedbackForm')}
-              style={styles.serviceIcons}>
-              <Ionicons name="chatbubble" size={24} color="black" />
-              <Text style={{ color: 'black' }}>Feedback</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('CustomerServices')}
-              style={styles.serviceIcons}>
-              <Ionicons name="person-sharp" size={24} color="black" />
-              <Text style={{ color: 'black' }}>Customer Service</Text>
-            </TouchableOpacity>
+          <View style={styles.serviceItems}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10 }}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("Setting")}
+                style={styles.serviceIcons}>
+                <Ionicons name="settings" size={24} color="black" />
+                <Text style={{ color: 'black' }}>Settings</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('FeedbackForm')}
+                style={styles.serviceIcons}>
+                <Ionicons name="chatbubble" size={24} color="black" />
+                <Text style={{ color: 'black' }}>Feedback</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('CustomerServices')}
+                style={styles.serviceIcons}>
+                <Ionicons name="person-sharp" size={24} color="black" />
+                <Text style={{ color: 'black' }}>Customer Service</Text>
+              </TouchableOpacity>
 
-          </View>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10 }}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('NotificationFile')}
-              style={styles.serviceIcons}>
-              <AntDesign name='sound' size={20} color={'black'} />
-              <Text style={{ color: 'black' }}>Announcemet</Text>
-            </TouchableOpacity>
-            <View style={styles.serviceIcons}>
-
-              <Ionicons name="book" size={24} color="black" />
-              <Text style={{ color: 'black' }}>Beginner's Guide</Text>
             </View>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('AboutUs')}
-              style={styles.serviceIcons}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10, }}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('NotificationFile')}
+                style={styles.serviceIcons}>
+                <AntDesign name='sound' size={20} color={'black'} />
+                <Text style={{ color: 'black' }}>Announcemet</Text>
+              </TouchableOpacity>
+              <View style={styles.serviceIcons}>
 
-              <Ionicons name="information-circle" size={24} color="black" />
-              <Text style={{ color: 'black' }}>About Us</Text>
-            </TouchableOpacity >
+                <Ionicons name="book" size={24} color="black" />
+                <Text style={{ color: 'black' }}>Beginner's Guide</Text>
+              </View>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('AboutUs')}
+                style={styles.serviceIcons}>
+
+                <Ionicons name="information-circle" size={24} color="black" />
+                <Text style={{ color: 'black' }}>About Us</Text>
+              </TouchableOpacity >
+            </View>
           </View>
+
+          {loading && (
+            <View style={styles.activityIndicatorContainer}>
+              <ActivityIndicator size={100} color="gold" />
+            </View>
+          )}
         </View>
-
-        {loading && (
-          <View style={styles.activityIndicatorContainer}>
-            <ActivityIndicator size={100} color="gold" />
-          </View>
-        )}
-      </View>
-      <TouchableOpacity
-        onPress={() => handleLogOut()}
-        style={styles.logoutButton}>
-        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16 }}>Logout</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => handleLogOut()}
+          style={styles.logoutButton}>
+          <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16 }}>Logout</Text>
+        </TouchableOpacity>
 
 
 
@@ -293,27 +329,34 @@ const Account = () => {
 
 
 
-      <Modal visible={showCopyModal} transparent={true}>
-        <View style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
+        <Modal visible={showCopyModal} transparent={true}>
           <View style={{
-            width: 150, // Set your desired width
-            height: 150, // Set your desired height
-            backgroundColor: 'rgba(0, 0, 0, 0.7)',
-            padding: 10,
+            flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
-            borderRadius: 10,
           }}>
-            <Entypo name="check" size={30} color={'white'} />
-            <Text style={{ color: 'white' }}>Copy Succesfull</Text>
+            <View style={{
+              width: 150, // Set your desired width
+              height: 150, // Set your desired height
+              backgroundColor: 'rgba(0, 0, 0, 0.7)',
+              padding: 10,
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: 10,
+            }}>
+              <Entypo name="check" size={30} color={'white'} />
+              <Text style={{ color: 'white' }}>Copy Succesfull</Text>
+            </View>
           </View>
-        </View>
-      </Modal>
-    </ScrollView>
+        </Modal>
+      </ScrollView>
+      <View style={styles.fixedBox}>
+        {/* Your content for the fixed box goes here */}
+        <TouchableOpacity onPress={() => navigation.navigate('CustomerServices')} style={{ height: 60, width: 60, justifyContent: 'center', alignItems: 'center' }} >
+          <Image source={require('../assets/customerCare.png')} style={{ height: 60, width: 60 }} />
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 };
 
@@ -321,13 +364,12 @@ const styles = {
   container: {
     flex: 1,
     alignSelf: 'center',
-    backgroundColor: 'white'
+    backgroundColor: 'rgba(255, 255, 255,0.5)', position: 'relative'
 
   },
   header: {
     flexDirection: "row",
-
-    justifyContent: 'space-between'
+    justifyContent: 'space-between', width: '96%', alignSelf: 'center'
   },
   profileImage: {
     width: 90,
@@ -358,7 +400,7 @@ const styles = {
   },
   balance: {
     marginVertical: 20,
-    elevation: 5,
+    elevation: 1,
     backgroundColor: 'white',
     padding: 10,
     width: 'auto',
@@ -429,6 +471,12 @@ const styles = {
     bottom: 0,
     left: 0,
     right: 0,
+  },
+  fixedBox: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    margin: 16,
   },
 };
 

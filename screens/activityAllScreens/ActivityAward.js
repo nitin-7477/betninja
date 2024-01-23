@@ -28,7 +28,7 @@ const ActivityAward = () => {
 
   const renderHeader = () => (
     <View style={{ height: SCREEN_HEIGHT * 0.25, width: SCREEN_WIDTH * 1, backgroundColor: "chocolate" }}>
-      <View style={{ width: responsiveWidth(100), backgroundColor: 'chocolate', height: responsiveHeight(6), alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10, borderBottomEndRadius: 15, borderBottomStartRadius: 15  }}>
+      <View style={{ width: responsiveWidth(100), backgroundColor: 'chocolate', height: responsiveHeight(6), alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10, borderBottomEndRadius: 15, borderBottomStartRadius: 15 }}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <AntDesign name='left' size={20} color={'white'} style={{ fontWeight: 'bold' }} />
         </TouchableOpacity>

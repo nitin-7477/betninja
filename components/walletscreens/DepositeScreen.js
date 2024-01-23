@@ -1,4 +1,4 @@
-import { Text, View, ScrollView, Image, TouchableOpacity, TextInput, Alert, ActivityIndicator } from 'react-native'
+import { Text, View, ScrollView, Image, TouchableOpacity, TextInput, Alert, ActivityIndicator, RefreshControl } from 'react-native'
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../Constants/Screen'
@@ -21,6 +21,7 @@ const DepositeScreen = ({ route }) => {
   const [loading, setLoading] = useState(false)
   const [selectedBank, setSelectedBank] = useState(1)
   const isButtonDisabled = parseInt(amount) >= 100;
+  const [refreshing, setRefreshing] = useState(false);
   // const handleAmountChange = (value) => {
   //   setAmount(value);
   // };
@@ -29,6 +30,17 @@ const DepositeScreen = ({ route }) => {
     fetchUserData()
   }, [])
 
+  const onRefresh = async () => {
+    try {
+      setRefreshing(true);
+      // Call your data fetching function here (e.g., fetchCommissionData)
+      await fetchUserData();
+    } catch (error) {
+      console.error('Error refreshing data:', error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
   // console.log(depositAmount);
   const fetchUserData = async () => {
     try {
@@ -54,8 +66,10 @@ const DepositeScreen = ({ route }) => {
 
   };
 
+
   const handleDeposite = async () => {
     try {
+      setAmount("")
       if (selectedBank == 3) {
         const token = await AsyncStorage.getItem('token');
         if (!token) {
@@ -120,7 +134,16 @@ const DepositeScreen = ({ route }) => {
 
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          colors={['#ff0000', '#00ff00', '#0000ff']} // Set the colors of the refresh indicator
+        />
+      }
+    >
       <View style={styles.depositSection}>
         <View style={{ width: '100%', backgroundColor: 'white', height: 50, alignItems: 'center', flexDirection: 'row', elevation: 5, paddingHorizontal: 10, shadowColor: 'black', marginBottom: 10, borderBottomEndRadius: 15, borderBottomStartRadius: 15 }}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -219,8 +242,8 @@ const DepositeScreen = ({ route }) => {
               value={amount}
               onChangeText={handleAmountChange}
             />
-            
-            <View style={{ width: 'auto', backgroundColor: 'rgba(144, 238, 144,0.4)', padding: 4, borderRadius: 10 }}><Text style={{ color: 'green' }}>{extraAmount !== "" ? extraAmount : ""}</Text></View>
+
+            {extraAmount == null ? <></> : (<View style={{ width: 'auto', backgroundColor: 'rgba(144, 238, 144,0.4)', padding: 4, borderRadius: 10 }}><Text style={{ color: 'green' }}>{extraAmount !== "" ? extraAmount : ""}</Text></View>)}
           </View>
         </View>
         {/* *********************Deposite Amount******************* */}
