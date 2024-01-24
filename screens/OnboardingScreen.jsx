@@ -1,7 +1,8 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import Onboarding from "react-native-onboarding-swiper";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const OnboardingScreen = () => {
   const navigation = useNavigation();
@@ -16,11 +17,34 @@ const OnboardingScreen = () => {
     )
   }
 
+  const NextButton = ({ ...props }) => (
+    <TouchableOpacity
+      style={{
+        height: 40,
+        width: 100,
+        backgroundColor: 'white',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 20, // Adjust the borderRadius as needed
+        marginRight: 10,  // Add margin if necessary
+      }}
+      {...props}
+    >
+      <Text style={{ fontSize: 16, color: 'black', fontWeight: 'bold' }}>Done</Text>
+    </TouchableOpacity>
+  );
+  const handleDone = async () => {
+    navigation.navigate('Login');
+    await AsyncStorage.setItem('onboarded', '1');
+  }
+
+
+
   return (
     <Onboarding
-      onSkip={() => navigation.navigate("Home")}
-      onDone={() => navigation.navigate("Home")}
-      DoneButtonComponent={DotComponent}
+      onSkip={handleDone}
+      onDone={handleDone}
+      NextButtonComponent={NextButton}
       pages={[
         {
           backgroundColor: "#fff",

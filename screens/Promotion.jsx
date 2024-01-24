@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, StatusBar, TouchableOpacity, ActivityIndicator, Modal, Alert, Image, RefreshControl } from 'react-native'
+import { View, Text, ScrollView, StatusBar, TouchableOpacity, ActivityIndicator, Modal, Alert, Image, RefreshControl, Linking } from 'react-native'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../components/Constants/Colors';
@@ -30,6 +30,17 @@ const Promotion = () => {
     }, 2000);
 
   };
+
+  // const initiateWhatsApp = () => {
+  //   let url = 'whatsapp://send?text=' + "Hi";
+  //   Linking.openURL(url)
+  //     .then((data) => {
+  //       console.log('WhatsApp Opened');
+  //     })
+  //     .catch(() => {
+  //       alert('Make sure Whatsapp is installed on your device');
+  //     });
+  // };
 
   console.log(process.env.SERVERURL);
 
@@ -154,112 +165,117 @@ const Promotion = () => {
       >
         <View style={styles.container}>
           <StatusBar style='dark' />
+          <View>
+            <View style={{ height: responsiveHeight(37), width: responsiveWidth(100), backgroundColor: '#d9ad82', }}>
+              <View >
+                <Text style={{ textAlign: 'center', color: 'white', fontWeight: '500', fontSize: 24, marginVertical: 10 }}>
+                  {commission?.total_commission > 0 ? commission?.total_commission.toFixed(2) : '0'}
+                </Text>
+                <Text style={{ textAlign: 'center', color: 'white', fontWeight: '500', fontSize: 22, marginVertical: responsiveHeight(2) }}>Yesterday's Total Commission</Text>
+                <Text style={{ textAlign: 'center', color: 'white', fontWeight: '500', fontSize: 14, marginVertical: 5 }}>Upgrade the level to increase the Commission income</Text>
+              </View>
 
-          <View style={{ height: responsiveHeight(37), width: responsiveWidth(100), backgroundColor: '#d9ad82', }}>
-            <View >
-              <Text style={{ textAlign: 'center', color: 'white', fontWeight: '500', fontSize: 24, marginVertical: 10 }}>
-                {commission?.total_commission > 0 ? commission?.total_commission.toFixed(2) : '0'}
-              </Text>
-              <Text style={{ textAlign: 'center', color: 'white', fontWeight: '500', fontSize: 22, marginVertical: responsiveHeight(2) }}>Yesterday's Total Commission</Text>
-              <Text style={{ textAlign: 'center', color: 'white', fontWeight: '500', fontSize: 14, marginVertical: 5 }}>Upgrade the level to increase the Commission income</Text>
+
+              <View style={{ backgroundColor: '#D3D3D3', height: responsiveHeight(37), width: responsiveWidth(95), alignSelf: 'center', marginTop: responsiveHeight(1.7), borderRadius: 10 }}>
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={{ width: '50%', padding: 5, height: '100%', backgroundColor: 'white', justifyContent: 'center', borderTopLeftRadius: 10, flexDirection: 'row', alignItems: 'center' }}>
+                    <Ionicons name='person' size={20} color={'#770737'} />
+
+                    <Text style={{ textAlign: 'center', color: 'black' }}>Direct Subordinates</Text>
+                  </View>
+                  <View style={{ width: '50%', padding: 5, height: '100%', backgroundColor: 'white', justifyContent: 'center', borderTopRightRadius: 10, flexDirection: 'row', alignItems: 'center' }}>
+                    <Ionicons name='person' size={20} color={'#770737'} />
+                    <Text style={{ color: 'black' }}>Team Subordinates</Text>
+                  </View>
+
+                </View>
+
+                <View style={{ flexDirection: 'row', marginVertical: 5 }}>
+                  <View style={{ width: '50%', padding: 5, height: 'auto', justifyContent: 'center', }}>
+                    <Text style={{ textAlign: 'center', color: 'black' }}>
+                      {commission?.direct?.number_of_register}
+                    </Text>
+                    <Text style={{ textAlign: 'center', color: 'grey' }}>no. of register</Text>
+
+                  </View>
+                  <View style={{ width: '50%', padding: 5, height: 'auto', justifyContent: 'center', }}>
+                    <Text style={{ textAlign: 'center', color: 'black' }}>
+                      {commission?.team?.number_of_register}
+                    </Text>
+                    <Text style={{ textAlign: 'center', color: 'grey' }}>no. of register</Text>
+
+                  </View>
+
+                </View>
+
+                <View style={{ flexDirection: 'row', marginVertical: 5 }}>
+                  <View style={{ width: '50%', padding: 5, height: 'auto', justifyContent: 'center', }}>
+                    <Text style={{ textAlign: 'center', color: 'green' }}>
+                      {commission?.direct?.deposit_number}
+                    </Text>
+                    <Text style={{ textAlign: 'center', color: 'grey' }}>Deposite number</Text>
+
+                  </View>
+                  <View style={{ width: '50%', padding: 5, height: 'auto', justifyContent: 'center', }}>
+                    <Text style={{ textAlign: 'center', color: 'green' }}>
+                      {commission?.team?.deposit_number}
+                    </Text>
+                    <Text style={{ textAlign: 'center', color: 'grey' }}>Deposite number</Text>
+
+                  </View>
+
+                </View>
+
+                <View style={{ flexDirection: 'row', marginVertical: 5 }}>
+                  <View style={{ width: '50%', padding: 5, height: 'auto', justifyContent: 'center', }}>
+                    <Text style={{ textAlign: 'center', color: 'red' }}>
+                      {commission?.direct?.deposit_amount}
+                    </Text>
+                    <Text style={{ textAlign: 'center', color: 'grey' }}>Deposite amount</Text>
+                  </View>
+                  <View style={{ width: '50%', padding: 5, height: 35, justifyContent: 'center', }}>
+                    <Text style={{ textAlign: 'center', color: 'red' }}>
+                      {commission?.team?.deposit_amount}
+                    </Text>
+                    <Text style={{ textAlign: 'center', color: 'grey' }}>Deposite amount</Text>
+                  </View>
+                </View>
+
+
+                <View style={{ flexDirection: 'row', marginVertical: 5 }}>
+                  <View style={{ width: '50%', padding: 5, height: 'auto', justifyContent: 'center', }}>
+                    <Text style={{ textAlign: 'center', color: 'black' }}>
+                      {commission?.direct?.deposit_first_time_count}
+                    </Text>
+                    <Text style={{ textAlign: 'center', color: 'grey' }}>Number of people making first deposite</Text>
+                  </View>
+                  <View style={{ width: '50%', padding: 5, height: 'auto', justifyContent: 'center', }}>
+                    <Text style={{ textAlign: 'center', color: 'black' }}>
+                      {commission?.team?.deposit_first_time_count}
+                    </Text>
+                    <Text style={{ textAlign: 'center', color: 'grey' }}>Number of people making first deposite</Text>
+                  </View>
+                </View>
+
+              </View>
+
             </View>
 
+            {/* **********************Invitation Link Button*********************** */}
 
-            <View style={{ backgroundColor: '#D3D3D3', height: responsiveHeight(37), width: responsiveWidth(95), alignSelf: 'center', marginTop: responsiveHeight(1.7), borderRadius: 10 }}>
-              <View style={{ flexDirection: 'row' }}>
-                <View style={{ width: '50%', padding: 5, height: '100%', backgroundColor: 'white', justifyContent: 'center', borderTopLeftRadius: 10, flexDirection: 'row', alignItems: 'center' }}>
-                  <Ionicons name='person' size={20} color={'#770737'} />
-
-                  <Text style={{ textAlign: 'center', color: 'black' }}>Direct Subordinates</Text>
-                </View>
-                <View style={{ width: '50%', padding: 5, height: '100%', backgroundColor: 'white', justifyContent: 'center', borderTopRightRadius: 10, flexDirection: 'row', alignItems: 'center' }}>
-                  <Ionicons name='person' size={20} color={'#770737'} />
-                  <Text style={{ color: 'black' }}>Team Subordinates</Text>
-                </View>
-
+            <TouchableOpacity
+              onPress={() => navigation.navigate('InvitationLink', { referalCode: commission?.referalCode })
+              }
+              style={{ marginTop: responsiveHeight(22), height: responsiveHeight(7), width: responsiveWidth(95), backgroundColor: '#d9ad82', alignSelf: 'center', alignItems: 'center', justifyContent: 'center', borderRadius: 20, marginBottom: 20 }}>
+              <Text style={{ textAlign: 'center', color: '#770737', fontWeight: 600, fontSize: 18 }}>Invite Your Friends</Text>
+            </TouchableOpacity>
+            {/* **********************Invitation Link Button*********************** */}
+            {loading && (
+              <View style={styles.activityIndicatorContainer}>
+                <ActivityIndicator size={100} color="gold" />
               </View>
-
-              <View style={{ flexDirection: 'row', marginVertical: 5 }}>
-                <View style={{ width: '50%', padding: 5, height: 'auto', justifyContent: 'center', }}>
-                  <Text style={{ textAlign: 'center', color: 'black' }}>
-                    {commission?.direct?.number_of_register}
-                  </Text>
-                  <Text style={{ textAlign: 'center', color: 'grey' }}>no. of register</Text>
-
-                </View>
-                <View style={{ width: '50%', padding: 5, height: 'auto', justifyContent: 'center', }}>
-                  <Text style={{ textAlign: 'center', color: 'black' }}>
-                    {commission?.team?.number_of_register}
-                  </Text>
-                  <Text style={{ textAlign: 'center', color: 'grey' }}>no. of register</Text>
-
-                </View>
-
-              </View>
-
-              <View style={{ flexDirection: 'row', marginVertical: 5 }}>
-                <View style={{ width: '50%', padding: 5, height: 'auto', justifyContent: 'center', }}>
-                  <Text style={{ textAlign: 'center', color: 'green' }}>
-                    {commission?.direct?.deposit_number}
-                  </Text>
-                  <Text style={{ textAlign: 'center', color: 'grey' }}>Deposite number</Text>
-
-                </View>
-                <View style={{ width: '50%', padding: 5, height: 'auto', justifyContent: 'center', }}>
-                  <Text style={{ textAlign: 'center', color: 'green' }}>
-                    {commission?.team?.deposit_number}
-                  </Text>
-                  <Text style={{ textAlign: 'center', color: 'grey' }}>Deposite number</Text>
-
-                </View>
-
-              </View>
-
-              <View style={{ flexDirection: 'row', marginVertical: 5 }}>
-                <View style={{ width: '50%', padding: 5, height: 'auto', justifyContent: 'center', }}>
-                  <Text style={{ textAlign: 'center', color: 'red' }}>
-                    {commission?.direct?.deposit_amount}
-                  </Text>
-                  <Text style={{ textAlign: 'center', color: 'grey' }}>Deposite amount</Text>
-                </View>
-                <View style={{ width: '50%', padding: 5, height: 35, justifyContent: 'center', }}>
-                  <Text style={{ textAlign: 'center', color: 'red' }}>
-                    {commission?.team?.deposit_amount}
-                  </Text>
-                  <Text style={{ textAlign: 'center', color: 'grey' }}>Deposite amount</Text>
-                </View>
-              </View>
-
-
-              <View style={{ flexDirection: 'row', marginVertical: 5 }}>
-                <View style={{ width: '50%', padding: 5, height: 'auto', justifyContent: 'center', }}>
-                  <Text style={{ textAlign: 'center', color: 'black' }}>
-                    {commission?.direct?.deposit_first_time_count}
-                  </Text>
-                  <Text style={{ textAlign: 'center', color: 'grey' }}>Number of people making first deposite</Text>
-                </View>
-                <View style={{ width: '50%', padding: 5, height: 'auto', justifyContent: 'center', }}>
-                  <Text style={{ textAlign: 'center', color: 'black' }}>
-                    {commission?.team?.deposit_first_time_count}
-                  </Text>
-                  <Text style={{ textAlign: 'center', color: 'grey' }}>Number of people making first deposite</Text>
-                </View>
-              </View>
-              {loading && (
-                <View style={styles.activityIndicatorContainer}>
-                  <ActivityIndicator size={100} color="gold" />
-                </View>
-              )}
-            </View>
-
+            )}
           </View>
-          {/* **********************Invitation Link Button*********************** */}
-
-          <View style={{ marginTop: responsiveHeight(22), height: responsiveHeight(7), width: responsiveWidth(95), backgroundColor: '#d9ad82', alignSelf: 'center', alignItems: 'center', justifyContent: 'center', borderRadius: 20, marginBottom: 20 }}>
-            <Text style={{ textAlign: 'center', color: '#770737', fontWeight: 600, fontSize: 18 }}>Invite Your Friends</Text>
-          </View>
-          {/* **********************Invitation Link Button*********************** */}
-
 
 
           <TouchableOpacity onPress={copyToClipboard} style={{ height: responsiveHeight(7), width: responsiveWidth(95), alignSelf: 'center', marginTop: responsiveHeight(2), borderRadius: 5, elevation: 3, backgroundColor: 'white' }}>
@@ -382,14 +398,14 @@ const Promotion = () => {
 
         </View>
 
-      </ScrollView>
+      </ScrollView >
       <View style={styles.fixedBox}>
         {/* Your content for the fixed box goes here */}
         <TouchableOpacity onPress={() => navigation.navigate('CustomerServices')} style={{ height: 60, width: 60, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }} >
           <Image source={require('../assets/customerCare.png')} style={{ height: 60, width: 60 }} />
         </TouchableOpacity>
       </View>
-    </View>
+    </View >
   )
 }
 

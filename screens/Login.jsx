@@ -35,7 +35,16 @@ const Login = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
 
+  // useEffect(() => {
 
+  //   handleReset()
+
+  // }, [])
+
+  // const handleReset = async () => {
+  //   await AsyncStorage.removeItem('onboarded');
+  //   navigation.push('OnboardingScreen');
+  // }
   useEffect(() => {
     const fetchData = async () => {
       try {
