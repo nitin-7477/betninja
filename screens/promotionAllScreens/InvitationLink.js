@@ -20,7 +20,7 @@ const InvitationLink = ({ route }) => {
 
 
   const initiateWhatsApp = () => {
-    const message = `Join Bet Ninja using my referral link: ${linkToGenerateQRCodeFor}`;
+    const message = `Join Bet Ninja using my referral link: ${linkToGenerateQRCodeFor}  `;
 
     let url = `whatsapp://send?text=${encodeURIComponent(message)}`;
 

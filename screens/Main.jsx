@@ -20,7 +20,7 @@ export default function Main() {
     const fetchToken = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
-
+        
         if (!token) {
           alert('Token Expired');
           navigation.navigate('Login');
@@ -34,7 +34,7 @@ export default function Main() {
         });
         setUserInformation(response.data);
       } catch (error) {
-        console.error('Error fetching user data in Main FIle:', error.response);
+        console.error('Error fetching user data in Main FIle:', error);
       }
     };
 

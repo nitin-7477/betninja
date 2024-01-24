@@ -109,24 +109,28 @@ export default function App() {
   }
 
 
-  if (showOnboarding) {
-    return (
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName='OnboardingScreen'>
-          <Stack.Screen name="OnboardingScreen" options={{ headerShown: false }} component={OnboardingScreen} />
-          <Stack.Screen name="Login" options={{ headerShown: false }} component={Login} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    )
-  }
-  else {
+  // if (showOnboarding) {
+  //   return (
+  //     <NavigationContainer>
+  //       <Stack.Navigator initialRouteName='OnboardingScreen'>
+  //         <Stack.Screen name="OnboardingScreen" options={{ headerShown: false }} component={OnboardingScreen} />
+  //         <Stack.Screen name="Login" options={{ headerShown: false }} component={Login} />
+  //         <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
+  //         <Stack.Screen options={{ headerShown: false }} name="ForgotPassword" component={ForgotPasswordComponent} />
+  //         <Stack.Screen options={{ headerShown: false }} name="HomeScreen" component={Home} />
+ 
+  //       </Stack.Navigator>
+  //     </NavigationContainer>
+  //   )
+  // }
+  // else {
     return (
 
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Login">
 
           <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
-          <Stack.Screen options={{ headerShown: false }} name="OnboardingScreen" component={OnboardingScreen} />
+          {/* <Stack.Screen options={{ headerShown: false }} name="OnboardingScreen" component={OnboardingScreen} /> */}
           <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
           <Stack.Screen options={{ headerShown: false }} name="HomeScreen" component={Home} />
           <Stack.Screen options={{ headerShown: false }} name="LiveChatScreen" component={LiveChatScreen} />
@@ -201,5 +205,5 @@ export default function App() {
       </NavigationContainer>
 
     )
-  }
+  // }
 }
