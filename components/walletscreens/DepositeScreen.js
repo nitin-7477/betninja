@@ -9,6 +9,7 @@ import { useNavigation } from "@react-navigation/native";
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { responsiveWidth, responsiveHeight, responsiveFontSize } from 'react-native-responsive-dimensions'
+import RazorpayCheckout from 'react-native-razorpay';
 
 
 const DepositeScreen = ({ route }) => {
@@ -22,6 +23,7 @@ const DepositeScreen = ({ route }) => {
   const [selectedBank, setSelectedBank] = useState(1)
   const isButtonDisabled = parseInt(amount) >= 100;
   const [refreshing, setRefreshing] = useState(false);
+
   // const handleAmountChange = (value) => {
   //   setAmount(value);
   // };
@@ -70,7 +72,7 @@ const DepositeScreen = ({ route }) => {
   const handleDeposite = async () => {
     try {
       setAmount("")
-      if (selectedBank == 3) {
+      if (selectedBank == 2) {
         const token = await AsyncStorage.getItem('token');
         if (!token) {
           navigation.navigate('Login')
@@ -85,8 +87,41 @@ const DepositeScreen = ({ route }) => {
 
         console.log("This is response of hitting deposite api", response);
       }
-      else if (selectedBank == 2) {
+      else if (selectedBank == 3) {
 
+        var options = {
+          description: 'Credits towards consultation',
+          image: 'https://i.imgur.com/3g7nmJC.jpg',
+          currency: 'INR',
+          key: 'rzp_test_f5OuQuaLaJyL4o',
+          amount: amount * 100,
+          name: 'Bet Ninja',
+          order_id: '',//Replace this with an order_id created using Orders API.
+          prefill: {
+            email: 'nitinkumar@example.com',
+            contact: '7477235745',
+            name: 'Nitin Kumar'
+          }, method: {
+            netbanking: true,
+            card: true,
+            wallet: true,
+            upi: true,
+            paylater: false
+          }, config: {
+            display: {
+              hide: [{ method: 'paylater' }]
+            }
+          },
+          theme: { color: '#53a20e' },
+
+        }
+        RazorpayCheckout.open(options).then((data) => {
+          // handle success
+          alert(`Success: ${data.razorpay_payment_id}`);
+        }).catch((error) => {
+          // handle failure
+
+        });
       }
       else if (selectedBank == 1) {
         navigation.navigate('QrScanner', { amount })

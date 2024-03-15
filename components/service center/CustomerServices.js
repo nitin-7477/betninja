@@ -38,8 +38,8 @@ const CustomerServices = () => {
         </View>
         <Image source={require('../../assets/customerService.png')} style={{ height: 200, width: 300, resizeMode: 'contain' }} />
       </View>
-      <View style={{ flex: 1, backgroundColor: 'white', width: SCREEN_WIDTH * 0.98, borderRadius: 40, marginTop: -30, marginBottom: 50, height: 300 }}>
-        <TouchableOpacity onPress={() => alert('This service is available in Update version')} style={{ height: 50, width: '95%', alignSelf: 'center', marginTop: 30, borderRadius: 5, elevation: 3, backgroundColor: 'white' }}>
+      <View style={{ flex: 1, backgroundColor: 'white', width: SCREEN_WIDTH * 0.96, borderRadius: 40, marginTop: -30, marginBottom: 50, height: 300, alignSelf: 'center', elevation: 1 }}>
+        <TouchableOpacity onPress={() => navigation.navigate('LiveChatScreen')} style={{ height: 50, width: '95%', alignSelf: 'center', marginTop: 30, borderRadius: 5, elevation: 3, backgroundColor: 'white' }}>
           <View style={{ height: 50, width: 320, justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, flexDirection: 'row' }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Image source={require('../../assets/livechat.png')} style={{ height: 25, width: 25 }} />

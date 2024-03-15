@@ -22,20 +22,20 @@ const OnboardingScreen = () => {
       style={{
         height: 40,
         width: 100,
-        backgroundColor: 'white',
+        // backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 20, // Adjust the borderRadius as needed
-        marginRight: 10,  // Add margin if necessary
+        // Add margin if necessary
       }}
       {...props}
     >
-      <Text style={{ fontSize: 16, color: 'black', fontWeight: 'bold' }}>Done</Text>
+      <Text style={{ fontSize: 16, color: 'black', fontWeight: '400' }}>Next</Text>
     </TouchableOpacity>
   );
   const handleDone = async () => {
+    await AsyncStorage.setItem('onboarded', 'complete');
     navigation.navigate('Login');
-    await AsyncStorage.setItem('onboarded', '1');
   }
 
 

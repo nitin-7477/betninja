@@ -237,40 +237,40 @@ const ThirtySecBetModal = ({ isVisible, closeModal, backgroundColor, selectType,
 
               <View style={{ flexDirection: 'row' }}>
                 <TouchableOpacity
-                  style={{ height: 25, width: 30, backgroundColor: selectedTimes == 1 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
+                  style={{ height: 25, width: 'auto', backgroundColor: selectedTimes == 1 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 10 }}
                   onPress={() => handleMultiplierClick(1, 1)}
                 >
                   <Text style={{ color: selectedTimes == 1 ? "white" : "black", fontWeight: 'bold' }}>X1</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  style={{ height: 25, width: 30, backgroundColor: selectedTimes == 2 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
+                  style={{ height: 25, width: 'auto', backgroundColor: selectedTimes == 2 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 10 }}
                   onPress={() => handleMultiplierClick(5, 2)}
                 >
                   <Text style={{ color: selectedTimes == 2 ? "white" : "black", fontWeight: 'bold' }}>X5</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  style={{ height: 25, width: 30, backgroundColor: selectedTimes == 3 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
+                  style={{ height: 25, width: 'auto', backgroundColor: selectedTimes == 3 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 2, paddingHorizontal: 5 }}
                   onPress={() => handleMultiplierClick(10, 3)}
                 >
                   <Text style={{ color: selectedTimes == 3 ? "white" : "black", fontWeight: 'bold' }}>X10</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  style={{ height: 25, width: 35, backgroundColor: selectedTimes == 4 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
+                  style={{ height: 25, width: 'auto', backgroundColor: selectedTimes == 4 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 2, paddingHorizontal: 5 }}
                   onPress={() => handleMultiplierClick(20, 4)}
                 >
                   <Text style={{ color: selectedTimes == 4 ? "white" : "black", fontWeight: 'bold' }}>X20</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={{ height: 25, width: 35, backgroundColor: selectedTimes == 5 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
+                  style={{ height: 25, width: 'auto', backgroundColor: selectedTimes == 5 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 2, paddingHorizontal: 5 }}
                   onPress={() => handleMultiplierClick(50, 5)}
                 >
                   <Text style={{ color: selectedTimes == 5 ? "white" : "black", fontWeight: 'bold' }}>X50</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={{ height: 25, width: 35, backgroundColor: selectedTimes == 6 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}
+                  style={{ height: 25, width: 'auto', backgroundColor: selectedTimes == 6 ? backgroundColor : null, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginHorizontal: 2, paddingHorizontal: 5 }}
                   onPress={() => handleMultiplierClick(100, 6)}
                 >
                   <Text style={{ color: selectedTimes == 6 ? "white" : "black", fontWeight: 'bold' }}>X100</Text>

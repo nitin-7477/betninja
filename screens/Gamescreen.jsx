@@ -7,10 +7,10 @@ import ThirtySecBetModal from '../components/allPopUp/30SecBetModal';
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import io from 'socket.io-client';
-import { Colors } from '../components/Constants/Colors';
+import { Colors } from '../components/Constants/Colors'; 
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-const HomeScreen = ({ navigation, index }) => {
+  const HomeScreen = ({ navigation, index }) => {
 
   const route = useRoute();
 
@@ -262,7 +262,7 @@ const HomeScreen = ({ navigation, index }) => {
     oneMinGameHistory()
     threeMinGameHistory()
     fiveMinGameHistory()
-    
+
 
   };
 

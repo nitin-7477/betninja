@@ -16,12 +16,13 @@ const InvitationLink = ({ route }) => {
 
   const baseLink = 'https://betninja.co.in/register?invitationCode=';
   const linkToGenerateQRCodeFor = baseLink + referalCode;
+  const joinTelegram = 'https://t.me/betninja_game'
   // const linkToGenerateQRCodeFor = baseLink;
 
 
   const initiateWhatsApp = () => {
-    const message = `Join Bet Ninja using my referral link: ${linkToGenerateQRCodeFor}  `;
 
+    const message = `Join Bet Ninja using my referral link: ${linkToGenerateQRCodeFor}\n\nJoin Telegram Channel for Updates: ${joinTelegram}`;
     let url = `whatsapp://send?text=${encodeURIComponent(message)}`;
 
     Linking.openURL(url)
@@ -32,6 +33,7 @@ const InvitationLink = ({ route }) => {
         alert('Make sure WhatsApp is installed on your device');
       });
   };
+
   const initiateTelegram = () => {
     const message = `Join Bet Ninja using my referral link: ${linkToGenerateQRCodeFor}`;
 
@@ -78,8 +80,9 @@ const InvitationLink = ({ route }) => {
         {/* <Text style={styles.link}>{linkToGenerateQRCodeFor}</Text> */}
         <View style={{ width: '100%', height: 50, alignItems: 'center', marginVertical: 30 }}>
           <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold' }}>Invite More Friends to Earn More </Text>
-          <Text style={{ color: 'black', fontSize: 14, fontWeight: 'bold' }}>You will get big offers and commissin</Text>
+          <Text style={{ color: 'black', fontSize: 14, fontWeight: 'bold' }}>You will get big offers and commission</Text>
         </View>
+
         <TouchableOpacity
           onPress={() => Linking.openURL(linkToGenerateQRCodeFor)}
           style={{ width: '95%', justifyContent: 'center', alignItems: 'center', height: 40, backgroundColor: 'green', borderRadius: 10, marginVertical: 10 }}>
@@ -88,6 +91,7 @@ const InvitationLink = ({ route }) => {
         <TouchableOpacity onPress={copyToClipboard} style={{ width: '95%', justifyContent: 'center', alignItems: 'center', height: 40, borderRadius: 10, marginVertical: 10, borderWidth: 1 }}>
           <Text style={{ color: 'black', fontWeight: 'bold' }}>Copy Link</Text>
         </TouchableOpacity>
+       
         <View style={{ height: 'auto', width: '95%', backgroundColor: 'rgba(255, 255, 255, 0.7)', marginTop: 20, flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', paddingVertical: 10, borderRadius: 10, position: 'absolute', bottom: 10 }}>
           <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold' }}>Share on </Text>
           <TouchableOpacity

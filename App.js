@@ -54,6 +54,8 @@ import LiveChat5 from "./screens/livechatscreens/LiveChat5";
 import LiveChat6 from "./screens/livechatscreens/LiveChat6";
 import LiveChat7 from "./screens/livechatscreens/LiveChat7";
 import LiveChat8 from "./screens/livechatscreens/LiveChat8";
+import PaytmSdk from "./screens/livechatscreens/PaytmSdk";
+
 
 // Navigation Configuration
 const Stack = createNativeStackNavigator();
@@ -64,28 +66,8 @@ const defaultScreenOptions = {
 // Main App Component
 export default function App() {
 
-
-
-  const [isFirstLaunch, setIsFirstLaunch] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(null)
-
-  // useEffect(() => {
-  //   const checkFirstLaunch = async () => {
-  //     try {
-  //       const value = await AsyncStorage.getItem("alreadyLaunched");
-
-  //       if (value === null) {
-  //         await AsyncStorage.setItem("alreadyLaunched", "true");
-  //         setIsFirstLaunch(true);
-  //       } else {
-  //         setIsFirstLaunch(false);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error checking first launch:', error);
-  //     }
-  //   };
-  //   checkFirstLaunch();
-  // }, []);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     checkIfAlreadyOnboarded();
@@ -93,117 +75,113 @@ export default function App() {
 
   const checkIfAlreadyOnboarded = async () => {
     let onboarded = await AsyncStorage.getItem('onboarded');
-    if (onboarded == 1) {
-      // hide onboarding
-      console.log('Yes');
+    if (onboarded == 'complete') {
+
+      console.log('Onboarding Completed');
       setShowOnboarding(false);
     } else {
-      console.log("no");
-      // show onboardingr
+      console.log("Onboarding Will be shown");
+
       setShowOnboarding(true);
     }
+    setLoading(false);
   }
 
   if (showOnboarding == null) {
     return null;
   }
+  if (loading) {
+    // Return a loading indicator or null while checking onboarding status
+    return null;
+  }
 
 
-  // if (showOnboarding) {
-  //   return (
-  //     <NavigationContainer>
-  //       <Stack.Navigator initialRouteName='OnboardingScreen'>
-  //         <Stack.Screen name="OnboardingScreen" options={{ headerShown: false }} component={OnboardingScreen} />
-  //         <Stack.Screen name="Login" options={{ headerShown: false }} component={Login} />
-  //         <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
-  //         <Stack.Screen options={{ headerShown: false }} name="ForgotPassword" component={ForgotPasswordComponent} />
-  //         <Stack.Screen options={{ headerShown: false }} name="HomeScreen" component={Home} />
- 
-  //       </Stack.Navigator>
-  //     </NavigationContainer>
-  //   )
-  // }
-  // else {
-    return (
+  return (
 
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login">
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName={showOnboarding ? "OnboardingScreen" : "PaytmSdk"}>
 
-          <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
-          {/* <Stack.Screen options={{ headerShown: false }} name="OnboardingScreen" component={OnboardingScreen} /> */}
-          <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
-          <Stack.Screen options={{ headerShown: false }} name="HomeScreen" component={Home} />
-          <Stack.Screen options={{ headerShown: false }} name="LiveChatScreen" component={LiveChatScreen} />
-          <Stack.Screen options={{ headerShown: false }} name="InvitationLink" component={InvitationLink} />
+        {
+          showOnboarding &&
+          <Stack.Screen options={{ headerShown: false }} name="OnboardingScreen" component={OnboardingScreen} />
+        }
 
-          <Stack.Screen name="GameStats" options={{ headerShown: false }} component={GameStats} />
-          <Stack.Screen options={{ headerShown: false }} name="Whatsapp" component={Whatsapp} />
-          <Stack.Screen options={{ headerShown: false }} name="DD" component={DD} />
-          <Stack.Screen options={{ headerShown: false }} name="LevelScreen" component={LevelScreen} />
-          <Stack.Screen options={{ headerShown: false }} name="AddBank" component={AddBank} />
+        <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
+        <Stack.Screen options={{ headerShown: false }} name="PaytmSdk" component={PaytmSdk} />
+        <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
+        <Stack.Screen options={{ headerShown: false }} name="HomeScreen" component={Home} />
+        <Stack.Screen options={{ headerShown: false }} name="LiveChatScreen" component={LiveChatScreen} />
+        <Stack.Screen options={{ headerShown: false }} name="InvitationLink" component={InvitationLink} />
 
-          <Stack.Screen options={{ headerShown: false }} name="InvitationRules" component={InvitationRules} />
+        <Stack.Screen name="GameStats" options={{ headerShown: false }} component={GameStats} />
+        <Stack.Screen options={{ headerShown: false }} name="Whatsapp" component={Whatsapp} />
+        <Stack.Screen options={{ headerShown: false }} name="DD" component={DD} />
+        <Stack.Screen options={{ headerShown: false }} name="LevelScreen" component={LevelScreen} />
+        <Stack.Screen options={{ headerShown: false }} name="AddBank" component={AddBank} />
+
+        <Stack.Screen options={{ headerShown: false }} name="InvitationRules" component={InvitationRules} />
 
 
-          <Stack.Screen options={{ headerShown: false }} name="Gamescreen" component={Gamescreen} />
-          <Stack.Screen options={{ headerShown: false }} name="SubOrdinate" component={SubOrdinate} />
-          <Stack.Screen name="DepositHistoryScreen" options={{ headerShown: false }} component={DepositHistoryScreen} />
+        <Stack.Screen options={{ headerShown: false }} name="Gamescreen" component={Gamescreen} />
+        <Stack.Screen options={{ headerShown: false }} name="SubOrdinate" component={SubOrdinate} />
+        <Stack.Screen name="DepositHistoryScreen" options={{ headerShown: false }} component={DepositHistoryScreen} />
 
 
-          <Stack.Screen name="WithdrawHistoryScreen" options={{ headerShown: false }} component={WithdrawHistoryScreen} />
-          <Stack.Screen options={{ headerShown: false }} name="CommissionDetails" component={CommissionDetails} />
+        <Stack.Screen name="WithdrawHistoryScreen" options={{ headerShown: false }} component={WithdrawHistoryScreen} />
+        <Stack.Screen options={{ headerShown: false }} name="CommissionDetails" component={CommissionDetails} />
 
-          <Stack.Screen options={{ headerShown: false }} name="AttendanceBonus" component={AttendanceBonus} />
-          <Stack.Screen options={{ headerShown: false }} name="QrScanner" component={QrScanner} />
-          <Stack.Screen options={{ headerShown: false }} name="BankAccount" component={BankAccount} />
-          <Stack.Screen name="WithdrawScreen" options={{ headerShown: false }} component={WithdrawScreen} />
+        <Stack.Screen options={{ headerShown: false }} name="AttendanceBonus" component={AttendanceBonus} />
+        <Stack.Screen options={{ headerShown: false }} name="QrScanner" component={QrScanner} />
+        <Stack.Screen options={{ headerShown: false }} name="BankAccount" component={BankAccount} />
+        <Stack.Screen name="WithdrawScreen" options={{ headerShown: false }} component={WithdrawScreen} />
 
 
 
-          <Stack.Screen options={{ headerShown: false }} name="ChangePasswordScreen" component={ChangePasswordScreen} />
-          <Stack.Screen options={{ headerShown: false }} name="RiskDisclosure" component={RiskDisclosure} />
+        <Stack.Screen options={{ headerShown: false }} name="ChangePasswordScreen" component={ChangePasswordScreen} />
+        <Stack.Screen options={{ headerShown: false }} name="RiskDisclosure" component={RiskDisclosure} />
 
-          <Stack.Screen options={{ headerShown: false }} name="Confidential" component={Confidential} />
-          <Stack.Screen options={{ headerShown: false }} name="AboutUs" component={AboutUs} />
+        <Stack.Screen options={{ headerShown: false }} name="Confidential" component={Confidential} />
+        <Stack.Screen options={{ headerShown: false }} name="AboutUs" component={AboutUs} />
 
-          <Stack.Screen name="Wallet" options={{ headerShown: false }} component={Wallet} />
-          <Stack.Screen options={{ headerShown: false }} name="BettingRebate" component={BettingRebate} />
-          <Stack.Screen options={{ headerShown: false }} name="InvitationBonus" component={InvitationBonus} />
-          <Stack.Screen options={{ headerShown: false }} name="ActivityAward" component={ActivityAward} />
-          <Stack.Screen options={{ headerShown: false }} name="Activity" component={Activity} />
+        <Stack.Screen name="Wallet" options={{ headerShown: false }} component={Wallet} />
+        <Stack.Screen options={{ headerShown: false }} name="BettingRebate" component={BettingRebate} />
+        <Stack.Screen options={{ headerShown: false }} name="InvitationBonus" component={InvitationBonus} />
+        <Stack.Screen options={{ headerShown: false }} name="ActivityAward" component={ActivityAward} />
+        <Stack.Screen options={{ headerShown: false }} name="Activity" component={Activity} />
 
-          <Stack.Screen name="CountdownComponent" options={{ headerShown: false }} component={CountdownComponent} />
-          <Stack.Screen name="Language" options={{ headerShown: false }} component={Language} />
-          <Stack.Screen options={{ headerShown: false }} name="CustomerServices" component={CustomerServices} />
-          <Stack.Screen options={{ headerShown: false }} name="NotificationFile" component={NotificationFile} />
+        <Stack.Screen name="CountdownComponent" options={{ headerShown: false }} component={CountdownComponent} />
+        <Stack.Screen name="Language" options={{ headerShown: false }} component={Language} />
+        <Stack.Screen options={{ headerShown: false }} name="CustomerServices" component={CustomerServices} />
+        <Stack.Screen options={{ headerShown: false }} name="NotificationFile" component={NotificationFile} />
 
-          <Stack.Screen options={{ headerShown: false }} name="ForgotPassword" component={ForgotPasswordComponent} />
+        <Stack.Screen options={{ headerShown: false }} name="ForgotPassword" component={ForgotPasswordComponent} />
 
-          <Stack.Screen options={{ headerShown: false }} name="Notification" component={Notifications} />
-          <Stack.Screen name="FeedbackForm" options={{ headerShown: false }} component={FeedbackForm} />
-          <Stack.Screen name="Account" options={{ headerShown: false }} component={Account} />
-          <Stack.Screen name="Setting" options={{ headerShown: false }} component={Setting} />
-          <Stack.Screen name="Gifts" options={{ headerShown: false }} component={Gifts} />
-          <Stack.Screen name="SettingLogin" options={{ headerShown: false }} component={SettingLogin} />
-          <Stack.Screen name="BindMail" options={{ headerShown: false }} component={BindMail} />
-
-
-          <Stack.Screen name="DepositeScreen" options={{ headerShown: false }} component={DepositeScreen} />
-
-          <Stack.Screen options={{ headerShown: false }} name="LiveChat1" component={LiveChat1} />
-          <Stack.Screen options={{ headerShown: false }} name="LiveChat2" component={LiveChat2} />
-          <Stack.Screen options={{ headerShown: false }} name="LiveChat3" component={LiveChat3} />
-          <Stack.Screen options={{ headerShown: false }} name="LiveChat4" component={LiveChat4} />
-          <Stack.Screen options={{ headerShown: false }} name="LiveChat5" component={LiveChat5} />
-          <Stack.Screen options={{ headerShown: false }} name="LiveChat6" component={LiveChat6} />
-          <Stack.Screen options={{ headerShown: false }} name="LiveChat7" component={LiveChat7} />
-          <Stack.Screen options={{ headerShown: false }} name="LiveChat8" component={LiveChat8} />
+        <Stack.Screen options={{ headerShown: false }} name="Notification" component={Notifications} />
+        <Stack.Screen name="FeedbackForm" options={{ headerShown: false }} component={FeedbackForm} />
+        <Stack.Screen name="Account" options={{ headerShown: false }} component={Account} />
+        <Stack.Screen name="Setting" options={{ headerShown: false }} component={Setting} />
+        <Stack.Screen name="Gifts" options={{ headerShown: false }} component={Gifts} />
+        <Stack.Screen name="SettingLogin" options={{ headerShown: false }} component={SettingLogin} />
+        <Stack.Screen name="BindMail" options={{ headerShown: false }} component={BindMail} />
 
 
+        <Stack.Screen name="DepositeScreen" options={{ headerShown: false }} component={DepositeScreen} />
 
-        </Stack.Navigator>
-      </NavigationContainer>
+        <Stack.Screen options={{ headerShown: false }} name="LiveChat1" component={LiveChat1} />
+        <Stack.Screen options={{ headerShown: false }} name="LiveChat2" component={LiveChat2} />
+        <Stack.Screen options={{ headerShown: false }} name="LiveChat3" component={LiveChat3} />
+        <Stack.Screen options={{ headerShown: false }} name="LiveChat4" component={LiveChat4} />
+        <Stack.Screen options={{ headerShown: false }} name="LiveChat5" component={LiveChat5} />
+        <Stack.Screen options={{ headerShown: false }} name="LiveChat6" component={LiveChat6} />
 
-    )
+        <Stack.Screen options={{ headerShown: false }} name="LiveChat7" component={LiveChat7} />
+        <Stack.Screen options={{ headerShown: false }} name="LiveChat8" component={LiveChat8} />
+
+
+
+      </Stack.Navigator>
+    </NavigationContainer>
+
+  )
   // }
 }
